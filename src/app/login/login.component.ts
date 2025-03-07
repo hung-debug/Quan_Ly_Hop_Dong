@@ -189,16 +189,38 @@ export class LoginComponent implements OnInit, AfterViewInit {
           } else {
             try {
               await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-              let data = {
+  
+              // Thu thập thông tin
+              const deviceInfo = this.deviceService.getDeviceInfo();
+              const osInfo = this.deviceService.os + ' ' + this.deviceService.os_version;
+              const appVersion = environment.appVersion; // Giả sử bạn lưu appVersion trong environment.ts
+              const language = localStorage.getItem('lang') || 'vi'; // Hoặc sessionStorage, tùy bạn
+              //const dateOfBirth = data.customer.info.birth_day; // Ví dụ, tùy thuộc vào cấu trúc dữ liệu
+              //const gender = data.customer.info.gender;  // Ví dụ, tùy thuộc vào cấu trúc dữ liệu
+              //fcmToken bạn cần lấy từ service firebase. ở đây tôi ví dụ
+              const fcmToken = 'YOUR_FCM_TOKEN'; // Thay thế bằng cách lấy FCM token thực tế
+              // Tạo object dữ liệu
+              let analysisData = {
                 eventName: "Login",
+                //mail: this.loginForm.value.username, // mail đã có trong infoUser
                 params: {
                   username: this.loginForm.value.username,
                   thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-                }
+                },
+                // Thêm các trường mới
+                //dateOfBirth: dateOfBirth,
+                language: language,
+                appVersion: appVersion,
+                osInfo: osInfo,
+                deviceInfo: deviceInfo.browser + " " + deviceInfo.browser_version,
+                //gender: gender,
               };
-              this.customerAnalysis.pushData(data);
+  
+              // Gọi hàm pushData
+              this.customerAnalysis.pushData(analysisData);
+  
             } catch (error) {
-              console.error("Lấy token thất bại:", error);             
+              console.error("Lấy token hoặc push dữ liệu thất bại:", error);
             }            
             this.action(urlLink, isContractId, isRecipientId);
           }
@@ -435,17 +457,35 @@ export class LoginComponent implements OnInit, AfterViewInit {
               this.toastService.showSuccessHTMLWithTimeout('Đăng nhập thành công, mở sang trang chủ hệ thống eContract.','',3000)
               try {
                 await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-                let data = {
+                const deviceInfo = this.deviceService.getDeviceInfo();
+                const osInfo = this.deviceService.os + ' ' + this.deviceService.os_version;
+                const appVersion = environment.appVersion; //  appVersion trong environment.ts
+                const language = localStorage.getItem('lang') || 'vi'; // Hoặc sessionStorage, tùy bạn
+                //const dateOfBirth = data.customer.info.birth_day; // Ví dụ, tùy thuộc vào cấu trúc dữ liệu
+                //const gender = data.customer.info.gender;  // Ví dụ, tùy thuộc vào cấu trúc dữ liệu
+                console.log('data', deviceInfo, osInfo, language);
+                
+                // Tạo object dữ liệu
+                let analysisData = {
                   eventName: "Login",
+                  //mail: this.loginForm.value.username, // mail đã có trong infoUser
                   params: {
                     username: res.customer.info.email,
                     thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-                  }
+                  },
+                  //dateOfBirth: dateOfBirth,
+                  language: language,
+                  appVersion: appVersion,
+                  osInfo: osInfo,
+                  deviceInfo: deviceInfo.browser + " " + deviceInfo.browser_version,
                 };
-                this.customerAnalysis.pushData(data);
+    
+                // Gọi hàm pushData
+                this.customerAnalysis.pushData(analysisData);
+    
               } catch (error) {
-                console.error("Lấy token thất bại:", error);             
-              }            
+                console.error("Lấy token hoặc push dữ liệu thất bại:", error);
+              }           
               setTimeout(() => {
                 this.router.navigate(['/main/dashboard'])
                 this.isSSOlogin = false
