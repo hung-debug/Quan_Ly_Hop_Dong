@@ -4900,8 +4900,8 @@ export class ConsiderContractComponent
   async eKYCStart(ekycDocType: string) {
     const data = {
       id: 0,
-      title: 'Xác thực CMT/CCCD mặt trước',
-      noti: 'Vui lòng đưa CMT/CCCD mặt trước vào gần khung hình',
+      title: 'Xác thực CMT/CCCD/Hộ chiếu mặt trước',
+      noti: 'Vui lòng đưa CMT/CCCD/Hộ chiếu mặt trước vào gần khung hình',
       recipientId: this.recipientId,
       contractId: this.idContract,
       ekycDocType: ekycDocType
@@ -4917,7 +4917,8 @@ export class ConsiderContractComponent
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result) => {
-      this.cccdFront = result;
+      // this.cccdFront = result;
+      this.cccdFront = result.base64Img;
 
       if (this.recipient.name && this.recipient.card_id) {
         this.nameCompany = this.recipient.name;
@@ -4933,7 +4934,27 @@ export class ConsiderContractComponent
           });
       }
 
-      if (result) this.eKYCSignOpenAfter();
+      // if (result) this.eKYCSignOpenAfter();
+      if (result.docType == "OLD ID" || result.docType == "NEW ID") this.eKYCSignOpenAfter()
+        else {
+          const dialogConfig = new MatDialogConfig();
+  
+          const dataFace = {
+            cccdFront: this.cccdFront,
+            contractId: this.idContract,
+          };
+    
+          dialogConfig.data = dataFace;
+          dialogConfig.disableClose = true;
+    
+          const final = this.dialog.open(EkycDialogSignComponent, dialogConfig);
+  
+          final.afterClosed().subscribe(async (result: any) => {
+            if (result == 2) {
+              await this.signContractSubmit();
+            }
+          });
+        }
     });
   }
 

@@ -316,10 +316,12 @@ export class DetermineSignerComponent implements OnInit {
     let numberContractUseOrg: any = null;
     let numberContractBuyOrg: any = null;
     let checkSmsMethod: any = null;
+    let brandName:any=null;
     //So luong hop dong da dung
     try {
       numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
       checkSmsMethod = numberContractUseOrg.sms_send_method;
+      brandName = numberContractUseOrg.brand_name;
     } catch (err) {
       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu đã dùng ' + err, '', 3000);
     }
@@ -334,7 +336,7 @@ export class DetermineSignerComponent implements OnInit {
 
     if (countEkyc > 0 && Number(numberContractUseOrg.ekyc) + Number(countEkyc) > Number(numberContractBuyOrg.ekyc)) {
       this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-    } else if ((countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) && checkSmsMethod == 'API') {
+    } else if ((countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) && checkSmsMethod == 'API' && brandName !== 'mContract') {
       this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
     } else {
       this.getApiDetermine(true);
@@ -832,6 +834,8 @@ export class DetermineSignerComponent implements OnInit {
       // validate phía đối tác
       for (let j = 0; j < dataArrPartner.length; j++) {
         let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
+        console.log("isParterSort",isParterSort);
+        
         for (let k = 0; k < isParterSort.length; k++) {
           //Tổ chức
           if (dataArrPartner[j].type != 3) {
@@ -1020,12 +1024,23 @@ export class DetermineSignerComponent implements OnInit {
               //   count++;
               //   break;
               // }
+              
+              // valid cccd passport number
+              if (isParterSort[k].card_id?.trim() &&
+                !this.pattern.card_id9.test(isParterSort[k].card_id?.trim()) &&
+                !this.pattern.card_id12.test(isParterSort[k].card_id?.trim()) &&
+                !this.pattern.card_id_passport.test(isParterSort[k].card_id?.trim()) &&
+                isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+                this.getNotificationValid("CMT/CCCD/Số hộ chiếu" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
+                count++;
+                break;
+              }
 
               if (isParterSort[k].card_id?.trim() && 
               !this.pattern_input.taxCode_form.test(isParterSort[k].card_id?.trim()) &&
               !this.pattern.card_id9.test(isParterSort[k].card_id?.trim()) && 
               !this.pattern.card_id12.test(isParterSort[k].card_id?.trim()) && 
-              isParterSort[k].sign_type.length > 0) {
+              isParterSort[k].sign_type.filter((p: any) => p.id !== 5).length > 0) {
                 this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
                 count++;
                 break;
@@ -1072,6 +1087,7 @@ export class DetermineSignerComponent implements OnInit {
             if (isParterSort[k].card_id?.trim() &&
               !this.pattern.card_id9.test(isParterSort[k].card_id?.trim()) &&
               !this.pattern.card_id12.test(isParterSort[k].card_id?.trim()) &&
+              !this.pattern.card_id_passport.test(isParterSort[k].card_id?.trim()) &&
               isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
@@ -1132,7 +1148,7 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       if (this.getCheckDuplicateCardId(allCheckEmail, this.datas.is_determine_clone)) {
-        this.getNotificationValid("Mã số thuế/CMT/CCCD không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Mã số thuế/CMT/CCCD/Hộ chiếu không được trùng nhau giữa các bên tham gia!");
         return false
       }
     }

@@ -349,10 +349,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     let numberContractUseOrg: any = null;
     let numberContractBuyOrg: any = null;
     let checkSmsMethod: any = null;
+    let brandName: any = null;
     //So luong hop dong da dung
     try {
       numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
       checkSmsMethod = numberContractUseOrg.sms_send_method;
+      brandName = numberContractUseOrg.brand_name;
     } catch(err) {
       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu đã dùng '+err,'',3000);
     }
@@ -367,7 +369,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     if(countEkyc > 0 && Number(numberContractUseOrg.ekyc) + Number(countEkyc) > Number(numberContractBuyOrg.ekyc)) {
       this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-    } else if((countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) && checkSmsMethod == 'API') {
+    } else if((countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) && checkSmsMethod == 'API' && brandName !== 'mContract') {
       this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
     } else {
       this.getApiDetermine(true);
@@ -1018,8 +1020,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             // valid cccd number
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
             !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
+            !this.pattern.card_id_passport.test(isParterSort[k].card_id.trim()) &&
             isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
+              this.getNotificationValid("CMT/CCCD/ Số hộ chiếu" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
@@ -1068,7 +1071,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
 
       if (this.getCheckDuplicateCardId(allCheckEmail, this.datasForm.is_determine_clone)) {
-        this.getNotificationValid("Mã số thuế/CMT/CCCD không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Mã số thuế/CMT/CCCD/Hộ chiếu không được trùng nhau giữa các bên tham gia!");
         return false
       }
     }
