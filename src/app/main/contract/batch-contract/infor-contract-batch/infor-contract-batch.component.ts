@@ -391,7 +391,17 @@ export class InforContractBatchComponent implements OnInit {
                                   '',
                                   3000
                                 );
-                              } else if (
+                              } else if (checkSmsMethod == 'API' && this.brandName != 'mContract') {
+                                if (responseUpload.status == 204) {
+                                  //next step
+                                  this.step = variable.stepSampleContractBatch.step2;
+                                  this.datasBatch.stepLast = this.step;
+                                  this.nextOrPreviousStep(this.step);
+                                  
+                                  this.spinner.hide();
+                                }
+                                }
+                                else if (
                                 (Number(this.smsContractUse) +
                                   Number(countSMS) >
                                 Number(this.smsContractBuy)) && checkSmsMethod == 'API' && this.brandName == 'mContract'
