@@ -25,6 +25,7 @@ export class RemoteDialogSignComponent implements OnInit {
   currentUser: any;
   taxCode: any;
   mobile: boolean = false;
+  phone: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -47,6 +48,7 @@ export class RemoteDialogSignComponent implements OnInit {
         // Validators.pattern(parttern.card_id9) ||
         // Validators.pattern(parttern.card_id12)
       ]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
   }
 
@@ -54,7 +56,8 @@ export class RemoteDialogSignComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
-
+    console.log("this.dtaa",this.datas);
+    
 
 
     this.user = this.userService.getInforUser();
@@ -72,6 +75,7 @@ export class RemoteDialogSignComponent implements OnInit {
         Validators.required,
         Validators.pattern(parttern.cardid)
       ]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
       if (this.user.organization_id != 0) {
       // this.userService.getUserById(this.id).subscribe((response) => {
@@ -99,6 +103,7 @@ export class RemoteDialogSignComponent implements OnInit {
                 [Validators.required,
                   Validators.pattern(parttern.cardid)
               ]),
+              phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
             })
 
             break;
@@ -124,6 +129,15 @@ export class RemoteDialogSignComponent implements OnInit {
       })
 
     this.getDeviceApp()
+  }
+  
+  // Hàm kiểm tra giá trị của "supplier"
+  isMobiFoneCA(): boolean {
+    return this.myForm.get('supplier')?.value === '2';
+  }
+
+  isVNPTorCA2(): boolean {
+    return this.myForm.get('supplier')?.value === '1' || this.myForm.get('supplier')?.value === '3';
   }
 
   getDeviceApp() {
@@ -234,7 +248,8 @@ export class RemoteDialogSignComponent implements OnInit {
 
         const data = {
           ma_dvcs: this.myForm.value.taxCode,
-          type: this.myForm.value.supplier
+          type: this.myForm.value.supplier,
+          phone: this.myForm.value.phone
         };
 
 
@@ -257,7 +272,8 @@ export class RemoteDialogSignComponent implements OnInit {
     } else {
       const data = {
         ma_dvcs: this.myForm.value.taxCode,
-        type: this.myForm.value.supplier
+        type: this.myForm.value.supplier,
+        phone: this.myForm.value.phone
       };
 
       this.dialogRef.close(data);
