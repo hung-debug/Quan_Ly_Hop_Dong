@@ -444,6 +444,7 @@
   "cardId1": "Card Id",
   "cardId.passport":"CMT/CCCD/Passport",
   "enter.cardId.passport":"Enter CMT/CCCD/Passport",
+  "card.passport":"MST/CCCD/Passport",
   "enter.note": "Enter note",
   "only.match.email.org": "Only match email in the same organization",
   "parent.unit": "Parent unit",
