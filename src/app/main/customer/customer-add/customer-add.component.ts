@@ -376,8 +376,8 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             }
 
-            if(!parttern.cardid.test(this.personalCustomer.card_id)){
-              this.getNotificationValid("Mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
+            if(!parttern.cardid.test(this.personalCustomer.card_id) && !parttern.card_id_passport.test(this.personalCustomer.card_id)){
+              this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
               return false;
             }
 
