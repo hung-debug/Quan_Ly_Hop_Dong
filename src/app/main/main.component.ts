@@ -188,13 +188,11 @@ export class MainComponent implements OnInit {
   //click logout
   async logout() {
     try {
-      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
       let data = {
-        eventName: "Logout", // Đổi eventName thành Logout
+        eventName: "Logout",
         params: {
-          // Lấy username từ localStorage, nếu không có thì để trống.
           username: JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email,
-          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString()
         }
       };
       this.customerAnalysis.pushData(data);

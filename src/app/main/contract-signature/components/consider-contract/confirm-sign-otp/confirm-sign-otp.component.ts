@@ -425,18 +425,22 @@ export class ConfirmSignOtpComponent implements OnInit {
         async (result) => {
           if(result?.success == false){
             if(result.message == 'Wrong otp'){
+              this.handleContractData('Thất bại: Mã OTP không đúng')
               this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);
               this.spinner.hide();
             }else if(result.message == 'Otp code has been expired'){
+              this.handleContractData('Thất bại: Mã OTP quá hạn')
               this.toastService.showErrorHTMLWithTimeout('Mã OTP quá hạn', '', 3000);
               this.spinner.hide();
             }else if(result.message == 'You have entered wrong otp 5 times in a row'){
+              this.handleContractData('Thất bại: Bạn đã nhập sai OTP 5 lần liên tiếp')
               this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(result.nextAttempt, "dd/MM/yyyy HH:mm"), '', 3000);
               this.dialog.closeAll();
               this.spinner.hide();
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
 
             } else{
+              this.handleContractData('Thất bại: Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!')
               this.toastService.showErrorHTMLWithTimeout('Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!',
                 'Thực hiện ký không thành công!', 3000);
               this.dialog.closeAll();
@@ -446,30 +450,14 @@ export class ConfirmSignOtpComponent implements OnInit {
             if(this.data.firstHandler) {
               let savefirstHandler = await this.savefirstHandler();
               if(!savefirstHandler) {
+                this.handleContractData('Thất bại: Lỗi lưu ô Số tài liệu hoặc ô Text')
                 this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
               }
             }
             if (!notContainSignImage) {
             }
             setTimeout(async () => {
-              try {
-                await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-
-                let data = {
-                  eventName: "kyOTP", // Thay đổi eventName cho phù hợp
-                  params: {
-                    tenHĐ: this.datas.is_data_contract.name,
-                    idHĐ: this.datas.is_data_contract.id,
-                    maHĐ: this.datas.is_data_contract.contract_uid,
-                    nguoiXuLy: this.datasOtp.currentUser.email || this.datasOtp.currentUser.phone,
-                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-                  },
-                };
-                await this.customerAnalysis.pushData(data);
-                console.log('Dữ liệu ký OTP đã được gửi thành công!');
-              } catch (error) {
-                console.error('Lỗi khi gửi dữ liệu ký OTP:', error);
-              }
+              this.handleContractData('Thành công')
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!' : 'Xem xét tài liệu thành công'
@@ -480,12 +468,32 @@ export class ConfirmSignOtpComponent implements OnInit {
           }
 
         }, error => {
+          this.handleContractData('Thất bại: Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý')
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
           this.spinner.hide();
         }
       )
     }
 
+  }
+
+  async handleContractData(status: string) {
+    try {
+      let data = {
+        eventName: "kyOTP",
+        params: {
+          tenHĐ: this.datas.is_data_contract.name,
+          idHĐ: this.datas.is_data_contract.id,
+          maHĐ: this.datas.is_data_contract.contract_uid,
+          nguoiXuLy: this.datasOtp.currentUser.email || this.datasOtp.currentUser.phone,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        },
+      };
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
+    }
   }
 
   changePhone(){

@@ -152,43 +152,19 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       const statusResponse: any = await this.contractService
         .changeStatusContract(this.datas.id, 10, '')
         .toPromise(); // Đợi kết quả từ API
-  
+      let reason;
       // Kiểm tra kết quả trả về từ changeStatusContract
-      if (statusResponse.errors?.length > 0) {
-        if (statusResponse.errors[0].code === 1017) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
-          return;
-        }
+      if (statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017) {
+        this.spinner.hide();
+        reason = 'Số tài liệu đã tồn tại'
+        this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
+        await this.handleContractData('Thất bại: ' + reason, statusResponse);
       } else {
-        // Điều hướng nếu thành công
+        this.toastService.showSuccessHTMLWithTimeout('create.contract.success', '', 3000);
+        await this.handleContractData('Thành công', statusResponse);
         this.router.navigate(['/main/contract/create/processing']);
         await this.router.navigateByUrl('/', { skipLocationChange: true });
         this.router.navigate(['/main/contract/create/processing']);
-  
-        // Hiển thị thông báo thành công
-        this.toastService.showSuccessHTMLWithTimeout('create.contract.success', '', 3000);
-        try {
-          await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-  
-          // Tạo đối tượng data chứa thông tin sự kiện và thông tin từ this.datas
-          let data = {
-            eventName: "taoHDDonLe",
-            params: {
-              tenHD: this.datas.name,
-              maHD: this.datas.contract_id,
-              thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-            },
-            // Thêm các thông tin khác từ this.datas nếu cần
-          };
-          console.log('Giá trị của this.datas.contract_no:', this.datas);
-          console.log('ngay tao', this.customerAnalysis.convertToVietnamTimeISOString(new Date()))
-          // Gọi pushData để gửi dữ liệu lên Parse Server
-          await this.customerAnalysis.pushData(data); // Chỉ truyền data
-          console.log('Dữ liệu đã được gửi thành công!');
-        } catch (error) {
-          console.error('Lỗi khi gửi dữ liệu:', error);
-        }
       }
     } catch (error) {
       // Xử lý lỗi nếu có
@@ -198,6 +174,29 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       this.spinner.hide(); // Đảm bảo spinner được ẩn dù có lỗi hay không
     }
   }
+
+  async handleContractData(status: string, statusResponse: any) {
+    try {
+      let data = {
+        eventName: "taoHDDonLe",
+        params: {
+          tenHD: this.datas.name,
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        } as any,
+      };
+  
+      if (!(statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017)) {
+        data.params.idHD = statusResponse.id;
+        data.params.maHD = statusResponse.contract_uid;
+      }
+  
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
+    }
+  }
+  
 
   user: any;
   submit(action: string) {

@@ -121,6 +121,9 @@ export class ContractSignatureComponent implements OnInit {
   inputTimeout: any
   numberPage: number;
   enterPage: number = 1;
+  signedContract: any;
+  networkCode: string;
+  supplierID: any;
   signInfoPKIU: any = {};
   chooseContract: any = [];
   constructor(
@@ -148,6 +151,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("vvvvvvvvvvv")
     this.route.queryParams.subscribe((params) => {
 
       if (typeof params.type_display != 'undefined' && params.type_display) {
@@ -815,10 +819,8 @@ export class ContractSignatureComponent implements OnInit {
   private convertActionStr(): string {
     return 'contract.list.received';
   }
-  isPushDataSent: boolean = false;
-  dataChecked: any[] = [];
 
-  
+  dataChecked: any[] = [];
   toggleOne(item: any, index1: any) {
     item.checked = !item.checked
     let data = {
@@ -1265,7 +1267,6 @@ export class ContractSignatureComponent implements OnInit {
       if (isSubmit) {
         try {
           for (let index = 0; index < this.dataChecked.length; index++) {
-            await this.contractServiceV1.updateInfoContractConsider([], this.dataChecked[index].id).toPromise(); // Nếu phương thức trả về Observable, cần chuyển đổi sang Promise
           }
         } catch (error) {
           this.toastService.showErrorHTMLWithTimeout(
@@ -1276,10 +1277,6 @@ export class ContractSignatureComponent implements OnInit {
         }
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this.router.navigate(['main/c/receive/processed']);
-        });
-        await this.pushCustomerAnalysisData("xemxetLoHĐ",  {
-          tenHĐ: this.contractViewList.filter(item => this.dataChecked.some(checkedItem => checkedItem.id === item.id)).map(item => item.contractName), // Lấy danh sách tên HĐ
-          maHĐ: this.contractViewList.filter(item => this.dataChecked.some(checkedItem => checkedItem.id === item.id)).map(item => item.contract_uid), // Lấy danh sách mã HĐ
         });
         this.toastService.showSuccessHTMLWithTimeout('Xem xét tài liệu thành công',
           '',
@@ -1332,7 +1329,7 @@ export class ContractSignatureComponent implements OnInit {
     }
     //Lay hop dong ky nhieu bang hsm hay usb token
     let signId = contractsSignManyChecked[0]?.sign_type[0]?.id;
-
+    this.signedContract = contractsSignManyChecked;
     let recipientId: any = [];
     let taxCode: any = [];
     let idSignMany: any = [];
@@ -1495,40 +1492,7 @@ export class ContractSignatureComponent implements OnInit {
 
     return contractNames;
   }
-  getRemoteSignEventName(supplierID: any): string {
-    switch (supplierID) {
-      case "1":
-        return "kyLoRS_VNPTSmartCA";
-      case "3":
-        return "kyLoRS_Nacencomm";
-      case "2":
-        return "kyLoRS_MobiCA";
-      default:
-        return "kyLoRS_Default"; // Hoặc một giá trị mặc định khác
-    }
-  }
-  getSimPKIEventName(networkCode: any) {
-    switch (networkCode) {
-      case 1:
-        return "kyLoSimPKI_MobiFone";
-      case 2:
-        return "kyLoSimPKI_Viettel";
-      case "bcy":
-        return "kyLoSimPKI_BCY";
-      default:
-        return "kyLoSimPKI_Default"; // Hoặc một giá trị mặc định khác
-    }
-  }
-  getUsbEventName(usbTokenType: string): string {
-  switch (usbTokenType) {
-    case "bcy":
-      return "kyLoUSBtokenBCY";
-    case "standard":
-      return "kyLoUSBtoken";
-    default:
-      return "kyLoUSBtoken"; // Giá trị mặc định (có thể điều chỉnh)
-  }
-}
+
   async actionSignMulti(signId: any, recipientId: any, taxCode: any, result: any, idSignMany: any) {
     if(signId == 3) {
       let signI = '';
@@ -1569,6 +1533,7 @@ export class ContractSignatureComponent implements OnInit {
         // Await the dialog close event
         const result: any = await dialogRef.afterClosed().toPromise();
         if(result) {
+          this.networkCode = result.networkCode;
           this.spinner.show();
           const checkSign = await this.contractServiceV1.signPkiDigitalMulti(
             result.phone,
@@ -1580,6 +1545,7 @@ export class ContractSignatureComponent implements OnInit {
             name
           ).toPromise();
           this.spinner.hide();
+          this.handleContractData(checkSign);
           recipientId.forEach((id: any) => {
             let existingRecipient = checkSign.find((item: any) => item.recipientId === id);
             
@@ -1634,14 +1600,7 @@ export class ContractSignatureComponent implements OnInit {
               10000
             );
           }
-          const contractNames = this.chooseContract.map((contract: any) => contract.contractName);
-          const contractUids = this.contractsSignMany.filter(item => recipientId.includes(item.id)).map(item => item.contract_uid); // Lấy contract_uid
-          const contractIds = this.contractsSignMany.filter(item => recipientId.includes(item.id)).map(item => item.contractId)
-          await this.pushCustomerAnalysisData(this.getSimPKIEventName(result.networkCode), {
-            tenHĐ: contractNames,
-            maHĐ: contractUids,
-            idHĐ: contractIds
-          }); // Truyền eventName
+
           if(!(resultsTrue.length == 0 && resultsFalse.length == checkSign.length)) {
             this.router
             .navigateByUrl('/', { skipLocationChange: true })
@@ -1732,16 +1691,8 @@ export class ContractSignatureComponent implements OnInit {
           return false;
         }
       }
-      const contractNames = contractsSignManyChecked.map(item => item.contractName);
-      const contractUids = contractsSignManyChecked.map(item => item.contract_uid);
-      const contractIds = contractsSignManyChecked.map(item => item.contractId);
+
       this.signUsbTokenMany(fileC, idContract, recipientId, documentId, taxCode, idSignMany, result.mark);
-      // Thêm đoạn code phân tích khách hàng vào đây (sau khi gọi this.signUsbTokenMany())
-      await this.pushCustomerAnalysisData(this.getUsbEventName(result.usbTokenType), {
-        tenHĐ: contractNames, // Lấy danh sách tên HĐ
-        maHĐ: contractUids, // Lấy danh sách mã HĐ
-        idHĐ: contractIds // Lấy danh sách id HĐ
-    }); // Truyền eventName
     } else if (signId == 4) {
       //Ký nhiều hsm
       //Mở popup ký hsm
@@ -1813,7 +1764,7 @@ export class ContractSignatureComponent implements OnInit {
             );
 
             let countSuccess = 0;
-
+            this.handleContractData(checkSign);
             for (let i = 0; i < checkSign.length; i++) {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
@@ -1878,29 +1829,7 @@ export class ContractSignatureComponent implements OnInit {
                 '',
                 3000
               );
-              
-             // Xác định eventName dựa trên nhà cung cấp HSM
-            let eventName: string;
-            switch (this.dataHsm.supplier) {
-              case "mobifone":
-                eventName = "kyLoHsm_mbf";
-                break;
-              case "icorp":
-                eventName = "kyLoHsm_ica";
-                break;
-              default:
-                eventName = "kyLoHsm_default"; // Hoặc một giá trị mặc định khác
-                break;
-            }
-            const contractNames = contractsSignManyChecked.map(item => item.contractName);
-            const contractUids = contractsSignManyChecked.map(item => item.contract_uid);
-            const contractIds = contractsSignManyChecked.map(item => item.contractId);
-            // Thêm đoạn code phân tích khách hàng vào đây
-            await this.pushCustomerAnalysisData(eventName, {
-              tenHĐ: contractNames, // Lấy danh sách tên HĐ
-              maHĐ: contractUids, // Lấy danh sách mã HĐ
-              idHĐ: contractIds // Lấy danh sách id HĐ
-          });
+
               this.router
                 .navigateByUrl('/', { skipLocationChange: true })
                 .then(() => {
@@ -2018,9 +1947,11 @@ export class ContractSignatureComponent implements OnInit {
               return this.toastService.showErrorHTMLWithTimeout("sign.cert.err","",3000)
             }
             let countSuccess = 0;
-            for (const checkSign of checkSignResults) {
-              countSuccess += checkSign.length;
-            }
+            let dataSign = checkSignResults.flat();
+            this.handleContractData(dataSign)
+            // for (const checkSign of checkSignResults) {
+            //   countSuccess += checkSign.length;
+            // }
 
             if (checkSignResults[0][0].result.success && this.currentDate < this.endDate) {
               this.toastService.showSuccessHTMLWithTimeout(
@@ -2028,14 +1959,7 @@ export class ContractSignatureComponent implements OnInit {
                 '',
                 3000
               );
-              const contractNames = contractsSignManyChecked.map(item => item.contractName);
-              const contractUids = contractsSignManyChecked.map(item => item.contract_uid);
-              const contractIds = contractsSignManyChecked.map(item => item.contractId);
-              await this.pushCustomerAnalysisData("kyLoCTS", {
-                tenHĐ: contractNames, // Lấy danh sách tên HĐ
-                maHĐ: contractUids, // Lấy danh sách mã HĐ
-                idHĐ: contractIds // Lấy danh sách id HĐ
-            }); // Truyền thêm cert_id
+
               await this.router.navigateByUrl('/', { skipLocationChange: true });
               await this.router.navigate(['main/c/receive/processed']);
             } else {
@@ -2089,7 +2013,7 @@ export class ContractSignatureComponent implements OnInit {
             return;
           }
           let supplierID = resultRS.type;
-        
+          this.supplierID = supplierID;
           this.nameCompany = resultRS.ma_dvcs;
 
           try {
@@ -2117,25 +2041,26 @@ export class ContractSignatureComponent implements OnInit {
           let recipientIds: any = contractsSignManyChecked.map(item => item.id)
           //Call api ký nhiều remote signing
           await this.contractServiceV1.signRemoteMulti(
-              manyRemoteSignData,
-              recipientIds,
-              null,
-              3,
-              supplierID
+            manyRemoteSignData,
+            recipientIds,
+            null,
+            3,
+            supplierID
           ).then(
-            async (res: any) => {
+            (res: any) => {
               this.spinner.hide();
 
               let countSuccess = 0;
               let checkSign = res
+              this.handleContractData(checkSign);
               for (let i = 0; i < checkSign.length; i++) {
                 if (checkSign[i].result.success == false) {
-            this.spinner.hide();
-  
+                  this.spinner.hide();
+
                   if (checkSign[i].result.message == 'Tax code do not match!') {
                     this.toastService.showErrorHTMLWithTimeout(
                       'taxcode.not.match',
-                        '',
+                      '',
                       3000
                     );
                   } else if (
@@ -2157,7 +2082,7 @@ export class ContractSignatureComponent implements OnInit {
                   } else {
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign[i].result.message,
-                        '',
+                      '',
                       3000
                     );
                   }
@@ -2165,35 +2090,25 @@ export class ContractSignatureComponent implements OnInit {
                 } else {
                   countSuccess++;
                 }
-                }
-  
+              }
+
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
                 this.remoteDialogSuccessOpen(supplierID).then((res) => {
                   if (res.isDismissed) {
-                this.router
-                    .navigateByUrl('/', { skipLocationChange: true })
-                    .then(() => {
+                    this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
                         this.router.navigate(['main/c/receive/processed']);
-                    });
+                      });
                   }
                 })
-                // Lấy thông tin từ contractsSignManyChecked
-                const contractNames = contractsSignManyChecked.map((item: any) => item.contractName);
-                const contractUids = contractsSignManyChecked.map(item => item.contract_uid);
-                const contractIds = contractsSignManyChecked.map(item => item.contractId);
-                  // Thêm đoạn code phân tích khách hàng vào đây
-                  await this.pushCustomerAnalysisData(this.getRemoteSignEventName(supplierID), {
-                      tenHĐ: contractNames, // Lấy danh sách tên HĐ
-                      maHĐ: contractUids, // Lấy danh sách mã HĐ
-                      idHĐ: contractIds // Lấy danh sách id HĐ
-              });
-            }
+              }
             },
             (err: any) => {
-            this.spinner.hide();
+              this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
-          }
+            }
           )
         }
       });
@@ -2637,6 +2552,7 @@ export class ContractSignatureComponent implements OnInit {
     let boxTypes: any = []
     let certInfoBase64 = '';
     let sessionId: any;
+    let checkSign: any = [];
     //tao mang currentHeight toan so 0;
     for (let i = 0; i < fileC.length; i++) {
       currentHeight[i] = 0;
@@ -2914,15 +2830,15 @@ export class ContractSignatureComponent implements OnInit {
               );
               return false;
             }
-
+            let infoSign: any;
             const updateInfo =
-              await this.contractServiceV1.updateInfoContractConsiderPromise(
-                [{
-                  processAt: this.isDateTime
-                }],
-                recipientId[i]
-              );
-
+            await this.contractServiceV1.updateInfoContractConsiderPromise(
+              [{
+                processAt: this.isDateTime
+              }],
+              recipientId[i]
+            );
+            
             if (!updateInfo.id) {
               this.toastService.showErrorHTMLWithTimeout(
                 'Lỗi cập nhật trạng thái tài liệu ',
@@ -3067,6 +2983,9 @@ export class ContractSignatureComponent implements OnInit {
         //   });
       })
       await Promise.all(promises)
+      
+      //this.handleContractData(checkSign);
+      //await Promise.all(promises)
       // token v2 - optimizing
       await this.signV2FixingProcess()
       this.toastService.showSuccessHTMLWithTimeout(
@@ -3500,30 +3419,82 @@ export class ContractSignatureComponent implements OnInit {
     } else if (currentSigningStatus.success) {
       return true
     }
+  }
+
+  mapRecipientStatus(a: any, b: any) {
+    const idOrder = a.split(', ').map(Number);
+    
+    const idToResult = b.reduce((acc: any, item: any) => {
+        acc[item.recipientId || item.recipients] = item.result.success ? 'Thành công' : `Thất bại: ${item.result.message}`;
+        return acc;
+    }, {});
+
+    const result = idOrder.map((id: any) => idToResult[id]).join(', ');
+    
+    return result;
 }
-  // Trong ContractSignatureComponent
-  async pushCustomerAnalysisData(eventName: string, params: any) {
-    if (!this.isPushDataSent) {
-        try {
-            await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-            const data = {
-                eventName,
-                params: {
-                    tenHĐ: params.tenHĐ,  // Lấy trực tiếp từ params
-                    maHĐ: params.maHĐ,    // Lấy trực tiếp từ params
-                    idHĐ: params.idHĐ,
-                    trangThaiHĐ: params.trangThaiHĐ,
-                    nguoiXuLy: this.currentUser?.email || this.currentUser?.phone,
-                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date()),
-                    ...params, // Thêm các tham số khác (nếu có)
-                },
-            };
-            await this.customerAnalysis.pushData(data);
-            console.log(`Đã push data cho sự kiện: ${eventName}`, data); // Log cả data
-            this.isPushDataSent = true;
-        } catch (error) {
-            console.error(`Lỗi khi push data cho sự kiện ${eventName}:`, error);
+
+  async handleContractData(dataContract: any) {
+    try {
+      let eventName;
+      let tenHD = this.signedContract.map((contract: any) => contract.contractName).join(', ');
+      let idHĐ = this.signedContract.map((contract: any) => contract.id).join(', ');
+      let maHĐ = this.signedContract.map((contract: any) => contract.contract_uid).join(', ');
+      let status = this.mapRecipientStatus(idHĐ, dataContract);
+
+      if(this.signedContract.sign_type.length == 0) {
+        eventName = 'xemxetLoHĐ'
+      } else {
+        let typesign = this.signedContract[0]?.sign_type[0]?.id;
+        if (typesign == 4) {
+          if(this.dataHsm?.supplier == 'mobifone') {
+            eventName = 'kyLoHsm_mbf'
+          } else if (this.dataHsm?.supplier == 'icorp'){
+            eventName = 'kyLoHsm_ica'
+          } else {
+            eventName = 'kyLoHsm'
+          }
+        } else if (typesign == 3) {
+          if(this.networkCode == 'MobiFone') {
+            eventName = 'kyLoSimPKI_MobiFone'
+          } else if (this.networkCode == 'Viettel') {
+            eventName = 'kyLoSimPKI_Viettel'
+          } else if (this.networkCode == "bcy"){
+            eventName = 'kyLoSimPKI_BCY'
+          } else {
+            eventName = 'kyLoSimPKI'
+          }
+        } else if (typesign == 6) {
+          eventName = 'kyLoCTS'
+        } else if (typesign == 8) {
+          if(this.supplierID == 1) {
+            eventName = 'kyLoRS_VNPTSmartCA'
+          } else if (this.supplierID == 2) {
+            eventName = 'kyLoRS_MobiCA'
+          } else if (this.supplierID == 3){
+            eventName = 'kyLoRS_Nacencomm'
+          } else {
+            eventName = 'kyLoRS'
+          }
+        } else if(typesign == 2) {
+          eventName = 'kyLoUSBtoken'
         }
+      }
+    
+      let data = {
+        eventName: eventName,
+        params: {
+          tenHĐ: tenHD,
+          idHĐ: idHĐ,
+          maHĐ: maHĐ,
+          trangThaiHD: status,
+          nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+        },
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
     }
-}
+  }
 }
