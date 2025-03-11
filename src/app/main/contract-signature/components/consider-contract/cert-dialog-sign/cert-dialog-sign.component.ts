@@ -147,16 +147,16 @@ export class CertDialogSignComponent implements OnInit {
           this.dialogRef.close(this.selectedCert);
           return;
         }
-        else {
-          if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
-              '',
-              3000
-            );
-            return;
-          }
-        }
+        // else {
+        //   if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
+        //       '',
+        //       3000
+        //     );
+        //     return;
+        //   }
+        // }
       }
     } else if (this.data.id == 1) {
       //trường hợp ký nhiều
@@ -166,16 +166,16 @@ export class CertDialogSignComponent implements OnInit {
           this.dialogRef.close(this.selectedCert);
           return;
         }
-        else {
-          if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
-              '',
-              3000
-            );
-            return;
-          }
-        }
+        // else {
+        //   if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
+        //       '',
+        //       3000
+        //     );
+        //     return;
+        //   }
+        // }
       }
     }
   }
