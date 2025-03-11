@@ -136,7 +136,7 @@ export class ReportEKYCComponent implements OnInit {
         rowspan: 1,
       },
       {
-        header: 'cardId',
+        header: 'cardId.passport',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,

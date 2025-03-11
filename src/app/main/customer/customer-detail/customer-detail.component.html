@@ -859,7 +859,7 @@
                         <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
                         <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(this).length > 0">
                           <div class="participants__name" style="width: 88%">
-                            <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;</div>
+                            <div class="label_detail text-color">{{'cardId.passport' | translate}}&nbsp;</div>
                             <div class="input-data">
                               <input type="text" [(ngModel)]="this.card_id"
                                 oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>

@@ -1055,7 +1055,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             if (!isParterSort[k].card_id?.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5 || p.id == 9).length > 0) {
-              this.getNotificationValid("Vui lòng nhập CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của đối tác cá nhân!")
+              this.getNotificationValid("Vui lòng nhập CMT/CCCD/Số hộ chiếu của" + this.getNameObjectValid(3) + "tổ chức của đối tác cá nhân!")
               count++;
               break;
             }
