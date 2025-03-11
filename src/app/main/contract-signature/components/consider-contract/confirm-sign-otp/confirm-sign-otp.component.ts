@@ -45,6 +45,7 @@ export class ConfirmSignOtpComponent implements OnInit {
   smsContractBuy: any;
 
   @Output() confirmOtpForm = new EventEmitter();
+  orgId: any;
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -81,7 +82,17 @@ export class ConfirmSignOtpComponent implements OnInit {
     //Lấy số lượng tài liệu đã sử dụng
     const numberContractUseOriganzation = await this.unitService.getNumberContractUseOriganzation(this.data.orgId).toPromise();
     this.smsContractUse = numberContractUseOriganzation.sms;
-
+    let numberContractUseOrg: any = null;
+    let checkSmsMethod: any = null;
+    let brandName:any=null;
+    //So luong hop dong da dung
+    try {
+      numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
+      checkSmsMethod = numberContractUseOrg.sms_send_method;
+      brandName = numberContractUseOrg.brand_name;
+    } catch (err) {
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu đã dùng ' + err, '', 3000);
+    }
     //Lấy số lượng tài liệu đã mua
     const getNumberContractBuyOriganzation = await this.unitService.getNumberContractBuyOriganzation(this.data.orgId).toPromise();
     this.smsContractBuy = getNumberContractBuyOriganzation.sms;
