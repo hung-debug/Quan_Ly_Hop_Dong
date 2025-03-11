@@ -13,7 +13,7 @@ export const parttern = {
 
   card_id12: /^[0-9]{12}$/,
   
-  card_id_passport: /^[A-Z][0-9]{8}$/, // validate số hộ chiếu
+  card_id_passport: /^[A-Z][0-9]{7,8}$/, // validate số hộ chiếu
 
   card_idHSM9: /^\w{9}(\w{3})?$/,
 
