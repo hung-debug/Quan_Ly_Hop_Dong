@@ -363,9 +363,9 @@ export class ForwardContractComponent implements OnInit {
       if (this.isReqCardId && !String(this.myForm.value.card_id)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD/Số hộ chiếu người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
-      } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) 
-        && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12) 
-        && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id_passport)) {
+      } else if ((this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) 
+        && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) || 
+        (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).match(parttern.card_id_passport))) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD/Số hộ chiếu', '', 3000);
         return;
       }
