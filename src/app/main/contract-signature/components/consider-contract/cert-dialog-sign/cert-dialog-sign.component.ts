@@ -149,7 +149,7 @@ export class CertDialogSignComponent implements OnInit {
       //trường hợp ký đơn
       for (const signUpdate of this.data.isDataObjectSignature) {
         if (signUpdate?.recipient?.email === this.currentUser.email &&
-          (this.dataCardId === signUpdate?.recipient?.cardId || this.dataMST === signUpdate?.recipient?.cardId) && signUpdate?.recipient?.status === 1) {
+           signUpdate?.recipient?.status === 1) {
           this.dialogRef.close(this.selectedCert);
           return;
         }
@@ -168,7 +168,7 @@ export class CertDialogSignComponent implements OnInit {
       //trường hợp ký nhiều
       for (const signUpdate of this.data.isDataObjectSignature) {
         if (signUpdate?.email === this.currentUser.email &&
-          (this.dataCardId === signUpdate?.cardId || this.dataMST === signUpdate?.cardId) && signUpdate?.status === 1) {
+           signUpdate?.status === 1) {
           this.dialogRef.close(this.selectedCert);
           return;
         }
