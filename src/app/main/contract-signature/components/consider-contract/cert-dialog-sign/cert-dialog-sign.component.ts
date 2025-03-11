@@ -29,6 +29,7 @@ export class CertDialogSignComponent implements OnInit {
   list: any[];
   selectedCert: any;
   dataCardId: any;
+  dataMST:any;
   currentUser: any;
   loginType: any;
 
@@ -136,14 +137,19 @@ export class CertDialogSignComponent implements OnInit {
       )
     }
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    const uidCert = this.getValueByKey(this.selectedCert.certInformation, "UID")
-    this.dataCardId = uidCert?.split(":")[1];
-
+    // const uidCert = this.getValueByKey(this.selectedCert.certInformation, "UID=CCCD")
+    // this.dataCardId = uidCert?.split(":")[1];
+    const cccdMatch = this.selectedCert.certInformation.match(/UID=CCCD:([\d]+)/);
+    const mstMatch = this.selectedCert.certInformation.match(/UID=MST:([\d-]+)/);
+    
+    this.dataCardId = cccdMatch ? cccdMatch[1] : null;
+    this.dataMST = mstMatch ? mstMatch[1] : null;
+    
     if (!this.data.id) {
       //trường hợp ký đơn
       for (const signUpdate of this.data.isDataObjectSignature) {
         if (signUpdate?.recipient?.email === this.currentUser.email &&
-          this.dataCardId === signUpdate?.recipient?.cardId && signUpdate?.recipient?.status === 1) {
+          (this.dataCardId === signUpdate?.recipient?.cardId || this.dataMST === signUpdate?.recipient?.cardId) && signUpdate?.recipient?.status === 1) {
           this.dialogRef.close(this.selectedCert);
           return;
         }
@@ -162,7 +168,7 @@ export class CertDialogSignComponent implements OnInit {
       //trường hợp ký nhiều
       for (const signUpdate of this.data.isDataObjectSignature) {
         if (signUpdate?.email === this.currentUser.email &&
-          this.dataCardId === signUpdate?.cardId && signUpdate?.status === 1) {
+          (this.dataCardId === signUpdate?.cardId || this.dataMST === signUpdate?.cardId) && signUpdate?.status === 1) {
           this.dialogRef.close(this.selectedCert);
           return;
         }
