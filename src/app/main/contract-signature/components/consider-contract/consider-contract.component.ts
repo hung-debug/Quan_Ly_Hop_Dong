@@ -5784,11 +5784,11 @@ export class ConsiderContractComponent
         eventName: eventName,
         params: {
           tenHĐ: this.datas.is_data_contract.name,
-          idHĐ: this.datas.is_data_contract.id,
           maHĐ: this.datas.is_data_contract.contract_uid,
-          trangThaiHD: status,
+          idHĐ: this.datas.is_data_contract.id,
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThaiHD: status,
         },
       }
       await this.customerAnalysis.pushData(data);

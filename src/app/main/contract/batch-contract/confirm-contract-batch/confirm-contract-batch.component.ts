@@ -1000,19 +1000,22 @@ export class ConfirmContractBatchComponent
   async handleContractData(status: string, response: any) {
     try {
       let tenHĐ = response.map((contract: any) => contract.name).join(', ');
+      let maHD = response.map((contract: any) => contract.contract_uid).join(', ');
+      let idHD = response.map((contract: any) => contract.id).join(', ');
       let data = {
         eventName: "taoHDTheoLo",
         params: {
           tenHĐ: tenHĐ,
-          tenFile: this.datasBatch.contractFile.name,
+          maHD: maHD,
+          idHD: idHD,
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
         } as any,
       };
   
-      if (!(response.errors?.length > 0 && response.errors[0].code == 1015)) {
-        data.params.idHD = response.map((contract: any) => contract.id).join(', ');
-        data.params.maHD = response.map((contract: any) => contract.contract_uid).join(', ');
+      if (response.errors?.length > 0 && response.errors[0].code == 1015) {
+        delete data.params.idHD;
+        delete data.params.maHD;
       }
       await this.customerAnalysis.pushData(data);
     } catch (error) {
