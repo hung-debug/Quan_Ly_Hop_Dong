@@ -473,7 +473,8 @@ export class ForwardContractComponent implements OnInit {
                         maHĐ: this.datas.is_data_contract.contract_uid,
                         idHĐ: this.datas.dataContract.is_data_contract.id,
                         nguoiXuLy:this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
-                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString()
+                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+                        trangThai: "Thành công"
                       },
                     };
                     await this.customerAnalysis.pushData(data);

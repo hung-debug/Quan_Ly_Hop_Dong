@@ -483,8 +483,8 @@ export class ConfirmSignOtpComponent implements OnInit {
         eventName: "kyOTP",
         params: {
           tenHĐ: this.datas.is_data_contract.name,
-          idHĐ: this.datas.is_data_contract.id,
           maHĐ: this.datas.is_data_contract.contract_uid,
+          idHĐ: this.datas.is_data_contract.id,
           nguoiXuLy: this.datasOtp.currentUser.email || this.datasOtp.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,

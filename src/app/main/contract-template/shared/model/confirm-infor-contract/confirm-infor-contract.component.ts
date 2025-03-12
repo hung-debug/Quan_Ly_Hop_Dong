@@ -481,9 +481,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let data = {
         eventName: eventName,
         params: {
-          idHD: this.datas.id,
           tenMauHĐ: this.datas.name,
           maMauHĐ: this.datas.contract_no,
+          idHD: this.datas.id,
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
         },

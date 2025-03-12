@@ -181,16 +181,17 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         eventName: "taoHDDonLe",
         params: {
           tenHD: this.datas.name,
+          maHD: statusResponse.contract_uid || '',
+          idHD: statusResponse.id || '',
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
         } as any,
       };
   
-      if (!(statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017)) {
-        data.params.idHD = statusResponse.id;
-        data.params.maHD = statusResponse.contract_uid;
-      }
-  
+      if (statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017) {
+        delete data.params.maHD;
+        delete data.params.idHD;
+      }  
       await this.customerAnalysis.pushData(data);
     } catch (error) {
       console.error('Lỗi khi gửi dữ liệu:', error);
