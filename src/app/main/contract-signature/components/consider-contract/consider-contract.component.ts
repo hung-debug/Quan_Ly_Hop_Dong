@@ -3323,6 +3323,7 @@ export class ConsiderContractComponent
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
                     }
+                    this.handleContractData("Thành công");
                   }
                 }
               } catch (error) {
@@ -3374,6 +3375,7 @@ export class ConsiderContractComponent
                       } else if (pdfC1) {
                         fileC = pdfC1.path;
                       }
+                      this.handleContractData("Thành công");
                     }
                   }
                 } catch (error) {
@@ -5479,6 +5481,7 @@ export class ConsiderContractComponent
               });
               
               setTimeout(() => {
+                this.handleContractData("Thành công");
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
@@ -5488,6 +5491,7 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else {
+                  this.handleContractData("Thành công");
                   if ([3, 4].includes(this.datas.roleContractReceived)) {
                     alert('Ký tài liệu thành công');
                   } else {

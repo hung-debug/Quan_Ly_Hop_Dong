@@ -472,7 +472,7 @@ export class ForwardContractComponent implements OnInit {
                       eventName: "uyQuyen/chuyenTiep",
                       params: {
                         tenHĐ: this.datas.dataContract.is_data_contract.name,
-                        maHĐ: this.datas.is_data_contract.contract_uid,
+                        maHĐ: this.datas.dataContract.is_data_contract.contract_uid,
                         idHĐ: this.datas.dataContract.is_data_contract.id,
                         nguoiXuLy:this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
                         thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
