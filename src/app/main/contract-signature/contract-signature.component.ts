@@ -157,7 +157,6 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("vvvvvvvvvvv")
     this.route.queryParams.subscribe((params) => {
 
       if (typeof params.type_display != 'undefined' && params.type_display) {
@@ -3479,13 +3478,18 @@ export class ContractSignatureComponent implements OnInit {
       let eventName;
       let tenHD = this.signedContract.map((contract: any) => contract.contractName).join(', ');
       let idHĐ = this.signedContract.map((contract: any) => contract.contractId).join(', ');
+      let recipientId = this.signedContract.map((contract: any) => contract.id).join(', ');
       let maHĐ = this.signedContract.map((contract: any) => contract.contract_uid).join(', ');
       let status = this.mapRecipientStatus(idHĐ, dataContract);
-
       if(this.signedContract?.sign_type?.length == 0) {
         eventName = 'xemxetLoHĐ'
       } else {
         let typesign = this.signedContract[0]?.sign_type[0]?.id;
+        if(typesign == 2) {
+          status = this.mapRecipientStatus(idHĐ, dataContract);
+        } else {
+          status = this.mapRecipientStatus(recipientId, dataContract);
+        }
         if (typesign == 4) {
           if(this.dataHsm?.supplier == 'mobifone') {
             eventName = 'kyLoHsm_mbf'
