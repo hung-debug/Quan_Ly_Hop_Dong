@@ -468,14 +468,14 @@ export class ForwardContractComponent implements OnInit {
                 this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp/Ủy quyền' : 'Ủy quyền/Chuyển tiếp') + ' thành công!'
                   , "", 3000);
                   try {
-                    await this.customerAnalysis.getTokenAnalysis()?.toPromise();
                     let data = {
                       eventName: "uyQuyen/chuyenTiep",
                       params: {
                         tenHĐ: this.datas.dataContract.is_data_contract.name,
-                        maHĐ: this.datas.dataContract.is_data_contract.id,
+                        maHĐ: this.datas.is_data_contract.contract_uid,
+                        idHĐ: this.datas.dataContract.is_data_contract.id,
                         nguoiXuLy:this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
-                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString()
                       },
                     };
                     await this.customerAnalysis.pushData(data);

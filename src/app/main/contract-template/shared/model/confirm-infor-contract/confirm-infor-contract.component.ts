@@ -109,20 +109,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   
   async callAPIFinish() {
     try {
-      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-
-      // Tạo đối tượng data chứa thông tin sự kiện
-      let data = {
-        eventName: "taoMauHĐ", // Thay đổi eventName cho phù hợp
-        params: {
-          tenMauHĐ: this.datas.name, // Lấy tên mẫu từ datas
-          maMauHĐ: this.datas.contract_no, // Lấy mã mẫu từ datas
-          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-        },
-        // Thêm các thông tin khác từ this.datas nếu cần
-      };
-      // Gọi pushData để gửi dữ liệu lên Parse Server
-      await this.customerAnalysis.pushData(data); // Chỉ truyền data
       this.spinner.show();
   
       // Gán danh sách email/SDT vào `datas`
@@ -134,19 +120,23 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         .toPromise(); // Chuyển Observable thành Promise
   
       // Sau khi API trên hoàn thành, gọi API changeStatusContract
-      await this.contractTemplateService
+      let reponse = await this.contractTemplateService
         .changeStatusContract(this.datas.id, 10)
         .toPromise(); // Đợi API này hoàn thành
-  
-      // Xử lý khi cả hai API thành công
-      await this.router.navigateByUrl('/', { skipLocationChange: true });
-      this.router.navigate(['/main/contract-template']);
-  
-      this.toastService.showSuccessHTMLWithTimeout(
-        'Tạo mẫu tài liệu thành công!',
-        '',
-        3000
-      );
+      
+      if (reponse.errors?.length > 0 && reponse.errors[0].code === 1017) {
+        this.handleContractData('Thất bại: Số tài liệu đã tồn tại ', 'taoMauHĐ');
+      } else {
+        this.handleContractData('Thành công', 'taoMauHĐ');
+        await this.router.navigateByUrl('/', { skipLocationChange: true });
+        this.router.navigate(['/main/contract-template']);
+    
+        this.toastService.showSuccessHTMLWithTimeout(
+          'Tạo mẫu tài liệu thành công!',
+          '',
+          3000
+        );  
+      }
     } catch (error) {
       // Xử lý lỗi nếu xảy ra ở bất kỳ API nào
       console.error('Error:', error);
@@ -202,24 +192,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
   async SaveContract(action: string) {
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-      try {
-        await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-
-        // Tạo đối tượng data chứa thông tin sự kiện
-        let data = {
-          eventName: "capNhatMauHD", // Thay đổi eventName cho phù hợp
-          params: {
-            tenMauHĐ: this.datas.name,
-            maMauHĐ: this.datas.contract_no,
-            thoiGianCapNhat: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-          },
-        };
-        // Gọi pushData để gửi dữ liệu lên Parse Server
-        await this.customerAnalysis.pushData(data); // Chỉ truyền data
-        console.log('Dữ liệu đã được gửi thành công!');
-      } catch (error) {
-        console.error('Lỗi khi gửi dữ liệu:', error);
-      }
       let isHaveFieldId: any[] = [];
       let isNotFieldId: any[] = [];
       let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
@@ -407,10 +379,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           });
         }, (error) => {
           this.spinner.hide();
+          this.handleContractData('Thất bại: Vui lòng liên hệ đội hỗ trợ để được xử lý', 'capNhatMauHD');
           this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
+          await this.handleContractData('Thất bại', 'capNhatMauHD');
           break;
         }
       }
@@ -459,6 +433,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       await this.contractTemplateService.getContractSample(dataSignNotId).toPromise().then((data) => {
         this.spinner.hide();
       }, error => {
+        this.handleContractData('Thất bại: Vui lòng liên hệ đội hỗ trợ để được xử lý', 'capNhatMauHD');
         isErrorNotId = true;
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
@@ -476,6 +451,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     }
 
     if (isSuccess == 0) {
+      this.handleContractData('Thành công', 'capNhatMauHD');
       if (action != 'saveDraft_contract') {
         this.spinner.hide();
 
@@ -497,6 +473,24 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
+    }
+  }
+
+  async handleContractData(status: string, eventName: string) {
+    try {
+      let data = {
+        eventName: eventName,
+        params: {
+          idHD: this.datas.id,
+          tenMauHĐ: this.datas.name,
+          maMauHĐ: this.datas.contract_no,
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        },
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
     }
   }
 

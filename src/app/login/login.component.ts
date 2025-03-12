@@ -188,17 +188,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
             return;
           } else {
             try {
-              await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-              let data = {
+              let analysisData = {
                 eventName: "Login",
                 params: {
-                  username: this.loginForm.value.username
-                }
+                  username: this.loginForm.value.username,
+                  thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString()
+                },
               };
-              this.customerAnalysis.pushData(data);
+              this.customerAnalysis.pushData(analysisData);
             } catch (error) {
-              console.error("Lấy token thất bại:", error);             
-            }            
+              console.error("Lấy token hoặc push dữ liệu thất bại:", error);
+            }        
             this.action(urlLink, isContractId, isRecipientId);
           }
         } else {
@@ -428,22 +428,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
           let accessToken: any = this.keycloakService.getKeycloakInstance().token
           let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
           let res: any = await this.authService.getAuthencationToken(accessToken, ssoIdToken,0)
-          console.log("res", res)
           switch(res.code) {
             case '00':
               this.toastService.showSuccessHTMLWithTimeout('Đăng nhập thành công, mở sang trang chủ hệ thống eContract.','',3000)
               try {
-                await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-                let data = {
+                let analysisData = {
                   eventName: "Login",
                   params: {
-                    username: res.customer.info.email
-                  }
+                    username: res.customer.info.email,
+                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString()
+                  },
                 };
-                this.customerAnalysis.pushData(data);
+                this.customerAnalysis.pushData(analysisData);  
               } catch (error) {
-                console.error("Lấy token thất bại:", error);             
-              }            
+                console.error("Lấy token hoặc push dữ liệu thất bại:", error);
+              }       
               setTimeout(() => {
                 this.router.navigate(['/main/dashboard'])
                 this.isSSOlogin = false

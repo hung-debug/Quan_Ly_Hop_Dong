@@ -326,15 +326,14 @@ export class ConfirmInfoContractComponent implements OnInit {
         await this.contractService.coordinationContract(participantId, response_determine_contract.recipients, this.datas.recipient_id_coordition).toPromise().then(async (data) => {
           this.toastService.showSuccessHTMLWithTimeout("Điều phối tài liệu thành công!", "", 3000);
           try {
-            await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-    
             let data = {
               eventName: "dieuPhoiHĐ",
               params: {
                 tenHĐ: this.datas.is_data_contract.name,
-                maHĐ: this.datas.is_data_contract.id,
+                idHĐ: this.datas.is_data_contract.id,
+                maHĐ: this.datas.is_data_contract.contract_uid,
                 nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
-                thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString()
               },
             };
             await this.customerAnalysis.pushData(data);

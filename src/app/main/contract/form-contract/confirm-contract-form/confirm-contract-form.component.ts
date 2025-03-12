@@ -238,23 +238,6 @@ export class ConfirmContractFormComponent implements OnInit {
   
   async callAPIFinish() {
     try{
-      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-
-      // Tạo đối tượng data chứa thông tin sự kiện
-      let data = {
-        eventName: "taoHDDonLeTheoMau", // Thay đổi eventName cho phù hợp
-        params: {
-          tenHD: this.datasForm.name,
-          maHD: this.datasForm.contract_id,
-          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date()) // Gọi hàm từ CustomerAnalysis service
-        },
-        name: this.datasForm.name, // Thêm thông tin từ this.datasForm
-        contract_no: this.datasForm.contract_no // Thêm thông tin từ this.datasForm
-        // Thêm các thông tin khác từ this.datasForm nếu cần
-      };
-
-      // Gọi pushData để gửi dữ liệu lên Parse Server
-      await this.customerAnalysis.pushData(data); // Chỉ truyền data
       this.spinner.show();
       // Gọi API addContractStep1 lần đầu    
       const contract: any = await this.contractService.addContractStep1(
@@ -275,15 +258,15 @@ export class ConfirmContractFormComponent implements OnInit {
       const statusResponse: any = await this.contractService
         .changeStatusContract(this.datasForm.id, 10, '')
         .toPromise(); // Đợi kết quả từ API
-        
       // Kiểm tra kết quả trả về từ changeStatusContract
-      if (statusResponse.errors?.length > 0) {
-        if (statusResponse.errors[0].code === 1017) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
-          return;
-        }
+      let reason;
+      if (statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017) {
+        this.spinner.hide();
+        reason = 'Số tài liệu đã tồn tại'
+        await this.handleContractData('Thất bại: ' + reason, statusResponse);
+        this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
       } else {
+        await this.handleContractData('Thành công', statusResponse);
         // Điều hướng nếu thành công
         this.router.navigate(['/main/contract/create/processing']);
         await this.router.navigateByUrl('/', { skipLocationChange: true });
@@ -300,6 +283,27 @@ export class ConfirmContractFormComponent implements OnInit {
       this.spinner.hide(); // Đảm bảo spinner được ẩn dù có lỗi hay không
     } 
       
+  }
+
+  async handleContractData(status: string, statusResponse: any) {
+    try {
+      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+      let data = {
+        eventName: "taoHDDonLeTheoMau",
+        params: {
+          tenHD: this.datasForm.name,
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        } as any,
+      };
+      if (!(statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017)) {
+        data.params.idHD = statusResponse.id;
+        data.params.maHD = statusResponse.contract_uid;
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
+    }
   }
 
   user: any;
