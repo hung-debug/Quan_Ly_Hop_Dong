@@ -1354,7 +1354,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, supplierID:any) {
+  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, supplierID:any, phoneMobiCA:any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1362,7 +1362,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const supplierMap: { [key: number]: string } = {
         1: 'vnpt',
-        2: 'mobiCA',
+        2: 'MobiFoneCA',
         3: 'nacencomm'
       };
     const supplier = supplierMap[supplierID] || 'vnpt';
@@ -1372,7 +1372,8 @@ export class ContractService {
       isTimestamp: isTimestamp,
       type: boxType,
       field: datas.field,
-      supplier: supplier
+      supplier: supplier,
+      phone: phoneMobiCA
     });
 
     return this.http
