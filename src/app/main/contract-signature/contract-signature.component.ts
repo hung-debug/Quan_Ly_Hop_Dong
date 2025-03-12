@@ -33,7 +33,13 @@ import { RemoteDialogSignComponent } from './components/consider-contract/remote
 import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 // import { ContractService } from 'src/app/service/contract.service';
-
+interface SignInfo {
+  recipientId: number;
+  result: {
+    success: boolean;
+    message: string;
+  };
+}
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -2562,7 +2568,7 @@ export class ContractSignatureComponent implements OnInit {
     try {
       let preparePromises = fileC.map( async (_: any, i: any) => {
         const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
-
+        checkSign = this.updateCheckSign(checkSign, idContract[i]);
         base64String.push(encode(base64StringPdf));
 
         //Lấy toạ độ ô ký của từng tài liệu
@@ -2691,6 +2697,11 @@ export class ContractSignatureComponent implements OnInit {
         this.certInfoBase64 = certInfoBase64
         this.nameCompany = utf8.decode(cert.certInfo.CommonName);
       } else {
+        checkSign.forEach((sign: SignInfo) => {
+          sign.result.success = false;
+          sign.result.message = 'Lỗi không lấy được thông tin usb token';
+        });
+        this.handleContractData(checkSign);
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi không lấy được thông tin usb token',
           '',
@@ -2823,6 +2834,11 @@ export class ContractSignatureComponent implements OnInit {
             );
 
             if (!sign.recipient_id) {
+              checkSign.forEach((sign: SignInfo) => {
+                sign.result.success = false;
+                sign.result.message = 'Lỗi ký usb token không cập nhật được recipient id';
+              });
+              this.handleContractData(checkSign);
               this.toastService.showErrorHTMLWithTimeout(
                 'Lỗi ký usb token không cập nhật được recipient id',
                 '',
@@ -2840,6 +2856,11 @@ export class ContractSignatureComponent implements OnInit {
             );
             
             if (!updateInfo.id) {
+              const existingSign = checkSign.find((sign: any) => sign.recipientId === idContract[i]);
+              if(existingSign) {
+                existingSign.result.success = false;
+                existingSign.result.message = 'Lỗi cập nhật trạng thái tài liệu';
+              }
               this.toastService.showErrorHTMLWithTimeout(
                 'Lỗi cập nhật trạng thái tài liệu ',
                 '',
@@ -2984,7 +3005,7 @@ export class ContractSignatureComponent implements OnInit {
       })
       await Promise.all(promises)
       
-      //this.handleContractData(checkSign);
+      this.handleContractData(checkSign);
       //await Promise.all(promises)
       // token v2 - optimizing
       await this.signV2FixingProcess()
@@ -3421,6 +3442,25 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  updateCheckSign(checkSign: SignInfo[], recipientId: number): SignInfo[] | null {
+    if (recipientId !== undefined) {
+      const existingSign = checkSign.find((sign) => sign.recipientId === recipientId);
+  
+      if (!existingSign) {
+        const infoSign: SignInfo = {
+          recipientId: recipientId,
+          result: {
+            success: true,
+            message: "",
+          },
+        };
+        checkSign.push(infoSign);
+      }
+      return checkSign;
+    }
+    return null;
+  }
+
   mapRecipientStatus(a: any, b: any) {
     const idOrder = a.split(', ').map(Number);
     
@@ -3432,17 +3472,17 @@ export class ContractSignatureComponent implements OnInit {
     const result = idOrder.map((id: any) => idToResult[id]).join(', ');
     
     return result;
-}
+  }
 
   async handleContractData(dataContract: any) {
     try {
       let eventName;
       let tenHD = this.signedContract.map((contract: any) => contract.contractName).join(', ');
-      let idHĐ = this.signedContract.map((contract: any) => contract.id).join(', ');
+      let idHĐ = this.signedContract.map((contract: any) => contract.contractId).join(', ');
       let maHĐ = this.signedContract.map((contract: any) => contract.contract_uid).join(', ');
       let status = this.mapRecipientStatus(idHĐ, dataContract);
 
-      if(this.signedContract.sign_type.length == 0) {
+      if(this.signedContract?.sign_type?.length == 0) {
         eventName = 'xemxetLoHĐ'
       } else {
         let typesign = this.signedContract[0]?.sign_type[0]?.id;
@@ -3485,11 +3525,11 @@ export class ContractSignatureComponent implements OnInit {
         eventName: eventName,
         params: {
           tenHĐ: tenHD,
-          idHĐ: idHĐ,
           maHĐ: maHĐ,
-          trangThaiHD: status,
+          idHĐ: idHĐ,
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThaiHD: status,
         },
       }
       await this.customerAnalysis.pushData(data);
