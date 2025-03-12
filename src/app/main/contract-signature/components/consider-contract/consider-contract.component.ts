@@ -175,6 +175,8 @@ export class ConsiderContractComponent
   dataCert: any;
   trustedUrl: any;
   idPdfSrcMobile: any;
+  phoneMobiCA: any;
+  // statusSign: any;
 
   sessionIdUsbToken: any;
   emailRecipients: any;
@@ -3206,7 +3208,8 @@ export class ConsiderContractComponent
             height: signUpdate.height,
             page: signUpdate.page,
           };
-
+          console.log("fieldRemoteSigning",fieldRemoteSigning);
+          
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             // this.textSign = this.contractNoValueSign
 
@@ -3272,8 +3275,10 @@ export class ConsiderContractComponent
                   this.recipientId,
                   this.isTimestamp,
                   signUpdate.type,
-                  supplierID
+                  supplierID,
+                  this.phoneMobiCA
                 );
+                // this.statusSign = checkSign;   
                 if (!checkSign || (checkSign && !checkSign.success)) {
                   if (!checkSign.message) {
                     this.toastService.showErrorHTMLWithTimeout(
@@ -3321,7 +3326,8 @@ export class ConsiderContractComponent
                     this.recipientId,
                     this.isTimestamp,
                     signUpdate.type,
-                    supplierID
+                    supplierID,
+                    this.phoneMobiCA
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -4374,6 +4380,7 @@ export class ConsiderContractComponent
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
         this.remoteDialogSuccessOpen(supplierID).then(result => {
+          // console.log("statusSign",this.statusSign);
           if (result.isDismissed) {
             this.router.navigate([
               'main/form-contract/detail/' + this.idContract,
@@ -5123,6 +5130,7 @@ export class ConsiderContractComponent
         if (result) {
           let supplierID = result.type;
           this.dataCert.cert_id = result.ma_dvcs;
+          this.phoneMobiCA = result.phone;
           await this.signContractSubmit(supplierID);
         }
       });

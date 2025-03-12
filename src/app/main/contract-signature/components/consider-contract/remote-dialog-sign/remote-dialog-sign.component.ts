@@ -68,7 +68,7 @@ export class RemoteDialogSignComponent implements OnInit {
     } else
       this.type = 0;
 
-
+      this.myForm.get('supplier')?.value
     this.myForm = this.fbd.group({
       supplier: this.fbd.control('1', [Validators.required]),
       taxCode: this.fbd.control(this.datas?.dataContract?.card_id ? this.datas?.dataContract?.card_id : this.data.userCode, [
@@ -77,7 +77,16 @@ export class RemoteDialogSignComponent implements OnInit {
       ]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
-      if (this.user.organization_id != 0) {
+    
+      // Cập nhật Validators lần đầu tiên
+    this.updateValidators();
+
+    // Lắng nghe sự thay đổi của supplier để cập nhật Validators
+    this.myForm.get('supplier')?.valueChanges.subscribe(() => {
+      this.updateValidators();
+    });
+  
+    if (this.user.organization_id != 0) {
       // this.userService.getUserById(this.id).subscribe((response) => {
       //   this.myForm = this.fbd.group({
       //     taxCode: this.fbd.control(response.tax_code, [
@@ -96,7 +105,7 @@ export class RemoteDialogSignComponent implements OnInit {
 
           if (id == this.datas.recipientId) {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
-
+            this.myForm.get('supplier')?.value
             this.myForm = this.fbd.group({
               supplier: this.fbd.control('1', [Validators.required]),
               taxCode: this.fbd.control(taxCodePartnerStep2,
@@ -131,6 +140,22 @@ export class RemoteDialogSignComponent implements OnInit {
     this.getDeviceApp()
   }
   
+  updateValidators() {
+    const supplier = this.myForm.get('supplier')?.value;
+  
+    if (supplier === '1' || supplier === '3') { // VNPT SmartCA hoặc CA2
+      this.myForm.get('taxCode')?.setValidators([Validators.required, Validators.pattern(parttern.cardid)]);
+      this.myForm.get('phone')?.clearValidators(); // Xóa required của phone
+    } else if (supplier === '2') { // MobiFoneCA
+      this.myForm.get('phone')?.setValidators([Validators.required, Validators.pattern(parttern.phone)]);
+      this.myForm.get('taxCode')?.clearValidators(); // Xóa required của taxCode
+    }
+  
+    // Cập nhật lại trạng thái form
+    this.myForm.get('taxCode')?.updateValueAndValidity();
+    this.myForm.get('phone')?.updateValueAndValidity();
+  }
+  
   // Hàm kiểm tra giá trị của "supplier"
   isMobiFoneCA(): boolean {
     return this.myForm.get('supplier')?.value === '2';
@@ -160,13 +185,18 @@ export class RemoteDialogSignComponent implements OnInit {
   cardId: any;
   async onSubmit() {
     this.submitted = true;
-
+    console.log("!",this.myForm);
     if (this.myForm.invalid) {
+      console.log("this.myForm.get('supplier')?.value",this.myForm.get('supplier')?.value);
+      
+      console.log("!",this.myForm);
+      
       return;
     }
     this.submitted = true;
 
     if (this.myForm.invalid) {
+      console.log("2");
       return;
     }
 
