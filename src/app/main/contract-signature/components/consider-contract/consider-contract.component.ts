@@ -3208,7 +3208,7 @@ export class ConsiderContractComponent
             height: signUpdate.height,
             page: signUpdate.page,
           };
-          console.log("fieldRemoteSigning",fieldRemoteSigning);
+          // console.log("fieldRemoteSigning",fieldRemoteSigning);
           
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             // this.textSign = this.contractNoValueSign
