@@ -3560,7 +3560,7 @@ export class ContractSignatureComponent implements OnInit {
         if(typesign == 2) {
           status = this.mapRecipientStatus(idHĐ, dataContract);
         } else if(typesign == 8) {
-          status = this.mapRecipientStatusRS(idHĐ, dataContract);
+          status = this.mapRecipientStatusRS(recipientId, dataContract);
         } else {
           status = this.mapRecipientStatus(recipientId, dataContract);
         }
