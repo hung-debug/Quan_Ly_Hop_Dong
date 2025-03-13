@@ -69,7 +69,7 @@ export class CustomerAnalysis {
     await this.getTokenAnalysis()?.toPromise();
     await this.getCurrentTokenAnalysis();
     data.appId = this.tokenAnalysis.tenantId;
-    data.phone = this.infoUser.phone;
+    data.phone = this.infoUser.phone || this.infoUser.email;
     data.mail = this.infoUser.email;
     data.userUuid = this.infoUser.email;
 
