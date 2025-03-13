@@ -501,7 +501,7 @@
                   <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thư số-->
                   <div class="participants--input" *ngIf="getDataSignCert(d).length > 0">
                     <div class="participants__name">
-                      <div class="label-text flex">{{'tax_code.cardId1' | translate}}&nbsp;
+                      <div class="label-text flex">{{'tax_code.cardId' | translate}}&nbsp;
                         <span class="required-title">*</span>
                         <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
                       </div>
@@ -626,6 +626,20 @@
                       </div>
                       <div class="input-data">
                         <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                          oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là remote signing-->
+                  <div class="col-md-6" *ngIf="getDataSignRemote(d).length > 0" style="padding-right: 7px;">
+                    <div class="participants__name">
+                      <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                        <span class="required-title">*</span>
+                        <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                      </div>
+                      <div class="input-data">
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -1620,6 +1634,20 @@
                         </div>
                       </div>
                     </div>
+                    
+                    <!--trường hiển thị khi người ký của đối tác chọn loại ký là remote signing-->
+                    <div class="col-md-6" style="padding-left: 7px;" *ngIf="getDataSignRemote(d).length > 0">
+                      <div class="participants__name">
+                        <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                          <span class="required-title">*</span>
+                          <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                        </div>
+                        <div class="input-data">
+                          <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
+                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <!--NB email-->
@@ -1762,6 +1790,20 @@
                         </div>
                         <div class="input-data">
                           <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!--trường hiển thị khi người ký của đối tác chọn loại ký là remote signing-->
+                    <div class="col-md-6" *ngIf="getDataSignRemote(d).length > 0">
+                      <div class="participants__name">
+                        <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                          <span class="required-title">*</span>
+                          <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                        </div>
+                        <div class="input-data">
+                          <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
                             oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                         </div>
                       </div>
@@ -2359,6 +2401,20 @@
                         </div>
                         <div class="input-data">
                           <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!--trường hiển thị khi người ký đối tác cá nhân chọn loại ký là chứng thư số-->
+                    <div class="col-md-6 mt-7px" *ngIf="getDataSignRemote(d).length > 0">
+                      <div class="participants__name">
+                        <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                          <span class="required-title">*</span>
+                          <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                        </div>
+                        <div class="input-data">
+                          <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
                             oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                         </div>
                       </div>

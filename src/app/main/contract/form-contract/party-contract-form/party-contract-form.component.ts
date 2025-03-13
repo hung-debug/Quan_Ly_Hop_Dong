@@ -892,10 +892,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             if(!isParterSort[k].card_id.trim() && (isParterSort[k].role == 3 || isParterSort[k].role == 4) &&
                 (isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0 ||
                 isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0 ||
-                isParterSort[k].sign_type.filter((p: any) => p.id == 6).length > 0 ||
-                isParterSort[k].sign_type.filter((p: any) => p.id == 8).length > 0
+                isParterSort[k].sign_type.filter((p: any) => p.id == 6).length > 0 
               )) {
               this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
+              count++;
+              break;
+            }
+            
+            if(!isParterSort[k].card_id.trim() && (isParterSort[k].role == 3 || isParterSort[k].role == 4) &&
+            (isParterSort[k].sign_type.filter((p: any) => p.id == 8).length > 0)) {
+              this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD/Số hộ chiếu của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
               count++;
               break;
             }
@@ -905,10 +911,19 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) &&
                 (isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0 ||
                   isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0 ||
-                  isParterSort[k].sign_type.filter((p: any) => p.id == 6).length > 0 ||
-                  isParterSort[k].sign_type.filter((p: any) => p.id == 8).length > 0
+                  isParterSort[k].sign_type.filter((p: any) => p.id == 6).length > 0
               )) {
               this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
+              count++;
+              break;
+            }
+            
+            if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
+              !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
+              !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) &&
+              !this.pattern.card_id_passport.test(isParterSort[k].card_id.trim()) &&
+              (isParterSort[k].sign_type.filter((p: any) => p.id == 8).length > 0)) {
+              this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu của" + this.getNameObject(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
             }
@@ -966,16 +981,31 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               }
               isPartnerCaNhanDuplicate = [];
 
-              if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8).length > 0) {
+              if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6).length > 0) {
                 this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(isParterSort[k].role)+"của đối tác cá nhân");
+                count++;
+                break;
+              }
+              
+              if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 8).length > 0) {
+                this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD/Số hộ chiếu của"+this.getNameObject(isParterSort[k].role)+"của đối tác cá nhân");
                 count++;
                 break;
               }
 
               if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
                 !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
-                !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8).length > 0) {
+                !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6).length > 0) {
                 this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
+                count++;
+                break;
+              }
+              
+              if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
+              !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
+              !this.pattern.card_id_passport.test(isParterSort[k].card_id.trim()) &&
+              !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 8).length > 0) {
+                this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu của" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
                 count++;
                 break;
               }
@@ -996,7 +1026,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               }
             }
 
-            if (!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+            if (!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5 || p.id == 8).length > 0) {
               this.getNotificationValid("Vui lòng nhập CMT/CCCD/Số hộ chiếu của" + this.getNameObject(isParterSort[k].role) + "tổ chức của đối tác cá nhân!")
               count++;
               break;
