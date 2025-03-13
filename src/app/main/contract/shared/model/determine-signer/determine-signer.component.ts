@@ -793,7 +793,7 @@ export class DetermineSignerComponent implements OnInit {
       if (!dataArr[i].card_id?.trim() &&
         (dataArr[i].role == 3 || dataArr[i].role == 4) &&
         dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8).length > 0) {
-        this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi");
+        this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD/Số hộ chiếu của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi");
         count++;
         break;
       }
@@ -802,11 +802,22 @@ export class DetermineSignerComponent implements OnInit {
         !this.pattern_input.taxCode_form.test(dataArr[i].card_id) &&
         !this.pattern.card_id9.test(dataArr[i].card_id) &&
         !this.pattern.card_id12.test(dataArr[i].card_id) &&
-        dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8).length > 0) {
+        dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6).length > 0) {
         this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
         count++;
         break;
       }
+      
+      if (dataArr[i].card_id?.trim() &&
+        !this.pattern_input.taxCode_form.test(dataArr[i].card_id) &&
+        !this.pattern.card_id9.test(dataArr[i].card_id) &&
+        !this.pattern.card_id12.test(dataArr[i].card_id) &&
+        !this.pattern.card_id_passport.test(dataArr[i].card_id) &&
+        dataArr[i].sign_type.filter((p: any) => p.id == 8).length > 0) {
+          this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
+          count++;
+          break;
+    }
     }
 
     if (count == 0) {
