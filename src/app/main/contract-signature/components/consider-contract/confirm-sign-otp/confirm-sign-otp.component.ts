@@ -450,13 +450,17 @@ export class ConfirmSignOtpComponent implements OnInit {
             if (!notContainSignImage) {
             }
             setTimeout(() => {
-
-              this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
-              this.toastService.showSuccessHTMLWithTimeout(
-                [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!' : 'Xem xét tài liệu thành công'
-                , [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '', 3000);
-                this.dialog.closeAll();
-                this.spinner.hide();
+              if (result.url_call_back) {
+                // Nếu có url_call_back thì điều hướng tới đó
+                window.location.href = result.url_call_back;
+              } else {
+                this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
+                this.toastService.showSuccessHTMLWithTimeout(
+                  [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!' : 'Xem xét tài liệu thành công'
+                  , [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '', 3000);
+                  this.dialog.closeAll();
+                  this.spinner.hide();
+              }
             }, 1000);
           }
 
