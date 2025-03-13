@@ -3526,6 +3526,19 @@ export class ContractSignatureComponent implements OnInit {
     return result;
   }
 
+  mapRecipientStatusRS(a: any, b: any) {
+    const idOrder = a.split(', ').map(Number);
+    
+    const idToResult = b.reduce((acc: any, item: any) => {
+        acc[item.recipientId || item.recipients] = item.result.success ? 'Gửi yêu cầu ký thành công' : `Gửi yêu cầu ký thất bại: ${item.result.message}`;
+        return acc;
+    }, {});
+
+    const result = idOrder.map((id: any) => idToResult[id]).join(', ');
+    
+    return result;
+  }
+
   getContractId(contractViewList: any[], selectedId: number): any | null {
     const matchedItem = contractViewList.find((item) => item.id === selectedId);
     return matchedItem || null;
@@ -3546,6 +3559,8 @@ export class ContractSignatureComponent implements OnInit {
         let typesign = this.signedContract[0]?.sign_type[0]?.id;
         if(typesign == 2) {
           status = this.mapRecipientStatus(idHĐ, dataContract);
+        } else if(typesign == 8) {
+          status = this.mapRecipientStatusRS(idHĐ, dataContract);
         } else {
           status = this.mapRecipientStatus(recipientId, dataContract);
         }

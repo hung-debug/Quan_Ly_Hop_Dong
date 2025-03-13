@@ -3381,7 +3381,7 @@ export class ConsiderContractComponent
                       } else if (pdfC1) {
                         fileC = pdfC1.path;
                       }
-                      this.handleContractData("Thành công");
+                      this.handleContractData("Gửi yêu cầu ký thành công");
                     }
                   }
                 } catch (error) {
