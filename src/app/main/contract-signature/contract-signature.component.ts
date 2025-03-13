@@ -3592,7 +3592,7 @@ export class ContractSignatureComponent implements OnInit {
           idHĐ: idHĐ,
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
-          trangThaiHD: status,
+          trangThai: status,
         },
       }
       await this.customerAnalysis.pushData(data);
