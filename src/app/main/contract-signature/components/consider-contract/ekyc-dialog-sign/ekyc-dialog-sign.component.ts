@@ -221,6 +221,7 @@ export class EkycDialogSignComponent implements OnInit {
               if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == true;
                 alert(this.translate.instant('confirm.success'));
+                this.upFileImageToDb(formData);
                 this.dialogRef.close({
                   base64Img: this.webcamImage.imageAsDataUrl,
                   docType: response.document
@@ -240,6 +241,7 @@ export class EkycDialogSignComponent implements OnInit {
               }
             } else {
               alert(this.translate.instant('confirm.success'));
+              this.upFileImageToDb(formData);
               this.dialogRef.close({
                 base64Img: this.webcamImage.imageAsDataUrl,
                 docType: response.document
