@@ -4379,6 +4379,28 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
+        // console.log("supplierID",supplierID);
+        // if(supplierID == 1 || supplierID == 3){
+        //   this.remoteDialogSuccessOpen(supplierID).then(result => {
+        //     // console.log("statusSign",this.statusSign);
+        //     if (result.isDismissed) {
+        //       this.router.navigate([
+        //         'main/form-contract/detail/' + this.idContract,
+        //       ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+        //     }
+        //   })
+        // }else if(supplierID == 2){
+        //   this.router.navigate([
+        //     'main/form-contract/detail/' + this.idContract,
+        //   ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+          
+        //   this.toastService.showSuccessHTMLWithTimeout(
+        //     "Ký số MobifoneCA thành công",
+        //     '',
+        //     3000
+        //   );
+        // }
+        
         this.remoteDialogSuccessOpen(supplierID).then(result => {
           // console.log("statusSign",this.statusSign);
           if (result.isDismissed) {
