@@ -5499,7 +5499,7 @@ export class ConsiderContractComponent
         message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!!";
         break;
       case "2":
-        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
+        message = "Tài liệu đã ký thành công!";
         break;
       case "3":
         message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
