@@ -757,6 +757,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       
       if(dataArr[i].card_id.trim() && !this.pattern.cardid.test(dataArr[i].card_id.trim()) && 
         !this.pattern.card_id_passport.test(dataArr[i].card_id.trim()) &&
+        !this.pattern_input.taxCode_form.test(dataArr[i].card_id?.trim()) &&
+        !this.pattern.card_id9.test(dataArr[i].card_id?.trim()) &&
+        !this.pattern.card_id12.test(dataArr[i].card_id?.trim()) &&
         (dataArr[i].sign_type.filter((p: any) => p.id == 8).length > 0)) {
         this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
         count++;
