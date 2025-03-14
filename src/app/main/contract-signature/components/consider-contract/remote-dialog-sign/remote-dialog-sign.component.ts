@@ -161,9 +161,9 @@ export class RemoteDialogSignComponent implements OnInit {
     return this.myForm.get('supplier')?.value === '2';
   }
 
-  isVNPTorCA2(): boolean {
-    return this.myForm.get('supplier')?.value === '1' || this.myForm.get('supplier')?.value === '3';
-  }
+  // isVNPTorCA2(): boolean {
+  //   return this.myForm.get('supplier')?.value === '1' || this.myForm.get('supplier')?.value === '3';
+  // }
 
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
@@ -185,18 +185,12 @@ export class RemoteDialogSignComponent implements OnInit {
   cardId: any;
   async onSubmit() {
     this.submitted = true;
-    console.log("!",this.myForm);
     if (this.myForm.invalid) {
-      console.log("this.myForm.get('supplier')?.value",this.myForm.get('supplier')?.value);
-      
-      console.log("!",this.myForm);
-      
       return;
     }
     this.submitted = true;
 
     if (this.myForm.invalid) {
-      console.log("2");
       return;
     }
 

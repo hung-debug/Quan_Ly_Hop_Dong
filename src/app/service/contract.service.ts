@@ -1389,7 +1389,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const supplierMap: { [key: number]: string } = {
         1: 'vnpt',
-        2: 'mobiCA',
+        2: 'MobiFoneCA',
         3: 'nacencomm'
       };
     const supplier = supplierMap[supplierID] || 'vnpt';
