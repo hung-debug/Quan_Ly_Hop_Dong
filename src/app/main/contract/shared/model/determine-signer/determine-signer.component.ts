@@ -975,7 +975,7 @@ export class DetermineSignerComponent implements OnInit {
             if (isParterSort[k].card_id?.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id?.trim()) &&
             !this.pattern.card_id12.test(isParterSort[k].card_id?.trim()) &&
             !this.pattern_input.taxCode_form.test(isParterSort[k].card_id?.trim()) &&
-            isParterSort[k].sign_type.filter((p: any) => p.id == 4 || p.id == 6 || p.id == 8).length > 0) {
+            isParterSort[k].sign_type.filter((p: any) => p.id == 4 || p.id == 6).length > 0) {
               this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
@@ -1055,8 +1055,19 @@ export class DetermineSignerComponent implements OnInit {
                 !this.pattern.card_id9.test(isParterSort[k].card_id?.trim()) &&
                 !this.pattern.card_id12.test(isParterSort[k].card_id?.trim()) &&
                 !this.pattern.card_id_passport.test(isParterSort[k].card_id?.trim()) &&
-                isParterSort[k].sign_type.filter((p: any) => p.id == 5 || p.id == 8).length > 0) {
-                this.getNotificationValid("CMT/CCCD/Số hộ chiếu" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
+                isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+                this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
+                count++;
+                break;
+              }
+              
+              if (isParterSort[k].card_id?.trim() &&
+              !this.pattern.card_id9.test(isParterSort[k].card_id?.trim()) &&
+              !this.pattern.card_id12.test(isParterSort[k].card_id?.trim()) &&
+              !this.pattern.card_id_passport.test(isParterSort[k].card_id?.trim()) &&
+              !this.pattern_input.taxCode_form.test(isParterSort[k].card_id?.trim()) &&
+              isParterSort[k].sign_type.filter((p: any) => p.id == 8).length > 0) {
+                this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
                 count++;
                 break;
               }
@@ -1065,8 +1076,8 @@ export class DetermineSignerComponent implements OnInit {
               !this.pattern_input.taxCode_form.test(isParterSort[k].card_id?.trim()) &&
               !this.pattern.card_id9.test(isParterSort[k].card_id?.trim()) && 
               !this.pattern.card_id12.test(isParterSort[k].card_id?.trim()) && 
-              isParterSort[k].sign_type.filter((p: any) => p.id !== 5 || p.id != 8).length > 0) {
-                this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ1!");
+              isParterSort[k].sign_type.filter((p: any) => p.id !== 5).length > 0) {
+                this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
                 count++;
                 break;
               }
