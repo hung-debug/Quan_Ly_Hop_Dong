@@ -304,11 +304,11 @@
             </div>
             <!-- <div class="input-data" style="width: 82%;"> -->
             <div class="input-data">
-              <input type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="card_id" (input)="validateCardId()"
+              <input type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="card_id" (input)="validateCardPassport()"
                 oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             </div>
-            <div class="invalid" *ngIf="errorCardid!=''">
-              {{errorCardid | translate}}
+            <div class="invalid" *ngIf="errorCardPassport!=''">
+              {{errorCardPassport | translate}}
             </div>
           </div>
         </div>
@@ -356,11 +356,11 @@
             </div>
             <!-- <div class="input-data" style="width: 82%;"> -->
             <div class="input-data">
-              <input type="text" placeholder="{{'enter.cardId.passport' | translate}}" [(ngModel)]="card_id" (input)="validateCardId()"
+              <input type="text" placeholder="{{'enter.cardId.passport' | translate}}" [(ngModel)]="card_id" (input)="validateCardPassport()"
                 oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             </div>
-            <div class="invalid" *ngIf="errorCardid!=''">
-              {{errorCardid | translate}}
+            <div class="invalid" *ngIf="errorCardPassport!=''">
+              {{errorCardPassport | translate}}
             </div>
           </div>
         </div>
