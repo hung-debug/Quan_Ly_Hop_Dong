@@ -4220,7 +4220,7 @@ export class ConsiderContractComponent
       return;
     }
 
-    if (notContainSignImage && this.eKYC == false && this.currentBoxSignType !== 8) {
+    if (notContainSignImage && this.eKYC == false && (this.currentBoxSignType === 8 && supplierID === 2)) {
       signUpdateTempN[0] = {
         "processAt": this.isDateTime
       };
@@ -4379,36 +4379,35 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        // console.log("supplierID",supplierID);
-        // if(supplierID == 1 || supplierID == 3){
-        //   this.remoteDialogSuccessOpen(supplierID).then(result => {
-        //     // console.log("statusSign",this.statusSign);
-        //     if (result.isDismissed) {
-        //       this.router.navigate([
-        //         'main/form-contract/detail/' + this.idContract,
-        //       ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
-        //     }
-        //   })
-        // }else if(supplierID == 2){
-        //   this.router.navigate([
-        //     'main/form-contract/detail/' + this.idContract,
-        //   ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+        if(supplierID == 1 || supplierID == 3){
+          this.remoteDialogSuccessOpen(supplierID).then(result => {
+            // console.log("statusSign",this.statusSign);
+            if (result.isDismissed) {
+              this.router.navigate([
+                'main/form-contract/detail/' + this.idContract,
+              ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+            }
+          })
+        }else if(supplierID == 2){
+          this.router.navigate([
+            'main/form-contract/detail/' + this.idContract,
+          ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
           
-        //   this.toastService.showSuccessHTMLWithTimeout(
-        //     "Ký số MobifoneCA thành công",
-        //     '',
-        //     3000
-        //   );
-        // }
+          this.toastService.showSuccessHTMLWithTimeout(
+            "Bạn vừa thực hiện ký thành công. Tài liệu đã được hoàn thành xử lý",
+            '',
+            3000
+          );
+        }
         
-        this.remoteDialogSuccessOpen(supplierID).then(result => {
-          // console.log("statusSign",this.statusSign);
-          if (result.isDismissed) {
-            this.router.navigate([
-              'main/form-contract/detail/' + this.idContract,
-            ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
-          }
-        })
+        // this.remoteDialogSuccessOpen(supplierID).then(result => {
+        //   // console.log("statusSign",this.statusSign);
+        //   if (result.isDismissed) {
+        //     this.router.navigate([
+        //       'main/form-contract/detail/' + this.idContract,
+        //     ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+        //   }
+        // })
       }
     }
   }
@@ -5141,6 +5140,11 @@ export class ConsiderContractComponent
       const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(async (result: any) => {
+        if(result.type == 2){
+          this.loadingText =
+          'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
+        }
+
         let signI = null;
         let imageRender = null;
 
