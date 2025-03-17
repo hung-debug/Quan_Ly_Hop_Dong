@@ -296,6 +296,7 @@ export class ConfirmContractFormComponent implements OnInit {
           idHD: statusResponse.id || '',
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
+          link: this.router.url
         } as any,
       };
   

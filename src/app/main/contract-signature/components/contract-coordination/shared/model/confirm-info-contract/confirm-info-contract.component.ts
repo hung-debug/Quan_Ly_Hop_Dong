@@ -334,7 +334,8 @@ export class ConfirmInfoContractComponent implements OnInit {
                 idHĐ: this.datas.is_data_contract.id,
                 nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
                 thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
-                trangThai: "Thành công"
+                trangThai: "Thành công",
+                link: this.router.url
               },
             };
             await this.customerAnalysis.pushData(data);
