@@ -3515,14 +3515,20 @@ export class ContractSignatureComponent implements OnInit {
 
   mapRecipientStatus(a: any, b: any) {
     const idOrder = a.split(', ').map(Number);
-    
+
     const idToResult = b.reduce((acc: any, item: any) => {
-        acc[item.recipientId || item.recipients] = item.result.success ? 'Thành công' : `Thất bại: ${item.result.message}`;
+        let message;
+        if (item.result.message == 'Chứng thư số đã bị hủy.'|| item.result.message == 'Unexpected error') {
+          message = 'Ký số thất bại';
+        } else {
+          message = item.result.message
+        }
+        acc[item.recipientId || item.recipients] = item.result.success ? 'Thành công' : `Thất bại: ${message}`;
         return acc;
     }, {});
 
     const result = idOrder.map((id: any) => idToResult[id]).join(', ');
-    
+
     return result;
   }
 
