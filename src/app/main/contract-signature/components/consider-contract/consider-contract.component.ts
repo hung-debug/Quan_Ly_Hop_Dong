@@ -266,7 +266,8 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
-    let getStatusBonBon = sessionStorage.getItem('isBonBon');
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    console.log("getStatusBonBon", getStatusBonBon)
     this.isBonBon = getStatusBonBon === "true";
     if(this.isBonBon) {
       this.confirmSignature = 1;
