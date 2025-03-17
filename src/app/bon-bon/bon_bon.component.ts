@@ -36,9 +36,8 @@ export class BonBonComponent implements OnInit{
       console.log("data", data)
       if(data?.code == '00'){
         if (this.authService.isLoggedInSuccess() == true) {
+          localStorage.setItem('isBonBon', 'true');
           this.action(isContractId, isRecipientId);
-        } else {
-          
         }
       } else if(data?.code == '13'){
         const date = moment(data.active_at);

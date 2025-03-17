@@ -10,6 +10,17 @@
   margin: 5px 5px;
 }
 
+.action-button1 {
+  background: #0041C4;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 5px 5px;
+}
+
 .action-button-both{
   width: 155px;
   background: #0041C4;
@@ -133,4 +144,15 @@ input {
   margin: 5px 5px;
 }
 
+.btn_footer {
+  display: flex;
+  justify-content: space-between;
+}
 
+.isBonBon {
+  width: 100%;
+}
+
+.noBonBon {
+  width: 100px;
+}

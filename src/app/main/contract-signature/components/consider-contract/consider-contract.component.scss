@@ -171,6 +171,9 @@
 .container-fluid{
   background-color: #FFFFFF;
   border-radius: 12px;
+}
+
+.size-web {
   padding-top: 18px;
   min-height: 92vh;
 }
@@ -630,4 +633,8 @@ a.info-contract {
   .custom-xl-width-col-xl-9 {
     width: calc(100% - 120px);
   }
+}
+
+:host ::ng-deep .pdf-viewer-custom .page {
+  width: 100% !important;
 }
