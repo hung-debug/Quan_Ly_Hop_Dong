@@ -56,10 +56,6 @@ export class RemoteDialogSignComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
-    console.log("this.dtaa",this.datas);
-    
-
-
     this.user = this.userService.getInforUser();
 
     this.id = this.user.customer_id;

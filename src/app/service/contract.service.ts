@@ -1381,7 +1381,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, supplierID : any) {
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, supplierID : any, phoneMobiCA:any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1400,7 +1400,8 @@ export class ContractService {
       isTimestamp: false,
       type: boxType,
       field: datas.field,
-      supplier: supplier
+      supplier: supplier,
+      phone: phoneMobiCA
     });
 
     return this.http

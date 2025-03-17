@@ -1105,7 +1105,8 @@
 
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
-    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+    <!-- <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p> -->
+    <p style="font-size: 18px; color: white; text-align: center;white-space: pre-line;">{{loadingText}}</p>
 </ngx-spinner>
 
 
