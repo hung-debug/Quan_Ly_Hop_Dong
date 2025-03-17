@@ -124,7 +124,11 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignHsm(data: any) {
-    return data.sign_type.filter((p: any) => [4,6,8].includes(p.id));
+    return data.sign_type.filter((p: any) => [4,6].includes(p.id));
+  }
+  
+  getDataSignRemote(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 8);
   }
 
   getApiDetermine() {
