@@ -1569,7 +1569,6 @@ export class ContractSignatureComponent implements OnInit {
             name
           ).toPromise();
           this.spinner.hide();
-          this.handleContractData(checkSign);
           recipientId.forEach((id: any) => {
             let existingRecipient = checkSign.find((item: any) => item.recipientId === id);
             
@@ -1615,8 +1614,11 @@ export class ContractSignatureComponent implements OnInit {
               '',
               10000
             );
-          }
-
+            for (let i = 0; i < checkSign.length; i++) {
+              if (checkSign[i].result.success == false) {
+                  checkSign[i].result.message = 'Ký số thất bại';
+              }}
+          }   
           if(resultsFalse.length == 0 && resultsTrue.length == checkSign.length) {
             this.toastService.showSuccessHTMLWithTimeout(
               'Ký số thành công',
@@ -1624,7 +1626,7 @@ export class ContractSignatureComponent implements OnInit {
               10000
             );
           }
-
+          this.handleContractData(checkSign);     
           if(!(resultsTrue.length == 0 && resultsFalse.length == checkSign.length)) {
             this.router
             .navigateByUrl('/', { skipLocationChange: true })
@@ -3515,20 +3517,14 @@ export class ContractSignatureComponent implements OnInit {
 
   mapRecipientStatus(a: any, b: any) {
     const idOrder = a.split(', ').map(Number);
-
+    
     const idToResult = b.reduce((acc: any, item: any) => {
-        let message;
-        if (item.result.message == 'Chứng thư số đã bị hủy.'|| item.result.message == 'Unexpected error') {
-          message = 'Ký số thất bại';
-        } else {
-          message = item.result.message
-        }
-        acc[item.recipientId || item.recipients] = item.result.success ? 'Thành công' : `Thất bại: ${message}`;
+        acc[item.recipientId || item.recipients] = item.result.success ? 'Thành công' : `Thất bại: ${item.result.message}`;
         return acc;
     }, {});
 
     const result = idOrder.map((id: any) => idToResult[id]).join(', ');
-
+    
     return result;
   }
 
