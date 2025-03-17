@@ -463,6 +463,7 @@ export class ConfirmSignOtpComponent implements OnInit {
               this.handleContractData('Thành công')
               if (result.url_call_back) {
                 // Nếu có url_call_back thì điều hướng tới đó
+                localStorage.removeItem('isBonBon');
                 window.location.href = result.url_call_back;
               } else {
                 this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);

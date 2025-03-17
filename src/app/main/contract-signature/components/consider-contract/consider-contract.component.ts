@@ -84,7 +84,7 @@ export class ConsiderContractComponent
     pages: [],
   };
   confirmConsider = null;
-  confirmSignature = null;
+  confirmSignature: any = null;
 
   taxCodePartnerStep2: any;
 
@@ -219,6 +219,7 @@ export class ConsiderContractComponent
   page1: boolean = false;
   pageLast: boolean = true;
   isXemXet: boolean = false;
+  isBonBon: boolean = false;
   zoomOptions = [
     { percent: '25%', value: 0.25 },
     { percent: '50%', value: 0.5 },
@@ -269,6 +270,12 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    console.log("getStatusBonBon", getStatusBonBon)
+    this.isBonBon = getStatusBonBon === "true";
+    if(this.isBonBon) {
+      this.confirmSignature = 1;
+    }
     if (environment.flag == "NB") {
       this.isNB = true
     } else {

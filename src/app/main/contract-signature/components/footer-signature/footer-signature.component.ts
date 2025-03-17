@@ -57,6 +57,7 @@ export class FooterSignatureComponent implements OnInit {
   phone: string = "phone";
   currentRecipient: any;
   type: any = 0;
+  isBonBon: boolean = false;
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
@@ -72,7 +73,8 @@ export class FooterSignatureComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
-    
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    this.isBonBon = getStatusBonBon === "true";
     this.getDeviceApp();
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -146,6 +148,9 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   getStyleButton() {
+    return {
+
+    }
     if (window.innerWidth >= 396) {
       return {
         "position": 'absolute',
