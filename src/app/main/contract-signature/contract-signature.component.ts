@@ -32,6 +32,7 @@ import { ProcessingHandleEcontractComponent } from '../contract-signature/shared
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 // import { ContractService } from 'src/app/service/contract.service';
 interface SignInfo {
   recipientId: number;
