@@ -1610,13 +1610,13 @@ export class ContractSignatureComponent implements OnInit {
 
           if(resultsTrue.length == 0 && resultsFalse.length == checkSign.length) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Ký số thất bại',
+              'Ký số thất bại, đã có lỗi trong quá trình ký số',
               '',
               10000
             );
             for (let i = 0; i < checkSign.length; i++) {
               if (checkSign[i].result.success == false) {
-                  checkSign[i].result.message = 'Ký số thất bại';
+                  checkSign[i].result.message = 'Ký số thất bại, đã có lỗi trong quá trình ký số';
               }}
           }   
           if(resultsFalse.length == 0 && resultsTrue.length == checkSign.length) {
@@ -3600,13 +3600,6 @@ export class ContractSignatureComponent implements OnInit {
         } else if(typesign == 2) {
           eventName = 'kyLoUSBtoken'
         }
-      }
-      const resultsFalse = dataContract.filter((item: any) => item.result.success === false);
-      const resultsTrue = dataContract.filter((item: any) => item.result.success === true);
-  
-      if (resultsFalse.length > 0 && resultsTrue.length > 0) {
-        status = status.replace(/Thất bại: .+?(,|$)/g, 'Thất bại: Ký số thất bại$1');
-        status = status.replace(/Gửi yêu cầu ký thất bại: .+?(,|$)/g, 'Gửi yêu cầu ký thất bại: Ký số thất bại$1');
       }
       let data = {
         eventName: eventName,
