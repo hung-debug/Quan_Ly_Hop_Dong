@@ -4220,7 +4220,7 @@ export class ConsiderContractComponent
       return;
     }
 
-    if (notContainSignImage && this.eKYC == false && ((this.currentBoxSignType === 8 && supplierID === 2) || (this.currentBoxSignType !== 8 && supplierID !== 2))) {
+    if (notContainSignImage && this.eKYC == false && ((this.currentBoxSignType == 8 && supplierID == 2) || (this.currentBoxSignType != 8 && supplierID != 2))) {
       signUpdateTempN[0] = {
         "processAt": this.isDateTime
       };

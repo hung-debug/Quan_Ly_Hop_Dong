@@ -2098,6 +2098,32 @@ export class ContractSignatureComponent implements OnInit {
                     }
                   })
                 } else if(supplierID == 2){
+                  for (let i = 0; i < recipientIds.length; i++) {
+                    let updateInfo: any = null;
+                    try {
+                      updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+                        processAt: this.isDateTime
+                      }],recipientIds[i]);
+                    } catch (err) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi cập nhật trạng thái tài liệu 1',
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
+  
+                    if (!updateInfo.id || !updateInfo) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi cập nhật trạng thái tài liệu 2',
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
+                  }
                   this.router
                   .navigateByUrl('/', { skipLocationChange: true })
                   .then(() => {
@@ -2109,30 +2135,6 @@ export class ContractSignatureComponent implements OnInit {
                     '',
                     3000
                   );
-                  // let updateInfo: any = null;
-                  // try {
-                  //   updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
-                  //     processAt: this.isDateTime
-                  //   }],recipientIds);
-                  // } catch (err) {
-                  //   this.spinner.hide()
-                  //   this.toastService.showErrorHTMLWithTimeout(
-                  //     'Lỗi cập nhật trạng thái tài liệu ',
-                  //     '',
-                  //     3000
-                  //   );
-                  //   return false;
-                  // }
-
-                  // if (!updateInfo.id || !updateInfo) {
-                  //   this.spinner.hide()
-                  //   this.toastService.showErrorHTMLWithTimeout(
-                  //     'Lỗi cập nhật trạng thái tài liệu ',
-                  //     '',
-                  //     3000
-                  //   );
-                  //   return false;
-                  // }
                 }
               }
             },
