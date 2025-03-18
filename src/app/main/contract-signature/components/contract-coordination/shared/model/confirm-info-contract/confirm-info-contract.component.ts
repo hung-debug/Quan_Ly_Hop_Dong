@@ -8,6 +8,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from "ngx-spinner";
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-confirm-info-contract',
   templateUrl: './confirm-info-contract.component.html',

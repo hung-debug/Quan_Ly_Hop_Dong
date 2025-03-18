@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PreviewContractTemplateComponent } from '../preview-contract-template/preview-contract-template.component';
 import { isTemplateExpression } from 'typescript';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-confirm-infor-contract',
   templateUrl: './confirm-infor-contract.component.html',
