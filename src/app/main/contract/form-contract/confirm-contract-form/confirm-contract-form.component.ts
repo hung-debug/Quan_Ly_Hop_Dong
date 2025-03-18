@@ -21,6 +21,7 @@ import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-confirm-contract-form',
@@ -296,7 +297,7 @@ export class ConfirmContractFormComponent implements OnInit {
           idHD: statusResponse.id || '',
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: this.router.url
+          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         } as any,
       };
   

@@ -32,6 +32,7 @@ import { ProcessingHandleEcontractComponent } from '../contract-signature/shared
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 // import { ContractService } from 'src/app/service/contract.service';
 interface SignInfo {
   recipientId: number;
@@ -1612,13 +1613,13 @@ export class ContractSignatureComponent implements OnInit {
 
           if(resultsTrue.length == 0 && resultsFalse.length == checkSign.length) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Ký số thất bại',
+              'Ký số thất bại, đã có lỗi trong quá trình ký số',
               '',
               10000
             );
             for (let i = 0; i < checkSign.length; i++) {
               if (checkSign[i].result.success == false) {
-                  checkSign[i].result.message = 'Ký số thất bại';
+                  checkSign[i].result.message = 'Ký số thất bại, đã có lỗi trong quá trình ký số';
               }}
           }   
           if(resultsFalse.length == 0 && resultsTrue.length == checkSign.length) {
@@ -3648,13 +3649,6 @@ export class ContractSignatureComponent implements OnInit {
           eventName = 'kyLoUSBtoken'
         }
       }
-      const resultsFalse = dataContract.filter((item: any) => item.result.success === false);
-      const resultsTrue = dataContract.filter((item: any) => item.result.success === true);
-  
-      if (resultsFalse.length > 0 && resultsTrue.length > 0) {
-        status = status.replace(/Thất bại: .+?(,|$)/g, 'Thất bại: Ký số thất bại$1');
-        status = status.replace(/Gửi yêu cầu ký thất bại: .+?(,|$)/g, 'Gửi yêu cầu ký thất bại: Ký số thất bại$1');
-      }
       let data = {
         eventName: eventName,
         params: {
@@ -3664,7 +3658,7 @@ export class ContractSignatureComponent implements OnInit {
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: this.router.url
+          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         },
       }
       await this.customerAnalysis.pushData(data);
