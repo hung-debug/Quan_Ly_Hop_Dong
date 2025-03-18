@@ -2107,7 +2107,7 @@ export class ContractSignatureComponent implements OnInit {
                     } catch (err) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(
-                        'Lỗi cập nhật trạng thái tài liệu 1',
+                        'Lỗi cập nhật trạng thái tài liệu',
                         '',
                         3000
                       );
@@ -2117,7 +2117,7 @@ export class ContractSignatureComponent implements OnInit {
                     if (!updateInfo.id || !updateInfo) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(
-                        'Lỗi cập nhật trạng thái tài liệu 2',
+                        'Lỗi cập nhật trạng thái tài liệu',
                         '',
                         3000
                       );
