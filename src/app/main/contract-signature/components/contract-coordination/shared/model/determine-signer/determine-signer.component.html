@@ -349,6 +349,20 @@
                     </div>
                   </div>
                 </div>
+                
+                <!--trường hiển thị khi van thu tổ chức của tôi chọn loại ký là usbtoken-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignRemote(d).length > 0">
+                  <div class="participants__name" style="width: 90%">
+                    <div class="label_detail text-color">
+                      {{ "tax_code.cardId.passport" | translate }}&nbsp;<span class="required-title">*</span>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{ 'enter.tax_code.cardId.passport' | translate }}"
+                        [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="col-md-1 delete-element" (click)="deletePartnerDocument(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn" />

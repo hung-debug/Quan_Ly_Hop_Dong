@@ -372,11 +372,20 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
             }
 
             if(!this.personalCustomer.card_id){
+              this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + "!")
+              return false;
+            }
+            
+            if((this.personalCustomer.signType[0].id == 8 || this.personalCustomer.signType[0].id == 5) && !this.personalCustomer.card_id){
               this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD/Số hộ chiếu của " + this.getNameObjectValid('SIGNER') + "!")
               return false;
             }
 
-            if(!parttern.cardid.test(this.personalCustomer.card_id) && !parttern.card_id_passport.test(this.personalCustomer.card_id)){
+            if(!(this.personalCustomer.signType[0].id == 8 || this.personalCustomer.signType[0].id == 5) && !parttern.cardid.test(this.personalCustomer.card_id)){
+              this.getNotificationValid("Mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
+              return false;
+            }
+            if((this.personalCustomer.signType[0].id == 8 || this.personalCustomer.signType[0].id == 5) && !parttern.cardid.test(this.personalCustomer.card_id) && !parttern.card_id_passport.test(this.personalCustomer.card_id)){
               this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
               return false;
             }
