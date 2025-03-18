@@ -185,7 +185,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           idHD: statusResponse.id || '',
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: this.router.url
+          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         } as any,
       };
   

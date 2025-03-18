@@ -3610,7 +3610,7 @@ export class ContractSignatureComponent implements OnInit {
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: this.router.url
+          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         },
       }
       await this.customerAnalysis.pushData(data);
