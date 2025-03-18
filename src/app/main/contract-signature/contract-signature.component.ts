@@ -1598,7 +1598,7 @@ export class ContractSignatureComponent implements OnInit {
               10000
             );
             for (let i = 0; i < resultsFalse.length; i++) {
-              resultsFalse[i].result.message = 'Ký số thất bại';
+              checkSign[i].result.message = 'Ký số thất bại';
             }
           }
 
