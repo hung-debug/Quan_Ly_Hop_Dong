@@ -3601,6 +3601,7 @@ export class ContractSignatureComponent implements OnInit {
       let recipientId = this.signedContract.map((contract: any) => contract.id).join(', ');
       let maHĐ = this.signedContract.map((contract: any) => contract.contract_uid).join(', ');
       let status;
+      
       if(this.signedContract[0]?.sign_type?.length == 0) {
         eventName = 'xemxetLoHĐ'
         status = this.mapRecipientStatus(idHĐ, dataContract);
@@ -3647,7 +3648,13 @@ export class ContractSignatureComponent implements OnInit {
           eventName = 'kyLoUSBtoken'
         }
       }
-    
+      const resultsFalse = dataContract.filter((item: any) => item.result.success === false);
+      const resultsTrue = dataContract.filter((item: any) => item.result.success === true);
+  
+      if (resultsFalse.length > 0 && resultsTrue.length > 0) {
+        status = status.replace(/Thất bại: .+?(,|$)/g, 'Thất bại: Ký số thất bại$1');
+        status = status.replace(/Gửi yêu cầu ký thất bại: .+?(,|$)/g, 'Gửi yêu cầu ký thất bại: Ký số thất bại$1');
+      }
       let data = {
         eventName: eventName,
         params: {
