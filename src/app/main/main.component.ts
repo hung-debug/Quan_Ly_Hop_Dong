@@ -192,7 +192,8 @@ export class MainComponent implements OnInit {
         eventName: "Logout",
         params: {
           username: JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email,
-          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString()
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          link: this.router.url
         }
       };
       this.customerAnalysis.pushData(data);

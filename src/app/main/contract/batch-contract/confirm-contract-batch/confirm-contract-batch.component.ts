@@ -1010,6 +1010,7 @@ export class ConfirmContractBatchComponent
           idHD: idHD,
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
+          link: this.router.url
         } as any,
       };
   
