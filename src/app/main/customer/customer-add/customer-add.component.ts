@@ -380,8 +380,12 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD/Số hộ chiếu của " + this.getNameObjectValid('SIGNER') + "!")
               return false;
             }
+            console.log("this.personalCustomer.signType[0].id",this.personalCustomer.signType[0].id);
 
-            if(!(this.personalCustomer.signType[0].id == 8 || this.personalCustomer.signType[0].id == 5) && !parttern.cardid.test(this.personalCustomer.card_id)){
+            if(this.personalCustomer.signType[0].id == 6 && !parttern.cardid.test(this.personalCustomer.card_id) &&
+            !parttern.card_id9.test(this.personalCustomer.card_id) &&
+            !parttern.card_id12.test(this.personalCustomer.card_id) &&
+            !parttern_input.taxCode_form.test(this.personalCustomer.card_id)){
               this.getNotificationValid("Mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
               return false;
             }

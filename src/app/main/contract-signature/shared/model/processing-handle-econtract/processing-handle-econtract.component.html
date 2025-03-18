@@ -35,8 +35,8 @@
                           *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}
                       : {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký ảnh và OTP", " Sign by OTP").replace("Ký eKYC", "Sign eKYC").replace("Ký số bằng", "Sign by").replace("và", "and") : ''}}</span>
                   </ng-template>
-                    <span style="color: dimgray" *ngIf="d.card_id && !(d.typeOfSign.id == 1 || d.typeOfSign.id == 3 || d.typeOfSign.id == 7 || d.typeOfSign.id == 5) ">MST/CCCD: {{d.card_id}}</span>
-                    <span style="color: dimgray" *ngIf="d.card_id && d.typeOfSign.id == 5 ">{{'card.passport' | translate}}: {{d.card_id}}</span>
+                    <span style="color: dimgray" *ngIf="d.card_id && !(d.typeOfSign.id == 1 || d.typeOfSign.id == 3 || d.typeOfSign.id == 7 || d.typeOfSign.id == 5 || d.typeOfSign.id == 8) ">MST/CCCD: {{d.card_id}}</span>
+                    <span style="color: dimgray" *ngIf="d.card_id && (d.typeOfSign.id == 5 || d.typeOfSign.id == 8) ">{{'card.passport' | translate}}: {{d.card_id}}</span>
                 </div>
 
 
