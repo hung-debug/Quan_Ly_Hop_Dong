@@ -5793,14 +5793,17 @@ export class ConsiderContractComponent
         eventName = 'xemxetHĐ'
       } else {
         let typesign = this.recipient?.sign_type[0]?.id
-        if (typesign == 2) {
+          if (typesign == 1) {
+          eventName = 'kyOTP'
+        }
+          else if (typesign == 2) {
           eventName = 'kyUSBtoken'
         } else if (typesign == 3) {
-          if(this.dataNetworkPKI.networkCode == 'MobiFone') {
+            if(this.dataNetworkPKI?.networkCode == 'MobiFone') {
             eventName = 'kySimPKI_MobiFone'
-          } else if (this.dataNetworkPKI.networkCode == 'Viettel') {
+          } else if (this.dataNetworkPKI?.networkCode == 'Viettel') {
             eventName = 'kySimPKI_Viettel'
-          } else if (this.dataNetworkPKI.networkCode == "bcy"){
+          } else if (this.dataNetworkPKI?.networkCode == "bcy"){
             eventName = 'kySimPKI_BCY'
           } else {
             eventName = 'kySimPKI'
