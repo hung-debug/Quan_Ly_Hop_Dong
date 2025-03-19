@@ -4270,8 +4270,8 @@ export class ConsiderContractComponent
       this.spinner.hide();
       return;
     }
-
-    if (notContainSignImage && this.eKYC == false && ((this.currentBoxSignType == 8 && supplierID == 2) || (this.currentBoxSignType != 8 && supplierID != 2))) {
+    // notContainSignImage && this.eKYC == false && ((this.currentBoxSignType == 8 && supplierID == 2) || (this.currentBoxSignType != 8 && supplierID != 2)) điều kiện chuyển đổi trạng thái ký mobiCA
+    if (notContainSignImage && this.eKYC == false && this.currentBoxSignType !== 8) {
       signUpdateTempN[0] = {
         "processAt": this.isDateTime
       };
