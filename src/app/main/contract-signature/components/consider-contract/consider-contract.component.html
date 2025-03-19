@@ -223,7 +223,7 @@
         ></pdf-viewer>
       </div>
 
-      <div style="display: flex; justify-content: center;margin-top: 2px;">
+      <div style="display: flex; justify-content: center;margin-top: 10px;">
         <button class="call-page input1" (click)="firstPageMobile()">
             <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
             <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
@@ -292,6 +292,11 @@
           </div>
         </div>
       </div>
+
+      <div class="checkbox-confirm" *ngIf="this.isBonBon">
+        <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="confirmConsiderBonBon"/>
+        <div class="text" style="text-align: justify;">{{ 'confirm.bonbon' | translate }}</div>
+      </div>
   </div>
 
   <app-footer-signature *ngIf="loaded  && (!this.mobile || (this.mobile && !this.multiSignInPdf))" 
@@ -310,8 +315,10 @@
     [pageBefore]="pageBefore"
     [status]="status"
     (submitChanges)="submitEvents($event)"
+    (submitChangesBonBon)="submitEventsBonBon($event)"
     [firstHandler] = "firstHandler"
     [confirmConsider] = "confirmConsider"
+    [confirmConsiderBonBon] = "confirmConsiderBonBon"
   ></app-footer-signature>
   <ngx-spinner
     bdColor="rgba(51,51,51,0.8)"

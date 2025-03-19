@@ -638,3 +638,48 @@ a.info-contract {
 :host ::ng-deep .pdf-viewer-custom .page {
   width: 100% !important;
 }
+
+.checkbox-confirm {
+  margin: 5px 10px 0px 10px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.checkbox-confirm .text {
+  margin-left: 5px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #011660;
+}
+
+.checkbox-hide-processing-thread {
+  -webkit-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  -moz-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  min-width: 24px;
+  min-height: 24px;
+  margin: auto 8px auto 0;
+  border-radius: 6px;
+  display: block;
+  border: 1px solid #A8B5CE; /* Thêm border */
+  position: relative;
+  cursor: pointer;
+  background-color: #fff; /* Màu nền mặc định */
+}
+.checkbox-hide-processing-thread:checked {
+  // background-color: #fff;
+  background-color: #0041C4;
+}
+
+.checkbox-hide-processing-thread:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px; /* Kích thước ảnh */
+  height: 10px; /* Kích thước ảnh */
+  background-image: url('../../../../../assets/img/Vector.png'); /* Replace with your image URL */
+  background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
+  transform: translate(-50%, -50%);
+}

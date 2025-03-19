@@ -948,5 +948,6 @@
   "upload.guild":"(Image needs to be in clear PNG format)",
   "report.exporting": "The report file is being downloaded",
   "change.phone": "CHANGE PHONE NUMBER",
-  "hind.text.phone.otp": "Enter phone number to receive OTP code"
+  "hind.text.phone.otp": "Enter phone number to receive OTP code",
+  "confirm.bonbon": "You agree to the terms and conditions of the contract and use electronic means to conduct transactions."
 }

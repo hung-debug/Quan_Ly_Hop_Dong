@@ -271,3 +271,47 @@
     margin-top: 5px;
   }
 }
+
+.clear-button {
+  position: absolute;
+  bottom: 1.5vh;
+  right: 1.5vh;
+  padding: 0.8vh 0.8vh;
+  font-size: 1.4vh;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 0.8vh;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.icon-clear {
+  width: 2.4vh;
+  height: 2.4vh;
+}
+
+.redraw {
+  margin: auto 0px auto 5px;
+  font-weight: 400;
+  font-size: 1.3vh;
+  color: #00186D;
+  line-height: 1.8vh;
+}
+
+.button-confirm-active-bonbon {
+  background-color: #0041C4;
+  color: #FFFFFF;
+  height: 40px;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+}
+
+.button-confirm-disable-bonbon {
+  background-color: #8E9AB0;
+  color: #FFFFFF;
+  height: 40px;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+}
