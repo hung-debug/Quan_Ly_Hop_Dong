@@ -42,11 +42,11 @@
   </div>
 </div>
 <br>
-<div *ngIf="this.datas.is_data_contract.status == 20 && this.datas.is_data_contract.release_state == 'CON_HIEU_LUC' && this.mobile === true">
+<div *ngIf="this.datas.is_data_contract.status == 20 && this.datas.is_data_contract.release_state == 'CON_HIEU_LUC' && this.mobile === true && !isBonBon">
   <div class="btn_footer">
     <button *ngIf="!this.is_show_coordination && !view && !isBonBon" type="button" name="next" class="next forward-btn-mobile" (click)="processingAuthorization()">{{'authori_forward' | translate}}</button>
 
-    <button *ngIf="!this.is_show_coordination && !view && this.lang == 'vi' || !this.lang" (click)="action()" type="button" name="next" class="next action-button1" [ngClass]="{ 'isBonBon': isBonBon, 'noBonBon': !isBonBon }" [ngStyle]="getStyleButton()">{{this.datas.action_title == 'dieu_phoi' ? 'Điều phối' : 'Xác nhận'}}</button>
+    <button *ngIf="!this.is_show_coordination && !view && this.lang == 'vi' || !this.lang" (click)="action()" type="button" name="next" class="next action-button1" [ngStyle]="getStyleButton()">{{this.datas.action_title == 'dieu_phoi' ? 'Điều phối' : 'Xác nhận'}}</button>
 
     <!-- <button *ngIf="!this.is_show_coordination && !view && !this.lang" type="button" name="next" class="next forward-btn-mobile" (click)="forWardContract()">{{'Chuyển tiếp' | translate}}</button> -->
 
@@ -58,5 +58,17 @@
     <button *ngIf="!this.is_show_coordination && !view && this.lang" type="button" name="next" class="next forward-btn-mobile" (click)="forWardContract()">{{'forward' | translate}}</button> -->
     
     <button *ngIf="!this.is_show_coordination && ![2,3,4].includes(this.datas.roleContractReceived) && !view" type="button" name="next" class="next action-button-previous" (click)="refuseContract()" [ngStyle]="getStyleButton()">{{'contract.status.fail' | translate}}</button>
+  </div>
+</div>
+
+<div *ngIf="this.datas.is_data_contract.status == 20 && this.datas.is_data_contract.release_state == 'CON_HIEU_LUC' && this.mobile === true && isBonBon">
+  <div class="btn_footer row" style="width: 100%; margin: 0;">
+    <div class="col-6">
+      <button type="button" name="next" class="next refuseBonBon" (click)="confirm(2)" [disabled]="!confirmConsiderBonBon">Từ chối</button>
+    </div>
+
+    <div class="col-6">
+      <button type="button" name="next" class="next aconfirmBonBon" (click)="confirm(1)" [disabled]="!confirmConsiderBonBon">Xác nhận</button>
+    </div>
   </div>
 </div>

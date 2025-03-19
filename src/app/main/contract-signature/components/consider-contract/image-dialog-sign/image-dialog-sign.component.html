@@ -26,7 +26,7 @@
         <div class="lable-radio" for="radio-file-com">Tải ảnh lên</div>
       </div>
 
-      <div class="radio-confirm flex">
+      <div *ngIf = "!isBonBon" class="radio-confirm flex">
         <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="1"
           [(ngModel)]='typeImageSignatureRadio' (change)="t(1)">
         <div class="lable-radio" for="radio-file-account">Ảnh từ tài khoản</div>
@@ -61,7 +61,7 @@
           <div class="select-contract container-img-file">
             <div class="upload-image-region d-flex flex-column container-img-file-1">
               <div class="upload-photo" type="button">Tải ảnh lên</div>
-              <div class="text-support-extension" style="text-align: center; margin-left: 5%; margin-right: 5%;">{{'text.support.extension' | translate}}</div>
+              <div *ngIf = "!isBonBon" class="text-support-extension" style="text-align: center; margin-left: 5%; margin-right: 5%;">{{'text.support.extension' | translate}}</div>
             </div>
           </div>
         </div>
@@ -73,23 +73,39 @@
       </div>
       </div>
 
-      <div class="signature-container" *ngIf="typeImageSignatureRadio == 3">
+      <div class="signature-container" *ngIf="typeImageSignatureRadio == 3 && !isBonBon">
         <signature-pad class="signature-pad" *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
         (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
       </div>   
+
+      <div class="signature-container mt-8px" *ngIf="typeImageSignatureRadio == 3 && isBonBon">
+        <signature-pad #signature class="signature-pad" [options]="signaturePadOptions"
+          (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)">
+        </signature-pad>
+        <div *ngIf="this.imgSignDrawing" class="clear-button flex" (click)="clearImage()">
+          <img class="icon-clear" src="assets/img/refresh-right-square-popup.svg">
+          <div class="redraw">Vẽ lại</div>
+        </div>
+      </div>
     </div>
 
-    <div class="checkbox-confirm">
+    <div *ngIf = "!isBonBon" class="checkbox-confirm">
       <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="confirmConsider"/>
       <div class="text" style="text-align: justify;">{{ 'multi.sign.confirm' | translate }}</div>
     </div>
     
-    <div class="select-option margin-top-20px">
+    <div *ngIf = "!isBonBon" class="select-option margin-top-20px">
       <button class="button-cancel" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
       <button class="button-clear" style="margin-left:20px" *ngIf="(typeImageSignatureRadio != 1 && typeImageSignatureRadio != 4)" type="button" (click)="clearImage()">Clear</button>     
       <button class="button-confirm-active" style="margin-left:20px" *ngIf="confirmConsider && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc)) || (typeImageSignatureRadio != 1))" type="button" (click)="uploadImage()">{{ 'confirm' | translate }}</button>
 
       <button class="button-confirm-disable" style="margin-left:20px" *ngIf="!confirmConsider && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1))" type="button">{{ 'confirm' | translate }}</button>
+    </div>
+
+    <div *ngIf = "isBonBon" class="margin-top-20px"> 
+      <button class="button-confirm-active-bonbon" *ngIf="(imgSignDrawing || imgSignPCSelect) && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc)) || (typeImageSignatureRadio != 1))" type="button" (click)="uploadImage()">{{ 'confirm' | translate }}</button>
+      <button class="button-confirm-disable-bonbon" *ngIf="(!imgSignDrawing && !imgSignPCSelect) && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1))" type="button">{{ 'confirm' | translate }}</button>
+
     </div>
     <canvas #croppedCanvas style="display: none;"></canvas>
   </div>

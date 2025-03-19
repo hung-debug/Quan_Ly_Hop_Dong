@@ -5,7 +5,7 @@
       <img [src]="logoWeb" (click)="backToDashboard()" alt="Logo" class="img-responsive"/>
     </div>
     <app-sidebar *ngIf="getShowHideSideBar() && this.mobile === false" (evenSelectSidebar)="getName($event)"></app-sidebar>
-    <header [ngStyle]="getStyleSideBar()">
+    <header *ngIf="!isBonBon" [ngStyle]="getStyleSideBar()">
 
       <div class="search-wrapper">
         <div style="padding-right: 8px;">
@@ -205,6 +205,10 @@
 
 
       </div>
+    </header>
+
+    <header *ngIf="isBonBon" [ngStyle]="getStyleSideBar()">
+      <img [src]="logoWeb" (click)="backToDashboard()" alt="Logo" class="img-responsive"/>
     </header>
 
     <div class="container-fluid" [ngStyle]="getStyle()">

@@ -21,6 +21,7 @@ export class FooterSignatureComponent implements OnInit {
   @Input() view: any;
   @Input() recipientId: any;
   @Output() submitChanges = new EventEmitter<number>();
+  @Output() submitChangesBonBon = new EventEmitter<number>();
   @Input() confirmSignature: any;
   @Input() coordinateY: any;
   @Input() idElement: any;
@@ -30,6 +31,7 @@ export class FooterSignatureComponent implements OnInit {
   @Input() pageLast: boolean;
   @Input() firstHandler: boolean;
   @Input() confirmConsider: any;
+  @Input() confirmConsiderBonBon: any;
   @Input() pageNum: number;
 
   @Input() pageBefore: number;
@@ -252,6 +254,11 @@ export class FooterSignatureComponent implements OnInit {
     pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
 
     this.pageNum = this.pageNumber;
+  }
+
+  confirm(e: any) {
+    this.submitChangesBonBon.emit(e);
+    this.action();
   }
 
   onNextPage() {

@@ -149,10 +149,28 @@ input {
   justify-content: space-between;
 }
 
-.isBonBon {
+.refuseBonBon {
+  background: #F3F6FA;
+  border: 1px solid #C6D2EA;
+  height: 44px;
   width: 100%;
+  border-radius: 7px;
+  cursor: pointer;
+  color: #011660;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
 }
 
-.noBonBon {
-  width: 100px;
+.aconfirmBonBon {
+  background: #0041C4;
+  border: 1px solid #0041C4;
+  height: 44px;
+  width: 100%;
+  border-radius: 7px;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
 }
