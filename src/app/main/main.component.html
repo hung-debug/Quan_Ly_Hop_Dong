@@ -1,7 +1,7 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
 
   <main class="page-content" [ngStyle]="getStyleWithSideBar()" style="padding-bottom: 25px;">
-    <div class="sidebar-header sidebar-header-custom">
+    <div *ngIf ="!mobile" class="sidebar-header sidebar-header-custom">
       <img [src]="logoWeb" (click)="backToDashboard()" alt="Logo" class="img-responsive"/>
     </div>
     <app-sidebar *ngIf="getShowHideSideBar() && this.mobile === false" (evenSelectSidebar)="getName($event)"></app-sidebar>
@@ -209,6 +209,7 @@
 
     <header *ngIf="isBonBon" [ngStyle]="getStyleSideBar()">
       <img [src]="logoWeb" (click)="backToDashboard()" alt="Logo" class="img-responsive"/>
+      <img src="assets/img/ec-header.png" style="height: 100%;">
     </header>
 
     <div class="container-fluid" [ngStyle]="getStyle()">

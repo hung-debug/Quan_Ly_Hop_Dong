@@ -64,11 +64,11 @@
 <div *ngIf="this.datas.is_data_contract.status == 20 && this.datas.is_data_contract.release_state == 'CON_HIEU_LUC' && this.mobile === true && isBonBon">
   <div class="btn_footer row" style="width: 100%; margin: 0;">
     <div class="col-6">
-      <button type="button" name="next" class="next refuseBonBon" (click)="confirm(2)" [disabled]="!confirmConsiderBonBon">Từ chối</button>
+      <button type="button" name="next" class="next refuseBonBon" (click)="confirm(2)" [disabled]="!confirmConsiderBonBon">Từ chối ký</button>
     </div>
 
     <div class="col-6">
-      <button type="button" name="next" class="next aconfirmBonBon" (click)="confirm(1)" [disabled]="!confirmConsiderBonBon">Xác nhận</button>
+      <button type="button" name="next" class="next aconfirmBonBon" (click)="confirm(1)" [disabled]="!confirmConsiderBonBon">Ký ngay</button>
     </div>
   </div>
 </div>

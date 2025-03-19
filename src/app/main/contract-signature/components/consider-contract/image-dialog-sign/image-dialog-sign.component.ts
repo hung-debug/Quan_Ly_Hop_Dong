@@ -266,4 +266,9 @@ onCancelCrop() {
     this.showCropper = false;
     this.imgSignPCSelect = null;
 }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
 }

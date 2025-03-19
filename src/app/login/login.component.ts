@@ -366,6 +366,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
   async ngOnInit() {
+    localStorage.removeItem('isBonBon');
     if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
       
       if(localStorage.getItem('sign_type') == '5') {
