@@ -3634,11 +3634,12 @@ export class ContractSignatureComponent implements OnInit {
         let typesign = this.signedContract[0]?.sign_type[0]?.id;
         if(typesign == 2) {
           status = this.mapRecipientStatus(idHĐ, dataContract);
-        } else if(typesign == 3 ||typesign == 8 && this.supplierID == 2) {
+        } else if (typesign == 3) {
           status = this.mapRecipientStatusPKI(recipientId, dataContract);
-        }
-          else if(typesign == 8 && this.supplierID != 2) {
+        } else if (typesign == 8 && this.supplierID != 2) {
           status = this.mapRecipientStatusRS(recipientId, dataContract);
+        } else if (typesign == 8 && this.supplierID == 2) {
+          status = this.mapRecipientStatus(recipientId, dataContract);
         } else {
           status = this.mapRecipientStatus(recipientId, dataContract);
         }
