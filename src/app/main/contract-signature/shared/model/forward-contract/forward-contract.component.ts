@@ -361,10 +361,12 @@ export class ForwardContractComponent implements OnInit {
         return;
       }
       if (this.isReqCardId && !String(this.myForm.value.card_id)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD/Số hộ chiếu người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
-      } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD', '', 3000);
+      } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) 
+        && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)
+        && !String(this.myForm.value.card_id).match(parttern.card_id_passport)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD/Số hộ chiếu', '', 3000);
         return;
       }
       //Mã số thuế hsm
@@ -386,8 +388,9 @@ export class ForwardContractComponent implements OnInit {
       else if (this.isReqCardIdCts && !String(this.myForm.value.card_id)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập MST/CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
-      } else if (this.isReqCardIdCts && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng MST/CMT/CCCD', '', 3000);
+      } else if (this.isReqCardIdCts && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid) 
+        && !String(this.myForm.value.card_id).match(parttern.card_id_passport)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng MST/CMT/CCCD/Số hộ chiếu', '', 3000);
         return;
       }
 

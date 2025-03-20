@@ -33,7 +33,7 @@
                               <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span style="color: red">*</span></div>
                               <div class="input-data">
                                   <img src="assets/img/icon_name.svg" class="input-img">
-                                  <input type="text" [(ngModel)]="d.name" placeholder="{{'nhap_ho_va_ten' | translate}}">
+                                  <input type="text" [(ngModel)]="d.name" placeholder="{{'nhap_ho_va_ten1' | translate}}">
                               </div>
                           </div>
 
@@ -155,7 +155,7 @@
                               class="required-title">*</span></div>
                           <div class="input-data">
                             <img src="assets/img/icon_name.svg" class="input-img">
-                            <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
+                            <input type="text" placeholder="{{'nhap_ho_va_ten2' | translate}}" [(ngModel)]="d.name">
                           </div>
                         </div>
       
@@ -361,7 +361,7 @@
                           <div class="input-data">
                             <img src="assets/img/icon_name.svg" class="input-img">
                             <input [id]="'signature-partner-' + d.ordering" type="text"
-                              placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
+                              placeholder="{{'nhap_ho_va_ten3' | translate}}" [(ngModel)]="d.name">
                           </div>
                         </div>
       
@@ -664,7 +664,7 @@
                           </div>
                           <div class="input-data">
                             <img src="assets/img/icon_name.svg" class="input-img">
-                            <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
+                            <input type="text" placeholder="{{'nhap_ho_va_ten5' | translate}}" [(ngModel)]="d.name">
                           </div>
                         </div>
       
@@ -876,7 +876,7 @@
                                 </div>
                                 <div class="input-data">
                                     <img src="assets/img/icon_name.svg" class="input-img">
-                                    <input type="text" [(ngModel)]="this.personalCustomer.name" placeholder="{{'nhap_ho_va_ten' | translate}}">
+                                    <input type="text" [(ngModel)]="this.personalCustomer.name" placeholder="{{'nhap_ho_va_ten6' | translate}}">
                                 </div>
                             </div>
 
@@ -1053,12 +1053,12 @@
                           <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là usb token-->
                           <div class="participants--input" style="display: flex">
                             <div class="participants__name" style="width: 88%">
-                              <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                              <div class="label_detail text-color">{{'tax_code.cardId.passport' | translate}}&nbsp;<span
                                   class="required-title">*</span>
                                 <!-- <div style="color: #ffc107;">({{'info.token' | translate}})</div> -->
                               </div>
                               <div class="input-data">
-                                <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="this.personalCustomer.card_id"
+                                <input type="text" placeholder="{{'tax_code.cardId.passport' | translate}}" [(ngModel)]="this.personalCustomer.card_id"
                                   oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                               </div>
                             </div>
