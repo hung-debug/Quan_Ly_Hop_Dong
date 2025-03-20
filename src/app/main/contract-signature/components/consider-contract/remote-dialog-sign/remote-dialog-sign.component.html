@@ -8,7 +8,7 @@
         <div class="label text-color">Nhà cung cấp <span class="required-title">*</span></div>
         <select formControlName="supplier" class="form-select-custom" style="font-size: 14px" aria-label="Default select example">
           <option value="1">VNPT SmartCA</option>
-          <option value="2">MobiFoneCA</option>
+          <option value="2" *ngIf="this.datas.isHidden">MobiFoneCA</option>
           <option value="3">CA2</option>
         </select>
       </div>
@@ -56,7 +56,7 @@
         <div class="label text-color">Nhà cung cấp <span class="required-title">*</span></div>
         <select formControlName="supplier" class="form-select-custom" style="font-size: 14px" aria-label="Default select example">
           <option value="1">VNPT SmartCA</option>
-          <option value="2" >MobiFoneCA</option>
+          <option value="2" *ngIf="this.datas.isHidden">MobiFoneCA</option>
           <option value="3" >CA2</option>
         </select>
       </div>

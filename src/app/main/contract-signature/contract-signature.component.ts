@@ -82,6 +82,7 @@ export class ContractSignatureComponent implements OnInit {
   name_or_email_customer: any;
   loadingText: string = 'Đang xử lý...';
   phoneMobiCA: any;
+  isHiddenMobiCA: boolean = false;
 
   typeDisplay: string = 'signOne';
   // typeDisplay: string = 'downloadOne';
@@ -1977,7 +1978,8 @@ export class ContractSignatureComponent implements OnInit {
         id: 1,
         title: 'CHỮ KÝ REMOTE SIGNING',
         is_content: 'forward_contract',
-        userCode: taxCode[0]
+        userCode: taxCode[0],
+        isHidden: this.isHiddenMobiCA
       };
 
       const dialogConfig = new MatDialogConfig();
