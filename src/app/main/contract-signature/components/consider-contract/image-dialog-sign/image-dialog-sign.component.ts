@@ -146,8 +146,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   t(ev: number) {
     this.checkIOSAndroid();
-    if (ev==4){  
-    }
     if (ev == 3) {
       setTimeout(() => {
         this.signaturePad.set('border', 'none');
@@ -157,11 +155,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
           this.signaturePad.set('canvasHeight', 500);
 
         if(this.mobile) {
-          if(this.iOS) {
-            this.signaturePad.set('canvasWidth',250);
-          } else {
-            this.signaturePad.set('canvasWidth',340);
-          }
+          this.signaturePad.set('canvasWidth',340);
         } else {
           this.signaturePad.set('canvasWidth', 950);
         }
