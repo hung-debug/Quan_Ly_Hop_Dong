@@ -3638,8 +3638,6 @@ export class ContractSignatureComponent implements OnInit {
           status = this.mapRecipientStatusPKI(recipientId, dataContract);
         } else if (typesign == 8 && this.supplierID != 2) {
           status = this.mapRecipientStatusRS(recipientId, dataContract);
-        } else if (typesign == 8 && this.supplierID == 2) {
-          status = this.mapRecipientStatus(recipientId, dataContract);
         } else {
           status = this.mapRecipientStatus(recipientId, dataContract);
         }
