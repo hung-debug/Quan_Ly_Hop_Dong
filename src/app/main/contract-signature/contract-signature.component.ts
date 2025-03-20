@@ -3589,6 +3589,30 @@ export class ContractSignatureComponent implements OnInit {
     return result;
   }
 
+  mapRecipientStatusPKI(recipientIds: string, results: any[]): string {
+    const idOrder: number[] = [];
+    const idToResultMap = new Map<number, string>()
+    if (recipientIds && /^\d+(?:, \d+)*$/.test(recipientIds)) {
+      recipientIds.split(', ').map(Number).forEach(id => {
+        idOrder.push(id);
+        idToResultMap.set(id, 'Thất bại: Ký số thất bại, đã có lỗi trong quá trình ký số.'); 
+      });
+    }
+    if (results) {
+      results.forEach(item => {
+        if (item.recipientId !== undefined && typeof item.recipientId === 'number') {
+          const resultMessage = item.result.success
+            ? 'Thành công'
+            : `Thất bại: ${item.result.message || 'Ký số thất bại, đã có lỗi trong quá trình ký số.'}`; // Sửa đổi quan trọng
+          idToResultMap.set(item.recipientId, resultMessage);
+        }
+      });
+    }
+    const finalStatus: string[] = idOrder.map(id => idToResultMap.get(id)!);
+  
+    return finalStatus.join(', ');
+  }
+
   getContractId(contractViewList: any[], selectedId: number): any | null {
     const matchedItem = contractViewList.find((item) => item.id === selectedId);
     return matchedItem || null;
@@ -3610,7 +3634,10 @@ export class ContractSignatureComponent implements OnInit {
         let typesign = this.signedContract[0]?.sign_type[0]?.id;
         if(typesign == 2) {
           status = this.mapRecipientStatus(idHĐ, dataContract);
-        } else if(typesign == 8) {
+        } else if(typesign == 3 ||typesign == 8 && this.supplierID == 2) {
+          status = this.mapRecipientStatusPKI(recipientId, dataContract);
+        }
+          else if(typesign == 8 && this.supplierID != 2) {
           status = this.mapRecipientStatusRS(recipientId, dataContract);
         } else {
           status = this.mapRecipientStatus(recipientId, dataContract);
