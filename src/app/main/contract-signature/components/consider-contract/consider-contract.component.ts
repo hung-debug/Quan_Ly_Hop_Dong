@@ -92,6 +92,8 @@ export class ConsiderContractComponent
 
   dataVersion2: any;
   type: any = 0;
+  
+  isHiddenMobiCA: boolean = true;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -5140,6 +5142,7 @@ export class ConsiderContractComponent
       is_content: 'forward_contract',
       recipientId: recipientId,
       dataContract: this.recipient,
+      isHidden: this.isHiddenMobiCA
     };
     const determineCoordination = await this.contractService.getDetermineCoordination(recipientId).toPromise();
 
