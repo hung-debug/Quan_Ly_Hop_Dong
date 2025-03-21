@@ -371,24 +371,29 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               }
             }
 
-            if(!this.personalCustomer.card_id){
-              this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + "!")
-              return false;
-            }
+            // if(!this.personalCustomer.card_id){
+            //   this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + "!")
+            //   return false;
+            // }
             
             if((this.personalCustomer.signType[0].id == 8 || this.personalCustomer.signType[0].id == 5) && !this.personalCustomer.card_id){
               this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD/Số hộ chiếu của " + this.getNameObjectValid('SIGNER') + "!")
               return false;
             }
-            console.log("this.personalCustomer.signType[0].id",this.personalCustomer.signType[0].id);
+            
+            if((this.personalCustomer.signType[0].id == 2 || this.personalCustomer.signType[0].id == 4 || this.personalCustomer.signType[0].id == 6) && !this.personalCustomer.card_id){
+              this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + "!")
+              return false;
+            }
 
-            if(this.personalCustomer.signType[0].id == 6 && !parttern.cardid.test(this.personalCustomer.card_id) &&
+            if((this.personalCustomer.signType[0].id == 2 || this.personalCustomer.signType[0].id == 4 || this.personalCustomer.signType[0].id == 6) && !parttern.cardid.test(this.personalCustomer.card_id) &&
             !parttern.card_id9.test(this.personalCustomer.card_id) &&
             !parttern.card_id12.test(this.personalCustomer.card_id) &&
             !parttern_input.taxCode_form.test(this.personalCustomer.card_id)){
               this.getNotificationValid("Mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
               return false;
             }
+
             if((this.personalCustomer.signType[0].id == 8 || this.personalCustomer.signType[0].id == 5) && !parttern.cardid.test(this.personalCustomer.card_id) && !parttern.card_id_passport.test(this.personalCustomer.card_id)){
               this.getNotificationValid("Mã số thuế/CMT/CCCD/Số hộ chiếu của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
               return false;
@@ -539,7 +544,11 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
           if(res.errors?.length > 0){
             if(res.errors[0].code == 1015) {
               this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout('Mã số thuế/ CMT/ CCCD đã được khai báo với khách hàng khác trên hệ thống','',3000);
+              if(this.personalCustomer.signType[0].id == 5 || this.personalCustomer.signType[0].id == 8){
+                this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD/Số hộ chiếu đã được khai báo với khách hàng khác trên hệ thống','',3000);
+              } else{
+                this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD đã được khai báo với khách hàng khác trên hệ thống','',3000);
+              }
             } else {
               this.spinner.hide();
               this.showError(res.errors[0].code, 'add', 'personal')
@@ -580,7 +589,11 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
             if(res.errors?.length > 0){
               if(res.errors[0].code == 1015) {
                 this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout('Mã số thuế/ CMT/ CCCD đã được khai báo với khách hàng khác trên hệ thống','',3000);
+                if(this.personalCustomer.signType[0].id == 5 || this.personalCustomer.signType[0].id == 8){
+                  this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD/Số hộ chiếu đã được khai báo với khách hàng khác trên hệ thống','',3000);
+                } else{
+                  this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD đã được khai báo với khách hàng khác trên hệ thống','',3000);
+                }
               } else {
                 this.spinner.hide();
                 this.showError(res.errors[0].code, 'edit', 'personal')
