@@ -5830,8 +5830,8 @@ export class ConsiderContractComponent
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       }
       await this.customerAnalysis.pushData(data);
     } catch (error) {
