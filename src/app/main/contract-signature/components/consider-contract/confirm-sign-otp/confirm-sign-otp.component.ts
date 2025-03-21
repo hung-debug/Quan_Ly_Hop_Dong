@@ -497,8 +497,8 @@ export class ConfirmSignOtpComponent implements OnInit {
           nguoiXuLy: this.datasOtp.currentUser.email || this.datasOtp.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       };
       await this.customerAnalysis.pushData(data);
     } catch (error) {

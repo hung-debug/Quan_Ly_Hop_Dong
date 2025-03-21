@@ -1011,8 +1011,8 @@ export class ConfirmContractBatchComponent
           idHD: idHD,
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         } as any,
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       };
   
       if (response.errors?.length > 0 && response.errors[0].code == 1015) {

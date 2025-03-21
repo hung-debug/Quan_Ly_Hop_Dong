@@ -3638,7 +3638,7 @@ export class ContractSignatureComponent implements OnInit {
           status = this.mapRecipientStatus(idHĐ, dataContract);
         } else if (typesign == 3) {
           status = this.mapRecipientStatusPKI(recipientId, dataContract);
-        } else if (typesign == 8 && this.supplierID != 2) {
+        } else if (typesign == 8) {
           status = this.mapRecipientStatusRS(recipientId, dataContract);
         } else {
           status = this.mapRecipientStatus(recipientId, dataContract);
@@ -3686,8 +3686,8 @@ export class ContractSignatureComponent implements OnInit {
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       }
       await this.customerAnalysis.pushData(data);
     } catch (error) {

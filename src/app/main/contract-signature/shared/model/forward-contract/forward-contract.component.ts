@@ -501,8 +501,8 @@ export class ForwardContractComponent implements OnInit {
                         nguoiXuLy:this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
                         thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
                         trangThai: "Thành công",
-                        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
                       },
+                      link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
                     };
                     await this.customerAnalysis.pushData(data);
                   } catch (error) {

@@ -196,8 +196,8 @@ export class MainComponent implements OnInit {
         params: {
           username: JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
-          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
-        }
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       };
       this.customerAnalysis.pushData(data);
     } catch (error) {
