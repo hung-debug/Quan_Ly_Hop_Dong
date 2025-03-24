@@ -138,16 +138,12 @@ fileChangedAttach(e: any) {
       setTimeout(() => {
         this.signaturePad.set('border', 'none');
         if(this.mobile)
-          this.signaturePad.set('canvasHeight', 340);
-        else
+          this.signaturePad.set('canvasHeight', 210);
+        else 
           this.signaturePad.set('canvasHeight', 500);
 
         if(this.mobile) {
-          if(this.iOS) {
-            this.signaturePad.set('canvasWidth',250);
-          } else {
-            this.signaturePad.set('canvasWidth',210);
-          }
+          this.signaturePad.set('canvasWidth',340);
         } else {
           this.signaturePad.set('canvasWidth', 950);
         }
