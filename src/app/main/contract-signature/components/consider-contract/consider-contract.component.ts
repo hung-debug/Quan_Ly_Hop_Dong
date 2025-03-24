@@ -91,6 +91,8 @@ export class ConsiderContractComponent
 
   dataVersion2: any;
   type: any = 0;
+  
+  isHiddenMobiCA: boolean = true;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -175,6 +177,8 @@ export class ConsiderContractComponent
   dataCert: any;
   trustedUrl: any;
   idPdfSrcMobile: any;
+  phoneMobiCA: any;
+  // statusSign: any;
 
   sessionIdUsbToken: any;
   emailRecipients: any;
@@ -3206,7 +3210,8 @@ export class ConsiderContractComponent
             height: signUpdate.height,
             page: signUpdate.page,
           };
-
+          // console.log("fieldRemoteSigning",fieldRemoteSigning);
+          
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             // this.textSign = this.contractNoValueSign
 
@@ -3272,8 +3277,10 @@ export class ConsiderContractComponent
                   this.recipientId,
                   this.isTimestamp,
                   signUpdate.type,
-                  supplierID
+                  supplierID,
+                  this.phoneMobiCA
                 );
+                // this.statusSign = checkSign;   
                 if (!checkSign || (checkSign && !checkSign.success)) {
                   if (!checkSign.message) {
                     this.toastService.showErrorHTMLWithTimeout(
@@ -3321,7 +3328,8 @@ export class ConsiderContractComponent
                     this.recipientId,
                     this.isTimestamp,
                     signUpdate.type,
-                    supplierID
+                    supplierID,
+                    this.phoneMobiCA
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -4213,7 +4221,7 @@ export class ConsiderContractComponent
       this.spinner.hide();
       return;
     }
-
+    // notContainSignImage && this.eKYC == false && ((this.currentBoxSignType == 8 && supplierID == 2) || (this.currentBoxSignType != 8 && supplierID != 2)) điều kiện chuyển đổi trạng thái ký mobiCA
     if (notContainSignImage && this.eKYC == false && this.currentBoxSignType !== 8) {
       signUpdateTempN[0] = {
         "processAt": this.isDateTime
@@ -4373,13 +4381,35 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        this.remoteDialogSuccessOpen(supplierID).then(result => {
-          if (result.isDismissed) {
-            this.router.navigate([
-              'main/form-contract/detail/' + this.idContract,
-            ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
-          }
-        })
+        if(supplierID == 1 || supplierID == 3){
+          this.remoteDialogSuccessOpen(supplierID).then(result => {
+            // console.log("statusSign",this.statusSign);
+            if (result.isDismissed) {
+              this.router.navigate([
+                'main/form-contract/detail/' + this.idContract,
+              ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+            }
+          })
+        }else if(supplierID == 2){
+          this.router.navigate([
+            'main/form-contract/detail/' + this.idContract,
+          ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+          
+          this.toastService.showSuccessHTMLWithTimeout(
+            "Bạn vừa thực hiện ký thành công. Tài liệu đã được hoàn thành xử lý",
+            '',
+            3000
+          );
+        }
+        
+        // this.remoteDialogSuccessOpen(supplierID).then(result => {
+        //   // console.log("statusSign",this.statusSign);
+        //   if (result.isDismissed) {
+        //     this.router.navigate([
+        //       'main/form-contract/detail/' + this.idContract,
+        //     ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+        //   }
+        // })
       }
     }
   }
@@ -5054,6 +5084,7 @@ export class ConsiderContractComponent
       is_content: 'forward_contract',
       recipientId: recipientId,
       dataContract: this.recipient,
+      isHidden: this.isHiddenMobiCA
     };
     const determineCoordination = await this.contractService.getDetermineCoordination(recipientId).toPromise();
 
@@ -5133,6 +5164,11 @@ export class ConsiderContractComponent
       const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(async (result: any) => {
+        if(result.type == 2){
+          this.loadingText =
+          'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
+        }
+
         let signI = null;
         let imageRender = null;
 
@@ -5144,6 +5180,7 @@ export class ConsiderContractComponent
         if (result) {
           let supplierID = result.type;
           this.dataCert.cert_id = result.ma_dvcs;
+          this.phoneMobiCA = result.phone;
           await this.signContractSubmit(supplierID);
         }
       });
@@ -5469,7 +5506,7 @@ export class ConsiderContractComponent
         message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!!";
         break;
       case "2":
-        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
+        message = "Tài liệu đã ký thành công!";
         break;
       case "3":
         message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";

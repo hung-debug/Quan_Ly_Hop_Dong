@@ -25,6 +25,7 @@ export class RemoteDialogSignComponent implements OnInit {
   currentUser: any;
   taxCode: any;
   mobile: boolean = false;
+  phone: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -47,6 +48,7 @@ export class RemoteDialogSignComponent implements OnInit {
         // Validators.pattern(parttern.card_id9) ||
         // Validators.pattern(parttern.card_id12)
       ]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
   }
 
@@ -54,9 +56,6 @@ export class RemoteDialogSignComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
-
-
-
     this.user = this.userService.getInforUser();
 
     this.id = this.user.customer_id;
@@ -65,15 +64,25 @@ export class RemoteDialogSignComponent implements OnInit {
     } else
       this.type = 0;
 
-
+      this.myForm.get('supplier')?.value
     this.myForm = this.fbd.group({
       supplier: this.fbd.control('1', [Validators.required]),
       taxCode: this.fbd.control(this.datas?.dataContract?.card_id ? this.datas?.dataContract?.card_id : this.data.userCode, [
         Validators.required,
         Validators.pattern(parttern.cardid)
       ]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
-      if (this.user.organization_id != 0) {
+    
+      // Cập nhật Validators lần đầu tiên
+    this.updateValidators();
+
+    // Lắng nghe sự thay đổi của supplier để cập nhật Validators
+    this.myForm.get('supplier')?.valueChanges.subscribe(() => {
+      this.updateValidators();
+    });
+  
+    if (this.user.organization_id != 0) {
       // this.userService.getUserById(this.id).subscribe((response) => {
       //   this.myForm = this.fbd.group({
       //     taxCode: this.fbd.control(response.tax_code, [
@@ -92,13 +101,14 @@ export class RemoteDialogSignComponent implements OnInit {
 
           if (id == this.datas.recipientId) {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
-
+            this.myForm.get('supplier')?.value
             this.myForm = this.fbd.group({
               supplier: this.fbd.control('1', [Validators.required]),
               taxCode: this.fbd.control(taxCodePartnerStep2,
                 [Validators.required,
                   Validators.pattern(parttern.cardid)
               ]),
+              phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
             })
 
             break;
@@ -125,6 +135,31 @@ export class RemoteDialogSignComponent implements OnInit {
 
     this.getDeviceApp()
   }
+  
+  updateValidators() {
+    const supplier = this.myForm.get('supplier')?.value;
+  
+    if (supplier === '1' || supplier === '3') { // VNPT SmartCA hoặc CA2
+      this.myForm.get('taxCode')?.setValidators([Validators.required, Validators.pattern(parttern.cardid)]);
+      this.myForm.get('phone')?.clearValidators(); // Xóa required của phone
+    } else if (supplier === '2') { // MobiFoneCA
+      this.myForm.get('phone')?.setValidators([Validators.required, Validators.pattern(parttern.phone)]);
+      this.myForm.get('taxCode')?.clearValidators(); // Xóa required của taxCode
+    }
+  
+    // Cập nhật lại trạng thái form
+    this.myForm.get('taxCode')?.updateValueAndValidity();
+    this.myForm.get('phone')?.updateValueAndValidity();
+  }
+  
+  // Hàm kiểm tra giá trị của "supplier"
+  isMobiFoneCA(): boolean {
+    return this.myForm.get('supplier')?.value === '2';
+  }
+
+  // isVNPTorCA2(): boolean {
+  //   return this.myForm.get('supplier')?.value === '1' || this.myForm.get('supplier')?.value === '3';
+  // }
 
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
@@ -146,7 +181,6 @@ export class RemoteDialogSignComponent implements OnInit {
   cardId: any;
   async onSubmit() {
     this.submitted = true;
-
     if (this.myForm.invalid) {
       return;
     }
@@ -234,7 +268,8 @@ export class RemoteDialogSignComponent implements OnInit {
 
         const data = {
           ma_dvcs: this.myForm.value.taxCode,
-          type: this.myForm.value.supplier
+          type: this.myForm.value.supplier,
+          phone: this.myForm.value.phone
         };
 
 
@@ -257,7 +292,8 @@ export class RemoteDialogSignComponent implements OnInit {
     } else {
       const data = {
         ma_dvcs: this.myForm.value.taxCode,
-        type: this.myForm.value.supplier
+        type: this.myForm.value.supplier,
+        phone: this.myForm.value.phone
       };
 
       this.dialogRef.close(data);

@@ -8,12 +8,12 @@
         <div class="label text-color">Nhà cung cấp <span class="required-title">*</span></div>
         <select formControlName="supplier" class="form-select-custom" style="font-size: 14px" aria-label="Default select example">
           <option value="1">VNPT SmartCA</option>
-          <!-- <option value="2" >MobiCA</option> -->
-          <option value="3" >CA2</option>
+          <option value="2" *ngIf="this.datas.isHidden">MobiFoneCA</option>
+          <option value="3">CA2</option>
         </select>
       </div>
     </div>
-      <div class="row">
+      <div class="row" *ngIf="!isMobiFoneCA()">
           <div class="col-md-12">
               <div class="label text-color">{{'tax_code.cardId' | translate}} <span class="required-title">*</span></div>
               <div class="input-data">
@@ -25,6 +25,20 @@
               </div>
           </div>
       </div>
+      
+      <div class="row" *ngIf="isMobiFoneCA()">
+        <div class="col-md-12">
+            <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
+            <div class="input-data">
+                <input type="text" formControlName="phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" autofocus>
+            </div>
+            <div *ngIf="submitted && f.phone.errors" class="invalid">
+              <div *ngIf="f.phone.errors.required">{{'error.phone.required' | translate}}</div>
+              <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>
+            </div>
+        </div>
+      </div>
+    
       <div class="row" style="justify-content: center;padding-top: 10px;">
           <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'exit' | translate}}</button>
           <button class="save-button" (click)="onSubmit()">{{'confirm' | translate}}</button>
@@ -42,12 +56,12 @@
         <div class="label text-color">Nhà cung cấp <span class="required-title">*</span></div>
         <select formControlName="supplier" class="form-select-custom" style="font-size: 14px" aria-label="Default select example">
           <option value="1">VNPT SmartCA</option>
-          <!-- <option value="2" >MobiCA</option> -->
+          <option value="2" *ngIf="this.datas.isHidden">MobiFoneCA</option>
           <option value="3" >CA2</option>
         </select>
       </div>
     </div>
-      <div class="row">
+      <div class="row" *ngIf="!isMobiFoneCA()">
           <div class="col-md-12">
               <div class="label text-color">{{'tax_code.cardId' | translate}} <span class="required-title">*</span></div>
               <div class="input-data">
@@ -58,6 +72,19 @@
                 <div *ngIf="f.taxCode.errors.pattern">{{'taxcode.format' | translate}}</div>
               </div>
           </div>
+      </div>
+      
+      <div class="row" *ngIf="isMobiFoneCA()">
+        <div class="col-md-12">
+            <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
+            <div class="input-data">
+                <input type="text" formControlName="phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" autofocus>
+            </div>
+            <div *ngIf="submitted && f.phone.errors" class="invalid">
+              <div *ngIf="f.phone.errors.required">{{'error.phone.required' | translate}}</div>
+              <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>
+            </div>
+        </div>
       </div>
       <div class="row" style="justify-content: center;padding-top: 10px; padding-bottom: 1.25em;">
           <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'exit' | translate}}</button>

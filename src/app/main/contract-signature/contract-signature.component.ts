@@ -80,6 +80,9 @@ export class ContractSignatureComponent implements OnInit {
   filter_status: any = 1;
   contractStatus: any = '';
   name_or_email_customer: any;
+  loadingText: string = 'Đang xử lý...';
+  phoneMobiCA: any;
+  isHiddenMobiCA: boolean = false;
 
   typeDisplay: string = 'signOne';
   // typeDisplay: string = 'downloadOne';
@@ -1975,7 +1978,8 @@ export class ContractSignatureComponent implements OnInit {
         id: 1,
         title: 'CHỮ KÝ REMOTE SIGNING',
         is_content: 'forward_contract',
-        userCode: taxCode[0]
+        userCode: taxCode[0],
+        isHidden: this.isHiddenMobiCA
       };
 
       const dialogConfig = new MatDialogConfig();
@@ -1999,10 +2003,14 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
+          if(resultRS.type == 2){
+            this.loadingText =
+            'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
+          }
           let supplierID = resultRS.type;
         
           this.nameCompany = resultRS.ma_dvcs;
-
+          this.phoneMobiCA = resultRS.phone;
           try {
             this.isDateTime = new Date();
           } catch(err) {
@@ -2032,9 +2040,10 @@ export class ContractSignatureComponent implements OnInit {
             recipientIds,
             null,
             3,
-            supplierID
+            supplierID,
+            this.phoneMobiCA
           ).then(
-            (res: any) => {
+            async (res: any) => {
               this.spinner.hide();
 
               let countSuccess = 0;
@@ -2080,15 +2089,55 @@ export class ContractSignatureComponent implements OnInit {
 
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
-                this.remoteDialogSuccessOpen(supplierID).then((res) => {
-                  if (res.isDismissed) {
-                    this.router
-                      .navigateByUrl('/', { skipLocationChange: true })
-                      .then(() => {
-                        this.router.navigate(['main/c/receive/processed']);
-                      });
-                  }
-                })
+                if(supplierID == 1 || supplierID == 3){
+                  this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                    if (res.isDismissed) {
+                      this.router
+                        .navigateByUrl('/', { skipLocationChange: true })
+                        .then(() => {
+                          this.router.navigate(['main/c/receive/processed']);
+                        });
+                    }
+                  })
+                } else if(supplierID == 2){
+                  // for (let i = 0; i < recipientIds.length; i++) {
+                  //   let updateInfo: any = null;
+                  //   try {
+                  //     updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+                  //       processAt: this.isDateTime
+                  //     }],recipientIds[i]);
+                  //   } catch (err) {
+                  //     this.spinner.hide()
+                  //     this.toastService.showErrorHTMLWithTimeout(
+                  //       'Lỗi cập nhật trạng thái tài liệu',
+                  //       '',
+                  //       3000
+                  //     );
+                  //     return false;
+                  //   }
+  
+                  //   if (!updateInfo.id || !updateInfo) {
+                  //     this.spinner.hide()
+                  //     this.toastService.showErrorHTMLWithTimeout(
+                  //       'Lỗi cập nhật trạng thái tài liệu',
+                  //       '',
+                  //       3000
+                  //     );
+                  //     return false;
+                  //   }
+                  // }
+                  this.router
+                  .navigateByUrl('/', { skipLocationChange: true })
+                  .then(() => {
+                    this.router.navigate(['main/c/receive/processed']);
+                  });
+                  
+                  this.toastService.showSuccessHTMLWithTimeout(
+                    "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                    '',
+                    3000
+                  );
+                }
               }
             },
             (err: any) => {
