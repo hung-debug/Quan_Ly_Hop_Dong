@@ -19,7 +19,8 @@ import { ConfirmCecaContractComponent } from '../confirm-ceca-contract/confirm-c
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
-
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-confirm-infor-contract',
   templateUrl: './confirm-infor-contract.component.html',
@@ -39,7 +40,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     private router: Router,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private customerAnalysis: CustomerAnalysis
   ) {
     this.step = variable.stepSampleContract.step4;
   }
@@ -57,7 +59,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   emailPhoneList: string[] = []; // Danh sách email
   currentInput: string = ''; // Giá trị hiện tại trong ô input
   errorMessage: string | null = null;
-
+  
   getPartnerCoordinationer(item: any) {
     return item.recipients.filter((p: any) => p.role == 1);
   }
@@ -108,6 +110,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     }
   }
 
+  
   back(e: any, step?: any) {
     this.nextOrPreviousStep(step);
   }
@@ -150,22 +153,19 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       const statusResponse: any = await this.contractService
         .changeStatusContract(this.datas.id, 10, '')
         .toPromise(); // Đợi kết quả từ API
-  
+      let reason;
       // Kiểm tra kết quả trả về từ changeStatusContract
-      if (statusResponse.errors?.length > 0) {
-        if (statusResponse.errors[0].code === 1017) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
-          return;
-        }
+      if (statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017) {
+        this.spinner.hide();
+        reason = 'Số tài liệu đã tồn tại'
+        this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
+        await this.handleContractData('Thất bại: ' + reason, statusResponse);
       } else {
-        // Điều hướng nếu thành công
+        this.toastService.showSuccessHTMLWithTimeout('create.contract.success', '', 3000);
+        await this.handleContractData('Thành công', statusResponse);
         this.router.navigate(['/main/contract/create/processing']);
         await this.router.navigateByUrl('/', { skipLocationChange: true });
         this.router.navigate(['/main/contract/create/processing']);
-  
-        // Hiển thị thông báo thành công
-        this.toastService.showSuccessHTMLWithTimeout('create.contract.success', '', 3000);
       }
     } catch (error) {
       // Xử lý lỗi nếu có
@@ -175,6 +175,31 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       this.spinner.hide(); // Đảm bảo spinner được ẩn dù có lỗi hay không
     }
   }
+
+  async handleContractData(status: string, statusResponse: any) {
+    try {
+      let data = {
+        eventName: "taoHDDonLe",
+        params: {
+          tenHD: this.datas.name,
+          maHD: statusResponse.contract_uid || '',
+          idHD: statusResponse.id || '',
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        } as any,
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      };
+  
+      if (statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017) {
+        delete data.params.maHD;
+        delete data.params.idHD;
+      }  
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
+    }
+  }
+  
 
   user: any;
   submit(action: string) {
@@ -220,7 +245,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   removeEmail(input: string): void {
     this.emailPhoneList = this.emailPhoneList.filter(e => e !== input);
   }
-  
 
   async SaveContract(action: string) {
     if (this.datas.is_action_contract_created && this.router.url.includes('edit')) {
@@ -378,8 +402,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         }
       })
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
-          (data) => {
-            if (action == 'finish_contract') {
+          async (data) => {
+            if (action == 'finish_contract') {  
               this.callAPIFinish();
             } else {
               if (
@@ -426,6 +450,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         );
     }
   }
+  
 
   async getDefindDataSignEdit(dataSignId: any,dataSignNotId: any,action: any) {
     let dataSample_contract: any[] = [];
@@ -610,4 +635,5 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       }
     }
   }
+  
 }

@@ -55,6 +55,7 @@ import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketService } from 'src/app/service/websocket.service';
 import { environment } from 'src/environments/environment';
 import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 @Component({
   selector: 'app-consider-contract',
@@ -144,7 +145,7 @@ export class ConsiderContractComponent
   allFileAttachment: any[];
   allRelateToContract: any[];
   firstHandler: boolean = false;
-
+  supplierID: number;
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
     { item_id: 2, item_text: 'Ký số bằng USB token' },
@@ -254,6 +255,7 @@ export class ConsiderContractComponent
     private detectCoordinateService: DetectCoordinateService,
     private timeService: TimeService,
     private websocketService: WebsocketService,
+    private customerAnalysis: CustomerAnalysis
 
   ) {
     this.currentUser = JSON.parse(
@@ -2353,6 +2355,7 @@ export class ConsiderContractComponent
                 this.idContract
               );
             } catch (error) {
+              this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
               return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
             }
             const pdfC2 = fileC.find((p: any) => p.type == 2);
@@ -2484,6 +2487,7 @@ export class ConsiderContractComponent
             try {
               base64String = await this.contractService.getDataFileUrlPromise(fileC);
             } catch (error) {
+              this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
               return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
             }
 
@@ -2493,6 +2497,7 @@ export class ConsiderContractComponent
               try {
                 await this.createEmptySignature(signUpdate, signDigital, signI);
               } catch (err) {
+                this.handleContractData("Thất bại: Lỗi ký usb token" + err)
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký usb token ' + err,
                   '',
@@ -2511,6 +2516,7 @@ export class ConsiderContractComponent
               );
               if (!sign.recipient_id) {
                 this.spinner.hide()
+                this.handleContractData("Thất bại: Lỗi ký USB Token")
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký USB Token',
                   '',
@@ -2527,6 +2533,7 @@ export class ConsiderContractComponent
 
               if (!dataSignMobi.data.FileDataSigned) {
                 this.spinner.hide()
+                this.handleContractData("Thất bại: Lỗi ký USB Token")
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký USB Token',
                   '',
@@ -2540,6 +2547,7 @@ export class ConsiderContractComponent
               );
 
               if (!sign.recipient_id) {
+                this.handleContractData("Thất bại: Lỗi đẩy file sau khi ký usb token")
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi đẩy file sau khi ký usb token',
                   '',
@@ -2555,6 +2563,7 @@ export class ConsiderContractComponent
         }
         return true;
       } else {
+        this.handleContractData("Thất bại: Lỗi ký USB Token")
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi ký USB Token',
           '',
@@ -2577,6 +2586,7 @@ export class ConsiderContractComponent
           this.idContract
         );
       } catch (error) {
+        this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
         return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
       }
       const pdfC2 = fileC.find((p: any) => p.type == 2);
@@ -2630,6 +2640,7 @@ export class ConsiderContractComponent
           );
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
+            this.handleContractData("Thất bại: 'Ký số không thành công!")
             this.toastService.showErrorHTMLWithTimeout(
               'Ký số không thành công!',
               '',
@@ -2651,6 +2662,7 @@ export class ConsiderContractComponent
           );
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
+            this.handleContractData("Thất bại: 'Ký số không thành công!")
             this.toastService.showErrorHTMLWithTimeout(
               'Ký số không thành công!',
               '',
@@ -2690,6 +2702,7 @@ export class ConsiderContractComponent
               this.idContract
             );
           } catch (error) {
+            this.handleContractData(this.translate.instant('get.contract.data.err'))
             return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
           }
 
@@ -2812,18 +2825,21 @@ export class ConsiderContractComponent
                   );
                 } else if (checkSign.message) {
                   if (checkSign.message.includes('Cannot authenticate hsm')) {
+                    this.handleContractData('Thất bại: Không thể xác thực hsm')
                     this.toastService.showErrorHTMLWithTimeout(
                       'Không thể xác thực hsm',
                       '',
                       3000
                     );
                   } else if (checkSign.message.includes('Tax code do not match')) {
+                    this.handleContractData("Thất bại: " + this.translate.instant('taxcode.not.match'))
                     this.toastService.showErrorHTMLWithTimeout(
                       'taxcode.not.match',
                       '',
                       3000
                     );
                   } else {
+                    this.handleContractData("Thất bại: " + checkSign.message)
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign.message,
                       '',
@@ -2856,6 +2872,7 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else if (checkSign.message) {
+                  this.handleContractData("Thất bại: " + checkSign.message)
                   this.toastService.showErrorHTMLWithTimeout(
                     checkSign.message,
                     '',
@@ -2894,6 +2911,7 @@ export class ConsiderContractComponent
           this.idContract
         );
       } catch (error) {
+        this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
         return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
       }
       const pdfC2 = fileC.find((p: any) => p.type == 2);
@@ -2934,6 +2952,7 @@ export class ConsiderContractComponent
               this.idContract
             );
           } catch (error) {
+            this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
             return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
           }
 
@@ -2954,6 +2973,7 @@ export class ConsiderContractComponent
               .certInfoCert(this.cert_id)
               .toPromise();
           } catch (error) {
+            this.handleContractData("Thất bại: " + this.translate.instant('get.cert.data.err'))
             return this.toastService.showErrorHTMLWithTimeout("get.cert.data.err","",3000)
           }
           this.name = inforCert.name;
@@ -3086,6 +3106,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   } else if (checkSign.message) {
+                    this.handleContractData("Thất bại: " + checkSign.message)
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign.message,
                       '',
@@ -3104,6 +3125,7 @@ export class ConsiderContractComponent
                   }
                 }
               } catch (error) {
+                this.handleContractData("Thất bại: " + this.translate.instant('error.server'))
                 this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
                 return false
               }
@@ -3121,6 +3143,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   } else if (checkSign.message) {
+                    this.handleContractData("Thất bại: " + checkSign.message)
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign.message,
                       '',
@@ -3138,6 +3161,7 @@ export class ConsiderContractComponent
                   }
                 }
               } catch (error) {
+                this.handleContractData("Thất bại: " + this.translate.instant('error.server'))
                 this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
                 return false
               }
@@ -3185,6 +3209,7 @@ export class ConsiderContractComponent
               this.idContract
             );
           } catch (error) {
+            this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
             return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
           }
 
@@ -3289,6 +3314,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   } else if (checkSign.message) {
+                    this.handleContractData("Thất bại: " + checkSign.message)
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign.message,
                       '',
@@ -3304,9 +3330,11 @@ export class ConsiderContractComponent
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
                     }
+                    this.handleContractData("Gửi yêu cầu ký thành công");
                   }
                 }
               } catch (error) {
+                this.handleContractData("Thất bại: " + this.translate.instant('error.server'))
                 return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
               }
 
@@ -3339,6 +3367,7 @@ export class ConsiderContractComponent
                         3000
                       );
                     } else if (checkSign.message) {
+                      this.handleContractData("Thất bại: " + checkSign.message)
                       this.toastService.showErrorHTMLWithTimeout(
                         checkSign.message,
                         '',
@@ -3354,9 +3383,11 @@ export class ConsiderContractComponent
                       } else if (pdfC1) {
                         fileC = pdfC1.path;
                       }
+                      this.handleContractData("Gửi yêu cầu ký thành công");
                     }
                   }
                 } catch (error) {
+                  this.handleContractData("Thất bại: " + this.translate.instant('error.server'))
                   return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
                 }
               }
@@ -3964,6 +3995,7 @@ export class ConsiderContractComponent
         recipientIdFixing
       );
     } catch (err: any) {
+      this.handleContractData("Thất bại: " + this.translate.instant("err ? err.statusText : 'callMergeTimeStamp error'"))
       console.warn("err ? err.statusText : 'callMergeTimeStamp error'")
       return;
     }
@@ -4029,6 +4061,7 @@ export class ConsiderContractComponent
 
       if (dataSignatureToken.ResponseCode != 0) {
         this.spinner.hide()
+        this.handleContractData("Thất bại: Lỗi ký usb token" + dataSignatureToken.ResponseMsg)
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi ký usb token ' + dataSignatureToken.ResponseMsg,
           '',
@@ -4047,6 +4080,7 @@ export class ConsiderContractComponent
       );
     } catch (err: any) {
       this.spinner.hide()
+      this.handleContractData("Thất bại: Lỗi ký usb token" + this.translate.instant(`${err ? err.statusText : 'error'}`))
       this.toastService.showErrorHTMLWithTimeout(
         `Lỗi ký usb token (${err ? err.statusText : 'error'})` ,
         '',
@@ -4084,6 +4118,7 @@ export class ConsiderContractComponent
       let savefirstHandler = await this.savefirstHandler();
       if(!savefirstHandler) {
         this.spinner.hide();
+        this.handleContractData("Thất bại: Lỗi lưu ô Số tài liệu hoặc ô Text")
         this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
         return false;
       }
@@ -4183,6 +4218,7 @@ export class ConsiderContractComponent
 
                 setTimeout(() => {
                   if (!this.mobile) {
+                    this.handleContractData("Thành công");
                     this.toastService.showSuccessHTMLWithTimeout(
                       [3, 4].includes(this.datas.roleContractReceived)
                         ? 'Ký tài liệu thành công'
@@ -4191,6 +4227,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   } else {
+                    this.handleContractData("Thành công");
                     if ([3, 4].includes(this.datas.roleContractReceived)) {
                       alert('Ký tài liệu thành công');
                     } else {
@@ -4202,6 +4239,7 @@ export class ConsiderContractComponent
                 }, 1000);
               },
               (error) => {
+                this.handleContractData("Lỗi");
                 this.toastService.showErrorHTMLWithTimeout(
                   'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
                   '',
@@ -4261,6 +4299,7 @@ export class ConsiderContractComponent
           }
           setTimeout(() => {
             if (!this.mobile) {
+              this.handleContractData("Thành công");
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived)
                   ? (isCheckSing ? 'success_sign' : 'sign_next_person')
@@ -4269,6 +4308,7 @@ export class ConsiderContractComponent
                 3000
               );
             } else {
+              this.handleContractData("Thành công");
               if ([3, 4].includes(this.datas.roleContractReceived)) {
                 alert('Ký tài liệu thành công');
               } else {
@@ -4280,6 +4320,7 @@ export class ConsiderContractComponent
           }, 1000);
         },
         (error) => {
+          this.handleContractData("Lỗi");
           this.toastService.showErrorHTMLWithTimeout(
             'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
             '',
@@ -4350,6 +4391,7 @@ export class ConsiderContractComponent
               }
               setTimeout(() => {
                 if (!this.mobile) {
+                  this.handleContractData("Thành công");
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
                       ? (isCheckSing ? 'success_sign' : 'sign_next_person')
@@ -4358,6 +4400,7 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else {
+                  this.handleContractData("Thành công");
                   if ([3, 4].includes(this.datas.roleContractReceived)) {
                     alert('Ký tài liệu thành công');
                   } else {
@@ -4370,6 +4413,7 @@ export class ConsiderContractComponent
             }
           },
           (error) => {
+            this.handleContractData("Lỗi");
             this.toastService.showErrorHTMLWithTimeout(
               'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
               '',
@@ -4652,6 +4696,7 @@ export class ConsiderContractComponent
                   3000
                 );
                 this.spinner.hide();
+                this.handleContractData("Từ chối: " + textRefuse);
                 this.router.navigate([
                   '/main/form-contract/detail/reject/' + this.idContract,
                 ]);
@@ -5179,6 +5224,7 @@ export class ConsiderContractComponent
         // }
         if (result) {
           let supplierID = result.type;
+          this.supplierID = result.type;
           this.dataCert.cert_id = result.ma_dvcs;
           this.phoneMobiCA = result.phone;
           await this.signContractSubmit(supplierID);
@@ -5470,8 +5516,9 @@ export class ConsiderContractComponent
                   }
                 );
               });
-
+              
               setTimeout(() => {
+                this.handleContractData("Thành công");
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
@@ -5481,6 +5528,7 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else {
+                  this.handleContractData("Thành công");
                   if ([3, 4].includes(this.datas.roleContractReceived)) {
                     alert('Ký tài liệu thành công');
                   } else {
@@ -5726,5 +5774,71 @@ export class ConsiderContractComponent
       0,
       canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
     );
+  }
+
+  async handleContractData(status: string) {
+    try {
+      let eventName;
+      if(this.recipient?.sign_type.length == 0) {
+        eventName = 'xemxetHĐ'
+      } else {
+        let typesign = this.recipient?.sign_type[0]?.id
+          if (typesign == 1) {
+          eventName = 'kyOTP'
+        }
+          else if (typesign == 2) {
+          eventName = 'kyUSBtoken'
+        } else if (typesign == 3) {
+            if(this.dataNetworkPKI?.networkCode == 'MobiFone') {
+            eventName = 'kySimPKI_MobiFone'
+          } else if (this.dataNetworkPKI?.networkCode == 'Viettel') {
+            eventName = 'kySimPKI_Viettel'
+          } else if (this.dataNetworkPKI?.networkCode == "bcy"){
+            eventName = 'kySimPKI_BCY'
+          } else {
+            eventName = 'kySimPKI'
+          }
+        } else if (typesign == 4) {
+          if(this.dataHsm?.supplier == 'mobifone') {
+            eventName = 'kyHsm_mbf'
+          } else if (this.dataHsm?.supplier == 'icorp'){
+            eventName = 'kyHsm_ica'
+          } else {
+            eventName = 'kyHsm'
+          }
+        } else if (typesign == 5) {
+          eventName = 'kyEKYC'
+        } else if (typesign == 6) {
+          eventName = 'kyCTS'
+        } else if (typesign == 7) {
+          eventName = 'kyUSBtokenBCY'
+        } else if (typesign == 8) {
+          if(this.supplierID == 1) {
+            eventName = 'kyRS_VNPTSmartCA'
+          } else if (this.supplierID == 2) {
+            eventName = 'kyRS_MobiCA'
+          } else if (this.supplierID == 3){
+            eventName = 'kyRS_Nacencomm'
+          } else {
+             eventName = 'kyRS'
+          }
+        } 
+      }
+      let data = {
+        eventName: eventName,
+        params: {
+          tenHĐ: this.datas.is_data_contract.name,
+          maHĐ: this.datas.is_data_contract.contract_uid,
+          idHĐ: this.datas.is_data_contract.id,
+          nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
+    }
   }
 }

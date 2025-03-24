@@ -14,6 +14,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { AccountLinkDialogComponent } from '../main/dialog/account-link-dialog/account-link-dialog.component';
 import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CustomerAnalysis } from '../service/customer-analysis';
 
 @Component({
   selector: 'app-login',
@@ -50,7 +51,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private changeDetector : ChangeDetectorRef,
     private toastService: ToastService,
     private keycloakService: KeycloakService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private customerAnalysis: CustomerAnalysis,
 
   ) {
     translate.addLangs(['en', 'vi']);
@@ -161,7 +163,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   weakPass: boolean = false;
   login(urlLink: any, isContractId: any, isRecipientId: any) {
-    this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
+    this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe(async (data) => {
 
       if(data?.login_fail_num == 5) {
         this.generateCaptcha();
@@ -185,6 +187,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
             this.changePassword();
             return;
           } else {
+            try {
+              let analysisData = {
+                eventName: "Login",
+                params: {
+                  username: this.loginForm.value.username,
+                  thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+                },
+                link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+              };
+              this.customerAnalysis.pushData(analysisData);
+            } catch (error) {
+              console.error("Lấy token hoặc push dữ liệu thất bại:", error);
+            }        
             this.action(urlLink, isContractId, isRecipientId);
           }
         } else {
@@ -417,6 +432,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
           switch(res.code) {
             case '00':
               this.toastService.showSuccessHTMLWithTimeout('Đăng nhập thành công, mở sang trang chủ hệ thống eContract.','',3000)
+              try {
+                let analysisData = {
+                  eventName: "Login",
+                  params: {
+                    username: res.customer.info.email,
+                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+                  },
+                  link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+                };
+                this.customerAnalysis.pushData(analysisData);  
+              } catch (error) {
+                console.error("Lấy token hoặc push dữ liệu thất bại:", error);
+              }       
               setTimeout(() => {
                 this.router.navigate(['/main/dashboard'])
                 this.isSSOlogin = false
