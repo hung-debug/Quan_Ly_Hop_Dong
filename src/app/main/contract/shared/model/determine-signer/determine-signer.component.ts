@@ -316,10 +316,12 @@ export class DetermineSignerComponent implements OnInit {
     let numberContractUseOrg: any = null;
     let numberContractBuyOrg: any = null;
     let checkSmsMethod: any = null;
+    let brandName:any=null;
     //So luong hop dong da dung
     try {
       numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
       checkSmsMethod = numberContractUseOrg.sms_send_method;
+      brandName = numberContractUseOrg.brand_name;
     } catch (err) {
       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu đã dùng ' + err, '', 3000);
     }
@@ -334,7 +336,8 @@ export class DetermineSignerComponent implements OnInit {
 
     if (countEkyc > 0 && Number(numberContractUseOrg.ekyc) + Number(countEkyc) > Number(numberContractBuyOrg.ekyc)) {
       this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-    } else if ((countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) && checkSmsMethod == 'API') {
+    }  
+      else if ((countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) && checkSmsMethod == 'API' && brandName == 'mContract') {
       this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
     } else {
       this.getApiDetermine(true);

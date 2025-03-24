@@ -83,12 +83,15 @@ export class ConfirmSignOtpComponent implements OnInit {
     //Lấy số lượng tài liệu đã sử dụng
     const numberContractUseOriganzation = await this.unitService.getNumberContractUseOriganzation(this.data.orgId).toPromise();
     this.smsContractUse = numberContractUseOriganzation.sms;
-
+    let numberContractUseOrg: any = null;
+    let checkSmsMethod: any = null;
+    let brandName:any=null;
     //Lấy số lượng tài liệu đã mua
     const getNumberContractBuyOriganzation = await this.unitService.getNumberContractBuyOriganzation(this.data.orgId).toPromise();
     this.smsContractBuy = getNumberContractBuyOriganzation.sms;
-
-    if(Number(this.smsContractUse) + Number(1) > Number(this.smsContractBuy)) {
+    checkSmsMethod = getNumberContractBuyOriganzation.sms_send_method;
+    brandName = getNumberContractBuyOriganzation.brand_name;
+    if(Number(this.smsContractUse) + Number(1) > Number(this.smsContractBuy) && checkSmsMethod == 'API' && brandName == 'mContract') {
       this.toastService.showErrorHTMLWithTimeout('Số lượng SMS của tổ chức không đủ để nhận thông tin ký tài liệu. Liên hệ với Admin để tiếp tục sử dụng dịch vụ','',3000);
       return;
     } else {
