@@ -41,6 +41,7 @@ export class MainComponent implements OnInit {
   messageNotification: string;
   isMessageNotificationSet = false;
   logoWeb: string;
+  isBonBon: boolean = false;
   @ViewChild('scrollingText', { static: false }) scrollingTextElement: ElementRef<any>;
   constructor(private router: Router,
               private appService: AppService,
@@ -104,6 +105,8 @@ export class MainComponent implements OnInit {
 
   lang: any;
   async ngOnInit() {
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    this.isBonBon = getStatusBonBon === "true";
     let url = environment.apiUrl.replace("/service", "");
     this.logoWeb = url + environment.logoWeb;
     if(localStorage.getItem('lang') == 'vi') {

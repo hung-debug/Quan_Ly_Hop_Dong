@@ -31,7 +31,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   mobile: boolean = false;
   confirmConsider: boolean = true;
   hasImage = false;
-
+  isBonBon: boolean = false;
   public signaturePadOptions: NgSignaturePadOptions = { // passed through to szimek/signature_pad constructor
     minWidth: 1.5,
     maxWidth: 1.5,
@@ -58,7 +58,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    this.isBonBon = getStatusBonBon === "true";
     this.getDeviceApp();
 
     this.ContractService.getInforPersonProcess(this.data.recipientId).subscribe((data: any) =>{
@@ -103,6 +104,9 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         if (e.target.files[0].size <= 50000000 && valid.includes(file.name.split('.').pop().toLowerCase())) {
           this.handleUpload(e);
           e.target.value = null;
+          // if(this.isBonBon) {
+          //   this.imgSignDrawing = true
+          // }
         } else if (!valid.includes(file.name.split('.').pop().toLowerCase())) {
           Swal.fire({
             title: 'File upload là file ảnh!',
@@ -145,6 +149,11 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   t(ev: number) {
+    if(this.isBonBon) {
+      this.imgSignDrawing = null;
+      this.imgSignPCSelect = null;
+      this.showCropper = false;
+    }
     this.checkIOSAndroid();
     if (ev==4){  
     }
@@ -226,9 +235,13 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       if(!this.imgSignPCSelect) {
         this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
       } else {
-          this.imageCropper.cropImage();
-          this.imgSignPCSelect = this.croppedImage;
+          if(!this.mobile) {
+            this.imageCropper.cropImage();
+            this.imgSignPCSelect = this.croppedImage;
+            this.dialogRef.close({value:this.imgSignPCSelect, type: 2});
+          } else {
           this.dialogRef.close({value:this.imgSignPCSelect, type: 2});
+        }
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {
@@ -257,4 +270,9 @@ onCancelCrop() {
     this.showCropper = false;
     this.imgSignPCSelect = null;
 }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
 }

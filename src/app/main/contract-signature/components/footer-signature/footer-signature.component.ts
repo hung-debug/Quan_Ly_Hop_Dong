@@ -21,6 +21,7 @@ export class FooterSignatureComponent implements OnInit {
   @Input() view: any;
   @Input() recipientId: any;
   @Output() submitChanges = new EventEmitter<number>();
+  @Output() submitChangesBonBon = new EventEmitter<number>();
   @Input() confirmSignature: any;
   @Input() coordinateY: any;
   @Input() idElement: any;
@@ -30,6 +31,7 @@ export class FooterSignatureComponent implements OnInit {
   @Input() pageLast: boolean;
   @Input() firstHandler: boolean;
   @Input() confirmConsider: any;
+  @Input() confirmConsiderBonBon: any;
   @Input() pageNum: number;
 
   @Input() pageBefore: number;
@@ -57,6 +59,7 @@ export class FooterSignatureComponent implements OnInit {
   phone: string = "phone";
   currentRecipient: any;
   type: any = 0;
+  isBonBon: boolean = false;
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
@@ -72,7 +75,8 @@ export class FooterSignatureComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
-    
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    this.isBonBon = getStatusBonBon === "true";
     this.getDeviceApp();
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -146,6 +150,9 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   getStyleButton() {
+    return {
+
+    }
     if (window.innerWidth >= 396) {
       return {
         "position": 'absolute',
@@ -247,6 +254,11 @@ export class FooterSignatureComponent implements OnInit {
     pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
 
     this.pageNum = this.pageNumber;
+  }
+
+  confirm(e: any) {
+    this.submitChangesBonBon.emit(e);
+    this.action();
   }
 
   onNextPage() {

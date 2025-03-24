@@ -1,6 +1,6 @@
 
 <meta name='viewport' content='width=device-width' />
-<div class="container-fluid">
+<div class="container-fluid" [ngClass]="{ 'cancel-padding': mobile, 'size-web': !mobile }">
   <div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
     <div [ngClass] = "{'col-md-3': this.show_information}" class="sample-contract__information" style="background-color: white; padding-right: 0px;">
       <div *ngIf="this.show_information == true">
@@ -209,41 +209,41 @@
 
   <div *ngIf="this.mobile && !this.multiSignInPdf">
 
-        <div style="margin:auto;padding: 10px">
-          <pdf-viewer *ngIf="![2,3].includes(recipient?.status)" [src]="pdfSrcMobile"
-          [render-text]="true"
-          style="width: 95%; height: calc(70vh); border: 1px;"
-          [fit-to-page]="true"
-          [show-borders]="true"
-          [show-all]="true"
-          [(page)]="pageMobile"
-          [stick-to-page]="true"
-          (after-load-complete)="afterLoadComplete($event)"
-          (pagechanging)="pagechanging($event)"
-          ></pdf-viewer>
-        </div>
+      <div class="pdf-viewer-custom">
+        <pdf-viewer *ngIf="![2,3].includes(recipient?.status)" [src]="pdfSrcMobile"
+        [render-text]="true"
+        style="width: 100%; height: calc(60vh); border: 1px;"
+        [fit-to-page]="true"
+        [show-borders]="true"
+        [show-all]="true"
+        [(page)]="pageMobile"
+        [stick-to-page]="true"
+        (after-load-complete)="afterLoadComplete($event)"
+        (pagechanging)="pagechanging($event)"
+        ></pdf-viewer>
+      </div>
 
-      <div class="flex-column" style="text-align: center;margin-top: 2px;">
-        <button class="call-page" (click)="firstPageMobile()">
-          <img width="14px" height="18px" *ngIf="this.page1" src="assets/img/previousbold.svg">
-          <img width="14px" height="18px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
+      <div style="display: flex; justify-content: center;margin-top: 10px;">
+        <button class="call-page input1" (click)="firstPageMobile()">
+            <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+            <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
         </button>
-        <button class="call-page1" (click)="previousPageMobile()">
-          <img width="10px" height="14px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-          <img width="10px" height="14px" *ngIf="!this.page1" src="assets/img/previous.svg">
+        <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPageMobile()">
+            <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+            <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
         </button>
+    
+        <input class="input1 no-focus" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
 
-        <input class="input-mobile" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
-
-        <button class="call-page1" id="prev" (click)="onNextPageMobile()">
-          <img width="10px" height="14px" *ngIf="this.pageLast" src="assets/img/next.svg">
-          <img width="10px" height="14px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+        <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPageMobile()" id="prev">
+            <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+            <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
         </button>
-
-        <button class="call-page1" id="prev" (click)="lastPageMobile()">
-          <img width="14px" height="18px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-          <img width="14px" height="18px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-        </button>
+    
+        <button class="call-page input1" (click)="lastPageMobile()" id="prev">
+            <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+            <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
+        </button>  
       </div>
 
       <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
@@ -262,10 +262,10 @@
         <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI" [srcMark]="srcMark" [isDateTime]="isDateTime"></app-display-digital-signature>
       </div>
 
-      <div class="flex-column" *ngIf="![2,3].includes(recipient?.status)" style="margin-top: 5px">
+      <div class="flex-column" *ngIf="![2,3].includes(recipient?.status) && !this.isBonBon" style="margin-top: 5px">
         <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state == 'CON_HIEU_LUC'">
-          <p class="d-flex justify-content-center mb-4">{{'contract.review' | translate}}</p>
-          <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
+          <p class="d-flex justify-content-center">{{'contract.review' | translate}}</p>
+          <p class="d-flex text-align-left mx-3">{{'content.confirm' | translate}}</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
               <input id="radio-confirm-consider" type="radio" name="confirm-radio-consider" [value]="1" [(ngModel)]="confirmConsider">
@@ -278,8 +278,8 @@
           </div>
         </div>
         <div class="label" style="text-align: center; font-weight: bold;" *ngIf="(this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4) && this.isDataContract.release_state == 'CON_HIEU_LUC'">
-          <p class="d-flex justify-content-center mb-4 text-uppercase">{{'contract.sign.confirm' | translate}}</p>
-          <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
+          <p class="d-flex justify-content-center text-uppercase">{{'contract.sign.confirm' | translate}}</p>
+          <p class="d-flex text-align-left mx-3">{{'content.confirm' | translate}}</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
               <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
@@ -291,6 +291,11 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="checkbox-confirm" *ngIf="this.isBonBon">
+        <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="confirmConsiderBonBon"/>
+        <div class="text" style="text-align: justify;">{{ 'confirm.bonbon' | translate }}</div>
       </div>
   </div>
 
@@ -310,8 +315,10 @@
     [pageBefore]="pageBefore"
     [status]="status"
     (submitChanges)="submitEvents($event)"
+    (submitChangesBonBon)="submitEventsBonBon($event)"
     [firstHandler] = "firstHandler"
     [confirmConsider] = "confirmConsider"
+    [confirmConsiderBonBon] = "confirmConsiderBonBon"
   ></app-footer-signature>
   <ngx-spinner
     bdColor="rgba(51,51,51,0.8)"

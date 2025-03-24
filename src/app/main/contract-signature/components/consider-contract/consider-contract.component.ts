@@ -84,7 +84,7 @@ export class ConsiderContractComponent
     pages: [],
   };
   confirmConsider = null;
-  confirmSignature = null;
+  confirmSignature: any = null;
 
   taxCodePartnerStep2: any;
 
@@ -221,6 +221,8 @@ export class ConsiderContractComponent
   page1: boolean = false;
   pageLast: boolean = true;
   isXemXet: boolean = false;
+  isBonBon: boolean = false;
+  confirmConsiderBonBon: boolean = true;
   zoomOptions = [
     { percent: '25%', value: 0.25 },
     { percent: '50%', value: 0.5 },
@@ -271,6 +273,12 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    console.log("getStatusBonBon", getStatusBonBon)
+    this.isBonBon = getStatusBonBon === "true";
+    // if(this.isBonBon) {
+    //   this.confirmSignature = 1;
+    // }
     if (environment.flag == "NB") {
       this.isNB = true
     } else {
@@ -308,6 +316,10 @@ export class ConsiderContractComponent
     let recipData: any = []
     recipData = res?.recipients.filter((item: any) => item.email == this.currentUser.email)
     this.isContainSignField = recipData[0]?.fields.some((ele: any) => ele.type == 3)
+  }
+
+  async submitEventsBonBon(e: any) {
+    this.confirmSignature = e;
   }
 
   firstPageMobile() {
@@ -2100,6 +2112,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px';
     dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;

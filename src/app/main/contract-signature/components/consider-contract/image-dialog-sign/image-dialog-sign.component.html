@@ -1,9 +1,15 @@
 <div class="container-fluid color-dialog-sign"[ngClass]="{
   'type-image-4': typeImageSignatureRadio == 4,
   'default-image': typeImageSignatureRadio != 4 }">
-  <div class="content-title-dialog-sign">
+  <div *ngIf = "!isBonBon" class="content-title-dialog-sign">
     <div class="title-dialog-sign">{{this.datas.title}}</div>
   </div>
+
+  <div *ngIf = "isBonBon" class="content-title-dialog-sign-bon-bon">
+    <div class="title-dialog-sign-bon-bon">{{this.datas.title}}</div>
+    <img src="assets/img/close-circle-bon-bon.svg" (click)="closeDialog()">
+  </div>
+
   <div class="text-select margin-top-20px">{{'text.select' | translate}}</div>
 
   <div class="content">
@@ -26,7 +32,7 @@
         <div class="lable-radio" for="radio-file-com">Tải ảnh lên</div>
       </div>
 
-      <div class="radio-confirm flex">
+      <div *ngIf = "!isBonBon" class="radio-confirm flex">
         <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="1"
           [(ngModel)]='typeImageSignatureRadio' (change)="t(1)">
         <div class="lable-radio" for="radio-file-account">Ảnh từ tài khoản</div>
@@ -54,7 +60,7 @@
         </div>
       </div>
       
-      <div *ngIf="typeImageSignatureRadio == 2">
+      <div *ngIf="typeImageSignatureRadio == 2 && !isBonBon">
         <div class="dialog-signature" [hidden]="imgSignPCSelect" (click)="addFileAttach()">
           <input id="attachFileSignature" type="file" accept="image/*"
             (change)="fileChangedAttach($event)" style="display: none;">
@@ -67,29 +73,62 @@
         </div>
         <div class="dialog-signature" *ngIf="imgSignPCSelect && !showCropper">
           <img [src]="croppedImage || imgSignPCSelect" alt="" style="max-width: 100%; max-height: 100%;">
-      </div>
-      <div class="image-cropper-container-wrapper">
+        </div>
+        <div class="image-cropper-container-wrapper" >
           <app-image-cropper *ngIf="showCropper" [imageSrc]="imgSignPCSelect" (crop)="onCropped($event)" (clear)="onCancelCrop()"></app-image-cropper>
-      </div>
+        </div>
       </div>
 
-      <div class="signature-container" *ngIf="typeImageSignatureRadio == 3">
+      <div *ngIf="typeImageSignatureRadio == 2 && isBonBon">
+        <div class="dialog-signature" [hidden]="imgSignPCSelect" (click)="addFileAttach()">
+          <input id="attachFileSignature" type="file" accept="image/*"
+            (change)="fileChangedAttach($event)" style="display: none;">
+          <div class="select-contract container-img-file">
+            <div class="upload-image-region d-flex flex-column container-img-file-1">
+              <div class="upload-photo" type="button">Tải ảnh lên</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-signature" *ngIf="imgSignPCSelect" (click)="addFileAttach()">
+          <img [src]="imgSignPCSelect" alt=""
+            style="display: block;margin: 0 auto;">
+        </div>
+      </div>
+
+      <div class="signature-container" *ngIf="typeImageSignatureRadio == 3 && !isBonBon">
         <signature-pad class="signature-pad" *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
         (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
       </div>   
+
+      <div class="signature-container mt-8px" *ngIf="typeImageSignatureRadio == 3 && isBonBon">
+        <signature-pad #signature class="signature-pad" [options]="signaturePadOptions"
+          (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)">
+        </signature-pad>
+        <div *ngIf="this.imgSignDrawing" class="clear-button flex" (click)="clearImage()">
+          <img class="icon-clear" src="assets/img/refresh-right-square-popup.svg">
+          <div class="redraw">Vẽ lại</div>
+        </div>
+      </div>
     </div>
 
-    <div class="checkbox-confirm">
+    <div *ngIf = "!isBonBon" class="checkbox-confirm">
       <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="confirmConsider"/>
       <div class="text" style="text-align: justify;">{{ 'multi.sign.confirm' | translate }}</div>
     </div>
     
-    <div class="select-option margin-top-20px">
+    <div *ngIf = "!isBonBon" class="select-option margin-top-20px">
       <button class="button-cancel" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
       <button class="button-clear" style="margin-left:20px" *ngIf="(typeImageSignatureRadio != 1 && typeImageSignatureRadio != 4)" type="button" (click)="clearImage()">Clear</button>     
       <button class="button-confirm-active" style="margin-left:20px" *ngIf="confirmConsider && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc)) || (typeImageSignatureRadio != 1))" type="button" (click)="uploadImage()">{{ 'confirm' | translate }}</button>
 
       <button class="button-confirm-disable" style="margin-left:20px" *ngIf="!confirmConsider && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1))" type="button">{{ 'confirm' | translate }}</button>
+    </div>
+
+    <div *ngIf = "isBonBon" class="margin-top-20px"> 
+      <button class="button-confirm-active-bonbon" *ngIf="(imgSignDrawing || imgSignPCSelect) && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc)) || (typeImageSignatureRadio != 1))" type="button" (click)="uploadImage()">{{ 'confirm' | translate }}</button>
+      <button class="button-confirm-disable-bonbon" *ngIf="(!imgSignDrawing && !imgSignPCSelect) && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1))" type="button">{{ 'confirm' | translate }}</button>
+
     </div>
     <canvas #croppedCanvas style="display: none;"></canvas>
   </div>
