@@ -1933,7 +1933,7 @@ export class ContractSignatureComponent implements OnInit {
             // Count successful responses
             if (checkSignResults[0][0]?.result?.success == false) {
               this.spinner.hide()
-              return this.toastService.showErrorHTMLWithTimeout("sign.cert.err","",3000)
+              return this.toastService.showErrorHTMLWithTimeout(checkSignResults[0][0]?.result?.message,"",3000)
             }
             let countSuccess = 0;
             for (const checkSign of checkSignResults) {
