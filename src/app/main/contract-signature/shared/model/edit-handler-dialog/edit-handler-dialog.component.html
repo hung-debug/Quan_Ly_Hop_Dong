@@ -278,7 +278,7 @@
 
 
         <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thứ số-->
-        <div class="participants--input" style="display: flex" *ngIf="id_sign_type == 6 || id_sign_type == 8">
+        <div class="participants--input" style="display: flex" *ngIf="id_sign_type == 6">
           <div class="participants__name" style="width: 93%">
             <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
               <span class="required-title">*</span>
@@ -291,6 +291,24 @@
             </div>
             <div class="invalid" *ngIf="errorCardid!=''">
               {{errorCardid | translate}}
+            </div>
+          </div>
+        </div>
+        
+        <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là remote-->
+        <div class="participants--input" style="display: flex" *ngIf="id_sign_type == 8">
+          <div class="participants__name" style="width: 93%">
+            <div class="label_detail text-color">{{'tax_code.cardId.passport' | translate}}&nbsp;
+              <span class="required-title">*</span>
+              <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+            </div>
+            <!-- <div class="input-data" style="width: 82%;"> -->
+            <div class="input-data">
+              <input type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="card_id" (input)="validateCardPassport()"
+                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+            </div>
+            <div class="invalid" *ngIf="errorCardPassport!=''">
+              {{errorCardPassport | translate}}
             </div>
           </div>
         </div>
@@ -334,15 +352,15 @@
         <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
         <div class="participants--input" style="display: flex" *ngIf=" id_sign_type == 5">
           <div class="participants__name" style="width: 93%">
-            <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span class="required-title">*</span>
+            <div class="label_detail text-color">{{'cardId.passport' | translate}}&nbsp;<span class="required-title">*</span>
             </div>
             <!-- <div class="input-data" style="width: 82%;"> -->
             <div class="input-data">
-              <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="card_id" (input)="validateCardId()"
+              <input type="text" placeholder="{{'enter.cardId.passport' | translate}}" [(ngModel)]="card_id" (input)="validateCardPassport()"
                 oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             </div>
-            <div class="invalid" *ngIf="errorCardid!=''">
-              {{errorCardid | translate}}
+            <div class="invalid" *ngIf="errorCardPassport!=''">
+              {{errorCardPassport | translate}}
             </div>
           </div>
         </div>

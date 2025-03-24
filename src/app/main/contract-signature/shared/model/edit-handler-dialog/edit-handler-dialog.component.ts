@@ -59,6 +59,7 @@ export class EditHandlerComponent implements OnInit {
   errorName: any = '';
   errorPhone: any = '';
   errorCardid: any = '';
+  errorCardPassport: any = '';
   errorEmail: any = '';
   locale: string;
   //dropdown
@@ -248,8 +249,11 @@ export class EditHandlerComponent implements OnInit {
     } else if (!this.isCheckRadio && (!this.validateName() || !this.validatePhoneNumber()) || (this.id_sign_type === 1 && !this.validatePhoneNumber())) {
       return false;
     }
-    if ((this.id_sign_type === 4 || this.id_sign_type === 2 || this.id_sign_type === 5 || this.id_sign_type == 6)) {
+    if ((this.id_sign_type === 4 || this.id_sign_type === 2 || this.id_sign_type == 6)) {
       return this.validateCardId();
+    }
+    if ((this.id_sign_type === 5 || this.id_sign_type === 8)) {
+      return this.validateCardPassport();
     }
     if (this.dataSign.length == 0 && this.data.role != 2 && this.data.role != 1) {
       this.toastService.showErrorHTMLWithTimeout("Loại ký không được để trống!","",3000)
@@ -288,6 +292,20 @@ export class EditHandlerComponent implements OnInit {
     }
     if (!this.pattern.cardid.test(testInput)) {
       this.errorCardid = "taxcode.format";
+      return false;
+    }
+    return true;
+  }
+  
+  validateCardPassport() {
+    let testInput = this.card_id
+    this.errorCardPassport = "";
+    if (testInput == "") {
+      this.errorCardPassport = "error.card.passport.required";
+      return false;
+    }
+    if (!this.pattern.cardid.test(testInput) && !this.pattern.card_id_passport.test(testInput)) {
+      this.errorCardPassport = "taxcode.passport.format";
       return false;
     }
     return true;
