@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   usedSSO: true,
   enableCustomerAnalysis: true,
-  appVersion: '2.11.0',
+  appVersion: '2.12.0',
 
   apiUrl: 'https://econtractdev.mobifone.ai/service',
   // apiUrl: 'http://10.4.201.53',
