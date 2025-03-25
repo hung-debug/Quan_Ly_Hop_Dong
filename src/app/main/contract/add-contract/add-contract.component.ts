@@ -133,7 +133,7 @@ export class AddContractComponent implements OnInit {
   message: any;
   shareData: object;
   is_disable: boolean = false;
-
+  isLiquidation: boolean = false;
   constructor(
     private formBuilder: FormBuilder,
     private appService: AppService,
@@ -164,6 +164,7 @@ export class AddContractComponent implements OnInit {
           this.action = params['action'];
           this.typeClone = params['type'];
           this.status = params['status'];
+          this.isLiquidation = this.action === 'add-contract-liquidation';
 
           //lay id user
           let userId = this.userService.getAuthCurrentUser().id;
