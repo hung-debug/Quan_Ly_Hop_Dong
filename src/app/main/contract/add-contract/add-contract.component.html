@@ -21,12 +21,12 @@
         </div>
         <div class="radio col-md-4 label_type" *ngIf="isQLHD_14">
             <label><input type="radio" name="contract_create" [value]="2" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable">
+                    (change)="changeType($event)" [disabled]="is_disable || action === 'add-batch'">
                 <span> {{'contract.by-template' | translate}}</span></label>
         </div> 
         <div class="radio col-md-4 label_type" *ngIf="isQLHD_15">
             <label><input type="radio" name="contract_create" [value]="3" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable">
+                    (change)="changeType($event)" [disabled]="is_disable || action === 'add-form'">
                 <span> {{'contract.by-batch' | translate}}</span></label>
         </div>
     </div>
