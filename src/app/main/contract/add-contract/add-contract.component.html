@@ -15,7 +15,7 @@
         <div class="radio col-md-4 label_type" *ngIf="isQLHD_01">
             <label>
                 <input type="radio" name="contract_create" [value]="1" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable || action === 'add-form'">
+                    (change)="changeType($event)" [disabled]="is_disable || action === 'add-form' || action === 'add-batch'">
                 <span> {{'contract.not-by-template' | translate}}</span>
             </label>
         </div>
