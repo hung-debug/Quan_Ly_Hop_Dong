@@ -487,8 +487,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           idHD: this.datas.id,
           thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       }
       await this.customerAnalysis.pushData(data);
     } catch (error) {

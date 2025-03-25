@@ -146,11 +146,10 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   async getContractGroupListDetail(typeIdDetail?: number) {
     this.typeListDetail = []
     this.type_id_detail = []
-    this.typeListDetail = [
-      { id: 1, name: 'Khác' },
-      { id: 2, name: 'Công nghệ thông tin' },
-      { id: 3, name: 'Đầu tư chi phí'}
-    ];
+    const inforType = await this.reportService
+    .getContractGroup()
+    .toPromise();
+    this.typeListDetail = inforType
     for (let i = 0; i<this.typeListDetail?.length; i++){
       this.type_id_detail.push(this.typeListDetail[i].id)
     }
@@ -259,7 +258,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
-
+    this.spinner.show();
     // Vô hiệu hóa nút export
     this.isExporting = true;
 
@@ -267,7 +266,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
     // Ẩn spinner
-    this.spinner.hide();
+    // this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
       ? this.selectedNodeOrganization
@@ -298,6 +297,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date;
     let id: string = '';
       if (flag) {
+        this.spinner.hide();
         this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
         let now = new Date();
         let randomFive = Math.floor(10000 + Math.random() * 90000);
@@ -313,6 +313,8 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           this.spinner.hide();
           // this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
           //this.exportToExcel(response)
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+          this.updateExportStatus(id, window.URL.createObjectURL(response)); // Cập nhật trạng thái
         },
         (err: any) => {
           this.spinner.hide()
@@ -397,6 +399,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     let id: string = '';
       if (flag) {
         this.spinner.hide();
+        this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
         let now = new Date();
         let randomFive = Math.floor(10000 + Math.random() * 90000);
         id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
@@ -409,6 +412,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         this.spinner.hide();
         if (flag) {
           //this.exportToExcelDetail(response)
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
           this.updateExportStatus(id, window.URL.createObjectURL(response));
         } else {
           this.spinner.hide();
@@ -419,6 +423,8 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           let parentOrgIndex = newMsaleDataDetail.findIndex((item: any) => item.orgId == idOrg)
           newMsaleDataDetail = [newMsaleDataDetail[parentOrgIndex], ...newMsaleDataDetail.toSpliced(parentOrgIndex, 1)]
           this.listDetail = newMsaleDataDetail
+          console.log("this.listDetail",this.listDetail);
+          
           this.contractsSum = 0
           this.listDetail.forEach(element => {
             this.contractsSum += element.data.length

@@ -89,6 +89,8 @@ export class ContractSignatureComponent implements OnInit {
   filter_status: any = 1;
   contractStatus: any = '';
   name_or_email_customer: any;
+  loadingText: string = 'Đang xử lý...';
+  phoneMobiCA: any;
 
   typeDisplay: string = 'signOne';
   // typeDisplay: string = 'downloadOne';
@@ -2039,10 +2041,14 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
+          if(resultRS.type == 2){
+            this.loadingText =
+            'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
+          }
           let supplierID = resultRS.type;
           this.supplierID = supplierID;
           this.nameCompany = resultRS.ma_dvcs;
-
+          this.phoneMobiCA = resultRS.phone;
           try {
             this.isDateTime = new Date();
           } catch(err) {
@@ -2072,9 +2078,10 @@ export class ContractSignatureComponent implements OnInit {
             recipientIds,
             null,
             3,
-            supplierID
+            supplierID,
+            this.phoneMobiCA
           ).then(
-            (res: any) => {
+            async (res: any) => {
               this.spinner.hide();
 
               let countSuccess = 0;
@@ -2121,15 +2128,55 @@ export class ContractSignatureComponent implements OnInit {
 
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
-                this.remoteDialogSuccessOpen(supplierID).then((res) => {
-                  if (res.isDismissed) {
-                    this.router
-                      .navigateByUrl('/', { skipLocationChange: true })
-                      .then(() => {
-                        this.router.navigate(['main/c/receive/processed']);
-                      });
-                  }
-                })
+                if(supplierID == 1 || supplierID == 3){
+                  this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                    if (res.isDismissed) {
+                      this.router
+                        .navigateByUrl('/', { skipLocationChange: true })
+                        .then(() => {
+                          this.router.navigate(['main/c/receive/processed']);
+                        });
+                    }
+                  })
+                } else if(supplierID == 2){
+                  // for (let i = 0; i < recipientIds.length; i++) {
+                  //   let updateInfo: any = null;
+                  //   try {
+                  //     updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+                  //       processAt: this.isDateTime
+                  //     }],recipientIds[i]);
+                  //   } catch (err) {
+                  //     this.spinner.hide()
+                  //     this.toastService.showErrorHTMLWithTimeout(
+                  //       'Lỗi cập nhật trạng thái tài liệu',
+                  //       '',
+                  //       3000
+                  //     );
+                  //     return false;
+                  //   }
+  
+                  //   if (!updateInfo.id || !updateInfo) {
+                  //     this.spinner.hide()
+                  //     this.toastService.showErrorHTMLWithTimeout(
+                  //       'Lỗi cập nhật trạng thái tài liệu',
+                  //       '',
+                  //       3000
+                  //     );
+                  //     return false;
+                  //   }
+                  // }
+                  this.router
+                  .navigateByUrl('/', { skipLocationChange: true })
+                  .then(() => {
+                    this.router.navigate(['main/c/receive/processed']);
+                  });
+                  
+                  this.toastService.showSuccessHTMLWithTimeout(
+                    "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                    '',
+                    3000
+                  );
+                }
               }
             },
             (err: any) => {
@@ -3542,6 +3589,30 @@ export class ContractSignatureComponent implements OnInit {
     return result;
   }
 
+  mapRecipientStatusPKI(recipientIds: string, results: any[]): string {
+    const idOrder: number[] = [];
+    const idToResultMap = new Map<number, string>()
+    if (recipientIds && /^\d+(?:, \d+)*$/.test(recipientIds)) {
+      recipientIds.split(', ').map(Number).forEach(id => {
+        idOrder.push(id);
+        idToResultMap.set(id, 'Thất bại: Ký số thất bại, đã có lỗi trong quá trình ký số.'); 
+      });
+    }
+    if (results) {
+      results.forEach(item => {
+        if (item.recipientId !== undefined && typeof item.recipientId === 'number') {
+          const resultMessage = item.result.success
+            ? 'Thành công'
+            : `Thất bại: ${item.result.message || 'Ký số thất bại, đã có lỗi trong quá trình ký số.'}`; // Sửa đổi quan trọng
+          idToResultMap.set(item.recipientId, resultMessage);
+        }
+      });
+    }
+    const finalStatus: string[] = idOrder.map(id => idToResultMap.get(id)!);
+  
+    return finalStatus.join(', ');
+  }
+
   getContractId(contractViewList: any[], selectedId: number): any | null {
     const matchedItem = contractViewList.find((item) => item.id === selectedId);
     return matchedItem || null;
@@ -3563,7 +3634,9 @@ export class ContractSignatureComponent implements OnInit {
         let typesign = this.signedContract[0]?.sign_type[0]?.id;
         if(typesign == 2) {
           status = this.mapRecipientStatus(idHĐ, dataContract);
-        } else if(typesign == 8) {
+        } else if (typesign == 3) {
+          status = this.mapRecipientStatusPKI(recipientId, dataContract);
+        } else if (typesign == 8) {
           status = this.mapRecipientStatusRS(recipientId, dataContract);
         } else {
           status = this.mapRecipientStatus(recipientId, dataContract);
@@ -3611,8 +3684,8 @@ export class ContractSignatureComponent implements OnInit {
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       }
       await this.customerAnalysis.pushData(data);
     } catch (error) {

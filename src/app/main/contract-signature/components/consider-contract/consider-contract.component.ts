@@ -176,6 +176,8 @@ export class ConsiderContractComponent
   dataCert: any;
   trustedUrl: any;
   idPdfSrcMobile: any;
+  phoneMobiCA: any;
+  // statusSign: any;
 
   sessionIdUsbToken: any;
   emailRecipients: any;
@@ -3231,7 +3233,8 @@ export class ConsiderContractComponent
             height: signUpdate.height,
             page: signUpdate.page,
           };
-
+          // console.log("fieldRemoteSigning",fieldRemoteSigning);
+          
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             // this.textSign = this.contractNoValueSign
 
@@ -3297,8 +3300,10 @@ export class ConsiderContractComponent
                   this.recipientId,
                   this.isTimestamp,
                   signUpdate.type,
-                  supplierID
+                  supplierID,
+                  this.phoneMobiCA
                 );
+                // this.statusSign = checkSign;   
                 if (!checkSign || (checkSign && !checkSign.success)) {
                   if (!checkSign.message) {
                     this.toastService.showErrorHTMLWithTimeout(
@@ -3349,7 +3354,8 @@ export class ConsiderContractComponent
                     this.recipientId,
                     this.isTimestamp,
                     signUpdate.type,
-                    supplierID
+                    supplierID,
+                    this.phoneMobiCA
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -4251,7 +4257,7 @@ export class ConsiderContractComponent
       this.spinner.hide();
       return;
     }
-
+    // notContainSignImage && this.eKYC == false && ((this.currentBoxSignType == 8 && supplierID == 2) || (this.currentBoxSignType != 8 && supplierID != 2)) điều kiện chuyển đổi trạng thái ký mobiCA
     if (notContainSignImage && this.eKYC == false && this.currentBoxSignType !== 8) {
       signUpdateTempN[0] = {
         "processAt": this.isDateTime
@@ -4417,13 +4423,35 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        this.remoteDialogSuccessOpen(supplierID).then(result => {
-          if (result.isDismissed) {
-            this.router.navigate([
-              'main/form-contract/detail/' + this.idContract,
-            ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
-          }
-        })
+        if(supplierID == 1 || supplierID == 3){
+          this.remoteDialogSuccessOpen(supplierID).then(result => {
+            // console.log("statusSign",this.statusSign);
+            if (result.isDismissed) {
+              this.router.navigate([
+                'main/form-contract/detail/' + this.idContract,
+              ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+            }
+          })
+        }else if(supplierID == 2){
+          this.router.navigate([
+            'main/form-contract/detail/' + this.idContract,
+          ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+          
+          this.toastService.showSuccessHTMLWithTimeout(
+            "Bạn vừa thực hiện ký thành công. Tài liệu đã được hoàn thành xử lý",
+            '',
+            3000
+          );
+        }
+        
+        // this.remoteDialogSuccessOpen(supplierID).then(result => {
+        //   // console.log("statusSign",this.statusSign);
+        //   if (result.isDismissed) {
+        //     this.router.navigate([
+        //       'main/form-contract/detail/' + this.idContract,
+        //     ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+        //   }
+        // })
       }
     }
   }
@@ -4851,8 +4879,8 @@ export class ConsiderContractComponent
   async eKYCStart(ekycDocType: string) {
     const data = {
       id: 0,
-      title: 'Xác thực CMT/CCCD mặt trước',
-      noti: 'Vui lòng đưa CMT/CCCD mặt trước vào gần khung hình',
+      title: 'Xác thực CMT/CCCD/Hộ chiếu mặt trước',
+      noti: 'Vui lòng đưa CMT/CCCD/Hộ chiếu mặt trước vào gần khung hình',
       recipientId: this.recipientId,
       contractId: this.idContract,
       ekycDocType: ekycDocType
@@ -4868,7 +4896,8 @@ export class ConsiderContractComponent
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result) => {
-      this.cccdFront = result;
+      // this.cccdFront = result;
+      this.cccdFront = result.base64Img;
 
       if (this.recipient.name && this.recipient.card_id) {
         this.nameCompany = this.recipient.name;
@@ -4884,7 +4913,27 @@ export class ConsiderContractComponent
           });
       }
 
-      if (result) this.eKYCSignOpenAfter();
+      // if (result) this.eKYCSignOpenAfter();
+      if (result.docType == "OLD ID" || result.docType == "NEW ID") this.eKYCSignOpenAfter()
+        else {
+          const dialogConfig = new MatDialogConfig();
+  
+          const dataFace = {
+            cccdFront: this.cccdFront,
+            contractId: this.idContract,
+          };
+    
+          dialogConfig.data = dataFace;
+          dialogConfig.disableClose = true;
+    
+          const final = this.dialog.open(EkycDialogSignComponent, dialogConfig);
+  
+          final.afterClosed().subscribe(async (result: any) => {
+            if (result == 2) {
+              await this.signContractSubmit();
+            }
+          });
+        }
     });
   }
 
@@ -5157,6 +5206,11 @@ export class ConsiderContractComponent
       const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(async (result: any) => {
+        if(result.type == 2){
+          this.loadingText =
+          'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
+        }
+
         let signI = null;
         let imageRender = null;
 
@@ -5169,6 +5223,7 @@ export class ConsiderContractComponent
           let supplierID = result.type;
           this.supplierID = result.type;
           this.dataCert.cert_id = result.ma_dvcs;
+          this.phoneMobiCA = result.phone;
           await this.signContractSubmit(supplierID);
         }
       });
@@ -5369,9 +5424,31 @@ export class ConsiderContractComponent
       this.mobile = false;
     }
   }
+  
+  openOrDownloadFile(item: any){
+    let currentUrl: string = ""
+    this.contractService.getFileContract(item.contract_id).subscribe(
+      res => {
+        let fileName = res.path
+        // const extension = fileName.split(".").pop()
+        const extension = fileName
+        currentUrl = res.path
+        if (extension?.toLowerCase() == "txt") {
+          window.open(currentUrl)
+        } else {
+          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+        }
+      }
+    )
+  }
 
-  openPdf(path: any, event: any) {
-    this.contractService.openPdf(path, event);
+  openPdf(path: any, event: any, item: any) {
+    // this.contractService.openPdf(path, event);
+    if(path.endsWith('.pdf')){
+      this.contractService.openPdf(path, event);
+    } else{
+      this.openOrDownloadFile(item);
+    }
   }
 
   flagFocus: boolean = false;
@@ -5474,7 +5551,7 @@ export class ConsiderContractComponent
         message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!!";
         break;
       case "2":
-        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
+        message = "Tài liệu đã ký thành công!";
         break;
       case "3":
         message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
@@ -5753,8 +5830,8 @@ export class ConsiderContractComponent
           nguoiXuLy: this.currentUser.email || this.currentUser.phone,
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
           trangThai: status,
-          link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
         },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       }
       await this.customerAnalysis.pushData(data);
     } catch (error) {

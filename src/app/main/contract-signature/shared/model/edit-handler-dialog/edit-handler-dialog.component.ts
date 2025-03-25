@@ -286,7 +286,7 @@ export class EditHandlerComponent implements OnInit {
       this.errorCardid = "error.card.required";
       return false;
     }
-    if (!this.pattern.cardid.test(testInput)) {
+    if (!this.pattern.cardid.test(testInput) && !this.pattern.card_id_passport.test(testInput)) {
       this.errorCardid = "taxcode.format";
       return false;
     }

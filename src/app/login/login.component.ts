@@ -193,8 +193,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 params: {
                   username: this.loginForm.value.username,
                   thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
-                  link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
                 },
+                link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
               };
               this.customerAnalysis.pushData(analysisData);
             } catch (error) {
@@ -438,8 +438,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
                   params: {
                     username: res.customer.info.email,
                     thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
-                    link: environment.SSO_URL+ this.router.url,
                   },
+                  link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
                 };
                 this.customerAnalysis.pushData(analysisData);  
               } catch (error) {
