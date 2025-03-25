@@ -15,13 +15,13 @@
         <div class="radio col-md-4 label_type" *ngIf="isQLHD_01">
             <label>
                 <input type="radio" name="contract_create" [value]="1" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable ">
+                    (change)="changeType($event)" [disabled]="is_disable || isAddForm ">
                 <span> {{'contract.not-by-template' | translate}}</span>
             </label>
         </div>
         <div class="radio col-md-4 label_type" *ngIf="isQLHD_14">
             <label><input type="radio" name="contract_create" [value]="2" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable || isLiquidation ">
+                    (change)="changeType($event)" [disabled]="is_disable || isLiquidation">
                 <span> {{'contract.by-template' | translate}}</span></label>
         </div> 
         <div class="radio col-md-4 label_type" *ngIf="isQLHD_15">
