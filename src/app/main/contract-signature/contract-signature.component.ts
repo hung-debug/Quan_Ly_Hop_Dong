@@ -3592,7 +3592,7 @@ export class ContractSignatureComponent implements OnInit {
           if(this.supplierID == 1) {
             eventName = 'kyLoRS_VNPTSmartCA'
           } else if (this.supplierID == 2) {
-            eventName = 'kyLoRS_MobiCA'
+            eventName = 'kyLoRS_MobifoneCA'
           } else if (this.supplierID == 3){
             eventName = 'kyLoRS_Nacencomm'
           } else {

@@ -5736,7 +5736,7 @@ export class ConsiderContractComponent
           if(this.supplierID == 1) {
             eventName = 'kyRS_VNPTSmartCA'
           } else if (this.supplierID == 2) {
-            eventName = 'kyRS_MobiCA'
+            eventName = 'kyRS_MobifoneCA'
           } else if (this.supplierID == 3){
             eventName = 'kyRS_Nacencomm'
           } else {
