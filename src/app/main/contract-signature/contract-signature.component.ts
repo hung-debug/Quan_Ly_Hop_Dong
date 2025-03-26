@@ -3641,7 +3641,11 @@ export class ContractSignatureComponent implements OnInit {
         } else if (typesign == 8) {
           status = this.mapRecipientStatusRS(recipientId, dataContract);
         } else {
-          status = this.mapRecipientStatus(recipientId, dataContract);
+          if(dataContract.length && dataContract[0].recipientId == 0 && typesign == 4) {
+            status = dataContract[0].result?.message;
+          } else {
+            status = this.mapRecipientStatus(recipientId, dataContract);
+          }
         }
         if (typesign == 4) {
           if(this.dataHsm?.supplier == 'mobifone') {
