@@ -28,8 +28,16 @@ export const environment = {
   // flag: 'KD',
   urlgetTokenAnalysis: 'https://ottcall.mobifone.vn/pthv_cms_api',
   urlAnalysis: 'https://ott.mobifone.vn/parse',
+  
   appNameAnalysis: 'eContract web dev',
   apiKeyAnalysis: 'XDQPiyOSljfHCJpa37e0NkUbAbCPJnc2',
+
+  // appNameAnalysis: 'eContract NB',
+  // apiKeyAnalysis: '7p2bwu4abWHFiLqKw0hTayX5QGvCYNJj',
+
+  // appNameAnalysis: 'eContract KD',
+  // apiKeyAnalysis: 'tCndQPm8PDWpg1dFTyP5bOUSbthDdxsj',
+
   logoWeb: '/images/logo_web.png',
   bannerWeb: '/images/banner_web.png',
   loginApp: '/images/login_app.png',
