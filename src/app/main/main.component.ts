@@ -199,7 +199,7 @@ export class MainComponent implements OnInit {
         },
         link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
       };
-      this.customerAnalysis.pushData(data);
+      await this.customerAnalysis.pushData(data);
     } catch (error) {
       console.error("Lấy token thất bại:", error);
     }
