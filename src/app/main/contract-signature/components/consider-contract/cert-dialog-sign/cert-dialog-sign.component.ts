@@ -12,7 +12,8 @@ import { DeviceDetectorService } from "ngx-device-detector";
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
 import { ConsiderContractComponent } from "src/app/main/contract-signature/components/consider-contract/consider-contract.component";
 import { log } from 'console';
-
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-cert-dialog-sign',
@@ -44,6 +45,7 @@ export class CertDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private DigitalCertificateService: DigitalCertificateService,
     private deviceService: DeviceDetectorService,
+    private customerAnalysis: CustomerAnalysis
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -148,6 +150,7 @@ export class CertDialogSignComponent implements OnInit {
           return;
         }
         else {
+          this.handleFalseContractData("Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu")
           if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
             this.toastService.showErrorHTMLWithTimeout(
               'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
@@ -167,6 +170,7 @@ export class CertDialogSignComponent implements OnInit {
           return;
         }
         else {
+          this.handleFalseContractData("Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu")
           if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
             this.toastService.showErrorHTMLWithTimeout(
               'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
@@ -177,6 +181,32 @@ export class CertDialogSignComponent implements OnInit {
           }
         }
       }
+    }
+  }
+
+  async handleFalseContractData(status: any) {
+    try {
+      let eventName = 'kyLoCTS'
+      let tenHD = this.data.isDataObjectSignature.map((contract: any) => contract.contractName).join(', ');
+      let idHĐ = this.data.isDataObjectSignature.map((contract: any) => contract.contractId).join(', ');
+      let recipientId = this.data.isDataObjectSignature.map((contract: any) => contract.id).join(', ');
+      let maHĐ = this.data.isDataObjectSignature.map((contract: any) => contract.contract_uid).join(', ');
+    
+      let data = {
+        eventName: eventName,
+        params: {
+          tenHĐ: tenHD,
+          maHĐ: maHĐ,
+          idHĐ: idHĐ,
+          nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: 'Thất bại: ' + status,
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
     }
   }
 }
