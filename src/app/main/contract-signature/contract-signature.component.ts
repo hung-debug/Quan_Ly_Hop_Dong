@@ -1974,7 +1974,10 @@ export class ContractSignatureComponent implements OnInit {
             // Count successful responses
             if (checkSignResults[0][0]?.result?.success == false) {
               this.spinner.hide()
-              this.handleFalseContractData(checkSignResults[0][0]?.result?.message)
+              let checkSign: any = [];
+              checkSign = this.updateCheckSign(checkSign, recipientId);
+              checkSign = this.updateMessage(checkSign, checkSignResults[0][0]?.result?.message);
+              this.handleContractData(checkSign);
               return this.toastService.showErrorHTMLWithTimeout(checkSignResults[0][0]?.result?.message,"",3000)
             }
             let countSuccess = 0;
@@ -3643,76 +3646,14 @@ export class ContractSignatureComponent implements OnInit {
           status = this.mapRecipientStatusRS(recipientId, dataContract);
         } else {
           if(dataContract.length && dataContract[0].recipientId == 0 && typesign == 4) {
-            status = dataContract[0].result?.message;
+            status = recipientId
+            .split(",")
+            .map(() => `Thất bại: ${dataContract[0].result?.message}`)
+            .join(", ");
           } else {
             status = this.mapRecipientStatus(recipientId, dataContract);
           }
         }
-        if (typesign == 4) {
-          if(this.dataHsm?.supplier == 'mobifone') {
-            eventName = 'kyLoHsm_mbf'
-          } else if (this.dataHsm?.supplier == 'icorp'){
-            eventName = 'kyLoHsm_ica'
-          } else {
-            eventName = 'kyLoHsm'
-          }
-        } else if (typesign == 3) {
-          if(this.networkCode == 'MobiFone') {
-            eventName = 'kyLoSimPKI_MobiFone'
-          } else if (this.networkCode == 'Viettel') {
-            eventName = 'kyLoSimPKI_Viettel'
-          } else if (this.networkCode == "bcy"){
-            eventName = 'kyLoSimPKI_BCY'
-          } else {
-            eventName = 'kyLoSimPKI'
-          }
-        } else if (typesign == 6) {
-          eventName = 'kyLoCTS'
-        } else if (typesign == 8) {
-          if(this.supplierID == 1) {
-            eventName = 'kyLoRS_VNPTSmartCA'
-          } else if (this.supplierID == 2) {
-            eventName = 'kyLoRS_MobifoneCA'
-          } else if (this.supplierID == 3){
-            eventName = 'kyLoRS_Nacencomm'
-          } else {
-            eventName = 'kyLoRS'
-          }
-        } else if(typesign == 2) {
-          eventName = 'kyLoUSBtoken'
-        }
-      }
-      let data = {
-        eventName: eventName,
-        params: {
-          tenHĐ: tenHD,
-          maHĐ: maHĐ,
-          idHĐ: idHĐ,
-          nguoiXuLy: this.currentUser.email || this.currentUser.phone,
-          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
-          trangThai: status,
-        },
-        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
-      }
-      await this.customerAnalysis.pushData(data);
-    } catch (error) {
-      console.error('Lỗi khi gửi dữ liệu:', error);
-    }
-  }
-
-  async handleFalseContractData(status: any) {
-    try {
-      let eventName;
-      let tenHD = this.signedContract.map((contract: any) => contract.contractName).join(', ');
-      let idHĐ = this.signedContract.map((contract: any) => contract.contractId).join(', ');
-      let recipientId = this.signedContract.map((contract: any) => contract.id).join(', ');
-      let maHĐ = this.signedContract.map((contract: any) => contract.contract_uid).join(', ');
-      
-      if(this.signedContract[0]?.sign_type?.length == 0) {
-        eventName = 'xemxetLoHĐ'
-      } else {
-        let typesign = this.signedContract[0]?.sign_type[0]?.id;
-
         if (typesign == 4) {
           if(this.dataHsm?.supplier == 'mobifone') {
             eventName = 'kyLoHsm_mbf'
