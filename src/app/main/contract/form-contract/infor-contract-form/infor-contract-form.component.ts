@@ -506,19 +506,13 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
           || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
           || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
             const file_name = file.name;
-            if (this.listFileAttach.filter((p: any) => p.name == file_name).length == 0 || !this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
+            if (this.listFileAttach.filter((p: any) => p.name == file_name).length == 0 && !this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
               this.listFileAttach.push(file);
-            } else {
-              this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
-              break;
-            }
-
-            if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
               this.datasForm.fileAttachForm.push(file);
             } else {
               this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
               break;
-            }    
+            }   
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
