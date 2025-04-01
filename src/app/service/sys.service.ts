@@ -16,7 +16,7 @@ export class SysService {
   }
 
   checkSizeFile(file:any){
-    if (file?.size <= 25 * (Math.pow(1024, 2))) {
+    if (file?.size <= 20 * (Math.pow(1024, 2))) {
       return {
         result: true,
         message: ''
@@ -24,7 +24,7 @@ export class SysService {
     } else {
       return {
         result: false,
-        message: 'File tài liệu yêu cầu tối đa 25MB'
+        message: 'File tài liệu yêu cầu tối đa 20MB'
       }
     }
   }
