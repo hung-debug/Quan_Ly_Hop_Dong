@@ -500,19 +500,25 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         let file = new File([file1], this.convertFileName(file1.name));
         const extension: any = file.name.split('.').pop();
 
-        if (file.size <= 10*(Math.pow(1024, 2))) {
+        if (file.size <= 20*(Math.pow(1024, 2))) {
 
           if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
           || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
           || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
             const file_name = file.name;
-            if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
+            if (this.listFileAttach.filter((p: any) => p.name == file_name).length == 0 || !this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
               this.listFileAttach.push(file);
+            } else {
+              this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
+              break;
             }
 
             if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
               this.datasForm.fileAttachForm.push(file);
-            }
+            } else {
+              this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
+              break;
+            }    
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
@@ -520,7 +526,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         } else {
           this.datasForm.file_name_attach = '';
           this.datasForm.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng tối đa 10MB','',3000);
+          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng tối đa 20MB','',3000);
           break;
         }
       }
