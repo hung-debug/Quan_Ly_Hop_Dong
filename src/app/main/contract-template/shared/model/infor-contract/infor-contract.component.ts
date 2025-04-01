@@ -352,22 +352,31 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
 
   fileChangedAttach(e: any) {
+
     let files = e.target.files;
     for (let i = 0; i < files.length; i++) {
       let file1 = e.target.files[i];
       const file = e.target.files[i];
       if (file1) {
         let file = new File([file1], this.convertFileName(file1.name));
-
         // giới hạn file upload lên là 5mb
         if (file.size <= 20*(Math.pow(1024, 2))) {
           const file_name = file.name;
-          if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
-            const extension: any = file.name.split('.').pop();
 
-            if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
-            || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
-            || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx'
+          if (
+            this.attachFileNameArr.filter((p: any) => p.filename == file_name).length > 0 || 
+            this.datas.attachFileNameArr.filter((p: any) => p.filename == file_name).length > 0
+          ) {
+            this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
+            e.target.value = null;
+            break; 
+          }
+     
+          const extension: any = file.name.split('.').pop();
+
+          if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
+          || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
+          || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx'
           ) {
             this.attachFileArr.push(file);
             this.datas.attachFileArr = this.attachFileArr;
@@ -383,7 +392,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
-          }
+          
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
