@@ -499,20 +499,27 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       if (file1) {
         let file = new File([file1], this.convertFileName(file1.name));
         const extension: any = file.name.split('.').pop();
+        const file_name = file.name;
+        if (
+          this?.datasForm?.fileAttachForm && this.datasForm.fileAttachForm.filter((p: any) => file.name == p.filename || file.name == p.name).length > 0
+        ) {
+          this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
+          e.target.value = null;
+          break; 
+        }
 
         if (file.size <= 20*(Math.pow(1024, 2))) {
 
           if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
           || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
           || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
-            const file_name = file.name;
-            if (this.listFileAttach.filter((p: any) => p.name == file_name).length == 0 && !this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
+            if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
               this.listFileAttach.push(file);
+            }
+
+            if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
               this.datasForm.fileAttachForm.push(file);
-            } else {
-              this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
-              break;
-            }   
+            }
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
