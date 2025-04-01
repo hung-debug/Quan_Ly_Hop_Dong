@@ -181,6 +181,7 @@ export class RemoteDialogSignComponent implements OnInit {
   cardId: any;
   async onSubmit() {
     this.submitted = true;
+    this.updateValidators()
     if (this.myForm.invalid) {
       return;
     }
