@@ -360,7 +360,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         let file = new File([file1], this.convertFileName(file1.name));
 
         // giới hạn file upload lên là 5mb
-        if (file.size <= 10*(Math.pow(1024, 2))) {
+        if (file.size <= 20*(Math.pow(1024, 2))) {
           const file_name = file.name;
           if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
             const extension: any = file.name.split('.').pop();
@@ -387,7 +387,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu tối đa 10MB", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu tối đa 20MB", "", 3000);
           break;
         }
       }

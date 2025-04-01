@@ -89,7 +89,7 @@ export class UploadContractFileComponent implements OnInit {
       let file1 = e.target.files[i];
       if (file1) {
         let file = new File([file1], this.convertFileName(file1.name));
-        if (file.size <= 10*(Math.pow(1024, 2))) {
+        if (file.size <= 20*(Math.pow(1024, 2))) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
 
@@ -121,7 +121,7 @@ export class UploadContractFileComponent implements OnInit {
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu tối đa 10MB", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu tối đa 20MB", "", 3000);
           break;
         }
       }
@@ -216,9 +216,9 @@ export class UploadContractFileComponent implements OnInit {
     if (!this.contractFile && !this.contractFileName) {
       this.errContractFileMess = "File tài liệu không được để trống" 
       return false
-    } else if (this.contractFile && this.contractFile.size > 10*(Math.pow(1024, 2))) {
+    } else if (this.contractFile && this.contractFile.size > 20*(Math.pow(1024, 2))) {
       this.errContractFileSize = true
-      this.toastService.showWarningHTMLWithTimeout("File tài liệu yêu cầu tối đa 10MB", "", 3000);
+      this.toastService.showWarningHTMLWithTimeout("File tài liệu yêu cầu tối đa 20MB", "", 3000);
       return false
     } else {
       this.errContractFileSize = false
