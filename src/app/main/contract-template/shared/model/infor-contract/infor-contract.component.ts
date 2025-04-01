@@ -362,10 +362,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         // giới hạn file upload lên là 5mb
         if (file.size <= 20*(Math.pow(1024, 2))) {
           const file_name = file.name;
-
           if (
-            this.attachFileNameArr.filter((p: any) => p.filename == file_name).length > 0 || 
-            this.datas.attachFileNameArr.filter((p: any) => p.filename == file_name).length > 0
+            this?.datas?.attachFileNameArr && this.datas.attachFileNameArr.filter((p: any) => p.filename == file_name).length > 0
           ) {
             this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
             e.target.value = null;
