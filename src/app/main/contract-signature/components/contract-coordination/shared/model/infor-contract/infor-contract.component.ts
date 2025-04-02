@@ -152,6 +152,7 @@ export class InforContractComponent implements OnInit {
           alert('Chỉ hỗ trợ file có định dạng PDF')
         }
       } else {
+        e.target.value = null;
         alert(checkSizeFile.message);
       }
     }
