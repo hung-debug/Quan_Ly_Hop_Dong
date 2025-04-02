@@ -356,6 +356,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     let files = e.target.files;
     for (let i = 0; i < files.length; i++) {
+      let isCheck = true;
       let file1 = e.target.files[i];
       const file = e.target.files[i];
       if (file1) {
@@ -367,8 +368,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             this?.datas?.attachFileNameArr && this.datas.attachFileNameArr.filter((p: any) => p.filename == file_name).length > 0
           ) {
             this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
-            e.target.value = null;
-            break; 
+            isCheck = false;
           }
      
           const extension: any = file.name.split('.').pop();
@@ -377,16 +377,18 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
           || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx'
           ) {
-            this.attachFileArr.push(file);
-            this.datas.attachFileArr = this.attachFileArr;
-            //
-            this.attachFileNameArr.push({filename: file.name});
-            if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
-              this.datas.attachFileNameArr = [];
-            }
-            this.datas.attachFileNameArr.push({filename: file.name})
-            if (this.datas.is_action_contract_created) {
-              this.uploadFileAttachAgain = true;
+            if(isCheck) {
+              this.attachFileArr.push(file);
+              this.datas.attachFileArr = this.attachFileArr;
+              //
+              this.attachFileNameArr.push({filename: file.name});
+              if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
+                this.datas.attachFileNameArr = [];
+              }
+              this.datas.attachFileNameArr.push({filename: file.name})
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileAttachAgain = true;
+              }
             }
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
