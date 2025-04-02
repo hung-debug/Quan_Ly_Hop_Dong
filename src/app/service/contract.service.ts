@@ -1481,27 +1481,13 @@ export class ContractService {
       .toPromise();
   }
 
-  savefirstHandler(fields: any[]) {
+  savefirstHandler(fields: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const uniqueFields: any[] = [];
-    const seen = new Set<string>();
-    fields.forEach((field: any) => {
-      const key = `${field.type}-${field.coordinate_x}-${field.coordinate_y}-${field.value || ''}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        uniqueFields.push(field);
-      }
-    });
-    const fieldsToUpdate = uniqueFields.filter((field: any) => {
-      const isSignature = field.type === 3 || field.type === 2;
-      return isSignature;
-    });
-  
     const body = JSON.stringify({
-      fields: fieldsToUpdate,
+      fields: fields,
     });
 
     return this.http.post<Contract>(this.savefirstHandlerUrl, body, {
