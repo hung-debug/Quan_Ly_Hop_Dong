@@ -2326,7 +2326,7 @@ export class ContractSignatureComponent implements OnInit {
                   dataObjectSignature = await this.contractServiceV1
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
-                  let fieldsSignature = dataObjectSignature;
+                  let fieldsSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i]);
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
 
                   try {
