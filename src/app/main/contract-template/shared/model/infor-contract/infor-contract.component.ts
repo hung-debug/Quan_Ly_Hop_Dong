@@ -284,6 +284,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu định dạng PDF, DOCX", "", 3000);
         }
       } else {
+        e.target.value = null;
         this.spinner.hide()
         this.toastService.showErrorHTMLWithTimeout(checkSizeFile.message, "", 3000);
       }
@@ -387,7 +388,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             if (this.datas.is_action_contract_created) {
               this.uploadFileAttachAgain = true;
             }
-            e.target.value = null;
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
@@ -400,6 +400,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }
       }
     }
+    e.target.value = null;
   }
 
   onChange(e: any) {

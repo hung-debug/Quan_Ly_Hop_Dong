@@ -363,6 +363,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.toastService.showWarningHTMLWithTimeout("File tài liệu yêu cầu định dạng PDF, docx", "", 3000);
         }
       } else {
+        e.target.value = null;
         this.spinner.hide()
         this.toastService.showWarningHTMLWithTimeout(checkSizeFile.message, "", 3000);
       }
