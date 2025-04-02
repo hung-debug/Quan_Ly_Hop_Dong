@@ -523,7 +523,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
-
+          e.target.value = null;
         } else {
           this.datasForm.file_name_attach = '';
           this.datasForm.attachFile = '';
