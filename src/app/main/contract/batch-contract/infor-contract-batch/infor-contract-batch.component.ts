@@ -257,6 +257,7 @@ export class InforContractBatchComponent implements OnInit {
           );
         }
       } else {
+        e.target.value = null;
         this.toastService.showErrorHTMLWithTimeout(
           checkSizeFile.message,
           '',

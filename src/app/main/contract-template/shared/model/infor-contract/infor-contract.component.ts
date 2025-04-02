@@ -284,6 +284,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu định dạng PDF, DOCX", "", 3000);
         }
       } else {
+        e.target.value = null;
         this.spinner.hide()
         this.toastService.showErrorHTMLWithTimeout(checkSizeFile.message, "", 3000);
       }
@@ -352,46 +353,56 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
 
   fileChangedAttach(e: any) {
+
     let files = e.target.files;
     for (let i = 0; i < files.length; i++) {
+      let isCheck = true;
       let file1 = e.target.files[i];
       const file = e.target.files[i];
       if (file1) {
         let file = new File([file1], this.convertFileName(file1.name));
-
         // giới hạn file upload lên là 5mb
-        if (file.size <= 10*(Math.pow(1024, 2))) {
+        if (file.size <= 20*(Math.pow(1024, 2))) {
           const file_name = file.name;
-          if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
-            const extension: any = file.name.split('.').pop();
-
-            if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
-            || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
-            || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx'
+          if (
+            this?.datas?.attachFileNameArr && this.datas.attachFileNameArr.filter((p: any) => p.filename == file_name).length > 0
           ) {
-            this.attachFileArr.push(file);
-            this.datas.attachFileArr = this.attachFileArr;
-            //
-            this.attachFileNameArr.push({filename: file.name});
-            if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
-              this.datas.attachFileNameArr = [];
-            }
-            this.datas.attachFileNameArr.push({filename: file.name})
-            if (this.datas.is_action_contract_created) {
-              this.uploadFileAttachAgain = true;
+            this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
+            isCheck = false;
+          }
+     
+          const extension: any = file.name.split('.').pop();
+
+          if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
+          || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
+          || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx'
+          ) {
+            if(isCheck) {
+              this.attachFileArr.push(file);
+              this.datas.attachFileArr = this.attachFileArr;
+              //
+              this.attachFileNameArr.push({filename: file.name});
+              if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
+                this.datas.attachFileNameArr = [];
+              }
+              this.datas.attachFileNameArr.push({filename: file.name})
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileAttachAgain = true;
+              }
             }
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
-          }
+          
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu tối đa 10MB", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu tối đa 20MB", "", 3000);
           break;
         }
       }
     }
+    e.target.value = null;
   }
 
   onChange(e: any) {
