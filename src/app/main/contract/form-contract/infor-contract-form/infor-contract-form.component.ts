@@ -513,12 +513,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
           if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
           || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
           || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
-            if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0 && isCheck) {
-              this.listFileAttach.push(file);
-            }
-
-            if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name && isCheck)) {
-              this.datasForm.fileAttachForm.push(file);
+            if(isCheck) {
+              if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
+                this.listFileAttach.push(file);
+              }
+  
+              if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
+                this.datasForm.fileAttachForm.push(file);
+              }
             }
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
