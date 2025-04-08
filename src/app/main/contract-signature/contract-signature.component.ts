@@ -136,6 +136,7 @@ export class ContractSignatureComponent implements OnInit {
   supplierID: any;
   signInfoPKIU: any = {};
   chooseContract: any = [];
+  isAllowFirstHandleEdit: boolean[] = [];
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -1654,6 +1655,7 @@ export class ContractSignatureComponent implements OnInit {
       let idContract: any = [];
       let fileC: any = [];
       let documentId: any = [];
+      this.isAllowFirstHandleEdit = [];
 
       //lấy field id được tích vào
       idSignMany = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].id);
@@ -1674,6 +1676,7 @@ export class ContractSignatureComponent implements OnInit {
           determineCoordination.recipients.forEach((item: any) => {
             if (item.id == recipientId[i]) {
               taxCode.push(item.fields[0].recipient.cardId);
+              this.isAllowFirstHandleEdit.push(determineCoordination.isAllowFirstHandleEdit || false);
             }
           });
         } catch (err) {
@@ -2330,7 +2333,14 @@ export class ContractSignatureComponent implements OnInit {
                   dataObjectSignature = await this.contractServiceV1
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
-                  let fieldsSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i]);
+                  let fieldsSignature;
+                  if (this.isAllowFirstHandleEdit[i]) {
+                    fieldsSignature = dataObjectSignature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.value && item.action_in_contract == false || item.type == 4 && item.recipient_id && item.value && item.action_in_contract == false);
+                  } else {
+                    fieldsSignature = dataObjectSignature.filter(
+                      (item: any) => item.type == 3 && item.recipient.id == recipientId[i]
+                    );
+                  }                  
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
 
                   try {
