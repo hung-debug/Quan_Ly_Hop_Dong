@@ -1654,6 +1654,7 @@ export class ContractSignatureComponent implements OnInit {
       let idContract: any = [];
       let fileC: any = [];
       let documentId: any = [];
+      let isAllowFirstHandleEdit: boolean[] = [];
 
       //lấy field id được tích vào
       idSignMany = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].id);
@@ -1674,6 +1675,7 @@ export class ContractSignatureComponent implements OnInit {
           determineCoordination.recipients.forEach((item: any) => {
             if (item.id == recipientId[i]) {
               taxCode.push(item.fields[0].recipient.cardId);
+              isAllowFirstHandleEdit.push(determineCoordination.isAllowFirstHandleEdit || false);
             }
           });
         } catch (err) {
@@ -1722,7 +1724,7 @@ export class ContractSignatureComponent implements OnInit {
         }
       }
 
-      this.signUsbTokenMany(fileC, idContract, recipientId, documentId, taxCode, idSignMany, result.mark);
+      this.signUsbTokenMany(fileC, idContract, recipientId, documentId, taxCode, idSignMany, result.mark, isAllowFirstHandleEdit);
     } else if (signId == 4) {
       //Ký nhiều hsm
       //Mở popup ký hsm
@@ -2233,7 +2235,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   //Ký usb token v1
-  async signTokenVersion1(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) {
+  async signTokenVersion1(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean, isAllowFirstHandleEdit: boolean[]) {
     //ky bang usb token
     let base64String: any = [];
 
@@ -2326,7 +2328,14 @@ export class ContractSignatureComponent implements OnInit {
                   dataObjectSignature = await this.contractServiceV1
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
-                  let fieldsSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i]);
+                  let fieldsSignature;
+                  if (isAllowFirstHandleEdit[i]) {
+                    fieldsSignature = dataObjectSignature;
+                  } else {
+                    fieldsSignature = dataObjectSignature.filter(
+                      (item: any) => item.type == 3 && item.recipient.id == recipientId[i]
+                    );
+                  }                  
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
 
                   try {
@@ -3234,7 +3243,7 @@ export class ContractSignatureComponent implements OnInit {
   // token v2 - fixing version =========================
 
 
-  async signUsbTokenMany(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) {
+  async signUsbTokenMany(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean, isAllowFirstHandleEdit: boolean[]) {
     let dataOrg: any
     try {
       dataOrg = await this.contractServiceV1.getDataNotifyOriganzation().toPromise();
@@ -3243,7 +3252,7 @@ export class ContractSignatureComponent implements OnInit {
       return this.toastService.showErrorHTMLWithTimeout("get.org.data.err","",3000)
     }
     if (dataOrg.usb_token_version == 1) {
-      this.signTokenVersion1(fileC, idContract, recipientId, documentId, taxCode, idSignMany, isMark);
+      this.signTokenVersion1(fileC, idContract, recipientId, documentId, taxCode, idSignMany, isMark, isAllowFirstHandleEdit);
     } else if (dataOrg.usb_token_version == 2) {
       this.signTokenVersion2(fileC, idContract, recipientId, documentId, taxCode, idSignMany, isMark);
     }
