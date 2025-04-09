@@ -85,7 +85,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   doSign() {
     //khong thuc hien ky eKYC tren web
-    if (this.sign.sign_unit == 'chu_ky_anh' && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
+    if (this.sign.sign_unit == 'chu_ky_anh' && ((this.sign?.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+    (this.sign?.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+    ((this.sign?.recipient?.phone == this.currentUser.phone || this.sign?.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && !this.view) {
       if(this.sign?.recipient?.sign_type.filter((p: any) => p.id == 5).length == 0){
         this.openPopupSignContract(1);
       }else{
@@ -93,7 +95,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       }
 
     } else if (this.sign.sign_unit == 'chu_ky_so'
-      && this.sign?.recipient?.email == this.currentUser.email && !this.view
+      && ((this.sign?.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+      (this.sign?.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+      ((this.sign?.recipient?.phone == this.currentUser.phone || this.sign?.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && !this.view
       && this.typeSignDigital && this.typeSignDigital == 3
     ) {
       // this.openPopupSignContract(3);
@@ -240,7 +244,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.sign.valueSign = this.contractService.removePeriodsFromCurrencyValue(this.sign.valueSign);
 
 
-    if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view || this.firstHandler) {
+    if ([2,3,4].includes(this.datas.roleContractReceived) && ((this.sign?.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+    (this.sign?.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+    ((this.sign?.recipient?.phone == this.currentUser.phone || this.sign?.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && 
+    !this.view || this.firstHandler) {
       this.checkShowEdit = !this.checkShowEdit;
       //this.sign.value = '';
       setTimeout(()=>{

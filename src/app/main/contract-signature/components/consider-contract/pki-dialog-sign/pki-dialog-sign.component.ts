@@ -63,7 +63,9 @@ export class PkiDialogSignComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
 
-      let ArrRecipients = response.recipients.filter((ele: any) => ele.email == this.currentUser.email);
+      let ArrRecipients = response.recipients.filter((ele: any) => (ele.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+      (ele.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+      ((ele.phone == this.currentUser.phone || ele.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT'));
 
 
       let ArrRecipientsNew = false

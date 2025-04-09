@@ -106,7 +106,9 @@ export class IndexComponent implements OnInit {
         let id_recipient_signature = null;
         for (const d of this.datas.is_data_contract.participants) {
           for (const q of d.recipients) {
-            if (q.email == this.currentUser.email && q.status == 1) {
+            if (((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+            ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && q.status == 1) {
               id_recipient_signature = q.id;
               break
             }

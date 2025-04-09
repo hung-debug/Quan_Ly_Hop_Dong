@@ -1485,7 +1485,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         signUpdate &&
         signUpdate.type == 2 &&
         this.datas.roleContractReceived == 3 &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+        ((signUpdate?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+        ((signUpdate?.recipient?.phone === this.currentUser.phone || signUpdate?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         const formData = {
@@ -1519,7 +1521,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     const signUpdate = this.isDataObjectSignature
       .filter(
         (item: any) =>
-          item?.recipient?.email === this.currentUser.email &&
+          ((item?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+          ((item?.recipient?.phone === this.currentUser.phone || item?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
           item?.recipient?.role === this.datas?.roleContractReceived
       )
       .map((item: any) => {
@@ -1605,7 +1609,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
       (item: any) =>
-        item?.recipient?.email === this.currentUser.email &&
+        ((item?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+        ((item?.recipient?.phone === this.currentUser.phone || item?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
         item?.recipient?.role === this.datas?.roleContractReceived &&
         item.required &&
         !item.value &&

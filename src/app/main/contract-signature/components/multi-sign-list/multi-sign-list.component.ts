@@ -254,7 +254,9 @@ export class MultiSignListComponent implements OnInit {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
       return this.datas.is_data_object_signature.filter(
         (item: any) =>
-          item.recipient ? (item?.recipient?.email === this.currentUser.email &&
+          item.recipient ? (((item?.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+        ((item?.recipient?.phone == this.currentUser.phone || item?.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
           item?.recipient?.role === this.datas?.roleContractReceived): []
       );
     } else {
