@@ -24,16 +24,7 @@ export class HsmDialogSignComponent implements OnInit {
   currentUser: any;
   taxCode: any;
   hsmSupplier: any;
-  suppliers: any[] = [
-    {
-      id: 'mobifone',
-      name: 'MobiFone'
-    },
-    {
-      id: 'icorp',
-      name: 'I-CA'
-    }
-  ];
+  suppliers: any[] = [];
   dataGetUserById: any;
   isHsmIcorp: boolean = false
   constructor(
@@ -56,7 +47,8 @@ export class HsmDialogSignComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+
+  async ngOnInit(): Promise<void> {
     this.datas = this.data;
     
     this.user = this.userService.getInforUser();
@@ -119,6 +111,15 @@ export class HsmDialogSignComponent implements OnInit {
           }
         }
       })
+    
+    let listSupplier = await this.contractService.getListSupplier(1).toPromise();
+    
+    if(listSupplier) {
+      this.suppliers = listSupplier.map((item: any) => ({
+        id: item.code,
+        name: item.supplierName
+      }));
+    }
   }
 
   onSupplierChange(event: any) {
