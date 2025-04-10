@@ -46,7 +46,14 @@ export class PkiDialogSignMultiComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.environment = environment
-    this.nl = networkList;
+    let listSupplier = await this.contractService.getListSupplier(2).toPromise();
+    if(listSupplier) {
+      this.nl = listSupplier.map((supplier: any) => ({
+        id: isNaN(Number(supplier.code)) ? supplier.code : Number(supplier.code),
+        name: supplier.supplierName
+      }));
+    }
+    //this.nl = networkList;
     this.datas = this.data;
     this.phoneNum = this.datas?.sign?.phone;
     this.networkCode = this.datas?.sign?.phone_tel;

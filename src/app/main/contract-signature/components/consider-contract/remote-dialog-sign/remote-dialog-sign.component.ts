@@ -26,7 +26,7 @@ export class RemoteDialogSignComponent implements OnInit {
   taxCode: any;
   mobile: boolean = false;
   phone: any;
-
+  suppliers: any[] = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -54,7 +54,14 @@ export class RemoteDialogSignComponent implements OnInit {
 
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    let listSupplier = await this.contractService.getListSupplier(3).toPromise();
+    if(listSupplier) {
+      this.suppliers = listSupplier.map((item: any) => ({
+        id: item.code,
+        name: item.supplierName
+      }));
+    }
     this.datas = this.data;
     this.user = this.userService.getInforUser();
 

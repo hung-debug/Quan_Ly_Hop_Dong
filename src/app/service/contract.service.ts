@@ -181,6 +181,7 @@ export class ContractService {
   mergeTimestampFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/merge-time-stampError`
   checkCurrentSigningUrl: any = `${environment.apiUrl}/api/v1/sign/check-process-is-sign`
   // token v2 fixing ===============================
+  listSuppliergUrl: any = `${environment.apiUrl}/api/v1/sign/get-supplier-by-type`
 
   token: any;
   customer_id: any;
@@ -2176,6 +2177,23 @@ export class ContractService {
       .post<any>(this.mergeTimestampFixingUrl, body, { headers: headers })
       .pipe();
   }
+
+  getListSupplier(type: number) {
+    this.getCurrentUser();
+    
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.token
+    });
+  
+    return this.http
+      .get<any>(this.listSuppliergUrl + '?typeId=' + type, {
+        headers: headers,
+      })
+      .pipe();
+  }
+  
+
   // tokenV2 fixing =======================================================
 
   checkCurrentSigning(recipientId: string) {

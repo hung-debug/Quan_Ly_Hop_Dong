@@ -45,8 +45,15 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.environment = environment
-    this.nl = networkList;
+    this.environment = environment;
+    let listSupplier = await this.contractService.getListSupplier(2).toPromise();
+    if(listSupplier) {
+      this.nl = listSupplier.map((supplier: any) => ({
+        id: isNaN(Number(supplier.code)) ? supplier.code : Number(supplier.code),
+        name: supplier.supplierName
+      }));
+    }
+    //this.nl = networkList;
     this.datas = this.data;
     let userId = this.userService.getAuthCurrentUser().id;
     const infoUser = await this.userService.getUserById(userId).toPromise();
