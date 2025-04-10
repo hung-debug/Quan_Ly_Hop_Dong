@@ -111,7 +111,9 @@ export class ConfirmInfoContractComponent implements OnInit {
     for (const d of this.datas.is_data_contract.participants) {
       for (const q of d.recipients) {
         if (q.email) {
-          if (q.email == this.currentUser.email && q.status == 1) {
+          if (((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+          ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && q.status == 1) {
             id_recipient_signature = q.id;
             break
           }
@@ -129,7 +131,9 @@ export class ConfirmInfoContractComponent implements OnInit {
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) {
           ArrRecipientsNew = true
           return
         }

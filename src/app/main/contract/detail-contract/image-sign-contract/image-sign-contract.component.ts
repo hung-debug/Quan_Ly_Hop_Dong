@@ -88,7 +88,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
 
   doEditText() {
-    if ([2,3].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
+    if ([2,3].includes(this.datas.roleContractReceived) && ((this.sign?.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+    (this.sign?.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+    ((this.sign?.recipient?.phone == this.currentUser.phone || this.sign?.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();

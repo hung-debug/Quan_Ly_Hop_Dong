@@ -2042,7 +2042,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       this.contractService.getAllInfoUser(stringEmitted).subscribe((res) => {
         let arr_all = res;
         let data = arr_all.map((p: any) => (
-          environment.flag == 'NB' ? {name: p.name, email: p.email, phone: p.phone} : {name: p.name, email: p.email}
+          environment.flag == 'NB' ? {name: p.name, email: p.email, phone: p.phone} : {name: p.name, email: p.email, phone: p.phone}
         ));
         if (action == 'view') {
           this.arrSearchNameView = data;

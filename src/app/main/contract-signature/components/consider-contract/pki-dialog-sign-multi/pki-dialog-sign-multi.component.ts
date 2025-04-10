@@ -109,7 +109,9 @@ export class PkiDialogSignMultiComponent implements OnInit {
         const contract = this.data.chooseContract.find((contract: any) => contract.id === recipientId);
 
         let response = await this.contractService.getDetermineCoordination(recipientId).toPromise();
-        let ArrRecipients = response.recipients.filter((ele: any) => ele.email == this.currentUser.email);
+        let ArrRecipients = response.recipients.filter((ele: any) => (ele.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (ele.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+        ((ele.phone == this.currentUser.phone || ele.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT'));
         let ArrRecipientsNew = false;
         ArrRecipients.forEach((item: any) => {
           if (item.sign_type[0].id == 3) {

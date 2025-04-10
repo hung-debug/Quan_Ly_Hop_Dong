@@ -97,13 +97,20 @@
                       [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
 
                     <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                      (focusin)="onFocusIn($event, index, 'view')" [(ngModel)]="d.name"
+                      (focusin)="onFocusIn($event, index, 'view')" [(ngModel)]="d.name" (ngxInputSearch)="doTheSearch($event, index, 'view')"
                       (focusout)="onFocusOut($event, d)">
                   </div>
                   <div class="search-name"
-                    *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0">
+                    *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0 && d.login_by === 'email'">
                     <button class="search-name-items" *ngFor="let t of this.arrSearchNameView"
                       (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})
+                    </button>
+                  </div>
+                  
+                  <div class="search-name"
+                  *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0 && d.login_by === 'phone'">
+                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameView"
+                      (click)="onSelectName(t, d)">{{t.name}} ({{t.phone}})
                     </button>
                   </div>
                 </div>
@@ -357,13 +364,20 @@
                       (focusout)="onFocusOut($event, d)">
 
                     <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                      (focusin)="onFocusIn($event, index, 'signature')" [(ngModel)]="d.name"
+                      (focusin)="onFocusIn($event, index, 'signature')" [(ngModel)]="d.name" (ngxInputSearch)="doTheSearch($event, index, 'signature')"
                       (focusout)="onFocusOut($event, d)">
                   </div>
                   <div class="search-name"
-                    *ngIf="this.arrSearch[index] && this.arrSearchNameSignature && arrSearchNameSignature.length > 0">
+                    *ngIf="this.arrSearch[index] && this.arrSearchNameSignature && arrSearchNameSignature.length > 0 && d.login_by === 'email'">
                     <button class="search-name-items" *ngFor="let t of this.arrSearchNameSignature"
                       (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})
+                    </button>
+                  </div>
+                  
+                  <div class="search-name"
+                  *ngIf="this.arrSearch[index] && this.arrSearchNameSignature && arrSearchNameSignature.length > 0 && d.login_by === 'phone'">
+                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameSignature"
+                      (click)="onSelectName(t, d)">{{t.name}} ({{t.phone}})
                     </button>
                   </div>
                 </div>

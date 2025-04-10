@@ -236,7 +236,9 @@ export class RemoteDialogSignComponent implements OnInit {
 
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
-          if (item.email === this.currentUser.email) {
+          if ((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) {
             ArrRecipientsNew = true
             return
           }

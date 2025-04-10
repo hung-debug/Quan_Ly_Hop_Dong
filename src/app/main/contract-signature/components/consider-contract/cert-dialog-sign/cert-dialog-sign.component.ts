@@ -150,8 +150,10 @@ export class CertDialogSignComponent implements OnInit {
     if (!this.data.id) {
       //trường hợp ký đơn
       for (const signUpdate of this.data.isDataObjectSignature) {
-        if (signUpdate?.recipient?.email === this.currentUser.email &&
-           signUpdate?.recipient?.status === 1) {
+        if (((signUpdate?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+        ((signUpdate?.recipient?.phone === this.currentUser.phone || signUpdate?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
+          this.dataCardId === signUpdate?.recipient?.cardId && signUpdate?.recipient?.status === 1) {
           this.dialogRef.close(this.selectedCert);
           return;
         }
@@ -169,8 +171,10 @@ export class CertDialogSignComponent implements OnInit {
     } else if (this.data.id == 1) {
       //trường hợp ký nhiều
       for (const signUpdate of this.data.isDataObjectSignature) {
-        if (signUpdate?.email === this.currentUser.email &&
-           signUpdate?.status === 1) {
+        if (((signUpdate?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
+        ((signUpdate?.phone === this.currentUser.phone || signUpdate?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
+          this.dataCardId === signUpdate?.cardId && signUpdate?.status === 1) {
           this.dialogRef.close(this.selectedCert);
           return;
         }
