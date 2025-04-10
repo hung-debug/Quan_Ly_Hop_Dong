@@ -126,6 +126,9 @@
             </div>
           </div>
         </div>
+
+        <div class="circle-button" (click)="openWorkspace()">☰</div>
+
         <div ngbDropdown class="d-inline-block">
           <div class="social-icons" ngbDropdownToggle>
             <span class="user_login"></span>
@@ -225,3 +228,11 @@
     </div> -->
   </main>
 </div>
+
+
+<div class="overlay1" [class.active]="isSidebarOpen" (click)="closeWorkspace()"></div>
+
+<div class="sidebar-workspace" [class.open]="isSidebarOpen">
+  <div class="close-btn" (click)="closeWorkspace()">×</div>
+</div>
+

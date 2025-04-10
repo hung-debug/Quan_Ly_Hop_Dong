@@ -42,6 +42,7 @@ export class MainComponent implements OnInit {
   isMessageNotificationSet = false;
   logoWeb: string;
   isBonBon: boolean = false;
+  isSidebarOpen = false;
   @ViewChild('scrollingText', { static: false }) scrollingTextElement: ElementRef<any>;
   constructor(private router: Router,
               private appService: AppService,
@@ -400,4 +401,13 @@ export class MainComponent implements OnInit {
     sessionStorage.setItem('lang', lang);
   }
 
+  openWorkspace() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeWorkspace() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    document.body.style.overflow = '';
+  }
 }
