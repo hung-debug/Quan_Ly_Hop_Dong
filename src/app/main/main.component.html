@@ -128,7 +128,7 @@
         </div>
 
         <div ngbDropdown class="d-inline-block">
-          <div class="social-icons" style="margin-right: 0px !important;" ngbDropdownToggle>
+          <div class="social-icons" [ngStyle]="flag ? {'margin-right': '0px'} : {}" ngbDropdownToggle>
             <span class="user_login"></span>
             <div style="display: flex; flex-direction: column;">
               <div class="label" style="color: #001A4D;">{{nameCurrentUser}}</div>
@@ -204,7 +204,7 @@
           </div>
         </div>
 
-        <div class="social-icons" (click)="openWorkspace()">
+        <div *ngIf = "this.flag" class="social-icons" (click)="openWorkspace()">
           <img src="assets/img/Variant2.svg" style="height: 100%;">
         </div>
       </div>
@@ -233,7 +233,7 @@
 <div class="overlay1" [class.active]="isSidebarOpen" (click)="closeWorkspace()"></div>
 
 <div class="sidebar-workspace" [class.open]="isSidebarOpen">
-  <div class="title-sidebar-workspace">Ứng dụng của tôi</div>
+  <div class="title-sidebar-workspace">ỨNG DỤNG CỦA TÔI</div>
 
   <div class="workspace-container">
     <div *ngFor="let workspace of listWorkSpace" class="workspace-item">
