@@ -146,6 +146,7 @@ import { SystemConfigComponent } from './main/system-config/system-config.compon
 import { DeleteConfigDialogComponent } from './main/system-config/delete-config-dialog/delete-config-dialog.component';
 import { ImageCropperComponentv2 } from './main/user/image-cropper/image-cropperv2.component';
 import { ExportStatusComponent } from './main/report/export-status/export-status.component';
+import { ClickOutsideDirective } from './directives/click-outside.directive';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -291,7 +292,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     SystemConfigComponent,
     DeleteConfigDialogComponent,
     ImageCropperComponentv2,
-    ExportStatusComponent
+    ExportStatusComponent,
+    ClickOutsideDirective
   ],
   imports: [
     PaginatorModule,
