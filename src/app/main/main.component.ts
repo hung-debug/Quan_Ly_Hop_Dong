@@ -42,6 +42,8 @@ export class MainComponent implements OnInit {
   isMessageNotificationSet = false;
   logoWeb: string;
   isBonBon: boolean = false;
+  isSidebarOpen = false;
+  listWorkSpace: any[] = [];
   @ViewChild('scrollingText', { static: false }) scrollingTextElement: ElementRef<any>;
   constructor(private router: Router,
               private appService: AppService,
@@ -105,6 +107,12 @@ export class MainComponent implements OnInit {
 
   lang: any;
   async ngOnInit() {
+    try{
+      let listWorkSpace = await this.dashboardService.getWorkSpace().toPromise();
+      this.listWorkSpace = listWorkSpace;
+    } catch(err) {
+      console.log(err)
+    }
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
     let url = environment.apiUrl.replace("/service", "");
@@ -400,4 +408,29 @@ export class MainComponent implements OnInit {
     sessionStorage.setItem('lang', lang);
   }
 
+  openWorkspace() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeWorkspace() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    document.body.style.overflow = '';
+  }
+
+  toggleDropdown(workspace: any) {
+    this.listWorkSpace.forEach(ws => ws.showDropdown = false);
+    workspace.showDropdown = !workspace.showDropdown;
+  }
+  
+  openDomain(domain: string, event: MouseEvent, workspace: any) {
+    event.stopPropagation();
+    window.open(domain, '_blank');
+    workspace.showDropdown = false;
+  }
+  
+  closeDropdown(workspace: any) {
+    workspace.showDropdown = false;
+  }
+  
 }
