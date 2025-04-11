@@ -35,7 +35,8 @@ export class HsmDialogSignComponent implements OnInit {
     }
   ];
   dataGetUserById: any;
-  isHsmIcorp: boolean = false
+  isHsmIcorp: boolean = false;
+  typeUser: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -54,6 +55,10 @@ export class HsmDialogSignComponent implements OnInit {
       pass2: this.fbd.control("", [Validators.required]),
       uuid: this.fbd.control("", [Validators.required]),
     });
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   ngOnInit(): void {
@@ -213,9 +218,10 @@ export class HsmDialogSignComponent implements OnInit {
   
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
-          if ((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) {
+          if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (item.email === this.currentUser.email && this.typeUser === 1)) {
             ArrRecipientsNew = true
             return
           }

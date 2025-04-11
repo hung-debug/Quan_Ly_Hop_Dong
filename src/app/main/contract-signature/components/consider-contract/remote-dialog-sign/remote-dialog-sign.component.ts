@@ -26,6 +26,7 @@ export class RemoteDialogSignComponent implements OnInit {
   taxCode: any;
   mobile: boolean = false;
   phone: any;
+  typeUser: any
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -50,6 +51,10 @@ export class RemoteDialogSignComponent implements OnInit {
       ]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
 
@@ -229,9 +234,10 @@ export class RemoteDialogSignComponent implements OnInit {
 
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
-          if ((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) {
+          if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (item.email === this.currentUser.email && this.typeUser === 1)) {
             ArrRecipientsNew = true
             return
           }

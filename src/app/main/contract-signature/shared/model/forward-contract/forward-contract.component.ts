@@ -36,7 +36,9 @@ export class ForwardContractComponent implements OnInit {
   dropdownSignTypeSettings: any = {};
   dataSign: any;
   signTypeList: Array<any> = type_signature;
-  currentSignType: any = null
+  currentSignType: any = null;
+  typeUser: any;
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -49,7 +51,9 @@ export class ForwardContractComponent implements OnInit {
     private translate: TranslateService,
     private customerAnalysis: CustomerAnalysis
   ) {
-   
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
 
@@ -323,9 +327,10 @@ export class ForwardContractComponent implements OnInit {
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if ((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }
@@ -443,9 +448,10 @@ export class ForwardContractComponent implements OnInit {
         let id_recipient_signature = null;
         for (const d of this.datas.dataContract.is_data_contract.participants) {
           for (const q of d.recipients) {
-            if (((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-            (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-            ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && q.status == 1) {
+            if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
               id_recipient_signature = q.id;
               break
             }
