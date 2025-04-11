@@ -108,8 +108,33 @@ export class MainComponent implements OnInit {
   lang: any;
   async ngOnInit() {
     try{
+      this.listWorkSpace = [
+        {
+          "id": 0,
+          "clientId": "TTCNTT-WORK-SPACE",
+          "clientName": "Workspace",
+          "icon": "../../assets/img/icon-account.png",
+          "note": "EContract Workspace",
+          "url": "https://auth-sso.mobifone.vn/",
+          "createdAt": null,
+          "listAdmin": null,
+          "available": true,
+          "tenantsList": [
+              {
+                  "id": null,
+                  "clientId": "TTCNTT-WORK-SPACE",
+                  "tenantCode": "TTCNTT-WORK-SPACE-TENANT",
+                  "domain": "https://auth-sso.mobifone.vn/",
+                  "admin": "75f4a3cb-6ea7-490a-9c9d-e970634c71e2"
+              }
+            ]
+        }
+      ];
       let listWorkSpace = await this.dashboardService.getWorkSpace().toPromise();
-      this.listWorkSpace = listWorkSpace;
+      if(listWorkSpace.length) {
+        listWorkSpace = listWorkSpace.filter((item: any) => item.clientId !== environment.SSO_CLIENTID);
+        this.listWorkSpace = this.listWorkSpace.concat(listWorkSpace);
+      }
     } catch(err) {
       console.log(err)
     }

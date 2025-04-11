@@ -244,7 +244,8 @@
         [href]="workspace.tenantsList[0].domain"
         target="_blank"
         class="workspace-icon">
-        <img [src]="'data:image/png;base64,' + workspace.icon" alt="icon" width="100%" height="100%" />
+        <img *ngIf="workspace.available" [src]="workspace.icon" alt="icon" width="32px" height="32px" />
+        <img *ngIf="!workspace.available" [src]="'data:image/png;base64,' + workspace.icon" alt="icon" width="100%" height="100%" />
       </a>
   
       <!-- Nếu có nhiều hơn 1 domain thì mở dropdown -->
