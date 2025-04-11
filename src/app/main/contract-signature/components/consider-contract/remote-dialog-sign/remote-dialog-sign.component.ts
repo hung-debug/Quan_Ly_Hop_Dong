@@ -26,6 +26,8 @@ export class RemoteDialogSignComponent implements OnInit {
   taxCode: any;
   mobile: boolean = false;
   phone: any;
+  typeUser: any
+
   suppliers: any[] = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -50,6 +52,10 @@ export class RemoteDialogSignComponent implements OnInit {
       ]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
+
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
 
@@ -80,7 +86,7 @@ export class RemoteDialogSignComponent implements OnInit {
       ]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
-    
+
       // Cập nhật Validators lần đầu tiên
     this.updateValidators();
 
@@ -88,7 +94,7 @@ export class RemoteDialogSignComponent implements OnInit {
     this.myForm.get('supplier')?.valueChanges.subscribe(() => {
       this.updateValidators();
     });
-  
+
     if (this.user.organization_id != 0) {
       // this.userService.getUserById(this.id).subscribe((response) => {
       //   this.myForm = this.fbd.group({
@@ -142,10 +148,10 @@ export class RemoteDialogSignComponent implements OnInit {
 
     this.getDeviceApp()
   }
-  
+
   updateValidators() {
     const supplier = this.myForm.get('supplier')?.value;
-  
+
     if (supplier === '1' || supplier === '3') { // VNPT SmartCA hoặc CA2
       this.myForm.get('taxCode')?.setValidators([Validators.required, Validators.pattern(parttern.cardid)]);
       this.myForm.get('phone')?.clearValidators(); // Xóa required của phone
@@ -153,12 +159,12 @@ export class RemoteDialogSignComponent implements OnInit {
       this.myForm.get('phone')?.setValidators([Validators.required, Validators.pattern(parttern.phone)]);
       this.myForm.get('taxCode')?.clearValidators(); // Xóa required của taxCode
     }
-  
+
     // Cập nhật lại trạng thái form
     this.myForm.get('taxCode')?.updateValueAndValidity();
     this.myForm.get('phone')?.updateValueAndValidity();
   }
-  
+
   // Hàm kiểm tra giá trị của "supplier"
   isMobiFoneCA(): boolean {
     return this.myForm.get('supplier')?.value === '2';
@@ -236,9 +242,10 @@ export class RemoteDialogSignComponent implements OnInit {
 
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
-          if ((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) {
+          if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') ||
+          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (item.email === this.currentUser.email && this.typeUser === 1)) {
             ArrRecipientsNew = true
             return
           }

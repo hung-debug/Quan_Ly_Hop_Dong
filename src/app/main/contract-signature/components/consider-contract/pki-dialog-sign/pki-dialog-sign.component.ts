@@ -33,6 +33,7 @@ export class PkiDialogSignComponent implements OnInit {
   isErrorInvalid = false;
   isErrorNetwork = false;
   patternPhone = /^[0-9]*$/;
+  typeUser : any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -42,6 +43,9 @@ export class PkiDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
   ) {
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   async ngOnInit(): Promise<void> {
@@ -70,9 +74,10 @@ export class PkiDialogSignComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
 
-      let ArrRecipients = response.recipients.filter((ele: any) => (ele.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-      (ele.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-      ((ele.phone == this.currentUser.phone || ele.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT'));
+      let ArrRecipients = response.recipients.filter((ele: any) => (((ele.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+      (ele.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((ele.phone == this.currentUser.phone || ele.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (ele.email == this.currentUser.email && this.typeUser === 1));
 
 
       let ArrRecipientsNew = false

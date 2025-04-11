@@ -165,6 +165,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   page1: boolean = false;
   pageLast: boolean = true;
   enviroment: any = "";
+  typeUser: any;
 
   pageRendering: any;
   pageNumPending: any = null;
@@ -201,6 +202,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   async ngOnInit(): Promise<void> {
@@ -1485,9 +1490,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         signUpdate &&
         signUpdate.type == 2 &&
         this.datas.roleContractReceived == 3 &&
-        ((signUpdate?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-        (signUpdate?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-        ((signUpdate?.recipient?.phone === this.currentUser.phone || signUpdate?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
+        ((((signUpdate?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((signUpdate?.recipient?.phone === this.currentUser.phone || signUpdate?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT'))&&this.typeUser === 0) || 
+        (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         const formData = {
@@ -1521,9 +1527,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     const signUpdate = this.isDataObjectSignature
       .filter(
         (item: any) =>
-          ((item?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-          (item?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-          ((item?.recipient?.phone === this.currentUser.phone || item?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
+          ((((item?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((item?.recipient?.phone === this.currentUser.phone || item?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           item?.recipient?.role === this.datas?.roleContractReceived
       )
       .map((item: any) => {
@@ -1609,9 +1616,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
       (item: any) =>
-        ((item?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-        (item?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-        ((item?.recipient?.phone === this.currentUser.phone || item?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) &&
+        ((((item?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item?.recipient?.phone === this.currentUser.phone || item?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         item?.recipient?.role === this.datas?.roleContractReceived &&
         item.required &&
         !item.value &&

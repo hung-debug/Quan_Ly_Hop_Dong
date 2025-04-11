@@ -20,10 +20,15 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   imageSignConfirm: string;
   currentUser: any;
   value: string;
+  typeUser: any;
   constructor(
     private dialog: MatDialog,
 
-  ) { }
+  ) { 
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
+  }
 
   ngOnInit(): void {
     
@@ -96,9 +101,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
 
   doEditText() {
-    if ([2,3].includes(this.datas.roleContractReceived) && ((this.sign?.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-    (this.sign?.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-    ((this.sign?.recipient?.phone == this.currentUser.phone || this.sign?.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && !this.view) {
+    if ([2,3].includes(this.datas.roleContractReceived) && ((((this.sign?.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+    (this.sign?.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+    ((this.sign?.recipient?.phone == this.currentUser.phone || this.sign?.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+    (this.sign?.recipient?.email == this.currentUser.email && this.typeUser === 1)) && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();

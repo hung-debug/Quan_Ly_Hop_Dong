@@ -24,6 +24,7 @@ export class IndexComponent implements OnInit {
   datas: any = {};
   data_contract: any;
   currentUser: any;
+  typeUser: any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -32,7 +33,11 @@ export class IndexComponent implements OnInit {
     private router: Router,
     private spinner: NgxSpinnerService,
 
-  ) { }
+  ) { 
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
+  }
 
   ngOnInit(): void {
     // 
@@ -106,9 +111,10 @@ export class IndexComponent implements OnInit {
         let id_recipient_signature = null;
         for (const d of this.datas.is_data_contract.participants) {
           for (const q of d.recipients) {
-            if (((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
-            (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'PHONE') ||
-            ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && q.status == 1) {
+            if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
               id_recipient_signature = q.id;
               break
             }
