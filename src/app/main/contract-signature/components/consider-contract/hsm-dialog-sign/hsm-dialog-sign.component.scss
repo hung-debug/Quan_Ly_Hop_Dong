@@ -169,3 +169,16 @@ input:-webkit-autofill:focus {
 input[data-autocompleted] {
   background-color: transparent !important;
 }
+::ng-deep .custom-dropdown-panel {
+  max-height: 107px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+::ng-deep .custom-dropdown-panel .p-dropdown-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px;
+  line-height: 1.5;
+}
