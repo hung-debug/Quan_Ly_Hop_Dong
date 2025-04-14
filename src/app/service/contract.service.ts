@@ -1384,12 +1384,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const supplierMap: { [key: number]: string } = {
-        1: 'vnpt',
-        2: 'MobiFoneCA',
-        3: 'nacencomm'
-      };
-    const supplier = supplierMap[supplierID] || 'vnpt';
+    const supplier = supplierID || 'vnpt';
 
     const body = JSON.stringify({
       userCode: datas.cert_id,
