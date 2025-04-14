@@ -145,7 +145,7 @@ export class ConsiderContractComponent
   allFileAttachment: any[];
   allRelateToContract: any[];
   firstHandler: boolean = false;
-  supplierID: number;
+  supplierID: any;
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
     { item_id: 2, item_text: 'Ký số bằng USB token' },
@@ -3463,7 +3463,7 @@ export class ConsiderContractComponent
   }
 
   otp: boolean = false;
-  async signContractSubmit(supplierID:any=!1) {
+  async signContractSubmit(supplierID:any =!'vnpt') {
     this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
@@ -3547,7 +3547,7 @@ export class ConsiderContractComponent
     }
   }
 
-  async signContract(notContainSignImage?: boolean, supplierID =! 1) {
+  async signContract(notContainSignImage?: boolean, supplierID =! 'vnpt') {
     const signUpdateTemp = JSON.parse(
       JSON.stringify(this.isDataObjectSignature)
     );
@@ -4124,7 +4124,7 @@ export class ConsiderContractComponent
   }
 
   filePath: any = '';
-  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!1) {
+  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!'vnpt') {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(this.firstHandler) {
@@ -4438,7 +4438,7 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        if(supplierID == 1 || supplierID == 3){
+        if(supplierID == 'vnpt' || supplierID == 'mobiCA'){
           this.remoteDialogSuccessOpen(supplierID).then(result => {
             // console.log("statusSign",this.statusSign);
             if (result.isDismissed) {
@@ -4447,7 +4447,7 @@ export class ConsiderContractComponent
               ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
             }
           })
-        }else if(supplierID == 2){
+        }else if(supplierID == 'MobiFoneCA'){
           this.router.navigate([
             'main/form-contract/detail/' + this.idContract,
           ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
@@ -5623,13 +5623,13 @@ export class ConsiderContractComponent
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
     switch (supplierID) {
-      case "1":
+      case "vnpt":
         appName = "VNPT SmartCA";
         break;
-      case "2":
-        appName = "MobiCA"; // Hoặc tên app chính xác của Nacencomm
+      case "MobiFoneCA":
+        appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
         break;
-      case "3":
+      case "mobiCA":
         appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
         break;
       default:
@@ -5826,11 +5826,11 @@ export class ConsiderContractComponent
         } else if (typesign == 7) {
           eventName = 'kyUSBtokenBCY'
         } else if (typesign == 8) {
-          if(this.supplierID == 1) {
+          if(this.supplierID == 'vnpt') {
             eventName = 'kyRS_VNPTSmartCA'
-          } else if (this.supplierID == 2) {
+          } else if (this.supplierID == 'MobiFoneCA') {
             eventName = 'kyRS_MobifoneCA'
-          } else if (this.supplierID == 3){
+          } else if (this.supplierID == 'mobiCA'){
             eventName = 'kyRS_Nacencomm'
           } else {
              eventName = 'kyRS'
