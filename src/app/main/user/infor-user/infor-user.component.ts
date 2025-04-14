@@ -13,6 +13,7 @@ import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { error } from 'console';
 import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component';
+import { ContractService } from 'src/app/service/contract.service';
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -88,7 +89,8 @@ export class InforUserComponent implements OnInit {
     public router: Router,
     private roleService: RoleService,
     private uploadService:UploadService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private contractService: ContractService,
     ) {
       this.addInforForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -132,8 +134,29 @@ export class InforUserComponent implements OnInit {
       this.roleList = data.entities;
     });
 
-    this.networkList = networkList;
-    this.supplierList = supplier;
+    try {
+      let listSupplierPki = await this.contractService.getListSupplier(2).toPromise();
+      if(listSupplierPki) {
+        this.networkList = listSupplierPki.map((supplier: any) => ({
+          id: supplier.pkiIndex,
+          name: supplier.supplierName,
+          code: supplier.code
+        }));
+        this.networkList.sort((a, b) => a.id - b.id);
+      }
+
+      let listSupplierHsm = await this.contractService.getListSupplier(1).toPromise();
+      if(listSupplierHsm) {
+        this.supplierList = listSupplierHsm.map((item: any) => ({
+          id: item.code,
+          name: item.supplierName
+        }));
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
+    //this.networkList = networkList;
+    //this.supplierList = supplier;
     this.user = this.userService.getInforUser();
     this.appService.setTitle('user.information');
     this.appService.setSubTitle('');
@@ -188,7 +211,7 @@ export class InforUserComponent implements OnInit {
 
         this.addKpiForm = this.fbd.group({
           phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-          networkKpi: data.phone_tel == 3 ? 'bcy': data.phone_tel,
+          networkKpi: data.phone_tel,
           is_show_phone_pki: data.is_show_phone_pki, 
         });
         this.isHsmIcorp = data.hsm_supplier === "icorp";
@@ -500,7 +523,7 @@ export class InforUserComponent implements OnInit {
       stampImage: [],
 
       phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi == 'bcy' ? 3 : this.addKpiForm.value.networkKpi,
+      networkKpi: this.addKpiForm.value.networkKpi,
       is_show_phone_pki: this.addKpiForm.value.is_show_phone_pki,
       hsm_supplier: this.addHsmForm.value.supplier,
       uuid: this.addHsmForm.value.uuid,
