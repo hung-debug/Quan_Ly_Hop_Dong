@@ -404,7 +404,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       }
       
       const checkEmail = await this.userService.getUserByEmail(data.email).toPromise();
-      if(checkEmail?.id){
+      if(checkEmail?.id == 0){
         this.userService.updateUser(data).subscribe(
           dataOut => {
   
@@ -425,7 +425,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   
             this.spinner.hide();
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại1', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
             this.spinner.hide();
           }
         )

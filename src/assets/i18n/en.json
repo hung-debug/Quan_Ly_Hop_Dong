@@ -756,7 +756,7 @@
   "update.infor.certificate": "Update information digital certificate server",
   "sign_by_cert":"Sign by certificate server",
   "choice": "Choice",
-  "unit.email.name": "Email/name",
+  "unit.email.name": "Email/name/phone",
   "error.org.required":"Organization is required",
   "multi.sign.warning": "The system supports signing up to 50 contracts/ signing time",
   "expire.time.contract.notif":"Document has expired",

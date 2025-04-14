@@ -770,7 +770,7 @@
   "sign_by_cert":"Ký bằng chứng thư số server",
   "choice": "Lựa chọn",
   "signer":"Người ký",
-  "unit.email.name": "Địa chỉ email/Họ tên",
+  "unit.email.name": "Địa chỉ email/Họ tên/Số điện thoại",
   "error.org.required":"Tổ chức không được để trống",
   "sign.multi.success":"Ký nhiều tài liệu thành công",
   "multi.sign.warning": "Hệ thống hỗ trợ ký tối đa 50 tài liệu/ 1 lần ký",
