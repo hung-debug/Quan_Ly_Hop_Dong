@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" style="overflow: hidden;">
   <div style="text-align: center; font-weight: bold">
     <h3 class="title-popup">{{this.datas.title}}</h3>
   </div>
@@ -28,7 +28,7 @@
         <img src="../../assets/img/global.svg" class="input-img" />
 
               <p-dropdown
-                panelStyleClass="font" class="pki-dialog"
+                panelStyleClass="custom-dropdown-panel font" class="pki-dialog"
                 [options]="nl"
                 [(ngModel)]="networkCode"
                 optionLabel="name"
