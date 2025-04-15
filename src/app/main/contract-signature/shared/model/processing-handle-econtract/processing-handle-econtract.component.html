@@ -4,7 +4,8 @@
         <div style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
             <div class="col-md-6" style="flex-direction: column;text-align: left;">
                 <span>{{this.personCreate}}</span>&nbsp;
-                <span style="color: #8B8B8B">({{this.emailCreate}})</span>
+                <span *ngIf="this.currentUser.loginType != 'SDT'" style="color: #8B8B8B">({{this.emailCreate}})</span>
+                <span *ngIf="this.currentUser.loginType == 'SDT'" style="color: #8B8B8B">({{this.phoneCreate}})</span>
             </div>
             <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
                 <span style="color: '#106DB6'">{{'orginator' | translate}}</span>

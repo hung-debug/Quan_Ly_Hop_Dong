@@ -55,6 +55,7 @@ export class InforUserComponent implements OnInit {
   imgSignPathMark: any;
 
   phoneOld:any;
+  currentUser: any;
 
   organizationName:any;
   roleName:any;
@@ -120,6 +121,9 @@ export class InforUserComponent implements OnInit {
           ),
         password1Hsm: null
       });
+      
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+
 
  }
 
@@ -424,7 +428,7 @@ export class InforUserComponent implements OnInit {
     }
     //neu thay doi so dien thoai thi can check lai
     if(data.phone != this.phoneOld){
-      this.userService.checkPhoneUser(data.phone).subscribe(
+      this.userService.checkPhoneUser(data.phone, this.currentUser.loginType).subscribe(
         dataByPhone => {
           if(dataByPhone.code == '00'){
 

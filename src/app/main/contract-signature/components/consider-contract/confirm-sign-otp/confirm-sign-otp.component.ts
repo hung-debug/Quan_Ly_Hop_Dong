@@ -44,6 +44,7 @@ export class ConfirmSignOtpComponent implements OnInit {
   userOtp:any;
   smsContractUse: any;
   smsContractBuy: any;
+  typeUser: any;
 
   @Output() confirmOtpForm = new EventEmitter();
 
@@ -64,7 +65,11 @@ export class ConfirmSignOtpComponent implements OnInit {
     private timeService: TimeService,
     public translate: TranslateService,
     private customerAnalysis: CustomerAnalysis
-  ) { }
+  ) {
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
+   }
 
 
 
@@ -237,7 +242,10 @@ export class ConfirmSignOtpComponent implements OnInit {
       for (const signUpdate of this.datas.is_data_object_signature) {
 
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
-          && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+          && ((((signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+        ((signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone || signUpdate?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1))
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
 
@@ -258,7 +266,10 @@ export class ConfirmSignOtpComponent implements OnInit {
     } else {
       for (const signUpdate of this.datas.is_data_object_signature) {
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
-          && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+          && ((((signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+        ((signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone || signUpdate?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1))
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
           const formData = {
@@ -315,7 +326,11 @@ export class ConfirmSignOtpComponent implements OnInit {
     //neu khong chua chu ky anh
     if (notContainSignImage) {
       signUpdatePayload = signUpdateTemp.filter(
-        (item: any) => item?.recipient?.email === this.datasOtp.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        (item: any) => ((((item?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+        ((item?.recipient?.phone === this.datasOtp.currentUser.phone || item?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (item?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1)) 
+        && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
           return {
             id: item.id,
@@ -345,7 +360,11 @@ export class ConfirmSignOtpComponent implements OnInit {
 
 
       signUpdatePayload = signUpdateTemp.filter(
-        (item: any) => item?.recipient?.email === this.datasOtp.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        (item: any) => ((((item?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+        ((item?.recipient?.phone === this.datasOtp.currentUser.phone || item?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (item?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1)) 
+        && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
           return {
             otp: this.addForm.value.otp,
@@ -376,7 +395,10 @@ export class ConfirmSignOtpComponent implements OnInit {
     let typeSignDigital = null;
     for (const signUpdate of this.datas.is_data_object_signature) {
       if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
-        && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+        && ((((signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+      (signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+      ((signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone || signUpdate?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1))
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         if (signUpdate.recipient?.sign_type) {

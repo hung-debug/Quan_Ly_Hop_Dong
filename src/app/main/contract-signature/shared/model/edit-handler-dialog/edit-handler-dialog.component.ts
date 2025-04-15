@@ -41,7 +41,7 @@ export class EditHandlerComponent implements OnInit {
   phone: string;
   login_by: any;
   status: any;
-  isCheckRadio = this.data.login_by === "phone" ? false : true;
+  isCheckRadio = this.data.response.login_by === "phone" ? false : true;
   is_handler: any;
   name: any;
   recipientId: any;
@@ -89,7 +89,7 @@ export class EditHandlerComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {  
+  ngOnInit(): void { 
     if (environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {
@@ -102,20 +102,20 @@ export class EditHandlerComponent implements OnInit {
       this.signTypeList = type_signature;
     }
 
-    this.name = this.data.name;
-    this.login_by = this.data.login_by;
+    this.name = this.data.response.name;
+    this.login_by = this.data.response.login_by;
     // voi case email duoc luu theo so phone thi khoi tao se clear rong
-    this.email = this.data.email !== this.data.phone ? this.data.email : "";
-    this.phone = this.data.phone;
-    this.sign_type = this.data.sign_type[0]?.name
-    this.id_sign_type = this.data.sign_type[0]?.id
-    this.card_id = this.data.card_id;
-    this.id = this.data.id;
-    this.role = this.data.role;
-    this.status = this.data.status;
-    this.recipientId = this.data.id;
-    this.user_in_organization = this.data.user_in_organization;
-    // this.contractid = this.data.is_data_contract.id;
+    this.email = this.data.response.email !== this.data.response.phone ? this.data.response.email : "";
+    this.phone = this.data.response.phone;
+    this.sign_type = this.data.response.sign_type[0]?.name
+    this.id_sign_type = this.data.response.sign_type[0]?.id
+    this.card_id = this.data.response.card_id;
+    this.id = this.data.response.id;
+    this.role = this.data.response.role;
+    this.status = this.data.response.status;
+    this.recipientId = this.data.response.id;
+    this.user_in_organization = this.data.response.user_in_organization;
+    // this.contractid = this.data.response.is_data_contract.id;
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -174,7 +174,7 @@ export class EditHandlerComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if(this.data.sign_type[0]?.id != 3 && this.dataSign[0]?.id == 3 && this.fieldsUpdate.length > 15) {
+    if(this.data.response.sign_type[0]?.id != 3 && this.dataSign[0]?.id == 3 && this.fieldsUpdate.length > 15) {
       this.toastService.showErrorHTMLWithTimeout(this.translate.instant('no.update.assign'), "", 3000);
       return; 
     }
@@ -183,7 +183,7 @@ export class EditHandlerComponent implements OnInit {
     const login_by = this.isCheckRadio ? "email" : "phone"
     this.spinner.show();
     let dataUpdate = {
-      ...this.data,
+      ...this.data.response,
       name: this.name,
       email: login_by === 'email' ? this.email.toLowerCase() : login_by === 'phone' ? this.phone : '',
       phone: this.phone,
@@ -195,11 +195,11 @@ export class EditHandlerComponent implements OnInit {
     }; 
 
     if (this.name !== "") {
-      if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
+      if (JSON.stringify(this.data.response) === JSON.stringify(dataUpdate)) {
         this.spinner.hide();
         return;
       }
-      this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
+      this.contractService.updateInfoPersonProcess(dataUpdate, this.data.response.id, this.data.contract_id).subscribe(
         (res: any) => {
           this.spinner.hide();
           if (!res.success) {
@@ -224,9 +224,9 @@ export class EditHandlerComponent implements OnInit {
             let dataOrg : any = ""
             this.contractService.viewFlowContract(this.data.contract_id).subscribe(response =>{
               response.recipients.forEach((element: any) => {     
-                if(element.id == this.data.id){
+                if(element.id == this.data.response.id){
                  dataOrg = element.user_in_organization
-                 dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1, user_in_organization: dataOrg }
+                 dataUpdate = { ...dataUpdate, "change_num": this.data.response.change_num + 1, user_in_organization: dataOrg }
                  this.dialogRef.close(dataUpdate);
                 }
               })
@@ -255,7 +255,7 @@ export class EditHandlerComponent implements OnInit {
     if ((this.id_sign_type === 5 || this.id_sign_type === 8)) {
       return this.validateCardPassport();
     }
-    if (this.dataSign.length == 0 && this.data.role != 2 && this.data.role != 1) {
+    if (this.dataSign.length == 0 && this.data.response.role != 2 && this.data.response.role != 1) {
       this.toastService.showErrorHTMLWithTimeout("Loại ký không được để trống!","",3000)
       return false
     }
@@ -281,6 +281,12 @@ export class EditHandlerComponent implements OnInit {
       this.errorPhone = "error.phone.required";
       return false;
     }
+    this.data.arrProcessHandle.forEach((item: any) =>{
+      if(testInput == item.phone){
+        this.errorPhone = "error.phone.exists";
+        return false;
+      }
+    })
     return true;
   }
   validateCardId() {
@@ -484,8 +490,8 @@ export class EditHandlerComponent implements OnInit {
         }
       }) 
     })
-    this.dataSign = this.data.sign_type
-    let currentSignType = this.data.sign_type[0]
+    this.dataSign = this.data.response.sign_type
+    let currentSignType = this.data.response.sign_type[0]
     if(currentSignType?.id == 2 || currentSignType?.id == 3 || currentSignType?.id == 4 || currentSignType?.id == 6 || currentSignType?.id == 7 || currentSignType?.id == 8) {
       this.signTypeList = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8);
     } else if(currentSignType?.id == 1 ||  currentSignType?.id == 5) {
@@ -552,7 +558,7 @@ export class EditHandlerComponent implements OnInit {
 
   checkContractTextFieldsSwalfire() {
     return Swal.fire({
-      title: `Người ký <b>${this.data.name}</b> đang có ô text/số tài liệu cần xử lý, bạn có chắc muốn chuyển sang hình thức ký <b>KHÔNG</b> hỗ trợ <b>nhập ô text/số tài liệu</b> không?`,
+      title: `Người ký <b>${this.data.response.name}</b> đang có ô text/số tài liệu cần xử lý, bạn có chắc muốn chuyển sang hình thức ký <b>KHÔNG</b> hỗ trợ <b>nhập ô text/số tài liệu</b> không?`,
       icon: 'warning',
       showCancelButton: false,
       confirmButtonColor: '#3085d6',

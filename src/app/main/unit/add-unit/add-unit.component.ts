@@ -25,7 +25,7 @@ export class AddUnitComponent implements OnInit {
   emailOld:any;
   phoneOld:any;
   fileCeCaOptions: any;
-
+  currentUser: any;
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   submitted = false;
@@ -57,11 +57,14 @@ export class AddUnitComponent implements OnInit {
         taxCode: this.fbd.control("",Validators.pattern(parttern.cardid)),
         idOrg: this.fbd.control(""),
       });
+      
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     }
 
   ngOnInit(): void {
     this.fileCeCaOptions = fileCeCaOptions;
-
+    console.log("this.currentUser",this.currentUser);
+    
     let orgId = this.userService.getInforUser().organization_id;
   
     this.datas = this.data;
@@ -174,7 +177,7 @@ export class AddUnitComponent implements OnInit {
   updateEmailAndPhone(data:any){
     if(data.email != this.emailOld || data.phone != this.phoneOld){
       //kiem tra email da ton tai trong he thong hay chua
-      this.userService.getUserByEmail(data.email).subscribe(
+      this.userService.getUserByEmail(data.email,this.currentUser.loginType).subscribe(
         dataByEmail => {
 
           //lay id vai tro admin theo id to chuc
@@ -365,13 +368,13 @@ export class AddUnitComponent implements OnInit {
                     
                     //kiem tra email da ton tai trong he thong hay chua
                     if(data.email) {
-                      this.userService.getUserByEmail(data.email).subscribe(
+                      this.userService.getUserByEmail(data.email,this.currentUser.loginType).subscribe(
                         dataByEmail => {
                           if(dataByEmail.id == 0){
 
                             //kiem tra phone da ton tai trong he thong hay chua
                             if(data.phone) {
-                              this.userService.checkPhoneUser(data.phone).subscribe(
+                              this.userService.checkPhoneUser(data.phone,this.currentUser.loginType).subscribe(
                                 dataByPhone => {
                                   if(dataByPhone.code == '00'){
             

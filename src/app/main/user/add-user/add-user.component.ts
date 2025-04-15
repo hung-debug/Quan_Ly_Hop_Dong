@@ -425,8 +425,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
         }
       }
       
-      const checkEmail = await this.userService.getUserByEmail(data.email).toPromise();
-      if(checkEmail?.id){
+      const checkEmail = await this.userService.getUserByEmail(data.email,data.login_type).toPromise(); 
+      if(checkEmail?.id == 0){
         this.userService.updateUser(data).subscribe(
           dataOut => {
   
@@ -447,7 +447,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   
             this.spinner.hide();
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại1', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
             this.spinner.hide();
           }
         )
@@ -521,7 +521,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     if(this.id !=null){
       //neu thay doi so dien thoai thi can check lai
       if(data.phone != this.phoneOld){
-        this.userService.checkPhoneUser(data.phone).subscribe(
+        this.userService.checkPhoneUser(data.phone, data.login_type).subscribe(
           dataByPhone => {
             if(dataByPhone.code == '00'){
               //kiem tra xem email dang sua co phai email cua admin to chuc khong
@@ -577,12 +577,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
       }
 
     }else{
-      this.userService.checkPhoneUser(data.phone).subscribe(
+      this.userService.checkPhoneUser(data.phone,data.login_type).subscribe(
         dataByPhone => {
           if(dataByPhone.code == '00'){
 
             //kiem tra email da ton tai trong he thong hay chua
-            this.userService.getUserByEmail(data.email).subscribe(
+            this.userService.getUserByEmail(data.email, data.login_type).subscribe(
               dataByEmail => {
                 if(dataByEmail.id == 0){
 
