@@ -919,13 +919,20 @@ export class ConsiderContractComponent
     const processRoleRecipients = (roleRecipients: any[]) => {
       if (roleRecipients.length === 0) return false;
   
-      if (roleRecipients.length === 1) return roleRecipients[0].email === email;
+      // if (roleRecipients.length === 1) return roleRecipients[0].email === email;
+      if (roleRecipients.length === 1) return ((((roleRecipients[0].email === email && this.currentUser?.loginType == 'EMAIL') || 
+      (roleRecipients[0].phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((roleRecipients[0].email === email || roleRecipients[0].phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (roleRecipients[0].email === email && this.typeUser === 1));
   
       const minOrdering = Math.min(...roleRecipients.map((r: any) => r.ordering));
       const minOrderingRecipient = roleRecipients.find((r: any) => r.ordering === minOrdering);
       const minOrderingCount = roleRecipients.filter((r: any) => r.ordering === minOrdering).length;
   
-      return minOrderingCount === 1 && minOrderingRecipient.email === email;
+      return minOrderingCount === 1 && ((((minOrderingRecipient.email === email && this.currentUser?.loginType == 'EMAIL') || 
+      (minOrderingRecipient.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((minOrderingRecipient.email === email || minOrderingRecipient.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (minOrderingRecipient.email === email && this.typeUser === 1));
     };
   
     // Kiểm tra theo thứ tự ưu tiên: 2 -> 3 -> 4
