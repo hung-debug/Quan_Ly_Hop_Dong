@@ -146,6 +146,7 @@ export class ConsiderContractComponent
   allRelateToContract: any[];
   firstHandler: boolean = false;
   supplierID: any;
+  suppliersRs: any[] = [];
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
     { item_id: 2, item_text: 'Ký số bằng USB token' },
@@ -274,7 +275,6 @@ export class ConsiderContractComponent
 
   async ngOnInit(): Promise<void> {
     let getStatusBonBon = localStorage.getItem('isBonBon');
-    console.log("getStatusBonBon", getStatusBonBon)
     this.isBonBon = getStatusBonBon === "true";
     // if(this.isBonBon) {
     //   this.confirmSignature = 1;
@@ -5240,6 +5240,7 @@ export class ConsiderContractComponent
           this.supplierID = result.type;
           this.dataCert.cert_id = result.ma_dvcs;
           this.phoneMobiCA = result.phone;
+          this.suppliersRs = result.suppliers;
           await this.signContractSubmit(supplierID);
         }
       });
@@ -5622,20 +5623,22 @@ export class ConsiderContractComponent
 
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
-    switch (supplierID) {
-      case "vnpt":
-        appName = "VNPT SmartCA";
-        break;
-      case "MobiFoneCA":
-        appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
-        break;
-      case "mobiCA":
-        appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
-        break;
-      default:
-        appName = "CA2 Remote Signing";
-        break;
-    }
+    let result  = this.suppliersRs.find(item => item.id == code);
+    appName = result.name;
+    // switch (supplierID) {
+    //   case "vnpt":
+    //     appName = "VNPT SmartCA";
+    //     break;
+    //   case "MobiFoneCA":
+    //     appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
+    //     break;
+    //   case "mobiCA":
+    //     appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
+    //     break;
+    //   default:
+    //     appName = "CA2 Remote Signing";
+    //     break;
+    // }
   
     switch (code) {
       case "QUA_THOI_GIAN_KY":

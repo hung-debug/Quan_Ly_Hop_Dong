@@ -276,7 +276,8 @@ export class RemoteDialogSignComponent implements OnInit {
         const data = {
           ma_dvcs: this.myForm.value.taxCode,
           type: this.myForm.value.supplier,
-          phone: this.myForm.value.phone
+          phone: this.myForm.value.phone,
+          suppliers: this.suppliers
         };
 
 
@@ -300,7 +301,8 @@ export class RemoteDialogSignComponent implements OnInit {
       const data = {
         ma_dvcs: this.myForm.value.taxCode,
         type: this.myForm.value.supplier,
-        phone: this.myForm.value.phone
+        phone: this.myForm.value.phone,
+        suppliers: this.suppliers
       };
 
       this.dialogRef.close(data);
