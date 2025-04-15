@@ -78,8 +78,12 @@ export class ForwardContractComponent implements OnInit {
     this.locale = currentRecipientData?.locale ? currentRecipientData?.locale: 'vi';
 
     for (const d of this.datas.dataContract.is_data_contract.participants) {
-      for (const q of d.recipients) {
-        if (q.email == this.currentUser.customer.info.email && q.status == 1) {
+      for (const q of d.recipients) {  
+        if (((((q.email == this.currentUser.customer.info.email && this.currentUser?.customer?.info?.loginType == 'EMAIL') || 
+        (q.phone == this.currentUser.customer.info.phone && this.currentUser?.customer?.info?.loginType == 'SDT') ||
+        ((q.phone == this.currentUser.customer.info.phone || q.email == this.currentUser.customer.info.email) && this.currentUser?.customer?.info?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (q.email == this.currentUser.customer.info.email && this.typeUser === 1)) && q.status == 1) {
+          
           let data_sign_cka = q.sign_type.filter((p: any) => p.id == 1)[0];
 
           //Chữ ký eKYC
