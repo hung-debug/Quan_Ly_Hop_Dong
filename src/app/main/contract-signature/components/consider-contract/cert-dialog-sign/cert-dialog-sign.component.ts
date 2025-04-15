@@ -53,7 +53,7 @@ export class CertDialogSignComponent implements OnInit {
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    this.loginType = JSON.parse(
+    this.typeUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
   }
