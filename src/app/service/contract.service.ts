@@ -181,6 +181,7 @@ export class ContractService {
   mergeTimestampFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/merge-time-stampError`
   checkCurrentSigningUrl: any = `${environment.apiUrl}/api/v1/sign/check-process-is-sign`
   // token v2 fixing ===============================
+  resubmitRejectionDocumentUrl: any = `${environment.apiUrl}/api/v1/contracts/resign-pending/`
 
   token: any;
   customer_id: any;
@@ -1872,6 +1873,14 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.get<any>(this.getCopyContract + id, { headers });
+  }
+
+  resubmitRejectionDocument(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.resubmitRejectionDocumentUrl + id, { headers });
   }
 
   convertUrltoBinary(res: any) {

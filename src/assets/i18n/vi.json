@@ -980,5 +980,6 @@
   "report.exporting": "File báo cáo đang được tải xuống",
   "change.phone": "THAY ĐỔI SỐ ĐIỆN THOẠI",
   "hind.text.phone.otp": "Nhập số điện thoại để nhận mã OTP",
-  "confirm.bonbon": "Bạn có đồng ý với các nội dung, điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch."
+  "confirm.bonbon": "Bạn có đồng ý với các nội dung, điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch.",
+  "document.re-signing": "Trình ký lại tài liệu"
 }
