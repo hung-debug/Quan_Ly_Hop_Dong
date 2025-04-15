@@ -53,9 +53,11 @@ export class PkiDialogSignComponent implements OnInit {
     let listSupplier = await this.contractService.getListSupplier(2).toPromise();
     if(listSupplier) {
       this.nl = listSupplier.map((supplier: any) => ({
-        id: isNaN(Number(supplier.code)) ? supplier.code : Number(supplier.code),
-        name: supplier.supplierName
+        id: supplier.pkiIndex,
+        name: supplier.supplierName,
+        code: supplier.code
       }));
+      this.nl.sort((a, b) => a.id - b.id);
     }
     //this.nl = networkList;
     this.datas = this.data;
@@ -154,7 +156,7 @@ export class PkiDialogSignComponent implements OnInit {
 
 
 
-      this.networkCompany = itemNameNetwork.id == 'bcy' ? 'bcy' : itemNameNetwork.name;
+      this.networkCompany = itemNameNetwork.code;
     }
 
     const resDialog = {

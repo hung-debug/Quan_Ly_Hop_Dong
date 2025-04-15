@@ -12,6 +12,7 @@ import {parttern_input, parttern} from "../../../config/parttern";
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component'; // Import component cropper
+import { ContractService } from 'src/app/service/contract.service';
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -84,7 +85,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
               public router: Router,
               private roleService: RoleService,
               private uploadService:UploadService,
-              private spinner: NgxSpinnerService
+              private spinner: NgxSpinnerService,
+              private contractService: ContractService,
     ) {
     this.addForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -124,8 +126,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
       this.unitService.getUnitList('', '').subscribe(data => {
         this.orgList = data.entities;
       });
-      this.networkList = networkList;
-      this.supplierList = supplier;
+      // this.networkList = networkList;
+      // this.supplierList = supplier;
     }
 
     if(this.isQLND_02) {
@@ -180,9 +182,9 @@ export class AddUserComponent implements OnInit, OnDestroy {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
-              if(data.phone_tel == 3) {
-                data.phone_tel = "bcy"
-              }
+              // if(data.phone_tel == 3) {
+              //   data.phone_tel = "bcy"
+              // }
               this.isHsmIcorp = data.hsm_supplier === "icorp";
               if (data.login_type == null) {
                 data.login_type = 'EMAIL';
@@ -285,6 +287,26 @@ export class AddUserComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     //lay id user
     this.spinner.show();
+    try {
+      let listSupplierPki = await this.contractService.getListSupplier(2).toPromise();
+      if(listSupplierPki) {
+        this.networkList = listSupplierPki.map((supplier: any) => ({
+          id: supplier.pkiIndex,
+          name: supplier.supplierName,
+          code: supplier.code
+        }));
+        this.networkList.sort((a, b) => a.id - b.id);
+      }
+      let listSupplierHsm = await this.contractService.getListSupplier(1).toPromise();
+      if(listSupplierHsm) {
+        this.supplierList = listSupplierHsm.map((item: any) => ({
+          id: item.code,
+          name: item.supplierName
+        }));
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
     let userId = this.userService.getAuthCurrentUser().id;
     
     const idUser = this.route.snapshot.paramMap.get('id'); // ID sẽ ở url

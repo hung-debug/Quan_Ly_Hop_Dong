@@ -145,7 +145,8 @@ export class ConsiderContractComponent
   allFileAttachment: any[];
   allRelateToContract: any[];
   firstHandler: boolean = false;
-  supplierID: number;
+  supplierID: any;
+  suppliersRs: any[] = [];
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
     { item_id: 2, item_text: 'Ký số bằng USB token' },
@@ -279,7 +280,6 @@ export class ConsiderContractComponent
 
   async ngOnInit(): Promise<void> {
     let getStatusBonBon = localStorage.getItem('isBonBon');
-    // console.log("getStatusBonBon", getStatusBonBon)
     this.isBonBon = getStatusBonBon === "true";
     // if(this.isBonBon) {
     //   this.confirmSignature = 1;
@@ -3497,7 +3497,7 @@ export class ConsiderContractComponent
   }
 
   otp: boolean = false;
-  async signContractSubmit(supplierID:any=!1) {
+  async signContractSubmit(supplierID:any =!'vnpt') {
     this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
@@ -3581,7 +3581,7 @@ export class ConsiderContractComponent
     }
   }
 
-  async signContract(notContainSignImage?: boolean, supplierID =! 1) {
+  async signContract(notContainSignImage?: boolean, supplierID =! 'vnpt') {
     const signUpdateTemp = JSON.parse(
       JSON.stringify(this.isDataObjectSignature)
     );
@@ -4165,7 +4165,7 @@ export class ConsiderContractComponent
   }
 
   filePath: any = '';
-  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!1) {
+  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!'vnpt') {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(this.firstHandler) {
@@ -4479,7 +4479,7 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        if(supplierID == 1 || supplierID == 3){
+        if(supplierID == 'vnpt' || supplierID == 'mobiCA'){
           this.remoteDialogSuccessOpen(supplierID).then(result => {
             if (result.isDismissed) {
               this.router.navigate([
@@ -4487,7 +4487,7 @@ export class ConsiderContractComponent
               ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
             }
           })
-        }else if(supplierID == 2){
+        }else if(supplierID == 'MobiFoneCA'){
           this.router.navigate([
             'main/form-contract/detail/' + this.idContract,
           ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
@@ -5299,6 +5299,7 @@ export class ConsiderContractComponent
           this.supplierID = result.type;
           this.dataCert.cert_id = result.ma_dvcs;
           this.phoneMobiCA = result.phone;
+          this.suppliersRs = result.suppliers;
           await this.signContractSubmit(supplierID);
         }
       });
@@ -5690,20 +5691,22 @@ export class ConsiderContractComponent
 
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
-    switch (supplierID) {
-      case "1":
-        appName = "VNPT SmartCA";
-        break;
-      case "2":
-        appName = "MobiCA"; // Hoặc tên app chính xác của Nacencomm
-        break;
-      case "3":
-        appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
-        break;
-      default:
-        appName = "CA2 Remote Signing";
-        break;
-    }
+    let result  = this.suppliersRs.find(item => item.id == code);
+    appName = result.name;
+    // switch (supplierID) {
+    //   case "vnpt":
+    //     appName = "VNPT SmartCA";
+    //     break;
+    //   case "MobiFoneCA":
+    //     appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
+    //     break;
+    //   case "mobiCA":
+    //     appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
+    //     break;
+    //   default:
+    //     appName = "CA2 Remote Signing";
+    //     break;
+    // }
   
     switch (code) {
       case "QUA_THOI_GIAN_KY":
@@ -5894,11 +5897,11 @@ export class ConsiderContractComponent
         } else if (typesign == 7) {
           eventName = 'kyUSBtokenBCY'
         } else if (typesign == 8) {
-          if(this.supplierID == 1) {
+          if(this.supplierID == 'vnpt') {
             eventName = 'kyRS_VNPTSmartCA'
-          } else if (this.supplierID == 2) {
+          } else if (this.supplierID == 'MobiFoneCA') {
             eventName = 'kyRS_MobifoneCA'
-          } else if (this.supplierID == 3){
+          } else if (this.supplierID == 'mobiCA'){
             eventName = 'kyRS_Nacencomm'
           } else {
              eventName = 'kyRS'

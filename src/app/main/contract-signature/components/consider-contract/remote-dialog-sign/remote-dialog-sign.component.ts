@@ -43,7 +43,7 @@ export class RemoteDialogSignComponent implements OnInit {
 
   ) {
     this.myForm = this.fbd.group({
-      supplier: this.fbd.control('1', [Validators.required]),
+      supplier: this.fbd.control('vnpt', [Validators.required]),
       taxCode: this.fbd.control("", [Validators.required,
       Validators.pattern(parttern.cardid)
         // Validators.pattern(parttern_input.taxCode_form) ||
@@ -79,7 +79,7 @@ export class RemoteDialogSignComponent implements OnInit {
 
       this.myForm.get('supplier')?.value
     this.myForm = this.fbd.group({
-      supplier: this.fbd.control('1', [Validators.required]),
+      supplier: this.fbd.control('vnpt', [Validators.required]),
       taxCode: this.fbd.control(this.datas?.dataContract?.card_id ? this.datas?.dataContract?.card_id : this.data.userCode, [
         Validators.required,
         Validators.pattern(parttern.cardid)
@@ -116,7 +116,7 @@ export class RemoteDialogSignComponent implements OnInit {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
             this.myForm.get('supplier')?.value
             this.myForm = this.fbd.group({
-              supplier: this.fbd.control('1', [Validators.required]),
+              supplier: this.fbd.control('vnpt', [Validators.required]),
               taxCode: this.fbd.control(taxCodePartnerStep2,
                 [Validators.required,
                   Validators.pattern(parttern.cardid)
@@ -151,11 +151,10 @@ export class RemoteDialogSignComponent implements OnInit {
 
   updateValidators() {
     const supplier = this.myForm.get('supplier')?.value;
-
-    if (supplier === '1' || supplier === '3') { // VNPT SmartCA hoặc CA2
+    if (supplier === 'vnpt' || supplier === 'mobiCA') { // VNPT SmartCA hoặc CA2
       this.myForm.get('taxCode')?.setValidators([Validators.required, Validators.pattern(parttern.cardid)]);
       this.myForm.get('phone')?.clearValidators(); // Xóa required của phone
-    } else if (supplier === '2') { // MobiFoneCA
+    } else if (supplier === 'MobifoneCA') { // MobiFoneCA
       this.myForm.get('phone')?.setValidators([Validators.required, Validators.pattern(parttern.phone)]);
       this.myForm.get('taxCode')?.clearValidators(); // Xóa required của taxCode
     }
@@ -167,7 +166,7 @@ export class RemoteDialogSignComponent implements OnInit {
 
   // Hàm kiểm tra giá trị của "supplier"
   isMobiFoneCA(): boolean {
-    return this.myForm.get('supplier')?.value === '2';
+    return this.myForm.get('supplier')?.value === 'MobifoneCA';
   }
 
   // isVNPTorCA2(): boolean {
@@ -286,7 +285,8 @@ export class RemoteDialogSignComponent implements OnInit {
         const data = {
           ma_dvcs: this.myForm.value.taxCode,
           type: this.myForm.value.supplier,
-          phone: this.myForm.value.phone
+          phone: this.myForm.value.phone,
+          suppliers: this.suppliers
         };
 
 
@@ -310,7 +310,8 @@ export class RemoteDialogSignComponent implements OnInit {
       const data = {
         ma_dvcs: this.myForm.value.taxCode,
         type: this.myForm.value.supplier,
-        phone: this.myForm.value.phone
+        phone: this.myForm.value.phone,
+        suppliers: this.suppliers
       };
 
       this.dialogRef.close(data);

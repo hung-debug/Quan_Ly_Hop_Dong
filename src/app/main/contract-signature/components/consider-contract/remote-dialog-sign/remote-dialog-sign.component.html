@@ -9,7 +9,7 @@
         <select formControlName="supplier" class="form-select-custom" style="font-size: 14px" aria-label="Default select example">
           <ng-container *ngFor="let supplier of suppliers">
             <option
-              *ngIf="supplier.id !== '2' || datas.isHidden"
+              *ngIf="supplier.id !== 'MobifoneCA' || datas.isHidden"
               [value]="supplier.id"
             >
               {{ supplier.name }}
