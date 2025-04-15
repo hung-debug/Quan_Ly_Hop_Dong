@@ -324,13 +324,14 @@ export class UserService {
     );
   }
 
-  getUserByEmail(email: any) {
+  getUserByEmail(email: any,loginType: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       email: email,
+      loginType: loginType,
     });
 
     return this.http.post<User>(this.getUserByEmailUrl, body, {
@@ -426,13 +427,14 @@ export class UserService {
       );
   }
 
-  checkPhoneUser(phone: any) {
+  checkPhoneUser(phone: any,loginType: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       phone_tel: phone,
+      loginType: loginType,
     });
     return this.http.post<any>(this.checkPhoneUrl, body, { headers }).pipe();
   }
