@@ -115,7 +115,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   }
 
   onSupplierChange(event: any) {
-    this.isHsmIcorp = event.value === "icorp";
+    this.isHsmIcorp = event.value === "mobifone";
   }
 
   getDataOnInit(){
@@ -185,7 +185,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
               // if(data.phone_tel == 3) {
               //   data.phone_tel = "bcy"
               // }
-              this.isHsmIcorp = data.hsm_supplier === "icorp";
+              this.isHsmIcorp = data.hsm_supplier === "mobifone";
               if (data.login_type == null) {
                 data.login_type = 'EMAIL';
               }

@@ -214,7 +214,7 @@ export class InforUserComponent implements OnInit {
           networkKpi: data.phone_tel,
           is_show_phone_pki: data.is_show_phone_pki, 
         });
-        this.isHsmIcorp = data.hsm_supplier === "icorp";
+        this.isHsmIcorp = data.hsm_supplier === "mobifone";
         this.addHsmForm = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
@@ -264,7 +264,7 @@ export class InforUserComponent implements OnInit {
   }
 
   onSupplierChange(event: any) {
-    this.isHsmIcorp = event.value === "icorp";
+    this.isHsmIcorp = event.value === "mobifone";
   }
 
   fieldTextType: boolean = false;

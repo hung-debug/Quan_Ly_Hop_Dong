@@ -108,7 +108,7 @@ export class DetailUserComponent implements OnInit {
       this.id = params['id'];
       this.userService.getUserById(this.id).subscribe(
         data => {
-          this.isHsmIcorp = data.hsm_supplier === "icorp";
+          this.isHsmIcorp = data.hsm_supplier === "mobifone";
           this.name = data.name;
           this.email = data.email;
           this.birthday = data.birthday;

@@ -146,7 +146,7 @@
                         </div>
 
                         <!--Tên người dùng hsm-->
-                        <div *ngIf="this.isHsmIcorp" class="row">
+                        <div *ngIf="!this.isHsmIcorp" class="row">
                             <div class="col-md-12">
                                 <div>{{'user.name.v2' | translate}}</div>
                                 <div>
@@ -155,7 +155,7 @@
                             </div>
                         </div>
 
-                        <div *ngIf="!this.isHsmIcorp" class="row">
+                        <div *ngIf="this.isHsmIcorp" class="row">
                             <div class="col-md-12">
                                 <div>UUID</div>
                                 <div>
