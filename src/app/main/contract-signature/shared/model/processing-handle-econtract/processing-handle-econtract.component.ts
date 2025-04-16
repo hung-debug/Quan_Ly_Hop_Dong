@@ -104,6 +104,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           card_id: element.cardId,
           user_in_organization: element.user_in_organization,
           role: element.role,
+          recipientHistory: element.recipientHistory,
         }
 
         this.is_list_name.push(data);

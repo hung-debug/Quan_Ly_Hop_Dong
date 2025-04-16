@@ -492,6 +492,10 @@
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
+                      <button mat-menu-item  class="div_icon" *ngIf = "this.filter_status == 31 || this.filter_status == 32" (click)="submitDocuments(item.id)">
+                        <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'document.re-signing' | translate}}</span>
+                      </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'" (click)="openEdit(item.id)">
                         <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.edit' | translate}}</span>

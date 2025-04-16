@@ -946,6 +946,21 @@ export class ContractComponent implements OnInit, AfterViewInit {
     });
   }
 
+  async submitDocuments(id: number) {
+    this.spinner.show();
+    try{
+      let resubmitRejection = await this.contractService.resubmitRejectionDocument(id).toPromise();
+      if (resubmitRejection.status === false) {
+        this.toastService.showErrorHTMLWithTimeout(resubmitRejection.message, '', 3000);
+      } else {
+        await this.router.navigate(['main/form-contract/edit/' + resubmitRejection.id]);
+      }
+    } catch(err) {
+      this.spinner.hide();
+      console.log("err", err)
+    }
+  }
+
   openCopy(id: number) {
     this.spinner.show();
     this.contractService.getContractCopy(id).subscribe((res: any) => {
