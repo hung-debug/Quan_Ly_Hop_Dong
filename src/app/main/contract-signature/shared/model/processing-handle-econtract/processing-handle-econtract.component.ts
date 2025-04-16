@@ -158,6 +158,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     let res = '';
 
     if(this.lang == 'vi' || !this.lang) {
+      if (role == 0) {
+        return 'Người khởi tạo';
+      }
       if (status == 3) {
         return 'Đã từ chối';
       } else if (status == 4) {
@@ -186,6 +189,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         if (!res.includes('Đã'))
           res = 'Đã huỷ'
     } else if (this.lang == 'en') {
+      if (role == 0) {
+        return 'Originator';
+      }
       if (status == 3) {
         return 'Rejected';
       } else if (status == 4) {
