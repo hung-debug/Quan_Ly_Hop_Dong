@@ -2134,7 +2134,7 @@ export class ContractSignatureComponent implements OnInit {
 
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
-                if(supplierID == 1 || supplierID == 3){
+                if(supplierID !== 'MobiFoneCA'){
                   this.remoteDialogSuccessOpen(supplierID).then((res) => {
                     if (res.isDismissed) {
                       this.router
@@ -2144,7 +2144,7 @@ export class ContractSignatureComponent implements OnInit {
                         });
                     }
                   })
-                } else if(supplierID == 2){
+                } else {
                   // for (let i = 0; i < recipientIds.length; i++) {
                   //   let updateInfo: any = null;
                   //   try {
@@ -2198,13 +2198,13 @@ export class ContractSignatureComponent implements OnInit {
   remoteDialogSuccessOpen(supplierID:any) {
       let message = "";
       switch (supplierID) {
-        case "1":
+        case "vnpt":
           message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
-        case "2":
+        case "MobiFoneCA":
           message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
-        case "3":
+        case "mobiCA":
           message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
         default:
@@ -3675,11 +3675,11 @@ export class ContractSignatureComponent implements OnInit {
         } else if (typesign == 6) {
           eventName = 'kyLoCTS'
         } else if (typesign == 8) {
-          if(this.supplierID == 1) {
+          if(this.supplierID == 'vnpt') {
             eventName = 'kyLoRS_VNPTSmartCA'
-          } else if (this.supplierID == 2) {
+          } else if (this.supplierID == 'MobiFoneCA') {
             eventName = 'kyLoRS_MobifoneCA'
-          } else if (this.supplierID == 3){
+          } else if (this.supplierID == 'mobiCA'){
             eventName = 'kyLoRS_Nacencomm'
           } else {
             eventName = 'kyLoRS'
