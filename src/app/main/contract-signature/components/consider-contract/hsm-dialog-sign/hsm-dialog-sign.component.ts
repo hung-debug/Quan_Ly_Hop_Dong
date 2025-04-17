@@ -26,7 +26,7 @@ export class HsmDialogSignComponent implements OnInit {
   hsmSupplier: any;
   suppliers: any[] = [];
   dataGetUserById: any;
-  isHsmIcorp: boolean = false;
+  isHsmIcorp: boolean = true;
   typeUser: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

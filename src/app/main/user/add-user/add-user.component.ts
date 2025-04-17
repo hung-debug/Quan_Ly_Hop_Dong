@@ -55,7 +55,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
-  isHsmIcorp: boolean = false
+  isHsmIcorp: boolean = true
 
   // Các biến liên quan đến ảnh Sign
   @ViewChild('imageCropperSign') imageCropperSign: ImageCropperComponentv2; // Tham chiếu đến component cropper
