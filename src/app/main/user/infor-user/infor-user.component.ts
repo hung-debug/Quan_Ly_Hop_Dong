@@ -60,7 +60,7 @@ export class InforUserComponent implements OnInit {
   roleName:any;
   maxDate: Date = moment().toDate();
   isDisable: any;
-  isHsmIcorp: boolean = false
+  isHsmIcorp: boolean = true
   // Tham chiếu đến các component ImageCropper
   @ViewChild('imageCropperSign') imageCropperSign: ImageCropperComponentv2;
   @ViewChild('imageCropperMark') imageCropperMark: ImageCropperComponentv2;

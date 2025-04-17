@@ -14,7 +14,7 @@ import { ContractService } from 'src/app/service/contract.service';
 })
 export class DetailUserComponent implements OnInit {
 
-  isHsmIcorp: boolean = false
+  isHsmIcorp: boolean = true
   name:any="";
   email:any="";
   birthday:any="";
