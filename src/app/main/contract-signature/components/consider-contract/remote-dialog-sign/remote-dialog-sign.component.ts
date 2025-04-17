@@ -148,7 +148,7 @@ export class RemoteDialogSignComponent implements OnInit {
     if (supplier === 'vnpt' || supplier === 'mobiCA') { // VNPT SmartCA hoặc CA2
       this.myForm.get('taxCode')?.setValidators([Validators.required, Validators.pattern(parttern.cardid)]);
       this.myForm.get('phone')?.clearValidators(); // Xóa required của phone
-    } else if (supplier === 'MobifoneCA') { // MobiFoneCA
+    } else if (supplier === 'MobiFoneCA') { // MobiFoneCA
       this.myForm.get('phone')?.setValidators([Validators.required, Validators.pattern(parttern.phone)]);
       this.myForm.get('taxCode')?.clearValidators(); // Xóa required của taxCode
     }
@@ -160,7 +160,7 @@ export class RemoteDialogSignComponent implements OnInit {
   
   // Hàm kiểm tra giá trị của "supplier"
   isMobiFoneCA(): boolean {
-    return this.myForm.get('supplier')?.value === 'MobifoneCA';
+    return this.myForm.get('supplier')?.value === 'MobiFoneCA';
   }
 
   // isVNPTorCA2(): boolean {
