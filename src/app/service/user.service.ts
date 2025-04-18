@@ -234,6 +234,7 @@ export class UserService {
       is_show_phone_pki: datas.is_show_phone_pki,
       login_type: datas.login_type,
       sign_image: datas.sign_image,
+      stampImage: datas.stampImage,
 
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,

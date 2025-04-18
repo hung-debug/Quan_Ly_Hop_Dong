@@ -580,9 +580,15 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
             //kiem tra email da ton tai trong he thong hay chua
             this.userService.getUserByEmail(data.email, data.login_type).subscribe(
-              dataByEmail => {
+              async dataByEmail => {
                 if(dataByEmail.id == 0){
-
+                  if(data.fileImageMark) {
+                    const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
+                    const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
+                    const sign_image:never[]=[];
+                    (sign_image as string[]).push(sign_image_content);
+                    data.stampImage = sign_image;
+                  } 
                   if(data.fileImage != null){
                     this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
 
@@ -590,9 +596,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
                       const sign_image:never[]=[];
                       (sign_image as string[]).push(sign_image_content);
                       data.sign_image = sign_image;
-
-
-                      //call api them moi
+                  
+                    //call api them moi
                       this.userService.addUser(data).subscribe(
                         data => {
                           if(data.success == true){
@@ -739,6 +744,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị
     this.showCropperSign = false; // Ẩn component cropper
     this.selectedFileSign = this.base64ToFile(croppedImage, 'cropped-sign.png'); // Tạo File từ base64
+    this.attachFile = this.selectedFileSign;
     this.onSubmit();
   }
 
@@ -748,6 +754,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị
       this.showCropperMark = false; // Ẩn component cropper
       this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
+      this.attachFileMark = this.selectedFileMark;
       this.onSubmit();
     }
 
