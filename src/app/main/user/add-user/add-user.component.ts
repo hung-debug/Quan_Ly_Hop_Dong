@@ -580,24 +580,24 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
             //kiem tra email da ton tai trong he thong hay chua
             this.userService.getUserByEmail(data.email, data.login_type).subscribe(
-              dataByEmail => {
+              async dataByEmail => {
                 if(dataByEmail.id == 0){
-
+                  if(data.fileImageMark) {
+                    const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
+                    const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
+                    const sign_image:never[]=[];
+                    (sign_image as string[]).push(sign_image_content);
+                    data.stampImage = sign_image;
+                  } 
                   if(data.fileImage != null){
-                    this.uploadService.uploadFile(data.fileImage).subscribe(async (dataFile) => {
+                    this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
 
                       const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
                       const sign_image:never[]=[];
                       (sign_image as string[]).push(sign_image_content);
                       data.sign_image = sign_image;
-                  if(data.fileImageMark) {
-                      const fileImageMark = this.uploadService.uploadFile(data.fileImageMark).toPromise();
-                      const sign_image_content:any = {bucket: (await fileImageMark).file_object.bucket, path: (await fileImageMark).file_object.file_path};
-                      const sign_image:never[]=[];
-                      (sign_image as string[]).push(sign_image_content);
-                      data.stampImage = sign_image;
-                    } 
-                      //call api them moi
+                  
+                    //call api them moi
                       this.userService.addUser(data).subscribe(
                         data => {
                           if(data.success == true){
