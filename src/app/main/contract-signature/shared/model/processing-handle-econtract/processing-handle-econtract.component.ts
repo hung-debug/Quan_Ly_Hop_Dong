@@ -29,7 +29,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   isEndDate: boolean;
   staus: number;
   card_id : any;
-
+  isRecipientHistory: boolean = false;
   status: any = [
     {
       value: 0,
@@ -85,6 +85,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.isHiddenButton = false;
       }
       response.recipients.forEach((element: any) => {
+        if(element.recipientHistory == true) {
+          this.isRecipientHistory = true;
+        }
         let data = {
           id: element.id,
           name: element.name,
