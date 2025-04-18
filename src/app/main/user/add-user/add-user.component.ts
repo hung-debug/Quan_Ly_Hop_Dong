@@ -584,14 +584,19 @@ export class AddUserComponent implements OnInit, OnDestroy {
                 if(dataByEmail.id == 0){
 
                   if(data.fileImage != null){
-                    this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
+                    this.uploadService.uploadFile(data.fileImage).subscribe(async (dataFile) => {
 
                       const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
                       const sign_image:never[]=[];
                       (sign_image as string[]).push(sign_image_content);
                       data.sign_image = sign_image;
-
-
+                  if(data.fileImageMark) {
+                      const fileImageMark = this.uploadService.uploadFile(data.fileImageMark).toPromise();
+                      const sign_image_content:any = {bucket: (await fileImageMark).file_object.bucket, path: (await fileImageMark).file_object.file_path};
+                      const sign_image:never[]=[];
+                      (sign_image as string[]).push(sign_image_content);
+                      data.stampImage = sign_image;
+                    } 
                       //call api them moi
                       this.userService.addUser(data).subscribe(
                         data => {
@@ -739,6 +744,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị
     this.showCropperSign = false; // Ẩn component cropper
     this.selectedFileSign = this.base64ToFile(croppedImage, 'cropped-sign.png'); // Tạo File từ base64
+    this.attachFile = this.selectedFileSign;
     this.onSubmit();
   }
 
@@ -748,6 +754,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị
       this.showCropperMark = false; // Ẩn component cropper
       this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
+      this.attachFileMark = this.selectedFileMark;
       this.onSubmit();
     }
 
