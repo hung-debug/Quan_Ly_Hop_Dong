@@ -267,7 +267,9 @@ export class AddContractComponent implements OnInit {
                   i_data_file_contract: rs[1],
                   is_data_object_signature: rs[2],
                 };
-
+                if(data_api?.is_data_contract?.isHistoryResignPending) {
+                  this.is_disable = true
+                }
                 this.getDataContractCreated(data_api);
               },
               () => {
