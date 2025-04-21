@@ -334,6 +334,25 @@ export var fileCeCaOptions = [
   {id: 'SELECTION', name: 'Tuỳ biến'}
 ]
 
+export var processingFlow = {
+  canceler: 'Đã hủy bỏ',
+  creator: 'Người khởi tạo',
+  assign: 'Chờ điều phối',
+  coordinating: 'Đang điều phối',
+  review: 'Chờ xem xét',
+  reviewing: 'Đang xem xét',
+  sign: 'Chờ ký',
+  waitStamp: 'Chờ đóng dấu',
+  signing: 'Đang ký',
+  stamping: 'Đang đóng dấu',
+  processed: 'Đã xử lý',
+  reviewed: 'Đã xem xét',
+  signed: 'Đã ký',
+  stampedbe: 'Đã đóng dấu',
+  reject: 'Đã từ chối',
+  authorized: 'Đã uỷ quyền /\nchuyển tiếp'
+}
+
 export var sideList = [
   {id:'1', name:'A'}, {id:'2', name:'B'}, {id:'3', name:'C'}, {id:'4', name:'D'},
   {id:'5', name:'E'}, {id:'6', name:'F'}, {id:'7', name:'G'}, {id:'8', name:'H'},

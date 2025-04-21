@@ -547,7 +547,7 @@
   "preview":"Xem trước",
   "contract": "TÀI LIỆU",
   "partner": "ĐỐI TÁC",
-  "canceller":"Người hủy bỏ",
+  "canceller":"Đã hủy bỏ",
   "download":"Tải xuống",
   "Đang ký": "Đang ký",
   "canceled": "Đã hủy bỏ",
@@ -981,5 +981,7 @@
   "change.phone": "THAY ĐỔI SỐ ĐIỆN THOẠI",
   "hind.text.phone.otp": "Nhập số điện thoại để nhận mã OTP",
   "confirm.bonbon": "Bạn có đồng ý với các nội dung, điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch.",
-  "document.re-signing": "Trình ký lại tài liệu"
+  "document.re-signing": "Trình ký lại tài liệu",
+  "contract.cancel.doc":"Lý do hủy bỏ tài liệu",
+  "cancel.contract": "LÝ DO HỦY BỎ TÀI LIỆU"
 }

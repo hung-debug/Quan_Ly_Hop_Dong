@@ -957,5 +957,7 @@
   "change.phone": "CHANGE PHONE NUMBER",
   "hind.text.phone.otp": "Enter phone number to receive OTP code",
   "confirm.bonbon": "You agree to the terms and conditions of the contract and use electronic means to conduct transactions.",
-  "document.re-signing": "Document re-signing"
+  "document.re-signing": "Document re-signing",
+  "contract.cancel.doc":"Reason for document cancellation",
+  "cancel.contract":"REASONS FOR DOCUMENT CANCELLATION"
 }

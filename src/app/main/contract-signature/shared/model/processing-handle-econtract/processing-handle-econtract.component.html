@@ -10,12 +10,12 @@
                 <span style="color: '#106DB6'">{{'orginator' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.timeCreate}})</span>
             </div>
-            <div  *ngIf ="!this.reasonCancel && listCheckSmsEmail  && isHiddenButton || this.isRecipientHistory" class="col-md-2" style="display: flex; flex-direction: column;text-align: center">
+            <div  *ngIf ="!this.reasonCancel && listCheckSmsEmail  && isHiddenButton" class="col-md-2" style="display: flex; flex-direction: column;text-align: center">
                 <span style="color: '#106DB6'">{{'action' | translate}}</span>
             </div>
         </div>
         <div *ngFor="let d of is_list_name">
-            <div *ngIf = "!this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
+            <div *ngIf = "!this.reasonCancel && d.role != 0" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
 
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
                     <div *ngIf="d.name" style="display: flex;">
@@ -48,7 +48,7 @@
                             <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
                         <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.role == 6 && d.reasonReject" >
-                            <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
+                            <div class="img_icon button" ngbTooltip="{{'contract.cancel.doc' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
@@ -56,7 +56,7 @@
 
 
                 <!--  -->
-                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = "isHiddenButton && listCheckSmsEmail || this.isRecipientHistory">
+                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = "isHiddenButton && listCheckSmsEmail">
                         <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4 && !d.recipientHistory">
                             <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                         </div>
@@ -68,7 +68,7 @@
                 </div>
             </div>
 
-            <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4) || this.isRecipientHistory && d.role == 0" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
+            <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4) || d.role == 0" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
 
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
                     <div style="display: flex;">
@@ -95,26 +95,28 @@
                             <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
                         <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.role == 6 && d.reasonReject" >
-                            <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
+                            <div class="img_icon button" ngbTooltip="{{'contract.cancel.doc' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
 
-                <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"
-                *ngIf = " isHiddenButton && listCheckSmsEmail || this.isRecipientHistory">
+                <div *ngIf = "this.contractStatus != 32 && this.contractStatus != 31" class="col-md-2">
+
+                </div>
+                <!-- <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"
+                *ngIf = " isHiddenButton && listCheckSmsEmail && ((d.statusNumber !== 0 && d.statusNumber !== 4 && !d.recipientHistory) || (d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num === 0 || !d.change_num) && !d.recipientHistory))">
                     <div *ngIf = "d.statusNumber !== 0 && d.statusNumber !== 4 && !d.recipientHistory">
                         <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                     </div>
                     <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num === 0 || !d.change_num) && !d.recipientHistory">
-                    <!-- <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4"> -->
                         <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update_person_process' | translate}}" (click)="openEdit(d.id)"/>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
-        <div *ngIf="this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
+        <!-- <div *ngIf="this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
             <div class="col-md-6" style="flex-direction: column;text-align: left;">
                 <span>{{this.personCreate}}</span>&nbsp;
                 <span style="color: #8B8B8B">({{this.emailCreate}})</span>
@@ -123,9 +125,7 @@
                 <span style="color: '#106DB6'">{{'canceller' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.cancelDate}})</span>
             </div>
-            <div class="col-md-2" >
-            </div>
-        </div>
+        </div> -->
     </div>
 
 </div>
