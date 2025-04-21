@@ -7,6 +7,9 @@ import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
 import { EditHandlerComponent } from '../edit-handler-dialog/edit-handler-dialog.component';
 import { ToastService } from 'src/app/service/toast.service';
+import {
+  processingFlow
+} from '../../../../../config/variable';
 @Component({
   selector: 'app-processing-handle-econtract',
   templateUrl: './processing-handle-econtract.component.html',
@@ -30,7 +33,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   isEndDate: boolean;
   staus: number;
   card_id : any;
-  isRecipientHistory: boolean = false;
   status: any = [
     {
       value: 0,
@@ -86,9 +88,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.isHiddenButton = false;
       }
       response.recipients.forEach((element: any) => {
-        if(element.recipientHistory == true) {
-          this.isRecipientHistory = true;
-        }
         let data = {
           id: element.id,
           name: element.name,
@@ -159,78 +158,114 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   checkStatusUser(status: any, role: any) {
-    let res = '';
-
-    if(this.lang == 'vi' || !this.lang) {
-      if (role == 0) {
-        return 'Người khởi tạo';
-      }
-      if (status == 3) {
-        return 'Đã từ chối';
-      } else if (status == 4) {
-        return 'Đã uỷ quyền/chuyển tiếp';
-      } else if (status == 34) {
-        return 'Quá hạn';
-      }
-
-      if (status == 0 && !this.reasonCancel) {
-        res += 'Chưa ';
-      } else if (status == 1 && !this.reasonCancel) {
-        res += 'Đang ';
-      } else if (status == 2) {
-        res += 'Đã ';
-      }
-
-      if (role == 1) {
-        res += 'điều phối';
-      } else if (role == 2) {
-        res += 'xem xét';
-      } else if (role == 3) {
-        res += 'ký';
-      } else if (role == 4) {
-        res = res + ' đóng dấu';
-      } else
-        if (!res.includes('Đã'))
-          res = 'Đã huỷ'
-    } else if (this.lang == 'en') {
-      if (role == 0) {
-        return 'Originator';
-      }
-      if (status == 3) {
-        return 'Rejected';
-      } else if (status == 4) {
-        return 'Authorized/Forwarded';
-      } else if (status == 34) {
-        return 'Overdue';
-      }
-
-      if (status == 0 && !this.reasonCancel) {
-        res += 'Not ';
-      } else if (status == 1 && !this.reasonCancel) {
-        res += 'Doing ';
-      } else if (status == 2) {
-        res += 'Already ';
-      }
-
-      if (!this.reasonCancel) {
-        if (role == 1) {
-          res += 'coordinator';
-        } else if (role == 2) {
-          res += 'consider';
-        } else if (role == 3) {
-          res += 'sign';
-        } else if (role == 4) {
-          res = res + ' mark';
-        }
-      } else {
-        if (!res.includes('Already'))
-          res = ''
-      }
+    if (role === -1 || role === 6) {
+      return processingFlow.canceler;
+    } else if (role === 0) {
+      return processingFlow.creator;
+    } else if ((status == 0) && role == 1) {
+        return processingFlow.assign;
+    } else if ((status == 1) && role == 1) {
+        return processingFlow.coordinating;
+    } else if ((status == 0) && role == 2) {
+        return processingFlow.review;
+    } else if ((status == 1) && role == 2) {
+        return processingFlow.reviewing;
+    } else if (status == 0 && role == 3) {
+        return processingFlow.sign;
+    } else if (status == 0 && role == 4) {
+        return processingFlow.waitStamp;
+    } else if (status == 1 && role == 3) {
+        return processingFlow.signing;
+    } else if (status == 1 && role == 4) {
+        return processingFlow.stamping;
+    } else if (status == 2 && role == 1) {
+        return processingFlow.processed;
+    } else if (status == 2 && role == 2) {
+        return processingFlow.reviewed;
+    } else if (status == 2 && role == 3) {
+        return processingFlow.signed;
+    } else if (status == 2 && role == 4) {
+        return processingFlow.stampedbe;
+    } else if (status == 3) {
+        return processingFlow.reject;
+    } else if (status == 4) {
+        return processingFlow.authorized;
     }
-
-
-    return res;
   }
+
+  // checkStatusUser(status: any, role: any) {
+  //   let res = '';
+
+  //   if(this.lang == 'vi' || !this.lang) {
+  //     if (role == 0) {
+  //       return 'Người khởi tạo';
+  //     }
+  //     if (status == 3) {
+  //       return 'Đã từ chối';
+  //     } else if (status == 4) {
+  //       return 'Đã uỷ quyền/chuyển tiếp';
+  //     } else if (status == 34) {
+  //       return 'Quá hạn';
+  //     }
+
+  //     if (status == 0 && !this.reasonCancel) {
+  //       res += 'Chưa ';
+  //     } else if (status == 1 && !this.reasonCancel) {
+  //       res += 'Đang ';
+  //     } else if (status == 2) {
+  //       res += 'Đã ';
+  //     }
+
+  //     if (role == 1) {
+  //       res += 'điều phối';
+  //     } else if (role == 2) {
+  //       res += 'xem xét';
+  //     } else if (role == 3) {
+  //       res += 'ký';
+  //     } else if (role == 4) {
+  //       res = res + ' đóng dấu';
+  //     } else
+  //       if (!res.includes('Đã'))
+  //         res = 'Đã huỷ'
+  //   } else if (this.lang == 'en') {
+  //     if (role == 0) {
+  //       return 'Originator';
+  //     }
+  //     if (status == 3) {
+  //       return 'Rejected';
+  //     } else if (status == 4) {
+  //       return 'Authorized/Forwarded';
+  //     } else if (status == 34) {
+  //       return 'Overdue';
+  //     }
+
+  //     if (status == 0 && !this.reasonCancel) {
+  //       res += 'Not ';
+  //     } else if (status == 1 && !this.reasonCancel) {
+  //       res += 'Doing ';
+  //     } else if (status == 2) {
+  //       res += 'Already ';
+  //     }
+
+  //     if (!this.reasonCancel) {
+  //       if (role == 1) {
+  //         res += 'coordinator';
+  //       } else if (role == 2) {
+  //         res += 'consider';
+  //       } else if (role == 3) {
+  //         res += 'sign';
+  //       } else if (role == 4) {
+  //         res = res + ' mark';
+  //       }
+  //     } else {
+  //       if (!res.includes('Already'))
+  //         res = ''
+  //     }
+  //   }
+
+
+  //   return res;
+  // }
 
   acceptRequest() {
     this.dialog.closeAll();
@@ -239,11 +274,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   // @ts-ignore
   viewReasonRejected(RecipientsId: any) {
     let data: any;
-
     for (let i = 0; i < this.is_list_name.length; i++) {
 
       if (RecipientsId === this.is_list_name[i].id) {
         data = { reasonReject: this.is_list_name[i].reasonReject }
+        if(this.is_list_name[i].role == 6) {
+          data.type = 1; //Đã hủy bỏ
+        } else {
+          data.type = 2; //Đã từ chối
+        }
       }
     }
 
