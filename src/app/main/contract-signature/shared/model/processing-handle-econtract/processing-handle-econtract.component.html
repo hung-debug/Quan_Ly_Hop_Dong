@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4) || d.role == 0" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
+            <div *ngIf = "this.reasonCancel || d.role == 0" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
 
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
                     <div style="display: flex;">
