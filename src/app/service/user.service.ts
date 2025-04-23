@@ -346,6 +346,10 @@ export class UserService {
     row: number = 15, page: any = 0
   ): Observable<any> {
     this.getCurrentUser();
+    
+    if (filter_nameOrEmail && filter_nameOrEmail.trim() !== '') {
+      page = 0;
+    }
 
     let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
     const headers = { Authorization: 'Bearer ' + this.token };
