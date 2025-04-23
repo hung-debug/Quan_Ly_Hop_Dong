@@ -36,9 +36,17 @@ export class DeleteMultiContractDialogComponent implements OnInit {
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/contract/create/draft']);
         });
-      }else{
-        this.spinner.hide()
-        this.toastService.showErrorHTMLWithTimeout('error.multi.delete.draft', "", 3000);
+      }else if(data.message == 'E04'){
+        // this.toastService.showErrorHTMLWithTimeout('error.multi.delete.draft', "", 3000);
+        if (data?.details && data?.details?.length > 0) {
+          data?.details.forEach((msg: string) => {
+            this.toastService.showErrorHTMLWithTimeout(msg, "", 3000);
+          });
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/contract/create/draft']);
+          });
+          this.spinner.hide()
+        }
       }
       this.dialogRef.close();
     },
