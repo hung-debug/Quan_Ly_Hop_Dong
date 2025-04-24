@@ -72,8 +72,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     let participants = detailContract[0].participants;
 
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
-      console.log("response",response);
-      
       this.personCreate = response.createdBy.name;
 
       this.timeCreate = response.createdAt ? moment(response.createdAt).add(420) : null;
