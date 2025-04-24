@@ -12,6 +12,7 @@ import {parttern_input, parttern} from "../../../config/parttern";
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component'; // Import component cropper
+import { ContractService } from 'src/app/service/contract.service';
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -54,7 +55,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
-  isHsmIcorp: boolean = false
+  isHsmIcorp: boolean = true
 
   // Các biến liên quan đến ảnh Sign
   @ViewChild('imageCropperSign') imageCropperSign: ImageCropperComponentv2; // Tham chiếu đến component cropper
@@ -84,7 +85,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
               public router: Router,
               private roleService: RoleService,
               private uploadService:UploadService,
-              private spinner: NgxSpinnerService
+              private spinner: NgxSpinnerService,
+              private contractService: ContractService,
     ) {
     this.addForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -95,7 +97,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       role: this.fbd.control("", [Validators.required]),
       status: 1,
       is_show_phone_pki: true,
-      // login_type: 'EMAIL',
+      login_type: 'EMAIL',
       phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
@@ -113,7 +115,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   }
 
   onSupplierChange(event: any) {
-    this.isHsmIcorp = event.value === "icorp";
+    this.isHsmIcorp = event.value === "mobifone";
   }
 
   getDataOnInit(){
@@ -124,8 +126,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
       this.unitService.getUnitList('', '').subscribe(data => {
         this.orgList = data.entities;
       });
-      this.networkList = networkList;
-      this.supplierList = supplier;
+      // this.networkList = networkList;
+      // this.supplierList = supplier;
     }
 
     if(this.isQLND_02) {
@@ -155,7 +157,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             role: this.fbd.control("", [Validators.required]),
             status: 1,
             is_show_phone_pki: true,
-            // login_type: 'EMAIL',
+            login_type: 'EMAIL',
             phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
@@ -172,7 +174,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('user.update');
-        // this.addForm.get('login_type')?.disable();
+        this.addForm.get('login_type')?.disable();
         this.roleService.getRoleList('', '').subscribe(data => {
           this.roleList = data.entities;
         });
@@ -180,10 +182,10 @@ export class AddUserComponent implements OnInit, OnDestroy {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
-              if(data.phone_tel == 3) {
-                data.phone_tel = "bcy"
-              }
-              this.isHsmIcorp = data.hsm_supplier === "icorp";
+              // if(data.phone_tel == 3) {
+              //   data.phone_tel = "bcy"
+              // }
+              this.isHsmIcorp = data.hsm_supplier === "mobifone";
               if (data.login_type == null) {
                 data.login_type = 'EMAIL';
               }
@@ -210,7 +212,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     role: this.fbd.control(Number(data.role_id), [Validators.required]),
                     status: data.status,
                     is_show_phone_pki: data.is_show_phone_pki,
-                    // login_type: data.login_type ? data.login_type : 'EMAIL',
+                    login_type: data.login_type ? data.login_type : 'EMAIL',
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
@@ -285,16 +287,36 @@ export class AddUserComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     //lay id user
     this.spinner.show();
+    try {
+      let listSupplierPki = await this.contractService.getListSupplier(2).toPromise();
+      if(listSupplierPki) {
+        this.networkList = listSupplierPki.map((supplier: any) => ({
+          id: supplier.pkiIndex,
+          name: supplier.supplierName,
+          code: supplier.code
+        }));
+        this.networkList.sort((a, b) => a.id - b.id);
+      }
+      let listSupplierHsm = await this.contractService.getListSupplier(1).toPromise();
+      if(listSupplierHsm) {
+        this.supplierList = listSupplierHsm.map((item: any) => ({
+          id: item.code,
+          name: item.supplierName
+        }));
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
     let userId = this.userService.getAuthCurrentUser().id;
     
     const idUser = this.route.snapshot.paramMap.get('id'); // ID sẽ ở url
     if(idUser){
       let arrUser = await this.userService.getUserById(idUser).toPromise();
-      // this.isDisable = arrUser.login_type;
+      this.isDisable = arrUser.login_type;
     }
 
     this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;
-    // this.addForm.get('login_type')?.setValue('EMAIL');
+    this.addForm.get('login_type')?.setValue('EMAIL');
 
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -403,36 +425,33 @@ export class AddUserComponent implements OnInit, OnDestroy {
         }
       }
       
-      const checkEmail = await this.userService.getUserByEmail(data.email).toPromise();
-      if(checkEmail?.id){
+      const checkEmail = await this.userService.getUserByEmail(data.email,data.login_type).toPromise(); 
         this.userService.updateUser(data).subscribe(
           dataOut => {
-  
-            let emailCurrent = this.userService.getAuthCurrentUser().email;
-            //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
-            if(data.organizationId != this.orgIdOld && emailCurrent == data.email){
-              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
-              localStorage.clear();
-              sessionStorage.clear();
-              this.router.navigate(['/login']);
-  
+            if(dataOut?.status == false){
+              this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+              this.spinner.hide();  
             }else{
-              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
-              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                this.router.navigate(['/main/user']);
-              });
+              let emailCurrent = this.userService.getAuthCurrentUser().email;
+              //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
+              if(data.organizationId != this.orgIdOld && emailCurrent === data.email){
+                this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
+                localStorage.clear();
+                sessionStorage.clear();
+                this.router.navigate(['/login']);   
+              }else{
+                this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
+                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                  this.router.navigate(['/main/user']);
+                });
+              }
+              this.spinner.hide();
             }
-  
-            this.spinner.hide();
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại1', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
             this.spinner.hide();
           }
         )
-      }else{
-        this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
-        this.spinner.hide();
-      }
   }
 
   getRoleByOrg(orgId:any){
@@ -481,7 +500,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       role: this.addForm.value.role,
       status: this.addForm.value.status,
       is_show_phone_pki: this.addForm.value.is_show_phone_pki,
-      // login_type: this.addForm.value.login_type,
+      login_type: this.addForm.value.login_type,
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
@@ -499,7 +518,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     if(this.id !=null){
       //neu thay doi so dien thoai thi can check lai
       if(data.phone != this.phoneOld){
-        this.userService.checkPhoneUser(data.phone).subscribe(
+        this.userService.checkPhoneUser(data.phone, data.login_type).subscribe(
           dataByPhone => {
             if(dataByPhone.code == '00'){
               //kiem tra xem email dang sua co phai email cua admin to chuc khong
@@ -555,15 +574,21 @@ export class AddUserComponent implements OnInit, OnDestroy {
       }
 
     }else{
-      this.userService.checkPhoneUser(data.phone).subscribe(
+      this.userService.checkPhoneUser(data.phone,data.login_type).subscribe(
         dataByPhone => {
           if(dataByPhone.code == '00'){
 
             //kiem tra email da ton tai trong he thong hay chua
-            this.userService.getUserByEmail(data.email).subscribe(
-              dataByEmail => {
+            this.userService.getUserByEmail(data.email, data.login_type).subscribe(
+              async dataByEmail => {
                 if(dataByEmail.id == 0){
-
+                  if(data.fileImageMark) {
+                    const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
+                    const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
+                    const sign_image:never[]=[];
+                    (sign_image as string[]).push(sign_image_content);
+                    data.stampImage = sign_image;
+                  } 
                   if(data.fileImage != null){
                     this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
 
@@ -571,20 +596,19 @@ export class AddUserComponent implements OnInit, OnDestroy {
                       const sign_image:never[]=[];
                       (sign_image as string[]).push(sign_image_content);
                       data.sign_image = sign_image;
-
-
-                      //call api them moi
+                  
+                    //call api them moi
                       this.userService.addUser(data).subscribe(
                         data => {
-                          // if(data.success == true){
+                          if(data.success == true){
                             this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
                             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                               this.router.navigate(['/main/user']);
                             });
                             this.spinner.hide();
-                          // }else{
-                          //   this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
-                          // }
+                          }else{
+                            this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
+                          }
 
                         }, error => {
                           this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
@@ -602,16 +626,16 @@ export class AddUserComponent implements OnInit, OnDestroy {
                       //call api them moi
                       this.userService.addUser(data).subscribe(
                         data => {
-                          // if(data.success == true){
+                          if(data.success == true){
                             this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
                             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                               this.router.navigate(['/main/user']);
                             });
                             this.spinner.hide();
-                          // } else {
-                          //   this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
-                          //   this.spinner.hide();
-                          // }
+                          } else {
+                            this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
+                            this.spinner.hide();
+                          }
 
                         }, error => {
                           this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
@@ -720,6 +744,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị
     this.showCropperSign = false; // Ẩn component cropper
     this.selectedFileSign = this.base64ToFile(croppedImage, 'cropped-sign.png'); // Tạo File từ base64
+    this.attachFile = this.selectedFileSign;
     this.onSubmit();
   }
 
@@ -729,6 +754,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị
       this.showCropperMark = false; // Ẩn component cropper
       this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
+      this.attachFileMark = this.selectedFileMark;
       this.onSubmit();
     }
 

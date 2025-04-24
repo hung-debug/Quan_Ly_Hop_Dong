@@ -145,7 +145,8 @@ export class ConsiderContractComponent
   allFileAttachment: any[];
   allRelateToContract: any[];
   firstHandler: boolean = false;
-  supplierID: number;
+  supplierID: any;
+  suppliersRs: any[] = [];
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
     { item_id: 2, item_text: 'Ký số bằng USB token' },
@@ -237,6 +238,7 @@ export class ConsiderContractComponent
     { percent: '500%', value: 5.0 },
   ];
   contract_no: any;
+  typeUser: any;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -267,6 +269,10 @@ export class ConsiderContractComponent
     this.loginType = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
 
   }
 
@@ -274,7 +280,6 @@ export class ConsiderContractComponent
 
   async ngOnInit(): Promise<void> {
     let getStatusBonBon = localStorage.getItem('isBonBon');
-    console.log("getStatusBonBon", getStatusBonBon)
     this.isBonBon = getStatusBonBon === "true";
     // if(this.isBonBon) {
     //   this.confirmSignature = 1;
@@ -314,7 +319,11 @@ export class ConsiderContractComponent
   async getCurrentFieldsData() {
     let res = await this.contractService.getDetermineCoordination(this.recipientId).toPromise()
     let recipData: any = []
-    recipData = res?.recipients.filter((item: any) => item.email == this.currentUser.email)
+    recipData = res?.recipients.filter((item: any) => (((item.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+    (item.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+    ((item.phone == this.currentUser.phone || item.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+    (item.email == this.currentUser.email && this.typeUser === 1));
+    
     this.isContainSignField = recipData[0]?.fields.some((ele: any) => ele.type == 3)
   }
 
@@ -729,7 +738,7 @@ export class ConsiderContractComponent
         for (const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
+            ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
             if (signUpdate.recipient?.sign_type) {
@@ -910,13 +919,20 @@ export class ConsiderContractComponent
     const processRoleRecipients = (roleRecipients: any[]) => {
       if (roleRecipients.length === 0) return false;
   
-      if (roleRecipients.length === 1) return roleRecipients[0].email === email;
+      // if (roleRecipients.length === 1) return roleRecipients[0].email === email;
+      if (roleRecipients.length === 1) return ((((roleRecipients[0].email === email && this.currentUser?.loginType == 'EMAIL') || 
+      (roleRecipients[0].phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((roleRecipients[0].email === email || roleRecipients[0].phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (roleRecipients[0].email === email && this.typeUser === 1));
   
       const minOrdering = Math.min(...roleRecipients.map((r: any) => r.ordering));
       const minOrderingRecipient = roleRecipients.find((r: any) => r.ordering === minOrdering);
       const minOrderingCount = roleRecipients.filter((r: any) => r.ordering === minOrdering).length;
   
-      return minOrderingCount === 1 && minOrderingRecipient.email === email;
+      return minOrderingCount === 1 && ((((minOrderingRecipient.email === email && this.currentUser?.loginType == 'EMAIL') || 
+      (minOrderingRecipient.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((minOrderingRecipient.email === email || minOrderingRecipient.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (minOrderingRecipient.email === email && this.typeUser === 1));
     };
   
     // Kiểm tra theo thứ tự ưu tiên: 2 -> 3 -> 4
@@ -1351,7 +1367,7 @@ export class ConsiderContractComponent
     ) {
       let dataSignature = this.datas.is_data_object_signature.filter(
         (item: any) =>
-          item?.recipient?.email === this.currentUser.email &&
+          ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           item?.recipient?.role === this.datas?.roleContractReceived
       );
       if(this.firstHandler && !this.mobile) {
@@ -1498,6 +1514,9 @@ export class ConsiderContractComponent
   currentNullElement: any
   isRemoteSigningExpired: boolean = false
   isRemoteSigningProcessing: boolean = false
+  ArrRecipientsEmail: any;
+  ArrRecipientsPhone: any;
+  ArrRecipientsEmailAndPhone: any;
 
   isRemoteSigningType: boolean = false
   countReject: number = 0
@@ -1600,8 +1619,14 @@ export class ConsiderContractComponent
               this.ArrRecipientsNew = response.recipients.filter(
                 (x: any) => x.email === this.currentUser.email
               );
+              this.ArrRecipientsEmail = response.recipients.filter((x: any) => x.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL');
+              this.ArrRecipientsPhone = response.recipients.filter((x: any) => x.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT');
+              this.ArrRecipientsEmailAndPhone = response.recipients.filter((x: any) => (x.email === this.currentUser.email || x.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT');
 
-              if (this.ArrRecipientsNew.length === 0) {
+              if (((this.ArrRecipientsEmail.length === 0 && this.currentUser?.loginType == 'EMAIL') || 
+              (this.ArrRecipientsPhone.length === 0 && this.currentUser?.loginType == 'SDT') || 
+              (this.ArrRecipientsEmailAndPhone.length === 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT') && this.typeUser === 0) || 
+              (this.ArrRecipientsNew.length === 0 && this.typeUser === 1)) {
                 this.toastService.showErrorHTMLWithTimeout(
                   'Bạn không có quyền xử lý tài liệu này!',
                   '',
@@ -1795,7 +1820,10 @@ export class ConsiderContractComponent
                     this.confirmSignature == 2) ||
                   (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
                 ) &&
-                this.ArrRecipientsNew.length > 0
+                ((((this.ArrRecipientsEmail.length > 0 && this.currentUser?.loginType == 'EMAIL') || 
+                (this.ArrRecipientsPhone.length > 0 && this.currentUser?.loginType == 'SDT') || 
+                (this.ArrRecipientsEmailAndPhone.length > 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+                (this.ArrRecipientsNew.length > 0 && this.typeUser === 1))
               ) {
                 let swalfire = null;
                 let value: string;
@@ -1897,8 +1925,14 @@ export class ConsiderContractComponent
                       this.ArrRecipientsNew = response.recipients.filter(
                         (x: any) => x.email === this.currentUser.email
                       );
+                      this.ArrRecipientsEmail = response.recipients.filter((x: any) => x.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL');
+                      this.ArrRecipientsPhone = response.recipients.filter((x: any) => x.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT');
+                      this.ArrRecipientsEmailAndPhone = response.recipients.filter((x: any) => (x.email === this.currentUser.email || x.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT');
 
-                      if (this.ArrRecipientsNew.length === 0) {
+                      if (((this.ArrRecipientsEmail.length === 0 && this.currentUser?.loginType == 'EMAIL') || 
+                      (this.ArrRecipientsPhone.length === 0 && this.currentUser?.loginType == 'SDT') || 
+                      (this.ArrRecipientsEmailAndPhone.length === 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT') && this.typeUser === 0) || 
+                      (this.ArrRecipientsNew.length === 0 && this.typeUser === 1)) {
                         this.toastService.showErrorHTMLWithTimeout(
                           'Bạn không có quyền xử lý tài liệu này!',
                           '',
@@ -1922,7 +1956,10 @@ export class ConsiderContractComponent
                       //
                       for (const d of this.datas.is_data_contract.participants) {
                         for (const q of d.recipients) {
-                          if (q.email == this.currentUser.email && q.status == 1) {
+                          if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+                          (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+                          ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+                          (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
                             id_recipient_signature = q.id;
                             this.phoneOtp = phone_recipient_signature = q.phone;
                             this.userOtp = q.name;
@@ -2139,7 +2176,10 @@ export class ConsiderContractComponent
           //
           for (const d of this.datas.is_data_contract.participants) {
             for (const q of d.recipients) {
-              if (q.email == this.currentUser.email && q.status == 1) {
+              if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+              (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+              ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+              (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
                 id_recipient_signature = q.id;
                 this.phoneOtp = phone_recipient_signature = q.phone;
                 this.userOtp = q.name;
@@ -2361,7 +2401,8 @@ export class ConsiderContractComponent
       if (this.signCertDigital) {
         for (const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4 || signUpdate.type == 5) && [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email && signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) && 
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
             let fileC: any
             try {
               fileC = await this.contractService.getFileContractPromise(
@@ -2590,7 +2631,7 @@ export class ConsiderContractComponent
           signUpdate &&
           signUpdate.type == 3 &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
       );
       let fileC: any
@@ -2697,7 +2738,7 @@ export class ConsiderContractComponent
             signUpdate.type == 3 ||
             signUpdate.type == 4 || signUpdate.type == 5) &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
           const objSign = this.isDataObjectSignature.filter(
@@ -2705,7 +2746,7 @@ export class ConsiderContractComponent
               signUpdate &&
               (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
               [3, 4].includes(this.datas.roleContractReceived) &&
-              signUpdate?.recipient?.email === this.currentUser.email &&
+              ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
@@ -2914,7 +2955,7 @@ export class ConsiderContractComponent
           signUpdate &&
           (signUpdate.type == 3 || signUpdate.type == 2) &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
       );
 
@@ -2947,7 +2988,7 @@ export class ConsiderContractComponent
             signUpdate.type == 4 ||
             signUpdate.type == 5)  &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
           const objSign = this.isDataObjectSignature.filter(
@@ -2955,7 +2996,7 @@ export class ConsiderContractComponent
               signUpdate &&
               (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
               [3, 4].includes(this.datas.roleContractReceived) &&
-              signUpdate?.recipient?.email === this.currentUser.email &&
+              ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
@@ -3204,7 +3245,7 @@ export class ConsiderContractComponent
             signUpdate.type == 3 ||
             signUpdate.type == 4 || signUpdate.type == 5) &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
           const objSign = this.isDataObjectSignature.filter(
@@ -3212,7 +3253,7 @@ export class ConsiderContractComponent
               signUpdate &&
               signUpdate.type == 3 &&
               [3, 4].includes(this.datas.roleContractReceived) &&
-              signUpdate?.recipient?.email === this.currentUser.email &&
+              ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
@@ -3463,7 +3504,7 @@ export class ConsiderContractComponent
   }
 
   otp: boolean = false;
-  async signContractSubmit(supplierID:any=!1) {
+  async signContractSubmit(supplierID:any =!'vnpt') {
     this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
@@ -3477,7 +3518,7 @@ export class ConsiderContractComponent
         signUpdate &&
         signUpdate.type == 2 &&
         [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+        ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         otpOrEkyc = true;
@@ -3547,7 +3588,7 @@ export class ConsiderContractComponent
     }
   }
 
-  async signContract(notContainSignImage?: boolean, supplierID =! 1) {
+  async signContract(notContainSignImage?: boolean, supplierID =! 'vnpt') {
     const signUpdateTemp = JSON.parse(
       JSON.stringify(this.isDataObjectSignature)
     );
@@ -3558,7 +3599,7 @@ export class ConsiderContractComponent
       signUpdatePayload = signUpdateTemp
         .filter(
           (item: any) =>
-            item?.recipient?.email === this.currentUser.email &&
+            ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
             item?.recipient?.role === this.datas?.roleContractReceived
         )
         .map((item: any) => {
@@ -3599,7 +3640,7 @@ export class ConsiderContractComponent
       signUpdatePayload = signUpdateTemp
         .filter(
           (item: any) =>
-            item?.recipient?.email === this.currentUser.email &&
+            ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
             item?.recipient?.role === this.datas?.roleContractReceived
         )
         .map((item: any) => {
@@ -3635,7 +3676,7 @@ export class ConsiderContractComponent
         signUpdate &&
         (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
         [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+        ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         if (signUpdate.recipient?.sign_type) {
@@ -3747,8 +3788,15 @@ export class ConsiderContractComponent
           this.ArrRecipientsNew = response.recipients.filter(
             (x: any) => x.email === this.currentUser.email
           );
+          
+          this.ArrRecipientsEmail = response.recipients.filter((x: any) => x.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL');
+          this.ArrRecipientsPhone = response.recipients.filter((x: any) => x.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT');
+          this.ArrRecipientsEmailAndPhone = response.recipients.filter((x: any) => (x.email === this.currentUser.email || x.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT');
 
-          if (this.ArrRecipientsNew.length === 0) {
+          if (((this.ArrRecipientsEmail.length === 0 && this.currentUser?.loginType == 'EMAIL') || 
+          (this.ArrRecipientsPhone.length === 0 && this.currentUser?.loginType == 'SDT') || 
+          (this.ArrRecipientsEmailAndPhone.length === 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT') && this.typeUser === 0) || 
+          (this.ArrRecipientsNew.length === 0 && this.typeUser === 1)) {
             this.toastService.showErrorHTMLWithTimeout(
               'Bạn không có quyền xử lý tài liệu này!',
               '',
@@ -4124,7 +4172,7 @@ export class ConsiderContractComponent
   }
 
   filePath: any = '';
-  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!1) {
+  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!'vnpt') {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(this.firstHandler) {
@@ -4145,7 +4193,7 @@ export class ConsiderContractComponent
           signUpdateTempN = signUpdateTempN
             .filter(
               (item: any) =>
-                item?.recipient?.email === this.currentUser.email &&
+                ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
                 item?.recipient?.role === this.datas?.roleContractReceived
             )
             .map((item: any) => {
@@ -4438,16 +4486,15 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        if(supplierID == 1 || supplierID == 3){
+        if(supplierID == 'vnpt' || supplierID == 'mobiCA'){
           this.remoteDialogSuccessOpen(supplierID).then(result => {
-            // console.log("statusSign",this.statusSign);
             if (result.isDismissed) {
               this.router.navigate([
                 'main/form-contract/detail/' + this.idContract,
               ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
             }
           })
-        }else if(supplierID == 2){
+        }else if(supplierID == 'MobiFoneCA'){
           this.router.navigate([
             'main/form-contract/detail/' + this.idContract,
           ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
@@ -4480,7 +4527,7 @@ export class ConsiderContractComponent
         signUpdate &&
         signUpdate.type == 3 &&
         [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+        ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         const formData = {
@@ -4520,7 +4567,7 @@ export class ConsiderContractComponent
     const signUpdatePayload = signUpdateTemp
       .filter(
         (item: any) =>
-          item?.recipient?.email === this.currentUser.email &&
+          ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           item.type == 3 &&
           item?.recipient?.role === this.datas?.roleContractReceived
       )
@@ -4681,8 +4728,15 @@ export class ConsiderContractComponent
           this.ArrRecipientsNew = response.recipients.filter(
             (x: any) => x.email === this.currentUser.email
           );
+          
+          this.ArrRecipientsEmail = response.recipients.filter((x: any) => x.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL');
+          this.ArrRecipientsPhone = response.recipients.filter((x: any) => x.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT');
+          this.ArrRecipientsEmailAndPhone = response.recipients.filter((x: any) => (x.email === this.currentUser.email || x.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT');
 
-          if (this.ArrRecipientsNew.length === 0) {
+          if (((this.ArrRecipientsEmail.length === 0 && this.currentUser?.loginType == 'EMAIL') || 
+          (this.ArrRecipientsPhone.length === 0 && this.currentUser?.loginType == 'SDT') || 
+          (this.ArrRecipientsEmailAndPhone.length === 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT') && this.typeUser === 0) || 
+          (this.ArrRecipientsNew.length === 0 && this.typeUser === 1)) {
             this.toastService.showErrorHTMLWithTimeout(
               'Bạn không có quyền xử lý tài liệu này!',
               '',
@@ -4726,7 +4780,7 @@ export class ConsiderContractComponent
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
       (item: any) =>
-        item?.recipient?.email === this.currentUser.email &&
+        ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         item?.recipient?.role === this.datas?.roleContractReceived &&
         item.required &&
         (!item.valueSign && !this.otpValueSign) &&
@@ -4798,7 +4852,10 @@ export class ConsiderContractComponent
           if (this.recipientId == recipient.id) {
             this.recipient = recipient;
             this.isRemoteSigningType = recipient.sign_type.some((item: any) => item.id == 8)
-            if (this.currentUser?.email != this.recipient?.email) {
+            if ((((this.currentUser?.email != this.recipient?.email && (this.currentUser?.loginType == 'EMAIL')) || 
+            (this.currentUser?.phone != this.recipient?.phone && this.currentUser?.loginType == 'SDT') ||
+            (this.currentUser.email != this.recipient?.email && this.currentUser?.phone != this.recipient?.phone && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (this.currentUser?.email != this.recipient?.email && this.typeUser === 1)) {
               this.router.navigate([
                 'main/form-contract/detail/' + this.idContract,
               ]);
@@ -4819,7 +4876,10 @@ export class ConsiderContractComponent
       }
     }
     if (
-      this.recipient?.email == this.currentUser.email &&
+      ((((this.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+      (this.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((this.recipient?.phone == this.currentUser.phone || this.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+      (this.recipient?.email == this.currentUser.email && this.typeUser === 1)) &&
       typeSignDigital &&
       typeSignDigital == 3
     ) {
@@ -5080,7 +5140,10 @@ export class ConsiderContractComponent
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }
@@ -5186,7 +5249,10 @@ export class ConsiderContractComponent
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }
@@ -5240,6 +5306,7 @@ export class ConsiderContractComponent
           this.supplierID = result.type;
           this.dataCert.cert_id = result.ma_dvcs;
           this.phoneMobiCA = result.phone;
+          this.suppliersRs = result.suppliers;
           await this.signContractSubmit(supplierID);
         }
       });
@@ -5349,7 +5416,10 @@ export class ConsiderContractComponent
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
-        sign?.recipient?.email === this.currentUser.email &&
+        ((((sign?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (sign?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((sign?.recipient?.phone === this.currentUser.phone || sign?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (sign?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
@@ -5384,7 +5454,10 @@ export class ConsiderContractComponent
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
-        sign?.recipient?.email === this.currentUser.email &&
+        ((((sign?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (sign?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((sign?.recipient?.phone === this.currentUser.phone || sign?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (sign?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
@@ -5415,7 +5488,10 @@ export class ConsiderContractComponent
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
-        sign?.recipient?.email === this.currentUser.email &&
+        ((((sign?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (sign?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((sign?.recipient?.phone === this.currentUser.phone || sign?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (sign?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
@@ -5622,20 +5698,22 @@ export class ConsiderContractComponent
 
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
-    switch (supplierID) {
-      case "1":
-        appName = "VNPT SmartCA";
-        break;
-      case "2":
-        appName = "MobiCA"; // Hoặc tên app chính xác của Nacencomm
-        break;
-      case "3":
-        appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
-        break;
-      default:
-        appName = "CA2 Remote Signing";
-        break;
-    }
+    let result  = this.suppliersRs.find(item => item.id == code);
+    appName = result.name;
+    // switch (supplierID) {
+    //   case "vnpt":
+    //     appName = "VNPT SmartCA";
+    //     break;
+    //   case "MobiFoneCA":
+    //     appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
+    //     break;
+    //   case "mobiCA":
+    //     appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
+    //     break;
+    //   default:
+    //     appName = "CA2 Remote Signing";
+    //     break;
+    // }
   
     switch (code) {
       case "QUA_THOI_GIAN_KY":
@@ -5826,11 +5904,11 @@ export class ConsiderContractComponent
         } else if (typesign == 7) {
           eventName = 'kyUSBtokenBCY'
         } else if (typesign == 8) {
-          if(this.supplierID == 1) {
+          if(this.supplierID == 'vnpt') {
             eventName = 'kyRS_VNPTSmartCA'
-          } else if (this.supplierID == 2) {
+          } else if (this.supplierID == 'MobiFoneCA') {
             eventName = 'kyRS_MobifoneCA'
-          } else if (this.supplierID == 3){
+          } else if (this.supplierID == 'mobiCA'){
             eventName = 'kyRS_Nacencomm'
           } else {
              eventName = 'kyRS'
@@ -5852,6 +5930,48 @@ export class ConsiderContractComponent
       await this.customerAnalysis.pushData(data);
     } catch (error) {
       console.error('Lỗi khi gửi dữ liệu:', error);
+    }
+  }
+  
+  checkRecipientMatch(item: any): boolean {
+    const recipient = item?.recipient;
+    const user = this.currentUser;
+  
+    if (!recipient || !user) return false;
+  
+    const emailMatch = recipient?.email === user.email;
+    const phoneMatch = recipient?.phone === user.phone;
+  
+    switch (user.loginType) {
+      case 'EMAIL':
+        return emailMatch;
+      case 'SDT':
+        return phoneMatch;
+      case 'EMAIL_AND_SDT':
+        return emailMatch || phoneMatch;
+      default:
+        return false;
+    }
+  }
+  
+  checkSignRecipientMatch(signUpdate: any): boolean {
+    const recipient = signUpdate?.recipient;
+    const user = this.currentUser;
+  
+    if (!recipient || !user) return false;
+  
+    const emailMatch = recipient?.email === user.email;
+    const phoneMatch = recipient?.phone === user.phone;
+  
+    switch (user.loginType) {
+      case 'EMAIL':
+        return emailMatch;
+      case 'SDT':
+        return phoneMatch;
+      case 'EMAIL_AND_SDT':
+        return emailMatch || phoneMatch;
+      default:
+        return false;
     }
   }
 }

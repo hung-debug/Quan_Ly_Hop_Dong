@@ -6,6 +6,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { networkList } from "../../../config/variable";
+import { ContractService } from 'src/app/service/contract.service';
 @Component({
   selector: 'app-detail-user',
   templateUrl: './detail-user.component.html',
@@ -13,7 +14,7 @@ import { networkList } from "../../../config/variable";
 })
 export class DetailUserComponent implements OnInit {
 
-  isHsmIcorp: boolean = false
+  isHsmIcorp: boolean = true
   name:any="";
   email:any="";
   birthday:any="";
@@ -44,7 +45,8 @@ export class DetailUserComponent implements OnInit {
 
   //phan quyen
   isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
-  
+  networkList: Array<any> = [];
+  supplierList: Array<any> = [];
   constructor(private appService: AppService,
     private toastService : ToastService,
     private userService : UserService,
@@ -52,11 +54,31 @@ export class DetailUserComponent implements OnInit {
     public router: Router,
     private unitService: UnitService,
     private roleService: RoleService,
+    private contractService: ContractService,
     ) {
      }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     //lay id user
+    try {
+      let listSupplierPki = await this.contractService.getListSupplier(2).toPromise();
+      if(listSupplierPki) {
+        this.networkList = listSupplierPki.map((supplier: any) => ({
+          id: supplier.pkiIndex,
+          name: supplier.supplierName,
+          code: supplier.code
+        }));
+      }
+      let listSupplierHsm = await this.contractService.getListSupplier(1).toPromise();
+      if(listSupplierHsm) {
+        this.supplierList = listSupplierHsm.map((item: any) => ({
+          id: item.code,
+          name: item.supplierName
+        }));
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -86,7 +108,7 @@ export class DetailUserComponent implements OnInit {
       this.id = params['id'];
       this.userService.getUserById(this.id).subscribe(
         data => {
-          this.isHsmIcorp = data.hsm_supplier === "icorp";
+          this.isHsmIcorp = data.hsm_supplier === "mobifone";
           this.name = data.name;
           this.email = data.email;
           this.birthday = data.birthday;
@@ -100,10 +122,9 @@ export class DetailUserComponent implements OnInit {
 
           this.nameHsm = data.hsm_name;
           this.uuid = data.uuid;
-          if(data.hsm_supplier == "icorp") {
-            this.supplier = "I-CA";
-          } else if (data.hsm_supplier == "mobifone") {
-            this.supplier = "MobiFone";
+          if(data.hsm_supplier) {
+            let result  = this.supplierList.find(item => item.id === data.hsm_supplier);
+            this.supplier = result.name;
           }
           // this.password1Hsm = data.hsm_pass;
 
@@ -130,13 +151,8 @@ export class DetailUserComponent implements OnInit {
             });
           }
           if(data.phone_tel != null){
-            if(data.phone_tel == 1) {
-              this.networkKpi = "MobiFone";
-            } else if (data.phone_tel == 2) {
-              this.networkKpi = "Viettel";
-            } else {
-              this.networkKpi = "Ban cơ yếu";
-            }
+            let result  = this.networkList.find(item => item.id === data.phone_tel);
+            this.networkKpi = result.name;
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);

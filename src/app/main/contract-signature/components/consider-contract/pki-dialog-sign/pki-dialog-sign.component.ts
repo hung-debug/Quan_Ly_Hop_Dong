@@ -33,6 +33,7 @@ export class PkiDialogSignComponent implements OnInit {
   isErrorInvalid = false;
   isErrorNetwork = false;
   patternPhone = /^[0-9]*$/;
+  typeUser : any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -42,11 +43,23 @@ export class PkiDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
   ) {
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   async ngOnInit(): Promise<void> {
-    this.environment = environment
-    this.nl = networkList;
+    this.environment = environment;
+    let listSupplier = await this.contractService.getListSupplier(2).toPromise();
+    if(listSupplier) {
+      this.nl = listSupplier.map((supplier: any) => ({
+        id: supplier.pkiIndex,
+        name: supplier.supplierName,
+        code: supplier.code
+      }));
+      this.nl.sort((a, b) => a.id - b.id);
+    }
+    //this.nl = networkList;
     this.datas = this.data;
     let userId = this.userService.getAuthCurrentUser().id;
     const infoUser = await this.userService.getUserById(userId).toPromise();
@@ -63,7 +76,10 @@ export class PkiDialogSignComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
 
-      let ArrRecipients = response.recipients.filter((ele: any) => ele.email == this.currentUser.email);
+      let ArrRecipients = response.recipients.filter((ele: any) => (((ele.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+      (ele.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((ele.phone == this.currentUser.phone || ele.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (ele.email == this.currentUser.email && this.typeUser === 1));
 
 
       let ArrRecipientsNew = false
@@ -140,7 +156,7 @@ export class PkiDialogSignComponent implements OnInit {
 
 
 
-      this.networkCompany = itemNameNetwork.id == 'bcy' ? 'bcy' : itemNameNetwork.name;
+      this.networkCompany = itemNameNetwork.code;
     }
 
     const resDialog = {

@@ -770,7 +770,7 @@
   "sign_by_cert":"Ký bằng chứng thư số server",
   "choice": "Lựa chọn",
   "signer":"Người ký",
-  "unit.email.name": "Địa chỉ email/Họ tên",
+  "unit.email.name": "Địa chỉ email/Họ tên/Số điện thoại",
   "error.org.required":"Tổ chức không được để trống",
   "sign.multi.success":"Ký nhiều tài liệu thành công",
   "multi.sign.warning": "Hệ thống hỗ trợ ký tối đa 50 tài liệu/ 1 lần ký",
@@ -980,5 +980,7 @@
   "report.exporting": "File báo cáo đang được tải xuống",
   "change.phone": "THAY ĐỔI SỐ ĐIỆN THOẠI",
   "hind.text.phone.otp": "Nhập số điện thoại để nhận mã OTP",
-  "confirm.bonbon": "Bạn có đồng ý với các nội dung, điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch."
+  "confirm.bonbon": "Bạn có đồng ý với các nội dung, điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch.",
+  "error.phone.exists": "Số điện thoại đã tồn tại trong luồng xử lý",
+  "document.re-signing": "Trình ký lại tài liệu"
 }

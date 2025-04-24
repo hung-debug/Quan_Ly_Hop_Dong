@@ -7,9 +7,19 @@
       <div class="sign-unit-select">
         <div class="label text-color">Nhà cung cấp <span class="required-title">*</span></div>
         <select formControlName="supplier" class="form-select-custom" style="font-size: 14px" aria-label="Default select example">
-          <option value="1">VNPT SmartCA</option>
+          <ng-container *ngFor="let supplier of suppliers">
+            <option
+              *ngIf="supplier.id !== 'MobiFoneCA' || datas.isHidden"
+              [value]="supplier.id"
+            >
+              {{ supplier.name }}
+            </option>
+          </ng-container>
+
+
+          <!-- <option value="1">VNPT SmartCA</option>
           <option value="2" *ngIf="this.datas.isHidden">MobiFoneCA</option>
-          <option value="3">CA2</option>
+          <option value="3">CA2</option> -->
         </select>
       </div>
     </div>
@@ -55,9 +65,17 @@
       <div class="sign-unit-select">
         <div class="label text-color">Nhà cung cấp <span class="required-title">*</span></div>
         <select formControlName="supplier" class="form-select-custom" style="font-size: 14px" aria-label="Default select example">
-          <option value="1">VNPT SmartCA</option>
+          <!-- <option value="1">VNPT SmartCA</option>
           <option value="2" *ngIf="this.datas.isHidden">MobiFoneCA</option>
-          <option value="3" >CA2</option>
+          <option value="3" >CA2</option> -->
+          <ng-container *ngFor="let supplier of suppliers">
+            <option
+              *ngIf="supplier.id !== 'MobiFoneCA' || datas.isHidden"
+              [value]="supplier.id"
+            >
+              {{ supplier.name }}
+            </option>
+          </ng-container>
         </select>
       </div>
     </div>

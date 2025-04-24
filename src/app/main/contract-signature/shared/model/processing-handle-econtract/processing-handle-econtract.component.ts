@@ -17,6 +17,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   is_list_name: any = [];
   personCreate: string;
   emailCreate: string;
+  phoneCreate: string;
   timeCreate: any;
   isHiddenButton = false;
   currentUser: any;
@@ -52,7 +53,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     private contractService: ContractService,
     public translate: TranslateService,
   ) {
-
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
   lang: string;
@@ -69,16 +70,18 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     let participants = detailContract[0].participants;
 
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
+      console.log("response",response);
+      
       this.personCreate = response.createdBy.name;
 
       this.timeCreate = response.createdAt ? moment(response.createdAt).add(420) : null;
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
+      this.phoneCreate = response.createdBy.phone;
       this.reasonCancel = response.reasonCancel;
       this.contractStatus = response.contractStatus;
       this.cancelDate = response.cancelDate ? moment(response.cancelDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
 
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
       if (this.currentUser.email == this.emailCreate) {
         this.isHiddenButton = true;
       } else {
@@ -101,6 +104,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           card_id: element.cardId,
           user_in_organization: element.user_in_organization,
           role: element.role,
+          recipientHistory: element.recipientHistory,
         }
 
         this.is_list_name.push(data);
@@ -157,6 +161,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     let res = '';
 
     if(this.lang == 'vi' || !this.lang) {
+      if (role == 0) {
+        return 'Người khởi tạo';
+      }
       if (status == 3) {
         return 'Đã từ chối';
       } else if (status == 4) {
@@ -185,6 +192,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         if (!res.includes('Đã'))
           res = 'Đã huỷ'
     } else if (this.lang == 'en') {
+      if (role == 0) {
+        return 'Originator';
+      }
       if (status == 3) {
         return 'Rejected';
       } else if (status == 4) {
@@ -259,8 +269,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   openEdit(recipient: any) {
     this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
+      console.log("response",response);
+      console.log("this.data",this.is_list_name);
+      
       let data: any;
-      data = response;
+      // let arrProcessHandle: any;
+      data = {
+        response,
+        arrProcessHandle: this.is_list_name,
+      }
       data["contract_id"] = this.data.is_data_contract.id
 
 

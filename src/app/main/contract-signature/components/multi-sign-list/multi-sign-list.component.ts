@@ -29,6 +29,7 @@ export class MultiSignListComponent implements OnInit {
   thePDF: any = null;
   pageNumber = 1;
   arrPage: any = [];
+  typeUser: any;
 
   objPdfProperties: any = {
     pages: [],
@@ -42,7 +43,15 @@ export class MultiSignListComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private contractService: ContractService
-  ) { }
+  ) {
+    this.currentUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info;
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
+   }
 
   ngOnInit(): void {
     //lấy id contract đã tick
@@ -254,7 +263,10 @@ export class MultiSignListComponent implements OnInit {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
       return this.datas.is_data_object_signature.filter(
         (item: any) =>
-          item.recipient ? (item?.recipient?.email === this.currentUser.email &&
+          item.recipient ? (((((item?.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item?.recipient?.phone == this.currentUser.phone || item?.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           item?.recipient?.role === this.datas?.roleContractReceived): []
       );
     } else {

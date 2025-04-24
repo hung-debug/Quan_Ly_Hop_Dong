@@ -181,7 +181,9 @@ export class ContractService {
   mergeTimestampFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/merge-time-stampError`
   checkCurrentSigningUrl: any = `${environment.apiUrl}/api/v1/sign/check-process-is-sign`
   // token v2 fixing ===============================
-
+  listSuppliergUrl: any = `${environment.apiUrl}/api/v1/sign/get-supplier-by-type`
+  resubmitRejectionDocumentUrl: any = `${environment.apiUrl}/api/v1/contracts/resign-pending/`
+  
   token: any;
   customer_id: any;
   organization_id: any;
@@ -1360,12 +1362,8 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const supplierMap: { [key: number]: string } = {
-        1: 'vnpt',
-        2: 'MobiFoneCA',
-        3: 'nacencomm'
-      };
-    const supplier = supplierMap[supplierID] || 'vnpt';
+
+    const supplier = supplierID || 'vnpt';
     const body = JSON.stringify({
       userCode: datas.cert_id,
       image_base64: datas.imageBase64,
@@ -1387,12 +1385,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const supplierMap: { [key: number]: string } = {
-        1: 'vnpt',
-        2: 'MobiFoneCA',
-        3: 'nacencomm'
-      };
-    const supplier = supplierMap[supplierID] || 'vnpt';
+    const supplier = supplierID || 'vnpt';
 
     const body = JSON.stringify({
       userCode: datas.cert_id,
@@ -1874,6 +1867,14 @@ export class ContractService {
     return this.http.get<any>(this.getCopyContract + id, { headers });
   }
 
+  resubmitRejectionDocument(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.resubmitRejectionDocumentUrl + id, { headers });
+  }
+
   convertUrltoBinary(res: any) {
     const headers = new HttpHeaders().append(
       'Content-Type',
@@ -2176,6 +2177,23 @@ export class ContractService {
       .post<any>(this.mergeTimestampFixingUrl, body, { headers: headers })
       .pipe();
   }
+
+  getListSupplier(type: number) {
+    this.getCurrentUser();
+    
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.token
+    });
+  
+    return this.http
+      .get<any>(this.listSuppliergUrl + '?typeId=' + type, {
+        headers: headers,
+      })
+      .pipe();
+  }
+  
+
   // tokenV2 fixing =======================================================
 
   checkCurrentSigning(recipientId: string) {

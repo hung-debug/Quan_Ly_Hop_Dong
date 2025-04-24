@@ -110,22 +110,21 @@
                 </div> 
               </div>
 
-              <div class="row mt-7px">            
+              <div class="row mt-7px">
                 <div class="col-md-6" style="padding-right: 7px">
-                  <div class="label-text">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">  
-                    <input class="content-input hover-item" *ngIf="d.login_by === 'email'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                      (focusin)="onFocusIn($event, index, 'view')" (ngxInputSearch)="doTheSearch($event, index, 'view')"
-                      [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
-  
-                    <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                      (focusin)="onFocusIn($event, index, 'view')" [(ngModel)]="d.name"
-                      (focusout)="onFocusOut($event, d)">
+                  <div class="label-text">{{ "user.name" | translate }}&nbsp;<span class="required-title">*</span></div>
+                  
+                  <div class="input-data">
+                    <input class="content-input hover-item" type="text"
+                      placeholder="{{ 'nhap_ho_va_ten' | translate }}" (focusin)="onFocusIn($event, index, 'view')"
+                      (ngxInputSearch)="doTheSearch($event, index, 'view')" [(ngModel)]="d.name"
+                      (focusout)="onFocusOut($event, d)" />
                   </div>
                   <div class="search-name"
                     *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0">
-                    <button  class="search-name-items" *ngFor="let t of this.arrSearchNameView"
-                      (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})
+                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameView"
+                      (click)="onSelectName(t, d)">
+                      {{ t.name }} {{ d.login_by === 'email' ? '(' + t.email + ')' : '(' + t.phone + ')' }}
                     </button>
                   </div>
                 </div>
@@ -363,27 +362,19 @@
 
               <div class="row mt-7px">
                 <div class="col-md-6" style="padding-right: 7px">
-                  <div class="label-text">
-                    {{ "user.name" | translate }}&nbsp;<span class="required-title">*</span>
-                  </div>
+                  <div class="label-text">{{ "user.name" | translate }}&nbsp;<span class="required-title">*</span></div>
+                  
                   <div class="input-data">
-                    <input class="content-input hover-item" *ngIf="d.login_by === 'email'" type="text" placeholder="{{ 'nhap_ho_va_ten' | translate }}"
-                      (focusin)="onFocusIn($event, index, 'signature')"
+                    <input class="content-input hover-item" type="text"
+                      placeholder="{{ 'nhap_ho_va_ten' | translate }}" (focusin)="onFocusIn($event, index, 'signature')"
                       (ngxInputSearch)="doTheSearch($event, index, 'signature')" [(ngModel)]="d.name"
                       (focusout)="onFocusOut($event, d)" />
-
-                    <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{ 'nhap_ho_va_ten' | translate }}"
-                      (focusin)="onFocusIn($event, index, 'signature')" [(ngModel)]="d.name"
-                      (focusout)="onFocusOut($event, d)" />
                   </div>
-                  <div class="search-name" *ngIf="
-                      this.arrSearch[index] &&
-                      this.arrSearchNameSignature &&
-                      arrSearchNameSignature.length > 0
-                    ">
+                  <div class="search-name"
+                    *ngIf="this.arrSearch[index] && this.arrSearchNameSignature && arrSearchNameSignature.length > 0">
                     <button class="search-name-items" *ngFor="let t of this.arrSearchNameSignature"
                       (click)="onSelectName(t, d)">
-                      {{ t.name }} ({{ t.email }})
+                      {{ t.name }} {{ d.login_by === 'email' ? '(' + t.email + ')' : '(' + t.phone + ')' }}
                     </button>
                   </div>
                 </div>
@@ -1275,6 +1266,7 @@
   
                         <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{ 'nhap_ho_va_ten' | translate }}"
                           (focusin)="onFocusIn($event, index, 'view')" [(ngModel)]="d.name"
+                          (ngxInputSearch)="doTheSearch($event, index, 'view')"
                           (focusout)="onFocusOut($event, d)" />
                       </div>
                     </div>

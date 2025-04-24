@@ -21,6 +21,7 @@ export class ConfirmInfoContractComponent implements OnInit {
 
   currentUser: any;
   emailRecipients: any;
+  typeUser: any;
   arrVariableRemove = [
     'id',
     'sign_unit',
@@ -49,7 +50,10 @@ export class ConfirmInfoContractComponent implements OnInit {
     private dialog: MatDialog,
     private toastService: ToastService,
     private customerAnalysis: CustomerAnalysis) {
-    this.step = variable.stepSampleContract.step4
+    this.step = variable.stepSampleContract.step4;
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   data_sample_contract: any = [];
@@ -111,7 +115,10 @@ export class ConfirmInfoContractComponent implements OnInit {
     for (const d of this.datas.is_data_contract.participants) {
       for (const q of d.recipients) {
         if (q.email) {
-          if (q.email == this.currentUser.email && q.status == 1) {
+          if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+          (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
             id_recipient_signature = q.id;
             break
           }
@@ -129,7 +136,10 @@ export class ConfirmInfoContractComponent implements OnInit {
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }

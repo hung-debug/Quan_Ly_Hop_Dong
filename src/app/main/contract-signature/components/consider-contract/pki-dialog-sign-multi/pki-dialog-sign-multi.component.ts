@@ -33,6 +33,7 @@ export class PkiDialogSignMultiComponent implements OnInit {
   isErrorInvalid = false;
   isErrorNetwork = false;
   patternPhone = /^[0-9]*$/;
+  typeUser: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -42,11 +43,23 @@ export class PkiDialogSignMultiComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
   ) {
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   async ngOnInit(): Promise<void> {
     this.environment = environment
-    this.nl = networkList;
+    let listSupplier = await this.contractService.getListSupplier(2).toPromise();
+    if(listSupplier) {
+      this.nl = listSupplier.map((supplier: any) => ({
+        id: supplier.pkiIndex,
+        name: supplier.supplierName,
+        code: supplier.code
+      }));
+      this.nl.sort((a, b) => a.id - b.id);
+    }
+    //this.nl = networkList;
     this.datas = this.data;
     this.phoneNum = this.datas?.sign?.phone;
     this.networkCode = this.datas?.sign?.phone_tel;
@@ -91,7 +104,7 @@ export class PkiDialogSignMultiComponent implements OnInit {
   
     const itemNameNetwork = this.nl.find((nc: any) => nc.id === this.networkCode);
     if (itemNameNetwork) {
-      this.networkCompany = itemNameNetwork.id === 'bcy' ? 'bcy' : itemNameNetwork.name;
+      this.networkCompany = itemNameNetwork.code;
     }
 
     try {
@@ -102,7 +115,11 @@ export class PkiDialogSignMultiComponent implements OnInit {
         const contract = this.data.chooseContract.find((contract: any) => contract.id === recipientId);
 
         let response = await this.contractService.getDetermineCoordination(recipientId).toPromise();
-        let ArrRecipients = response.recipients.filter((ele: any) => ele.email == this.currentUser.email);
+        let ArrRecipients = response.recipients.filter((ele: any) => (((ele.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (ele.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((ele.phone == this.currentUser.phone || ele.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (ele.email == this.currentUser.email && this.typeUser === 1));
+        
         let ArrRecipientsNew = false;
         ArrRecipients.forEach((item: any) => {
           if (item.sign_type[0].id == 3) {
