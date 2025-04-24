@@ -269,6 +269,7 @@ export class ContractService {
     handlerName: any,
     nameOrEmailCustomer: any,
     issue?: any,
+    isDelete?: any,
   ): Observable<any> {
     this.getCurrentUser();
 
@@ -385,6 +386,10 @@ export class ContractService {
 
     if (issue) {
       listContractUrl += '&issue=' + issue;
+    }
+
+    if (isDelete) {
+      listContractUrl += '&is_delete=' + isDelete;
     }
     //
     const headers = { Authorization: 'Bearer ' + this.token };
