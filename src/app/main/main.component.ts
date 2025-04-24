@@ -42,6 +42,9 @@ export class MainComponent implements OnInit {
   isMessageNotificationSet = false;
   logoWeb: string;
   isBonBon: boolean = false;
+  isSidebarOpen = false;
+  listWorkSpace: any[] = [];
+  flag: boolean = false;
   @ViewChild('scrollingText', { static: false }) scrollingTextElement: ElementRef<any>;
   constructor(private router: Router,
               private appService: AppService,
@@ -105,6 +108,40 @@ export class MainComponent implements OnInit {
 
   lang: any;
   async ngOnInit() {
+    if(environment.flag == 'KD') {
+      this.flag = true;
+      try{
+        this.listWorkSpace = [
+          {
+            "id": 0,
+            "clientId": "TTCNTT-WORK-SPACE",
+            "clientName": "Workspace",
+            "icon": "../../assets/img/icon-account.png",
+            "note": "EContract Workspace",
+            "url": "https://auth-sso.mobifone.vn/",
+            "createdAt": null,
+            "listAdmin": null,
+            "available": true,
+            "tenantsList": [
+                {
+                    "id": null,
+                    "clientId": "TTCNTT-WORK-SPACE",
+                    "tenantCode": "TTCNTT-WORK-SPACE-TENANT",
+                    "domain": "https://auth-sso.mobifone.vn/",
+                    "admin": "75f4a3cb-6ea7-490a-9c9d-e970634c71e2"
+                }
+              ]
+          }
+        ];
+        let listWorkSpace = await this.dashboardService.getWorkSpace().toPromise();
+        if(listWorkSpace.length) {
+          listWorkSpace = listWorkSpace.filter((item: any) => item.clientId !== environment.SSO_CLIENTID);
+          this.listWorkSpace = this.listWorkSpace.concat(listWorkSpace);
+        }
+      } catch(err) {
+        console.log(err)
+      }
+    }
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
     let url = environment.apiUrl.replace("/service", "");
@@ -400,4 +437,29 @@ export class MainComponent implements OnInit {
     sessionStorage.setItem('lang', lang);
   }
 
+  openWorkspace() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeWorkspace() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    document.body.style.overflow = '';
+  }
+
+  toggleDropdown(workspace: any) {
+    this.listWorkSpace.forEach(ws => ws.showDropdown = false);
+    workspace.showDropdown = !workspace.showDropdown;
+  }
+  
+  openDomain(domain: string, event: MouseEvent, workspace: any) {
+    event.stopPropagation();
+    window.open(domain, '_blank');
+    workspace.showDropdown = false;
+  }
+  
+  closeDropdown(workspace: any) {
+    workspace.showDropdown = false;
+  }
+  
 }
