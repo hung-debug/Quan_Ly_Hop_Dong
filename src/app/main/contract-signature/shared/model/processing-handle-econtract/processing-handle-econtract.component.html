@@ -22,7 +22,11 @@
                     <div *ngIf="d.name" style="display: flex;">
                     <!--Tên người trong luồng tài liệu-->
                         <span>{{d.name}}</span>&nbsp;
-                        <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
+                        <!-- <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span> -->
+                        <span style="color: #8B8B8B" *ngIf="(d.role == 0 || d.role == 6) && this.currentUser.loginType == 'SDT'">({{d.phone}})</span>
+                        <span style="color: #8B8B8B" *ngIf="(d.role == 0 || d.role == 6) && this.currentUser.loginType != 'SDT'">({{d.emailRecipients}})</span>
+                        <span *ngIf="d.login_by == 'email' && d.emailRecipients && d.role != 0" style="color: #8B8B8B">({{d.emailRecipients}})</span>
+                        <span *ngIf="d.login_by == 'phone' && d.phone && d.role != 0" style="color: #8B8B8B">({{d.phone}})</span>
                     </div>
                     <!-- <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span> -->
                     <span style="color: #8B8B8B" *ngIf="d.type == 1 && d.user_in_organization">{{d.user_in_organization}}</span>
@@ -76,7 +80,11 @@
 
                     <!--Tên người trong luồng tài liệu-->
                     <span>{{d.name}}</span>&nbsp;
-                    <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
+                    <!-- <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span> -->
+                    <span style="color: #8B8B8B" *ngIf="(d.role == 0 || d.role == 6) && this.currentUser.loginType == 'SDT'">({{d.phone}})</span>
+                    <span style="color: #8B8B8B" *ngIf="(d.role == 0 || d.role == 6) && this.currentUser.loginType != 'SDT'">({{d.emailRecipients}})</span>
+                    <span *ngIf="d.login_by == 'email' && d.emailRecipients && d.role != 0" style="color: #8B8B8B">({{d.emailRecipients}})</span>
+                    <span *ngIf="d.login_by == 'phone' && d.phone && d.role != 0" style="color: #8B8B8B">({{d.phone}})</span>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
 

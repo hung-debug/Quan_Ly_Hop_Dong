@@ -105,6 +105,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           user_in_organization: element.user_in_organization,
           role: element.role,
           recipientHistory: element.recipientHistory,
+          login_by: element.login_by
         }
 
         this.is_list_name.push(data);
@@ -309,8 +310,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   openEdit(recipient: any) {
     this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
-      console.log("response",response);
-      console.log("this.data",this.is_list_name);
       
       let data: any;
       // let arrProcessHandle: any;
