@@ -101,7 +101,7 @@
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
 
-                <div *ngIf = "this.contractStatus != 32 && this.contractStatus != 31 && this.contractStatus != 0" class="col-md-2">
+                <div *ngIf = "this.contractStatus != 32 && this.contractStatus != 31 && this.contractStatus != 0 && isHiddenButton && listCheckSmsEmail" class="col-md-2">
                 </div>
                 <!-- <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"
                 *ngIf = " isHiddenButton && listCheckSmsEmail && ((d.statusNumber !== 0 && d.statusNumber !== 4 && !d.recipientHistory) || (d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num === 0 || !d.change_num) && !d.recipientHistory))">
