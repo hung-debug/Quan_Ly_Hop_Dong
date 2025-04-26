@@ -12,23 +12,23 @@ let firebaseConfig;
 
 if (environment.flag == 'KD') {
   firebaseConfig = {
-    apiKey: "AIzaSyCJ6fpY0Qy-ZZJ0eLyWWVN1Bg9mU10dDcY",
+    apiKey: "AIzaSyBEX4QbtiOdkdLc2jgCRMNZF_H_BuVq_CM",
     authDomain: "econtract-f1d19.firebaseapp.com",
     projectId: "econtract-f1d19",
     storageBucket: "econtract-f1d19.firebasestorage.app",
     messagingSenderId: "275368630162",
-    appId: "1:275368630162:web:099eb2477c044ebe77534b",
-    measurementId: "G-VRCNNGZC1M"
+    appId: "1:275368630162:web:e5d174fb9821018677534b",
+    measurementId: "G-FX0NLN13RT"
   };
 } else {
   firebaseConfig = {
-    apiKey: "AIzaSyCJ6fpY0Qy-ZZJ0eLyWWVN1Bg9mU10dDcY",
+    apiKey: "AIzaSyBEX4QbtiOdkdLc2jgCRMNZF_H_BuVq_CM",
     authDomain: "econtract-f1d19.firebaseapp.com",
     projectId: "econtract-f1d19",
     storageBucket: "econtract-f1d19.firebasestorage.app",
     messagingSenderId: "275368630162",
-    appId: "1:275368630162:web:099eb2477c044ebe77534b",
-    measurementId: "G-VRCNNGZC1M"
+    appId: "1:275368630162:web:b3b01d5899d677f477534b",
+    measurementId: "G-2WKE95VE4G"
   };
 }
 
