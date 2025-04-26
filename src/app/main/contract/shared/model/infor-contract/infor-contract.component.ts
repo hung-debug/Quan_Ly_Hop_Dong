@@ -472,14 +472,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contractNameRequired();
     this.contractFileRequired();
     this.contractCeCaValid();
+    this.endTimeRequired();
     if (environment.flag == 'NB') {
       this.contractTypeValid();
-      if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid() || !this.contractTypeValid()) {
+      if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid() || !this.contractTypeValid() || !this.endTimeRequired()) {
         // this.spinner.hide();
         return false;
       }
     } else if (environment.flag == 'KD' && 
-      (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid())) {
+      (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid() || !this.endTimeRequired())) {
         return false
     }
 
@@ -1338,6 +1339,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.errorContractFile = "";
     if (!this.datas.contractFile && !this.datas.file_name) {
       this.errorContractFile = "error.contract.file.required";
+      return false;
+    }
+    return true;
+  }
+  
+  endTimeRequired(){
+    this.errorSignTime = "";
+    if(!this.sign_time){
+      this.errorSignTime = "error.notTime";
       return false;
     }
     return true;
