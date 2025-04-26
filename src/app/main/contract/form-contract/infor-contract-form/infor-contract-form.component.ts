@@ -66,6 +66,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   page: number = 5;
   code: any;
   id_form: number;
+  errorEndTime:any='';
 
   attachFormFileNameArr: any[] = [];
   attachFileArr: any[] = [];
@@ -586,6 +587,15 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     return false;
   }
 
+  endTimeRequired(){
+    this.errorEndTime = "";
+    if(!this.datasForm.sign_time){
+      this.errorEndTime = "error.notTime";
+      return false;
+    }
+    return true;
+  }
+
 
   validDataForm() {
     if (!this.datasForm.template_contract_id) {
@@ -598,6 +608,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       this.toastService.showWarningHTMLWithTimeout(this.translate.instant('please.choose.contract.name'),'',3000);
       return false;
     }
+    
+    // this.endTimeRequired();
+    const isValid = this.endTimeRequired();
+    if (!isValid) return;
 
     //Check khong có type_id và type_id đó không nằm trong typeList thì báo valid
     if (environment.flag == 'NB') {
