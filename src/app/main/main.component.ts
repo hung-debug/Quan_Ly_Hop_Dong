@@ -108,7 +108,7 @@ export class MainComponent implements OnInit {
 
   lang: any;
   async ngOnInit() {
-    if(environment.flag == 'KD') {
+    if(environment.flag == 'KD' && environment.usedSSO) {
       this.flag = true;
       try{
         this.listWorkSpace = [
