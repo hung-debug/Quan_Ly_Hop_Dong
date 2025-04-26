@@ -862,11 +862,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 count++;
                 break;
               }
-            } else if (isParterSort[k].email.trim() && !this.pattern.email.test(isParterSort[k].email.trim())) {
-              this.getNotificationValid("Email của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
-              count++;
-              break;
-            }
+            } else {
+              if (isParterSort[k].phone.trim() && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
+                this.getNotificationValid("Số điện thoại của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
+                count++;
+                break;
+              }
+            } 
             
             if((isParterSort[k].login_by == "phone" || isParterSort[k].login_by == "email") && (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim()))
             ) {
