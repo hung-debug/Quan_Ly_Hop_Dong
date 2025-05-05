@@ -7,7 +7,7 @@
         <div class="radio col-md-6 label_type">
           <label><input type="radio" name="type" [value]="1" [(ngModel)]="type"
             (change)="changeType()">
-            <span> Chia sẻ qua email</span></label>
+            <span> Chia sẻ qua Email/SĐT</span></label>
         </div>
         <div class="radio col-md-6 label_type">
           <label><input type="radio" name="type" [value]="2" [(ngModel)]="type"
@@ -19,7 +19,7 @@
     <form *ngIf="type==1" [formGroup]="addForm" class="content" >
         <div class="row">
             <div class="col-md-12">
-                <div class="label text-color">Email <span class="required-title">*</span></div>
+                <div class="label text-color">Email</div>
                 <!-- <div>
                     <p-chips styleClass="font" type="text" formControlName="email" separator="," placeholder="Email ngăn cách và kết thúc bởi dấu ,"></p-chips>
                 </div> -->
@@ -29,6 +29,19 @@
                 <div *ngIf="submitted && f.email.errors" class="invalid">
                     <div *ngIf="f.email.errors.required">Email không được để trống</div>
                 </div>
+            </div>
+            
+            <div class="col-md-12" style="padding-top: 10px">
+              <div class="label text-color">Số điện thoại</div>
+              <!-- <div>
+                  <p-chips styleClass="font" type="text" formControlName="email" separator="," placeholder="Email ngăn cách và kết thúc bởi dấu ,"></p-chips>
+              </div> -->
+              <div class="input-data">
+                  <input type="text" formControlName="phone" placeholder="Số điện thoại ngăn cách nhau bởi dấu ,">
+              </div>
+              <div *ngIf="submitted && f.email.errors" class="invalid">
+                  <div *ngIf="f.email.errors.required">Số điện thoại không được để trống</div>
+              </div>
             </div>
         </div>
     
@@ -62,7 +75,7 @@
         </div>
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-12">
-                <div class="label text-color">Email <span class="required-title">*</span></div>
+                <div class="label text-color">Email</div>
                 <div>
                     <p-multiSelect 
                         panelStyleClass="font"
@@ -77,10 +90,33 @@
                         [showClear]="true"  
                         ></p-multiSelect>
                 </div>
-                <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
+                <!-- <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
                     <div *ngIf="fUser.email.errors.required">Email không được để trống</div>
-                </div>
+                </div> -->
             </div>
+        </div>
+        
+        <div class="row" style="padding-top: 10px;">
+          <div class="col-md-12">
+              <div class="label text-color">Số điện thoại</div>
+              <div>
+                  <p-multiSelect 
+                      panelStyleClass="font"
+                      appendTo="body"
+                      [options]="listPhone" 
+                      formControlName="phone" 
+                      optionLabel="phone" 
+                      optionValue="phone" 
+                      placeholder="Chọn số điện thoại" 
+                      [filter]="true" 
+                      filterBy="phone" 
+                      [showClear]="true"  
+                      ></p-multiSelect>
+              </div>
+              <!-- <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
+                  <div *ngIf="fUser.email.errors.required">Số điện thoại không được để trống</div>
+              </div> -->
+          </div>
         </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">

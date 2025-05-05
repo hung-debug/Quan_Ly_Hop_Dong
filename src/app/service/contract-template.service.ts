@@ -327,13 +327,14 @@ export class ContractTemplateService {
     return this.http.get<any>(this.getDataContractV2 + idContract, { headers });
   }
 
-  shareContract(email: any, id: any) {
+  shareContract(email: any, phone: any, id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       email: email,
+      phone: phone,
       contract_id: id
     });
     

@@ -984,5 +984,6 @@
   "error.phone.exists": "Số điện thoại đã tồn tại trong luồng xử lý",
   "document.re-signing": "Trình ký lại tài liệu",
   "contract.cancel.doc":"Lý do hủy bỏ tài liệu",
-  "cancel.contract": "LÝ DO HỦY BỎ TÀI LIỆU"
+  "cancel.contract": "LÝ DO HỦY BỎ TÀI LIỆU",
+  "select.phone": "Chọn số điện thoại"
 }
