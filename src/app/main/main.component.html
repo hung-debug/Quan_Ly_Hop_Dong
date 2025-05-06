@@ -210,8 +210,8 @@
       </div>
     </header>
 
-    <header *ngIf="isBonBon" [ngStyle]="getStyleSideBar()">
-      <img [src]="logoWeb" (click)="backToDashboard()" alt="Logo" class="img-responsive"/>
+    <header class="header-bonbon" *ngIf="isBonBon" [ngStyle]="getStyleSideBar()">
+      <img [src]="logoWeb" (click)="backToDashboard()" alt="Logo" class="img-responsive-bonbon"/>
       <img src="assets/img/ec-header.png" style="height: 100%;">
     </header>
 

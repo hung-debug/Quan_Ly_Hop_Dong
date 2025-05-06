@@ -374,7 +374,7 @@ export class MainComponent implements OnInit {
 
   getStyle() {
 
-    if (this.router.url.includes("contract-signature")) {
+    if (this.router.url.includes("contract-signature") || this.isBonBon) {
       return {
         'margin-top': '40px'
       }
