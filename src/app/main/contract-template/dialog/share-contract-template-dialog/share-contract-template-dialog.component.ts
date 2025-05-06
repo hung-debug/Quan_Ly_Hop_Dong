@@ -93,7 +93,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
       });
 
       this.cols = [
-        {header: 'Email đã chia sẻ', style:'text-align: left;' },
+        {header: 'Email/SĐT đã chia sẻ', style:'text-align: left;' },
         {header: 'Tổ chức', style:'text-align: left;' },
         {header: 'role.manage', style:'text-align: center;' },
         ];
@@ -142,7 +142,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn tổ chức', "", 3000);
       return;
     }else if(!emailInput && !phoneInput){
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn giá trị Email/Số điện thoại', "", 3000);
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập Email hoặc SĐT chia sẻ', "", 3000);
       return;
     }
 
