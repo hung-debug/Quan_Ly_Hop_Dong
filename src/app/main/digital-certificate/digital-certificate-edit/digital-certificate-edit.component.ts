@@ -103,17 +103,24 @@ export class DigitalCertificateEditComponent implements OnInit {
   async getData() {
     await this.DigitalCertificateService.getCertById(this.datas.id).toPromise().then(
       data => {
-        this.emailList.push(...data.customers);
-        this.phoneList.push(...data.customers);
-        console.log("data",data);
+
+        // this.emailList.push(...data.customers);
+        // this.phoneList.push(...data.customers);
         
-        
-        const listCustomerEmail = data.customers.map((item: any) => item.email);
-        const listCustomerPhone = data.customers.map((item: any) => item.phone);
+        const customersWithEmail = data.customers.filter((item: any) => item.email);
+        const customersWithPhone = data.customers.filter((item: any) => item.phone);
+
+        this.emailList.push(...customersWithEmail);
+        this.phoneList.push(...customersWithPhone);
+
+        const listCustomerEmail = data.customers.map((item: any) => item?.email);
+        const listCustomerPhone = data.customers.map((item: any) => item?.phone);
         this.addForm.patchValue({
           status: data.status,
-          email: listCustomerEmail,
-          phone: listCustomerPhone
+          // email: listCustomerEmail,
+          // phone: listCustomerPhone
+          email: listCustomerEmail.filter((e: string | null) => e),
+          phone: listCustomerPhone.filter((p: string | null) => p)
         })
 
         // set emailOptionsList
@@ -135,7 +142,6 @@ export class DigitalCertificateEditComponent implements OnInit {
         this.orgID = data.orgAdminCreate.toString()
       }
     )
-
   }
 
   changeOrg(){
@@ -225,6 +231,14 @@ export class DigitalCertificateEditComponent implements OnInit {
   save() {
     this.submitted = true;
     if(!this.validData()){
+      return;
+    }
+    
+    let emailInput = this.addForm.value.email[0]?.trim();
+    let phoneInput = this.addForm.value.phone[0]?.trim();
+
+    if(!emailInput && !phoneInput){
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn giá trị Email hoặc SĐT', "", 3000);
       return;
     }
 
@@ -360,11 +374,11 @@ export class DigitalCertificateEditComponent implements OnInit {
   validData() {
     this.clearError();
     let validateResult = {
-      email: this.validateEmail(),
-      phone: this.validatePhone(),
+      // email: this.validateEmail(),
+      // phone: this.validatePhone(),
       orgId:this.validateOrg()
     }
-    if (!validateResult.email|| !validateResult.orgId) {
+    if (!validateResult.orgId) {
       return false;
     }
     return true

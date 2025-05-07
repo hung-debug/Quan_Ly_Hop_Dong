@@ -72,8 +72,8 @@ export class DigitalCertificateAddComponent implements OnInit {
   ) {
     this.addForm = this.fbd.group({
       password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
-      email: this.fbd.control("", [Validators.required]),
-      phone: this.fbd.control("", [Validators.required]),
+      email: this.fbd.control(""),
+      phone: this.fbd.control(""),
       orgId: this.fbd.control("", [Validators.required]),
       status: 1,
     });
@@ -84,8 +84,8 @@ export class DigitalCertificateAddComponent implements OnInit {
     this.addForm = this.fbd.group({
       password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
       status: 1,
-      email: this.fbd.control("", [Validators.required]),
-      phone: this.fbd.control("", [Validators.required]),
+      email: this.fbd.control(""),
+      phone: this.fbd.control(""),
       orgId: this.fbd.control("", [Validators.required])
     });
     // chạy mồi lấy list dữ liệu cho component
@@ -355,11 +355,11 @@ export class DigitalCertificateAddComponent implements OnInit {
     let validateResult = {
       file: this.contractFileRequired(),
       password: this.passwordRequired(),
-      email: this.validateEmail(),
-      phone: this.validatePhone(),
+      // email: this.validateEmail(),
+      // phone: this.validatePhone(),
       orgId:this.validateOrg()
     }
-    if (!validateResult.file || !validateResult.password || !validateResult.email || !validateResult.phone || !validateResult.orgId) {
+    if (!validateResult.file || !validateResult.password || !validateResult.orgId) {
       // this.spinner.hide();
       return false;
     }
@@ -371,6 +371,15 @@ export class DigitalCertificateAddComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
+    
+    let emailInput = this.addForm.value.email[0]?.trim();
+    let phoneInput = this.addForm.value.phone[0]?.trim();
+
+    if(!emailInput && !phoneInput){
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn giá trị Email hoặc SĐT', "", 3000);
+      return;
+    }
+    
     this.DigitalCertificateService.addImportCTS(this.datas.contractFile, this.addForm.value.email, this.addForm.value.phone, this.addForm.value.password, this.addForm.value.status).subscribe(response => {
       if (response.success == false) {
         this.toastService.showErrorHTMLWithTimeout(response.message, "", 3000)
