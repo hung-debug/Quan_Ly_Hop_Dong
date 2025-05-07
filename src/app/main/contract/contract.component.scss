@@ -388,6 +388,22 @@
 // .img_icon:hover{
   // width: 30px;
 // }
+
+.img_icon_up_down{
+  width: 15px;
+  cursor: pointer;
+  position: absolute;
+  margin-left: 6%;
+  fill: #0041C4;
+  margin-bottom: 10px;
+}
+.img_icon_up_down:hover{
+  width: 16px;
+}
+.disabled {
+  opacity: 0.5; /* hoặc bất kỳ kiểu ẩn nào khác bạn muốn áp dụng */
+  pointer-events: none; /* ngăn chặn sự kiện click */
+}
 .calendar_create, .calendar_deadline, .item_icon{
   display: flex;
   flex-direction: column;
