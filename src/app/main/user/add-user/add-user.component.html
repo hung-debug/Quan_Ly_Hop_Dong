@@ -18,21 +18,27 @@
 
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
-                    <!-- <div *ngIf="id == null" class="input-data">
-                      <input type="text" formControlName="email">
-                    </div>
-                    <div *ngIf="id != null" class="input-data hidden-color">
-                      <input type="text" formControlName="email" readonly class="hidden-color">
-                    </div> -->
-                    <div class="input-data" *ngIf="!this.isDisable">
-                      <input type="text" formControlName="email">
-                    </div>
-                    <div class="input-data" *ngIf="this.isDisable === 'SDT'">
+                    <div *ngIf="environment.flag == 'NB'">
+                      <div *ngIf="id == null" class="input-data">
                         <input type="text" formControlName="email">
+                      </div>
+                      <div *ngIf="id != null" class="input-data hidden-color">
+                        <input type="text" formControlName="email" readonly class="hidden-color">
+                      </div>
                     </div>
-                    <div *ngIf="this.isDisable === 'EMAIL' || this.isDisable === 'EMAIL_AND_SDT'" class="input-data hidden-color">
-                      <input type="text" formControlName="email" readonly>
+                    
+                    <div *ngIf="environment.flag == 'KD'">
+                      <div class="input-data" *ngIf="!this.isDisable">
+                        <input type="text" formControlName="email">
+                      </div>
+                      <div class="input-data" *ngIf="this.isDisable === 'SDT'">
+                          <input type="text" formControlName="email">
+                      </div>
+                      <div *ngIf="this.isDisable === 'EMAIL' || this.isDisable === 'EMAIL_AND_SDT'" class="input-data hidden-color">
+                        <input type="text" formControlName="email" readonly>
+                      </div>
                     </div>
+
                     <div *ngIf="submitted && f.email.errors" class="invalid">
                         <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
                         <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
@@ -50,18 +56,21 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
-                    <!-- <div class="input-data">
-                      <input type="text" formControlName="phone">
-                    </div> -->
-                    <div class="input-data" *ngIf="!this.isDisable">
+                    <div *ngIf="environment.flag == 'NB'" class="input-data">
                       <input type="text" formControlName="phone">
                     </div>
-                    <div class="input-data" *ngIf="this.isDisable === 'EMAIL'">
-                      <input type="text" formControlName="phone">
+                    <div *ngIf="environment.flag == 'KD'">
+                      <div class="input-data" *ngIf="!this.isDisable">
+                        <input type="text" formControlName="phone">
+                      </div>
+                      <div class="input-data" *ngIf="this.isDisable === 'EMAIL'">
+                        <input type="text" formControlName="phone">
+                      </div>
+                      <div *ngIf="this.isDisable === 'SDT' || this.isDisable === 'EMAIL_AND_SDT'" class="input-data hidden-color">
+                        <input type="text" formControlName="phone" readonly>
+                      </div>
                     </div>
-                  <div *ngIf="this.isDisable === 'SDT' || this.isDisable === 'EMAIL_AND_SDT'" class="input-data hidden-color">
-                    <input type="text" formControlName="phone" readonly>
-                  </div>
+
                     <div *ngIf="submitted && f.phone.errors" class="invalid">
                         <div *ngIf="f.phone.errors.required">{{'error.user.phone.required' | translate}}</div>
                         <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>
@@ -97,7 +106,7 @@
                 </div>
 
             </div>
-            <!-- <div class="row" style="justify-content: center;padding-top: 10px;">
+            <div *ngIf="environment.flag == 'NB'" class="row" style="justify-content: center;padding-top: 10px;">
                 <div class="col-md-2" style="text-align: center;">
                     <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
                     <span> {{'unit.active' | translate}}</span>
@@ -106,8 +115,9 @@
                     <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
                     <span> {{'unit.inactive' | translate}}</span>
                 </div>
-            </div> -->
-            <div class="row" style="justify-content: flex-start;padding-top: 10px;display: flex;">
+            </div>
+            
+            <div *ngIf="environment.flag == 'KD'" class="row" style="justify-content: flex-start;padding-top: 10px;display: flex;">
               <div style="display: flex;">
                 <div style="display: flex;">
                   <span>{{'choose.type.sign' | translate}}:</span>

@@ -14,6 +14,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { error } from 'console';
 import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component';
 import { ContractService } from 'src/app/service/contract.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -56,6 +57,7 @@ export class InforUserComponent implements OnInit {
 
   phoneOld:any;
   currentUser: any;
+  environment: any = "";
 
   organizationName:any;
   roleName:any;
@@ -128,6 +130,7 @@ export class InforUserComponent implements OnInit {
  }
 
   async ngOnInit(): Promise<void> {
+    this.environment = environment
     //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
       this.orgList = data.entities;

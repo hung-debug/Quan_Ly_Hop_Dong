@@ -13,6 +13,7 @@ import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component'; // Import component cropper
 import { ContractService } from 'src/app/service/contract.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -75,6 +76,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   imgSignPCSelectMark: string;
   imgSignBucketMark: string | null = null;
   imgSignPathMark: string | null = null;
+  environment: any = "";
 
   constructor(private appService: AppService,
               private toastService : ToastService,
@@ -112,6 +114,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
       organization_change:null
     });
+    this.environment = environment
   }
 
   onSupplierChange(event: any) {
