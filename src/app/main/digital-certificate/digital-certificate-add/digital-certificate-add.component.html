@@ -72,9 +72,34 @@
           </p-multiSelect>
         </div>
 
-        <div class="invalid" *ngIf="errorEmail">
+        <!-- <div class="invalid" *ngIf="errorEmail">
           {{errorEmail | translate}}
+        </div> -->
+      </div>
+    </div>
+    
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-12">
+        <div class="label text-color">{{'user.phone' | translate}}
+          <span class="required-title">*</span>
         </div>
+
+        <div>
+          <p-multiSelect 
+            panelStyleClass="font" 
+            appendTo="body" 
+            [options]="phoneList" 
+            formControlName="phone"
+            optionLabel="phone" optionValue="phone" placeholder="Chọn số điện thoại" [filter]="true" filterBy="phone"
+            [showClear]="true" (onFilter)="getListAllPhoneOnFillter($event)" [multiple]="true"
+            display="chip"
+            >
+          </p-multiSelect>
+        </div>
+
+        <!-- <div class="invalid" *ngIf="errorEmail">
+          {{errorEmail | translate}}
+        </div> -->
       </div>
     </div>
 

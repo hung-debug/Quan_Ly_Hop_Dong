@@ -37,7 +37,9 @@ export class DigitalCertificateAddComponent implements OnInit {
   email: any[];
   arrSearchEmailView: any = [];
   emailList: any = [];
+  phoneList: any = [];
   errorEmail: any = '';
+  errorPhone: any = '';
   pattern = parttern;
   pattern_input = parttern_input;
   listSelectedEmail: any = [];
@@ -70,7 +72,8 @@ export class DigitalCertificateAddComponent implements OnInit {
   ) {
     this.addForm = this.fbd.group({
       password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
-      email: this.fbd.control("", [Validators.required]),
+      email: this.fbd.control(""),
+      phone: this.fbd.control(""),
       orgId: this.fbd.control("", [Validators.required]),
       status: 1,
     });
@@ -81,7 +84,8 @@ export class DigitalCertificateAddComponent implements OnInit {
     this.addForm = this.fbd.group({
       password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
       status: 1,
-      email: this.fbd.control("", [Validators.required]),
+      email: this.fbd.control(""),
+      phone: this.fbd.control(""),
       orgId: this.fbd.control("", [Validators.required])
     });
     // chạy mồi lấy list dữ liệu cho component
@@ -104,7 +108,8 @@ export class DigitalCertificateAddComponent implements OnInit {
         element.expanded = !element.expanded
       });
       this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.currentOrgId);
-      this.getListAllEmailOnFillter(this.currentOrgId)
+      this.getListAllEmailOnFillter(this.currentOrgId);
+      this.getListAllPhoneOnFillter(this.currentOrgId)
     }, error => {
       setTimeout(() => this.router.navigate(['/login']));
       this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
@@ -161,9 +166,11 @@ export class DigitalCertificateAddComponent implements OnInit {
   changeOrg(){
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.addForm.patchValue({
-      email: this.addForm.value.email? this.addForm.value.email : []
+      email: this.addForm.value.email? this.addForm.value.email : [],
+      phone: this.addForm.value.phone? this.addForm.value.phone : []
     })
-    this.getListAllEmailOnFillter(this.organization_id)
+    this.getListAllEmailOnFillter(this.organization_id);
+    this.getListAllPhoneOnFillter(this.organization_id)
   }
 
   toggleFieldTextType() {
@@ -241,6 +248,30 @@ export class DigitalCertificateAddComponent implements OnInit {
     }
     );
   }
+  
+  getListAllPhoneOnFillter(event: any) {
+    this.phoneList = []
+    if (this.addForm.value.phone.length > 0) {
+      for (const item of this.addForm.value.phone) {
+        this.phoneList.push({phone: item})
+      }
+    }
+    let phone: any = event.filter || '';
+    // let emailLogin = this.userService.getAuthCurrentUser().email;
+    this.DigitalCertificateService.getListOrgByPhone(phone,this.addForm.value.orgId.data || '').subscribe((response) => {
+      if (response && response.length > 0) {
+        for (const item of response) {
+          if (item?.phone != this.phoneList.find((value: any) => value.phone == item.phone)?.phone) {
+            this.phoneList.push({phone: item.phone})
+          }
+        }
+      }
+
+    }, (error) => {
+      console.log(error)
+    }
+    );
+  }
 
   getData(event: any){
     let name: string = event.filter
@@ -261,6 +292,15 @@ export class DigitalCertificateAddComponent implements OnInit {
     this.errorEmail = "";
     if (!this.addForm.controls.email.valid) {
       this.errorEmail = "error.email.required";
+      return false;
+    }
+    return true;
+  }
+  
+  validatePhone() {
+    this.errorPhone = "";
+    if (!this.addForm.controls.phone.valid) {
+      this.errorPhone = "error.phone.required";
       return false;
     }
     return true;
@@ -315,10 +355,11 @@ export class DigitalCertificateAddComponent implements OnInit {
     let validateResult = {
       file: this.contractFileRequired(),
       password: this.passwordRequired(),
-      email: this.validateEmail(),
+      // email: this.validateEmail(),
+      // phone: this.validatePhone(),
       orgId:this.validateOrg()
     }
-    if (!validateResult.file || !validateResult.password || !validateResult.email || !validateResult.orgId) {
+    if (!validateResult.file || !validateResult.password || !validateResult.orgId) {
       // this.spinner.hide();
       return false;
     }
@@ -330,7 +371,16 @@ export class DigitalCertificateAddComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
-    this.DigitalCertificateService.addImportCTS(this.datas.contractFile, this.addForm.value.email, this.addForm.value.password, this.addForm.value.status).subscribe(response => {
+    
+    let emailInput = this.addForm.value.email[0]?.trim();
+    let phoneInput = this.addForm.value.phone[0]?.trim();
+
+    if(!emailInput && !phoneInput){
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn giá trị Email hoặc SĐT', "", 3000);
+      return;
+    }
+    
+    this.DigitalCertificateService.addImportCTS(this.datas.contractFile, this.addForm.value.email, this.addForm.value.phone, this.addForm.value.password, this.addForm.value.status).subscribe(response => {
       if (response.success == false) {
         this.toastService.showErrorHTMLWithTimeout(response.message, "", 3000)
       } else {
