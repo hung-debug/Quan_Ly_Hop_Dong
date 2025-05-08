@@ -44,7 +44,8 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
       this.addFormUser = this.fbd.group({
         orgId: "",
-        email: this.fbd.control("", [Validators.required])
+        email: this.fbd.control(""),
+        phone: this.fbd.control("")
       });
 
       this.stateOptions = [
@@ -75,7 +76,8 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
       this.addFormUser = this.fbd.group({
         orgId: this.organization_id_user_login,
-        email: this.fbd.control("", [Validators.required])
+        email: this.fbd.control(""),
+        phone: this.fbd.control("")
       });
     }else{
       //lay danh sach to chuc
@@ -91,7 +93,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
       });
 
       this.cols = [
-        {header: 'Email đã chia sẻ', style:'text-align: left;' },
+        {header: 'Email/SĐT đã chia sẻ', style:'text-align: left;' },
         {header: 'Tổ chức', style:'text-align: left;' },
         {header: 'role.manage', style:'text-align: center;' },
         ];
@@ -131,8 +133,20 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     if (this.addFormUser.invalid) {
       return;
     }
+    let orgValue = this.addFormUser.value.orgId;
+    let emailInput = this.addFormUser.value.email[0]?.trim();
 
-    this.contractTemplateService.shareContract(this.addFormUser.value.email, this.data.id).subscribe(data => {
+    let phoneInput = this.addFormUser.value.phone[0]?.trim();
+
+    if(!orgValue){
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn tổ chức', "", 3000);
+      return;
+    }else if(!emailInput && !phoneInput){
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập Email hoặc SĐT chia sẻ', "", 3000);
+      return;
+    }
+
+    this.contractTemplateService.shareContract(this.addFormUser.value.email, this.addFormUser.value.phone, this.data.id).subscribe(data => {
 
       if(data.contract_id != null){
         this.dialogRef.close();

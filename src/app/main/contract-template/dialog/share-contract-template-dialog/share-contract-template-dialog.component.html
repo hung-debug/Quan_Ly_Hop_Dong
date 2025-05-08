@@ -34,7 +34,7 @@
         </div>
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-12">
-                <div class="label text-color">Email <span class="required-title">*</span></div>
+                <div class="label text-color">Email</div>
                 <div>
                     <p-multiSelect
                         panelStyleClass="font"
@@ -53,6 +53,29 @@
                     <div *ngIf="fUser.email.errors.required">{{'error.email.required' |translate}}</div>
                 </div>
             </div>
+        </div>
+        
+        <div class="row" style="padding-top: 10px;">
+          <div class="col-md-12">
+            <div class="label text-color">Số điện thoại</div>
+            <div>
+                <p-multiSelect
+                    panelStyleClass="font"
+                    appendTo="body"
+                    [options]="userList"
+                    formControlName="phone"
+                    optionLabel="phone"
+                    optionValue="phone"
+                    placeholder="{{'select.phone' | translate}}"
+                    [filter]="true"
+                    filterBy="phone"
+                    [showClear]="true"
+                    ></p-multiSelect>
+            </div>
+            <!-- <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
+                <div *ngIf="fUser.email.errors.required">{{'error.email.required' |translate}}</div>
+            </div> -->
+          </div>
         </div>
 
         <div class="row" style="justify-content: center;padding-top: 10px;">
