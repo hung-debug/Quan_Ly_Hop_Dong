@@ -105,6 +105,7 @@ export class ConfirmContractBatchComponent
   loaded = false;
   isDisablePrevious = false;
   isDisableNext = false;
+  isDisableNextSubmit = false;
   difX: number;
   arrDifPage: any = [];
 
@@ -895,10 +896,10 @@ export class ConfirmContractBatchComponent
 
   user: any;
   submit() {
-    this.isDisableNext = true;
-    setTimeout(() => {
-      this.isDisableNext = false;
-    }, 3000);
+    // this.isDisableNextSubmit = true;
+    // setTimeout(() => {
+    //   this.isDisableNextSubmit = false;
+    // }, 3000);
 
     if (!this.datasBatch.ceca_push)
       this.datasBatch.ceca_push = 0;
