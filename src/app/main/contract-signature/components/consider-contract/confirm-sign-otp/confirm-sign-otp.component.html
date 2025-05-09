@@ -16,7 +16,7 @@
         <span id = "title">
           Nhập OTP <span class="invalid">*</span>
         </span>
-        <ng-otp-input class="otp-input-item" id="otp" [config]="{length:6}" formControlName="otp" (onInputChange)="onOtpChange($event)"></ng-otp-input>
+        <ng-otp-input class="otp-input-item" id="otp" [config]="config" formControlName="otp" (onInputChange)="onOtpChange($event)"></ng-otp-input>
         <div style="display: flex;flex-direction: column-reverse;">
           <div class="label-input-otp-sent" *ngIf="this.count > 0">OTP có hiệu lực trong <span style="color: #0041C4; font-weight: bold;padding: 1px 4px;"> {{counter$ | async }}s.</span>
           </div>
