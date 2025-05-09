@@ -166,8 +166,8 @@ export class DigitalCertificateAddComponent implements OnInit {
   changeOrg(){
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.addForm.patchValue({
-      email: this.addForm.value.email? this.addForm.value.email : [],
-      phone: this.addForm.value.phone? this.addForm.value.phone : []
+      email: this.addForm.value.email.trim() ? this.addForm.value.email.trim() : [],
+      phone: this.addForm.value.phone.trim() ? this.addForm.value.phone.trim() : []
     })
     this.getListAllEmailOnFillter(this.organization_id);
     this.getListAllPhoneOnFillter(this.organization_id)
@@ -256,8 +256,10 @@ export class DigitalCertificateAddComponent implements OnInit {
         this.phoneList.push({phone: item})
       }
     }
-    let phone: any = event.filter || '';
-    // let emailLogin = this.userService.getAuthCurrentUser().email;
+    let inputPhone = event.filter || '';
+    // let phone: any = event.filter || '';
+    let phone: any = inputPhone.trim();
+
     this.DigitalCertificateService.getListOrgByPhone(phone,this.addForm.value.orgId.data || '').subscribe((response) => {
       if (response && response.length > 0) {
         for (const item of response) {
