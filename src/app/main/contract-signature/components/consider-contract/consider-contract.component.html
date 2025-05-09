@@ -233,7 +233,7 @@
             <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
         </button>
     
-        <input class="input1 no-focus" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
+        <input class="input1 no-focus" [(ngModel)]="pageMobile" type="text" [style.width]="(((pageMobile || 1).toString().length) * 10 + 15) + 'px'" />&nbsp;/ &nbsp;{{this.pageNumber}}
 
         <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPageMobile()" id="prev">
             <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
