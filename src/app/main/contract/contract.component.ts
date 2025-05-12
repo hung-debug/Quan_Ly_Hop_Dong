@@ -89,6 +89,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
   backgroundColor: any;
   handler_name: any;
   name_or_email_customer: any;
+  ascendSortActive : boolean;
+  descendSortActive : boolean;
+  orderDesc: string;
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -195,6 +198,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.pageTotal = 0;
         this.action = params['action'];
         this.status = params['status'];
+        this.ascendSortActive = false;
+        this.descendSortActive = false;
 
         //set status
         this.convertStatusStr();
@@ -251,6 +256,53 @@ export class ContractComponent implements OnInit, AfterViewInit {
   onScroll(event: any) {
     if(window.scrollY>0){
       this.scrollY = window.scrollY;
+    }
+  }
+  
+  sortContractList(value: any){
+    this.getContractListByOrder(value);
+  }
+  
+  getContractListByOrder(value: any){
+    this.orderDesc = "true";
+
+    if(value == "ascend"){
+      this.orderDesc = "false"
+      this.ascendSortActive = true;
+      this.descendSortActive = false;
+    } else {
+      this.orderDesc = "true"
+      this.ascendSortActive = false;
+      this.descendSortActive = true;
+    }
+
+    this.roleMess = "";
+    if (this.isOrg == 'off' && !this.isQLHD_05) {
+      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+
+    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
+      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+    }
+    if (!this.roleMess) {
+
+      let isOrg = this.isOrg;
+
+      if(!this.isQLHD_03) {
+        isOrg ='off';
+      }
+
+      //get list contract
+      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc, this.handler_name, this.name_or_email_customer).subscribe(data => {
+        this.contracts = data.entities;
+        this.pageTotal = data.total_elements;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+      });
     }
   }
 
@@ -439,7 +491,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         isOrg ='off';
       }
 
-    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.handler_name, this.name_or_email_customer).subscribe(data => {
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc, this.handler_name, this.name_or_email_customer).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       this.totalPage = data.total_pages;
@@ -494,7 +546,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         isOrg ='off';
       }
 
-    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.handler_name, this.name_or_email_customer, true).subscribe(data => {
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc, this.handler_name, this.name_or_email_customer, true).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       this.checkedAll = false;
@@ -552,7 +604,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.p = 0
     }
 
-    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.handler_name, this.name_or_email_customer, '', 1).subscribe(data => {
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc, this.handler_name, this.name_or_email_customer, '', 1).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       this.checkedAll = false;
@@ -739,7 +791,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }
 
       //get list contract
-      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.handler_name, this.name_or_email_customer).subscribe(data => {
+      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc, this.handler_name, this.name_or_email_customer).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         this.checkedAll = false;
