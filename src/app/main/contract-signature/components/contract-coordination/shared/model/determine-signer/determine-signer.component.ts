@@ -55,6 +55,8 @@ export class DetermineSignerComponent implements OnInit {
   getNameIndividual: string = "";
   is_change_party: boolean = false;
   emailUser: string;
+  login_by: any;
+  isCheckRadio: any;
 
 
   //dropdown
@@ -74,6 +76,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // console.log("this.data",this.datas);
     
     if (this.datas.determine_contract)
       this.is_determine_clone = [...this.datas.determine_contract];
@@ -81,7 +84,20 @@ export class DetermineSignerComponent implements OnInit {
       this.is_determine_clone = [...this.contractService.getDataDetermine()];
   
     this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-
+    
+    // console.log("this.is_determine_clone",this.is_determine_clone);
+    // console.log("this.data_parnter_organization",this.data_parnter_organization);
+    
+    this.data_parnter_organization.forEach((data: any) =>{
+      let dataSigner = data.recipients.filter((item: any) => item.role == 3);
+      // console.log("dataSigner",dataSigner);
+      this.login_by = dataSigner[0]?.login_by;
+      // console.log("this.login_by",this.login_by);
+      
+    })
+    // console.log("this.login_by11",this.login_by);
+    this.isCheckRadio = this.login_by === "phone" ? false : true;
+    
     this.dropdownSignTypeSettings = {
       singleSelection: false,
       idField: "id",
@@ -231,8 +247,8 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
-          if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email.trim())) {
-            this.getNotificationValid("Email" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+          if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email.trim()) && this.isCheckRadio) {
+            this.getNotificationValid("Email" + this.getNameObject(3) + "của đối tác không hợp lệ1!")
             count++;
             break;
           }
@@ -559,6 +575,10 @@ export class DetermineSignerComponent implements OnInit {
 
   getDataSignature(e: any) {
     
+  }
+  
+  changeTypeSign(d: any) {
+    d === 1 ? this.isCheckRadio = false : this.isCheckRadio = true
   }
 
   getValueData(data: any, index: any) {
