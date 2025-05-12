@@ -267,11 +267,11 @@ export class ContractService {
   public getContractList(isOrg: any, organization_id: any, filter_name: any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status: any,
     page: any,
     size: any,
+    orderDesc: string,
     handlerName: any,
     nameOrEmailCustomer: any,
     issue?: any,
-    isDelete?: any,
-    orderDesc?: string,
+    isDelete?: any
   ): Observable<any> {
     this.getCurrentUser();
     
@@ -296,7 +296,6 @@ export class ContractService {
     let listContractUrl = '';
     if (isOrg == 'off') {
       if (filter_status == '50') {
-        console.log("1");
         
         filter_status = '30';
         listContractUrl =
@@ -325,7 +324,6 @@ export class ContractService {
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
-        console.log("2");
         listContractUrl =
           this.listContractUrl +
           '?keyword=' +
@@ -353,9 +351,7 @@ export class ContractService {
           }
       }
     } else {
-      console.log("3");
       if (organization_id == '') {
-        console.log("4");
         listContractUrl =
           this.listContractOrgChildrenUrl +
           '?organizationId=' +
@@ -384,7 +380,6 @@ export class ContractService {
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
-        console.log("5");
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
           '&page=' + page + '&size=' + size + orderPrefix.toString() ? orderPrefix.toString() : "true" + '&process_by=' + '&name_or_email_customer=' + nameOrEmailCustomer.trim();

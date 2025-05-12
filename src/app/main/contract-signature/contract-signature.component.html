@@ -131,6 +131,8 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')" />
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <ng-container [ngSwitch]="filter_status">
@@ -509,6 +511,8 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-md-2 bg-header">{{'create-time' | translate}}
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')" />
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-md-2 bg-header">{{'sign-time' | translate}}
@@ -643,6 +647,8 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')" />
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'sign-expired-time' | translate}}
@@ -892,6 +898,8 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')" />
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'sign-expired-time' | translate}}
