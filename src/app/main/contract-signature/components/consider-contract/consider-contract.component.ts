@@ -5993,20 +5993,37 @@ export class ConsiderContractComponent
 
   
   preventGestureZoom() {
-    // Safari/iOS: ngăn pinch-to-zoom
+    // Chặn pinch-to-zoom: Android & iOS
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault(); // chặn zoom bằng 2 ngón
+      }
+    }, { passive: false });
+
+    // Chặn double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault(); // chặn double-tap zoom
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // Chặn gesture zoom (chỉ hoạt động trên iOS/Safari)
     document.addEventListener('gesturestart', e => e.preventDefault());
     document.addEventListener('gesturechange', e => e.preventDefault());
     document.addEventListener('gestureend', e => e.preventDefault());
 
-    // Ngăn Ctrl + Wheel zoom
-    document.addEventListener('wheel', e => {
+    // Chặn zoom bằng Ctrl + wheel (desktop)
+    document.addEventListener('wheel', (e) => {
       if (e.ctrlKey) {
         e.preventDefault();
       }
     }, { passive: false });
 
-    // Ngăn Ctrl + '+', '-', '='
-    document.addEventListener('keydown', e => {
+    // Chặn Ctrl + '+', '-', '=' (desktop)
+    document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
         e.preventDefault();
       }
