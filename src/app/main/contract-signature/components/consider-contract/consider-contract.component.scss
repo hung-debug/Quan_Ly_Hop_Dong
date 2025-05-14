@@ -709,4 +709,11 @@ a.info-contract {
   opacity: 0.5;
 }
 
-
+.no-zoom {
+  touch-action: manipulation;       /* Ngăn double-tap zoom */
+  -ms-touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: auto;
+}
