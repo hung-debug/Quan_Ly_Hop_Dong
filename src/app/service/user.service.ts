@@ -343,6 +343,7 @@ export class UserService {
   public getUserList(
     filter_organization_id: any,
     filter_nameOrEmail: any,
+    filter_phone: any,
     filter_email: any,
     row: number = 15, page: any = 0
   ): Observable<any> {
@@ -352,7 +353,7 @@ export class UserService {
       page = 0;
     }
 
-    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
+    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone='+ filter_phone.trim() + '&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }
