@@ -684,3 +684,36 @@ a.info-contract {
   transform: translate(-50%, -50%);
 }
 
+.pdf-viewer-custom {
+  position: relative;
+}
+
+.zoom-controls {
+  position: absolute;
+  bottom: 5px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.zoom-controls img {
+  width: 32px;
+  height: 32px;
+  margin: 2px 0;
+  cursor: pointer;
+}
+
+.zoom-controls img[alt$="Disabled"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.no-zoom {
+  touch-action: manipulation;       /* Ngăn double-tap zoom */
+  -ms-touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: auto;
+}

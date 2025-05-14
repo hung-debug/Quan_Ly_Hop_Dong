@@ -1,6 +1,6 @@
 
 <meta name='viewport' content='width=device-width' />
-<div class="container-fluid" [ngClass]="{ 'cancel-padding': mobile, 'size-web': !mobile }">
+<div class="container-fluid no-zoom" [ngClass]="{ 'cancel-padding': mobile, 'size-web': !mobile }">
   <div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
     <div [ngClass] = "{'col-md-3': this.show_information}" class="sample-contract__information" style="background-color: white; padding-right: 0px;">
       <div *ngIf="this.show_information == true">
@@ -209,6 +209,16 @@
 
   <div *ngIf="this.mobile && !this.multiSignInPdf">
       <div class="pdf-viewer-custom">
+
+        <div class="zoom-controls">
+          <img *ngIf="zoomMobile < 5.0" (click)="zoomIn()" src="assets/img/cong.svg" alt="Zoom In">
+          <img *ngIf="zoomMobile >= 5.0" src="assets/img/cong_disable.svg" alt="Zoom In Disabled">
+
+          <!-- Nút Zoom Out -->
+          <img *ngIf="zoomMobile > 1.0" (click)="zoomOut()" src="assets/img/tru.svg" alt="Zoom Out">
+          <img *ngIf="zoomMobile <= 1.0" src="assets/img/tru_disable.svg" alt="Zoom Out Disabled">
+        </div>
+
         <pdf-viewer *ngIf="![2,3].includes(recipient?.status)" [src]="pdfSrcMobile"
         [render-text]="true"
         style="width: 100%; height: calc(60vh); border: 1px;"
@@ -217,6 +227,7 @@
         [show-all]="true"
         [(page)]="pageMobile"
         [stick-to-page]="true"
+        [zoom]="zoomMobile"
         (after-load-complete)="afterLoadComplete($event)"
         (pagechanging)="pagechanging($event)"
         ></pdf-viewer>
