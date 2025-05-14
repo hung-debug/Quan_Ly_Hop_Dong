@@ -279,6 +279,8 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    this.preventGestureZoom();
+    this.preventDoubleTapZoom();
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
     // if(this.isBonBon) {
@@ -5973,5 +5975,53 @@ export class ConsiderContractComponent
       default:
         return false;
     }
+  }
+
+  zoomMobile = 1.0; // 100%
+
+  zoomIn() {
+    if (this.zoomMobile < 5.0) {
+      this.zoomMobile = +(this.zoomMobile + 0.1).toFixed(2);
+    }
+  }
+
+  zoomOut() {
+    if (this.zoomMobile > 1.0) {
+      this.zoomMobile = +(this.zoomMobile - 0.1).toFixed(2);
+    }
+  }
+
+  
+  preventGestureZoom() {
+    // Safari/iOS: ngăn pinch-to-zoom
+    document.addEventListener('gesturestart', e => e.preventDefault());
+    document.addEventListener('gesturechange', e => e.preventDefault());
+    document.addEventListener('gestureend', e => e.preventDefault());
+
+    // Ngăn Ctrl + Wheel zoom
+    document.addEventListener('wheel', e => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Ngăn Ctrl + '+', '-', '='
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  lastTouchEnd = 0;
+
+  preventDoubleTapZoom() {
+    document.addEventListener('touchend', (event) => {
+      const now = new Date().getTime();
+      if (now - this.lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      this.lastTouchEnd = now;
+    }, false);
   }
 }
