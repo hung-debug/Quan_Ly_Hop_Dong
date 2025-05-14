@@ -70,7 +70,6 @@ export class ConsiderContractComponent
   data_coordinates: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined;
-  @ViewChild('pdfContainer', { static: false }) pdfContainer!: ElementRef;
   @Output() stepChangeSampleContract = new EventEmitter<string>();
   pdfSrc: any;
   thePDF: any = null;
@@ -1105,48 +1104,7 @@ export class ConsiderContractComponent
 
   eventMouseover() { }
 
-  private scaleMobile = 1;
-
-    listenToGesture() {
-    let initialScale = 1;
-    let currentScale = 1;
-
-    // gesturestart
-    this.renderer.listen(this.pdfContainer.nativeElement, 'gesturestart', (e: any) => {
-      initialScale = this.scaleMobile;
-    });
-
-    // gesturechange
-    this.renderer.listen(this.pdfContainer.nativeElement, 'gesturechange', (e: any) => {
-      e.preventDefault(); // chỉ chặn zoom trong vùng này
-      currentScale = initialScale * e.scale;
-      this.scaleMobile = currentScale;
-
-      // Áp dụng scale vào container của PDF
-      this.renderer.setStyle(
-        this.pdfContainer.nativeElement,
-        'transform',
-        `scale(${currentScale})`
-      );
-      this.renderer.setStyle(this.pdfContainer.nativeElement, 'transform-origin', '0 0');
-    });
-
-    // gestureend
-    this.renderer.listen(this.pdfContainer.nativeElement, 'gestureend', () => {
-      this.scaleMobile = currentScale;
-    });
-
-    // touchmove (zoom với chuột hoặc cảm ứng trên các thiết bị di động)
-    this.renderer.listen(this.pdfContainer.nativeElement, 'touchmove', (e: any) => {
-      if (e.scale !== 1) {
-        e.preventDefault();
-      }
-    });
-  }
-
-
   ngAfterViewInit() {
-    this.listenToGesture();
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
