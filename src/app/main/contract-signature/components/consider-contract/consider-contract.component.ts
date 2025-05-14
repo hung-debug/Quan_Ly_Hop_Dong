@@ -5981,13 +5981,13 @@ export class ConsiderContractComponent
 
   zoomIn() {
     if (this.zoomMobile < 5.0) {
-      this.zoomMobile = +(this.zoomMobile + 0.1).toFixed(2);
+      this.zoomMobile = +(this.zoomMobile + 0.5).toFixed(2);
     }
   }
 
   zoomOut() {
     if (this.zoomMobile > 1.0) {
-      this.zoomMobile = +(this.zoomMobile - 0.1).toFixed(2);
+      this.zoomMobile = +(this.zoomMobile - 0.5).toFixed(2);
     }
   }
 
