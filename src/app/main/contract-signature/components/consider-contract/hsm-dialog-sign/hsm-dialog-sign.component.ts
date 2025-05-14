@@ -28,6 +28,7 @@ export class HsmDialogSignComponent implements OnInit {
   dataGetUserById: any;
   isHsmIcorp: boolean = true;
   typeUser: any;
+  confirmConsider: boolean = true;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -266,6 +267,7 @@ export class HsmDialogSignComponent implements OnInit {
           //a_dvcs: this.myForm.value.taxCode,
           username: this.myForm.value.username,
           password: this.myForm.value.pass1,
+          confirmConsider: this.confirmConsider
         };
         if (this.isHsmIcorp) {
           data["password2"] = this.myForm.value.pass2;
@@ -295,6 +297,7 @@ export class HsmDialogSignComponent implements OnInit {
         username: this.myForm.value.username,
         password: this.myForm.value.pass1,
         // password2: this.myForm.value.pass2
+        confirmConsider: this.confirmConsider
       };
 
       if (this.isHsmIcorp) {
