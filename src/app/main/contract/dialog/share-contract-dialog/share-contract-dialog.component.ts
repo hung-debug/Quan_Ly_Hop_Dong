@@ -25,6 +25,7 @@ export class ShareContractDialogComponent implements OnInit {
   listPhone: Array<any> = [];
   submitted = false;
   submittedUser = false;
+  organization_id: any;
   get f() { return this.addForm.controls; }
   get fUser() { return this.addFormUser.controls; }
 
@@ -90,8 +91,9 @@ export class ShareContractDialogComponent implements OnInit {
 
     let emailLogin = this.userService.getAuthCurrentUser().email;
     let phoneLogin = this.userService.getAuthCurrentUser().phone;
+    this.organization_id = orgId;
     
-    this.userService.getUserList(orgId, "","").subscribe(data => {
+    this.userService.getUserList(orgId, "","","").subscribe(data => {
 
       this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
       this.listPhone = data.entities.filter((p: any) => p.phone != phoneLogin && p.status == 1);
@@ -103,6 +105,77 @@ export class ShareContractDialogComponent implements OnInit {
         phone: this.fbd.control(""),
       });
     });
+  }
+  
+  changeOrg(){
+    this.addForm.patchValue({
+      email: this.addFormUser.value.email? this.addFormUser.value.email : [],
+      phone: this.addFormUser.value.phone? this.addFormUser.value.phone : [],
+    })
+    this.getListAllEmailOnFillter(this.organization_id);
+    this.getListAllPhoneOnFillter(this.organization_id);
+  }
+  
+  getListAllEmailOnFillter(event: any) {
+    this.userList = []
+    if (this.addFormUser.value.email.length > 0) {
+      for (const item of this.addFormUser.value.email) {
+        this.userList.push({email: item})
+      }
+    }
+    let email: any = event.filter || ''
+    this.userService.getUserList(this.organization_id,'','',email || '').subscribe((response) => {
+      if (response) {
+        for (const item of response.entities) {
+          if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
+            this.userList.push({email: item.email})
+          }
+        }
+      }
+    });
+  }
+  
+  getListAllPhoneOnFillter(event: any) {
+    this.listPhone = []
+    if (this.addFormUser.value.phone.length > 0) {
+      for (const item of this.addFormUser.value.phone) {
+        this.listPhone.push({phone: item})
+      }
+    }
+    let phone: any = event.filter || ''
+    this.userService.getUserList(this.organization_id,'',phone || '','').subscribe((response) => {
+      if (response) {
+        for (const item of response.entities) {
+          if (item?.phone != this.listPhone.find((value: any) => value.phone == item.phone)?.phone) {
+            this.listPhone.push({phone: item.phone})
+          }
+        }
+      }
+    });
+  }
+  
+  onSelectionChangeEmail() {
+    let selectedValues = []
+    selectedValues = this.addFormUser.get('email')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.userList.find((opt: any) => opt.email === value);
+      if (option) {
+        value = option.email;
+      }
+    });
+    this.addFormUser.patchValue({ email: selectedValues });
+  }
+  
+  onSelectionChangePhone() {
+    let selectedValues = []
+    selectedValues = this.addFormUser.get('phone')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.listPhone.find((opt: any) => opt.phone === value);
+      if (option) {
+        value = option.phone;
+      }
+    });
+    this.addFormUser.patchValue({ phone: selectedValues });
   }
 
   //email:any;

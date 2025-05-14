@@ -38,6 +38,8 @@ export class ContractTemplateComponent implements OnInit {
   name:any="";
   type:any="";
   loaded:boolean=false;
+  currentUser: any;
+  login_type: any;
 
   //phan quyen
   isQLMHD_01:boolean=false;  //them moi mau hop dong
@@ -68,6 +70,11 @@ export class ContractTemplateComponent implements OnInit {
       { label: 'contract-template.create', value: 'off' },
       { label: 'contract-template.share', value: 'on' },
     ];
+    this.currentUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info;
+    
+    this.login_type = this.currentUser.loginType;
   }
 
   ngOnInit(): void {
@@ -131,7 +138,7 @@ export class ContractTemplateComponent implements OnInit {
   async getContractTemplateList(){
     this.enterPage = this.p;
     //get list contract template
-    await this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).toPromise().then(response => {
+    await this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page, this.login_type).toPromise().then(response => {
       this.contractsTemplate = response.entities;
       this.pageTotal = response.total_elements;
       if(this.pageTotal == 0){
