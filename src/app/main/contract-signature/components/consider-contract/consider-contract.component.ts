@@ -8,8 +8,7 @@ import {
   OnInit,
   Output,
   QueryList,
-  ViewChild,
-  Renderer2
+  ViewChild
 } from '@angular/core';
 import { ContractService } from '../../../../service/contract.service';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -260,8 +259,7 @@ export class ConsiderContractComponent
     private detectCoordinateService: DetectCoordinateService,
     private timeService: TimeService,
     private websocketService: WebsocketService,
-    private customerAnalysis: CustomerAnalysis,
-    private renderer: Renderer2
+    private customerAnalysis: CustomerAnalysis
 
   ) {
     this.currentUser = JSON.parse(
