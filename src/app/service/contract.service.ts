@@ -1412,7 +1412,7 @@ export class ContractService {
     const jsonBody = JSON.stringify(body)
 
     return this.http
-      .post<any>(this.signManyRemoteUrl + "?id=" + recipientIds.join(','), jsonBody, { headers: headers })
+      .post<any>(this.signManyRemoteUrl + "?id=" + recipientIds, jsonBody, { headers: headers })
       .toPromise();
   }
 
@@ -2577,25 +2577,18 @@ export class ContractService {
     ];
   }
   getRemoteSigningCertificates(supplierId: string, userCode?: string, phone?: string): Observable<RemoteCertificate[]> {
-  this.getCurrentUser(); // Đảm bảo có token
-  const headers = new HttpHeaders()
-    .append('Content-Type', 'application/json')
-    .append('Authorization', 'Bearer ' + this.token);
-
-  // Chuẩn bị body request dựa trên cấu trúc bạn cung cấp
-  const body = {
-    supplier: supplierId,
-    userCode: userCode || "", // Gửi userCode nếu có, nếu không gửi chuỗi rỗng
-    phone: phone || ""       // Gửi phone nếu có, nếu không gửi chuỗi rỗng
-  };
-
-  // Sử dụng POST vì API nhận body
-  return this.http.post<RemoteCertificate[]>(this.getRemoteSigningCertsUrl, body, { headers }).pipe(
-     // Map dữ liệu nhận được sang cấu trúc RemoteCertificate[] nếu cần
-     // Dựa trên response mẫu, cấu trúc đã khá giống, có thể không cần map phức tạp
-     map(response => response),
-     catchError(this.handleError) // Xử lý lỗi
-  );
-  }
-
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+      supplier: supplierId,
+      userCode: userCode || "",
+      phone: phone || "" 
+    };
+    return this.http.post<RemoteCertificate[]>(this.getRemoteSigningCertsUrl, body, { headers }).pipe(
+      map(response => response),
+      catchError(this.handleError)
+    );
+    }
 }

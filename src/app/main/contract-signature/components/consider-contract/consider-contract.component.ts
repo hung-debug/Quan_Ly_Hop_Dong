@@ -241,7 +241,7 @@ export class ConsiderContractComponent
   ];
   contract_no: any;
   typeUser: any;
-  //serialNumber: string | null = null;
+  serialNumber: string;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -282,6 +282,7 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    console.log('ngOnInit');
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
     // if(this.isBonBon) {
@@ -2395,7 +2396,7 @@ export class ConsiderContractComponent
   font: any;
   font_size: any;
   currentBoxSignType: any
-  async signDigitalDocument(supplierID: any,serialNumber?: string | null) {
+  async signDigitalDocument(supplierID: any) {
     let typeSignDigital = this.typeSignDigital;
     let checkCurrentSigningStatus: any = false;
     checkCurrentSigningStatus = await this.checkCurrentSigningCall()
@@ -3360,7 +3361,7 @@ export class ConsiderContractComponent
                   signUpdate.type,
                   supplierID,
                   this.phoneMobiCA,
-                  serialNumber
+                  this.serialNumber
                 );
                 // this.statusSign = checkSign;   
                 if (!checkSign || (checkSign && !checkSign.success)) {
@@ -3415,7 +3416,7 @@ export class ConsiderContractComponent
                     signUpdate.type,
                     supplierID,
                     this.phoneMobiCA,
-                    serialNumber
+                    this.serialNumber
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -3508,7 +3509,7 @@ export class ConsiderContractComponent
   }
 
   otp: boolean = false;
-  async signContractSubmit(supplierID:any =!'vnpt', serialNumber?: string | null) {
+  async signContractSubmit(supplierID:any =!'vnpt') {
     this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
@@ -3588,11 +3589,11 @@ export class ConsiderContractComponent
     );
 
     if (signUploadObs$.length == 0 || eKYC == 1) {
-      await this.signContract(true, supplierID,serialNumber);
+      await this.signContract(true, supplierID);
     }
   }
 
-  async signContract(notContainSignImage?: boolean, supplierID =! 'vnpt', serialNumber?: string | null) {
+  async signContract(notContainSignImage?: boolean, supplierID =! 'vnpt') {
     const signUpdateTemp = JSON.parse(
       JSON.stringify(this.isDataObjectSignature)
     );
@@ -3726,7 +3727,7 @@ export class ConsiderContractComponent
         }
       }
     } else {
-      await this.signImageC(signUpdatePayload, notContainSignImage, supplierID, serialNumber);
+      await this.signImageC(signUpdatePayload, notContainSignImage, supplierID);
     }
   }
 
@@ -4176,7 +4177,7 @@ export class ConsiderContractComponent
   }
 
   filePath: any = '';
-  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!'vnpt', serialNumber?: string | null) {
+  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!'vnpt') {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(this.firstHandler) {
@@ -4191,7 +4192,7 @@ export class ConsiderContractComponent
     if (signUpdatePayload) {
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
       if (notContainSignImage) {
-        signDigitalStatus = await this.signDigitalDocument(supplierID, serialNumber);
+        signDigitalStatus = await this.signDigitalDocument(supplierID);
 
         if (this.eKYC == false) {
           signUpdateTempN = signUpdateTempN
@@ -4262,7 +4263,7 @@ export class ConsiderContractComponent
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
                 if (!notContainSignImage) {
-                  await this.signDigitalDocument(supplierID, serialNumber);
+                  await this.signDigitalDocument(supplierID);
                 }
 
                 this.router
@@ -4332,7 +4333,7 @@ export class ConsiderContractComponent
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
-            await this.signDigitalDocument(supplierID, serialNumber);
+            await this.signDigitalDocument(supplierID);
           }
 
           this.router.navigateByUrl('/', { skipLocationChange: true })
@@ -4423,7 +4424,7 @@ export class ConsiderContractComponent
             } else {
               if (!notContainSignImage) {
                 //Ký số
-                await this.signDigitalDocument(supplierID, serialNumber);
+                await this.signDigitalDocument(supplierID);
               }
 
               this.router
@@ -5298,9 +5299,9 @@ export class ConsiderContractComponent
           this.phoneMobiCA = result.phone;
           this.suppliersRs = result.suppliers;
         }
-        this.supplierID = result.type; // Lưu nhà cung cấp đã chọn
-        const userCode = result.ma_dvcs; // Lấy MST/CCCD từ kết quả dialog
-        const phone = result.phone; // Lấy SĐT từ kết quả dialog
+        this.supplierID = result.type;
+        const userCode = result.ma_dvcs;
+        const phone = result.phone;
         this.spinner.show();
         let certificates: RemoteCertificate[] = [];
         try {
@@ -5315,7 +5316,7 @@ export class ConsiderContractComponent
             this.toastService.showErrorHTMLWithTimeout('Không tìm thấy chứng thư số hợp lệ cho thông tin đã nhập.', '', 3000);
             return;
           } else if (certificates.length === 1) {
-            await this.signContractSubmit(this.supplierID,null);}
+            await this.signContractSubmit(this.supplierID);}
             else if (certificates.length > 1) {
             // Trường hợp có nhiều hơn 1 chứng thư
             const dialogConfigCert = new MatDialogConfig();
@@ -5327,7 +5328,8 @@ export class ConsiderContractComponent
             const dialogRefCert = this.dialog.open(RemoteCertSelectionDialogComponent, dialogConfigCert);
             dialogRefCert.afterClosed().subscribe(async (selectedSerial: string | undefined) => {
               if (selectedSerial) {
-                await this.signContractSubmit(this.supplierID, selectedSerial);
+                this.serialNumber = selectedSerial;
+                await this.signContractSubmit(this.supplierID);
               } else {
                 this.spinner.hide();
               }

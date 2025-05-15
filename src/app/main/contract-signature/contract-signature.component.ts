@@ -2084,26 +2084,21 @@ export class ContractSignatureComponent implements OnInit {
           this.spinner.show();
           let certificates: RemoteCertificate[] = [];
           try {
-             // Gọi API lấy danh sách chứng thư số
              certificates = await this.contractServiceV1.getRemoteSigningCertificates(supplierID, resultRS.ma_dvcs, resultRS.phone).toPromise();
           } catch (error) {
              this.spinner.hide();
              this.toastService.showErrorHTMLWithTimeout('Lỗi khi lấy danh sách chứng thư số. Vui lòng thử lại.', '', 3000);
-             return; // Dừng lại nếu có lỗi
+             return false; 
           }
 
-          this.spinner.hide(); // Ẩn spinner sau khi nhận kết quả API
-
-          if (!certificates || certificates.length === 0) {
-            
+          this.spinner.hide(); 
+          if (!certificates || certificates.length === 0) {            
               this.toastService.showErrorHTMLWithTimeout('Không tìm thấy chứng thư số hợp lệ cho thông tin đã nhập.', '', 3000);
-              return; // Dừng lại nếu không có chứng thư
-            } else if (certificates.length === 1) {
-              // Chỉ có 1 chứng thư, tiến hành ký ngay
+              return false;
+          } else if (certificates.length === 1) {
               const serialNumber = certificates[0].serialNumber;
               this.spinner.show();
               let recipientIds: any = contractsSignManyChecked.map(item => item.id)
-              //Call api ký nhiều remote signing
               await this.contractServiceV1.signRemoteMulti(
                 manyRemoteSignData,
                 recipientIds,
@@ -2189,12 +2184,11 @@ export class ContractSignatureComponent implements OnInit {
                   this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
                 }
               )
-            } else {
-              // Có nhiều hơn 1 chứng thư, mở dialog cho người dùng chọn
+          } else {
               const dialogConfigCert = new MatDialogConfig();
               dialogConfigCert.width = '680px';
               dialogConfigCert.data = { certificates: certificates };
-              dialogConfigCert.disableClose = true; // Không cho đóng khi click ra ngoài
+              dialogConfigCert.disableClose = true;
               dialogConfigCert.panelClass = 'custom-dialog-container';
 
               const dialogRefCert = this.dialog.open(RemoteCertSelectionDialogComponent, dialogConfigCert);
@@ -2203,7 +2197,6 @@ export class ContractSignatureComponent implements OnInit {
                 if (selectedSerial) {
                 this.spinner.show();
                 let recipientIds: any = contractsSignManyChecked.map(item => item.id)
-              //Call api ký nhiều remote signing
               await this.contractServiceV1.signRemoteMulti(
                 manyRemoteSignData,
                 recipientIds,
