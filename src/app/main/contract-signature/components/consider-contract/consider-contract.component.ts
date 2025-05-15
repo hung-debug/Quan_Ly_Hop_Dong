@@ -5736,7 +5736,6 @@ export class ConsiderContractComponent
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
     let result  = this.suppliersRs.find(item => item.id == code);
-    appName = result.supplierID;
     switch (supplierID) {
       case "vnpt":
         appName = "VNPT SmartCA";
