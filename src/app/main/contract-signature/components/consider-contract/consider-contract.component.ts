@@ -279,8 +279,6 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
-    // this.preventGestureZoom();
-    this.preventDoubleTapZoom();
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
     // if(this.isBonBon) {
@@ -1105,7 +1103,9 @@ export class ConsiderContractComponent
   eventMouseover() { }
 
   ngAfterViewInit() {
-    this.preventGestureZoom()
+    if(this.mobile) {
+      this.preventGestureZoom()
+    }
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -6041,17 +6041,5 @@ export class ConsiderContractComponent
         e.preventDefault();
       }
     });
-  }
-
-  lastTouchEnd = 0;
-
-  preventDoubleTapZoom() {
-    document.addEventListener('touchend', (event) => {
-      const now = new Date().getTime();
-      if (now - this.lastTouchEnd <= 300) {
-        event.preventDefault();
-      }
-      this.lastTouchEnd = now;
-    }, false);
   }
 }
