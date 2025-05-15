@@ -33,6 +33,8 @@ import { RemoteDialogSignComponent } from './components/consider-contract/remote
 import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 import { environment } from 'src/environments/environment';
+import { RemoteCertSelectionDialogComponent } from './components/consider-contract/remote-cert-dialog/remote-cert-selection-dialog.component';
+import { RemoteCertificate } from './components/consider-contract/remote-cert-dialog/remote-certificate.interface';
 // import { ContractService } from 'src/app/service/contract.service';
 interface SignInfo {
   recipientId: number;
@@ -2320,119 +2322,351 @@ export class ContractSignatureComponent implements OnInit {
           }
 
           this.spinner.show();
-          let recipientIds: any = contractsSignManyChecked.map(item => item.id)
-          //Call api ký nhiều remote signing
-          await this.contractServiceV1.signRemoteMulti(
-            manyRemoteSignData,
-            recipientIds,
-            null,
-            3,
-            supplierID,
-            this.phoneMobiCA
-          ).then(
-            async (res: any) => {
-              this.spinner.hide();
+          let certificates: RemoteCertificate[] = [];
+          try {
+             certificates = await this.contractServiceV1.getRemoteSigningCertificates(supplierID, resultRS.ma_dvcs, resultRS.phone).toPromise();
+          } catch (error) {
+             this.spinner.hide();
+             this.toastService.showErrorHTMLWithTimeout('Lỗi khi lấy danh sách chứng thư số. Vui lòng thử lại.', '', 3000);
+             return false; 
+          }
 
-              let countSuccess = 0;
-              let checkSign = res
-              this.handleContractData(checkSign);
-              for (let i = 0; i < checkSign.length; i++) {
-                if (checkSign[i].result.success == false) {
+          this.spinner.hide(); 
+          if (!certificates || certificates.length === 0) {            
+              this.toastService.showErrorHTMLWithTimeout('Không tìm thấy chứng thư số hợp lệ cho thông tin đã nhập.', '', 3000);
+              return false;
+          } else if (certificates.length === 1) {
+              const serialNumber = certificates[0].serialNumber;
+              this.spinner.show();
+              let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+              await this.contractServiceV1.signRemoteMulti(
+                manyRemoteSignData,
+                recipientIds,
+                null,
+                3,
+                supplierID,
+                this.phoneMobiCA
+              ).then(
+                async (res: any) => {
                   this.spinner.hide();
 
-                  if (checkSign[i].result.message == 'Tax code do not match!') {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'taxcode.not.match',
-                      '',
-                      3000
-                    );
-                  } else if (
-                    checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
-                  ) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Mật khẩu cấp 2 không đúng',
-                      '',
-                      3000
-                    );
-                  } else if (
-                    checkSign[i].result.message == 'License ky so het han!'
-                  ) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'License ký số hết hạn!',
-                      '',
-                      3000
-                    );
-                  } else {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      checkSign[i].result.message,
-                      '',
-                      3000
-                    );
-                  }
-                  return;
-                } else {
-                  countSuccess++;
-                }
-              }
+                  let countSuccess = 0;
+                  let checkSign = res
+                  this.handleContractData(checkSign);
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
 
-              if (countSuccess == checkSign.length) {
-                this.spinner.hide();
-                if(supplierID !== 'MobiFoneCA'){
-                  this.remoteDialogSuccessOpen(supplierID).then((res) => {
-                    if (res.isDismissed) {
-                      this.router
-                        .navigateByUrl('/', { skipLocationChange: true })
-                        .then(() => {
-                          this.router.navigate(['main/c/receive/processed']);
-                        });
+                      if (checkSign[i].result.message == 'Tax code do not match!') {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'taxcode.not.match',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'License ky so het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
+                    } else {
+                      countSuccess++;
                     }
-                  })
-                } else {
-                  // for (let i = 0; i < recipientIds.length; i++) {
-                  //   let updateInfo: any = null;
-                  //   try {
-                  //     updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
-                  //       processAt: this.isDateTime
-                  //     }],recipientIds[i]);
-                  //   } catch (err) {
-                  //     this.spinner.hide()
-                  //     this.toastService.showErrorHTMLWithTimeout(
-                  //       'Lỗi cập nhật trạng thái tài liệu',
-                  //       '',
-                  //       3000
-                  //     );
-                  //     return false;
-                  //   }
-  
-                  //   if (!updateInfo.id || !updateInfo) {
-                  //     this.spinner.hide()
-                  //     this.toastService.showErrorHTMLWithTimeout(
-                  //       'Lỗi cập nhật trạng thái tài liệu',
-                  //       '',
-                  //       3000
-                  //     );
-                  //     return false;
-                  //   }
-                  // }
-                  this.router
-                  .navigateByUrl('/', { skipLocationChange: true })
-                  .then(() => {
-                    this.router.navigate(['main/c/receive/processed']);
-                  });
-                  
-                  this.toastService.showSuccessHTMLWithTimeout(
-                    "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
-                    '',
-                    3000
-                  );
+                  }
+
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    if(supplierID !== 'MobiFoneCA'){
+                      this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                        if (res.isDismissed) {
+                          this.router
+                            .navigateByUrl('/', { skipLocationChange: true })
+                            .then(() => {
+                              this.router.navigate(['main/c/receive/processed']);
+                            });
+                        }
+                      })
+                    } else {
+                      this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                      
+                      this.toastService.showSuccessHTMLWithTimeout(
+                        "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                        '',
+                        3000
+                      );
+                    }
+                  }
+                },
+                (err: any) => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
                 }
-              }
-            },
-            (err: any) => {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
-            }
-          )
+              )
+          } else {
+              const dialogConfigCert = new MatDialogConfig();
+              dialogConfigCert.width = '680px';
+              dialogConfigCert.data = { certificates: certificates };
+              dialogConfigCert.disableClose = true;
+              dialogConfigCert.panelClass = 'custom-dialog-container';
+
+              const dialogRefCert = this.dialog.open(RemoteCertSelectionDialogComponent, dialogConfigCert);
+
+              dialogRefCert.afterClosed().subscribe(async (selectedSerial: string | undefined) => {
+                if (selectedSerial) {
+                this.spinner.show();
+                let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+              await this.contractServiceV1.signRemoteMulti(
+                manyRemoteSignData,
+                recipientIds,
+                null,
+                3,
+                supplierID,
+                this.phoneMobiCA,
+                selectedSerial
+              ).then(
+                async (res: any) => {
+                  this.spinner.hide();
+
+                  let countSuccess = 0;
+                  let checkSign = res
+                  this.handleContractData(checkSign);
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
+
+                      if (checkSign[i].result.message == 'Tax code do not match!') {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'taxcode.not.match',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'License ky so het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
+                    } else {
+                      countSuccess++;
+                    }
+                  }
+
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    if(supplierID !== 'MobiFoneCA'){
+                      this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                        if (res.isDismissed) {
+                          this.router
+                            .navigateByUrl('/', { skipLocationChange: true })
+                            .then(() => {
+                              this.router.navigate(['main/c/receive/processed']);
+                            });
+                        }
+                      })
+                    } else {
+                      // for (let i = 0; i < recipientIds.length; i++) {
+                      //   let updateInfo: any = null;
+                      //   try {
+                      //     updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+                      //       processAt: this.isDateTime
+                      //     }],recipientIds[i]);
+                      //   } catch (err) {
+                      //     this.spinner.hide()
+                      //     this.toastService.showErrorHTMLWithTimeout(
+                      //       'Lỗi cập nhật trạng thái tài liệu',
+                      //       '',
+                      //       3000
+                      //     );
+                      //     return false;
+                      //   }
+      
+                      //   if (!updateInfo.id || !updateInfo) {
+                      //     this.spinner.hide()
+                      //     this.toastService.showErrorHTMLWithTimeout(
+                      //       'Lỗi cập nhật trạng thái tài liệu',
+                      //       '',
+                      //       3000
+                      //     );
+                      //     return false;
+                      //   }
+                      // }
+                      this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                      
+                      this.toastService.showSuccessHTMLWithTimeout(
+                        "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                        '',
+                        3000
+                      );
+                    }
+                  }
+                },
+                (err: any) => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+                }
+              )
+                } else {
+                  // Người dùng đã hủy dialog chọn chứng thư
+                  this.spinner.hide(); // Đảm bảo spinner đã ẩn
+                  console.log("Người dùng đã hủy chọn chứng thư.");
+                }})}
+          // let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+          // //Call api ký nhiều remote signing
+          // await this.contractServiceV1.signRemoteMulti(
+          //   manyRemoteSignData,
+          //   recipientIds,
+          //   null,
+          //   3,
+          //   supplierID,
+          //   this.phoneMobiCA
+          // ).then(
+          //   async (res: any) => {
+          //     this.spinner.hide();
+
+          //     let countSuccess = 0;
+          //     let checkSign = res
+          //     this.handleContractData(checkSign);
+          //     for (let i = 0; i < checkSign.length; i++) {
+          //       if (checkSign[i].result.success == false) {
+          //         this.spinner.hide();
+
+          //         if (checkSign[i].result.message == 'Tax code do not match!') {
+          //           this.toastService.showErrorHTMLWithTimeout(
+          //             'taxcode.not.match',
+          //             '',
+          //             3000
+          //           );
+          //         } else if (
+          //           checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+          //         ) {
+          //           this.toastService.showErrorHTMLWithTimeout(
+          //             'Mật khẩu cấp 2 không đúng',
+          //             '',
+          //             3000
+          //           );
+          //         } else if (
+          //           checkSign[i].result.message == 'License ky so het han!'
+          //         ) {
+          //           this.toastService.showErrorHTMLWithTimeout(
+          //             'License ký số hết hạn!',
+          //             '',
+          //             3000
+          //           );
+          //         } else {
+          //           this.toastService.showErrorHTMLWithTimeout(
+          //             checkSign[i].result.message,
+          //             '',
+          //             3000
+          //           );
+          //         }
+          //         return;
+          //       } else {
+          //         countSuccess++;
+          //       }
+          //     }
+
+          //     if (countSuccess == checkSign.length) {
+          //       this.spinner.hide();
+          //       if(supplierID !== 'MobiFoneCA'){
+          //         this.remoteDialogSuccessOpen(supplierID).then((res) => {
+          //           if (res.isDismissed) {
+          //             this.router
+          //               .navigateByUrl('/', { skipLocationChange: true })
+          //               .then(() => {
+          //                 this.router.navigate(['main/c/receive/processed']);
+          //               });
+          //           }
+          //         })
+          //       } else {
+          //         // for (let i = 0; i < recipientIds.length; i++) {
+          //         //   let updateInfo: any = null;
+          //         //   try {
+          //         //     updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+          //         //       processAt: this.isDateTime
+          //         //     }],recipientIds[i]);
+          //         //   } catch (err) {
+          //         //     this.spinner.hide()
+          //         //     this.toastService.showErrorHTMLWithTimeout(
+          //         //       'Lỗi cập nhật trạng thái tài liệu',
+          //         //       '',
+          //         //       3000
+          //         //     );
+          //         //     return false;
+          //         //   }
+  
+          //         //   if (!updateInfo.id || !updateInfo) {
+          //         //     this.spinner.hide()
+          //         //     this.toastService.showErrorHTMLWithTimeout(
+          //         //       'Lỗi cập nhật trạng thái tài liệu',
+          //         //       '',
+          //         //       3000
+          //         //     );
+          //         //     return false;
+          //         //   }
+          //         // }
+          //         this.router
+          //         .navigateByUrl('/', { skipLocationChange: true })
+          //         .then(() => {
+          //           this.router.navigate(['main/c/receive/processed']);
+          //         });
+                  
+          //         this.toastService.showSuccessHTMLWithTimeout(
+          //           "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+          //           '',
+          //           3000
+          //         );
+          //       }
+          //     }
+          //   },
+          //   (err: any) => {
+          //     this.spinner.hide();
+          //     this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+          //   }
+          // )
         }
       });
     }
