@@ -769,6 +769,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   eventMouseover() {}
 
   ngAfterViewInit() {
+    if(this.mobile) {
+      this.preventGestureZoom()
+    }
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -1945,7 +1948,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
-  
   preventGestureZoom() {
     // Chặn pinch-to-zoom: Android & iOS
     document.addEventListener('touchmove', (e) => {
@@ -1982,17 +1984,5 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         e.preventDefault();
       }
     });
-  }
-
-  lastTouchEnd = 0;
-
-  preventDoubleTapZoom() {
-    document.addEventListener('touchend', (event) => {
-      const now = new Date().getTime();
-      if (now - this.lastTouchEnd <= 300) {
-        event.preventDefault();
-      }
-      this.lastTouchEnd = now;
-    }, false);
   }
 }
