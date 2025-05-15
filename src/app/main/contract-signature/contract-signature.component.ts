@@ -566,7 +566,7 @@ export class ContractSignatureComponent implements OnInit {
   
   getContractListByOrder(value: any){
     
-    this.orderDesc = value === 'ascend' ? 'false' : 'true';
+    this.orderDesc = value === 'ascend' ? 'true' : 'false';
 
     this.ascendSortActive = value === 'ascend';
     this.descendSortActive = value === 'descent';
@@ -815,7 +815,7 @@ export class ContractSignatureComponent implements OnInit {
           this.p,
           this.page,
           this.contractStatus,
-          this.orderDesc = 'false',
+          this.orderDesc = 'true',
           this.name_or_email_customer,
           this.organization_id
         )
@@ -860,7 +860,7 @@ export class ContractSignatureComponent implements OnInit {
             this.p,
             this.page,
             this.contractStatus,
-            this.orderDesc = 'false',
+            this.orderDesc = 'true',
             this.name_or_email_customer,
             this.organization_id
           )

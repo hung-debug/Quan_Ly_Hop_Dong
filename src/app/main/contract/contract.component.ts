@@ -273,7 +273,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   
   getContractListByOrder(value: any){
 
-    this.orderDesc = value === 'ascend' ? 'false' : 'true';
+    this.orderDesc = value === 'ascend' ? 'true' : 'false';
 
     this.ascendSortActive = value === 'ascend';
     this.descendSortActive = value === 'descent';
@@ -793,7 +793,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }
 
       //get list contract
-      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc = 'false', this.handler_name, this.name_or_email_customer).subscribe(data => {
+      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc = 'true', this.handler_name, this.name_or_email_customer).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         this.checkedAll = false;
