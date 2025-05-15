@@ -199,7 +199,7 @@ export class UserComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, this.name, this.row, this.page).subscribe(response => {
+    this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, "",this.name, this.row, this.page).subscribe(response => {
       this.spinner.hide();
       this.list = response.entities;
       this.totalRecords = response.total_elements;
