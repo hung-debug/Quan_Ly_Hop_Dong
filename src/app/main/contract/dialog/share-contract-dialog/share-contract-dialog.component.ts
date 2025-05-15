@@ -218,12 +218,15 @@ export class ShareContractDialogComponent implements OnInit {
           if(!this.isValidEmail(valueEmail)){
             this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + valueEmail + ' sai định dạng', "", 3000);
             this.checkEmailError = true;
+            this.checkPhoneError = true;
           } else if(valueEmail == emailLogin){
             this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ cho chính mình', "", 3000);
             this.checkEmailError = true;
+            this.checkPhoneError = true;
           } else if (emailDup.has(valueEmail)) {
             this.toastService.showErrorHTMLWithTimeout(`Email "${valueEmail}" đã được nhập nhiều lần`, "", 3000);
             this.checkEmailError = true;
+            this.checkPhoneError = true;
           } else {
             emailDup.add(valueEmail);
             this.emailArr.push(valueEmail);
@@ -237,12 +240,15 @@ export class ShareContractDialogComponent implements OnInit {
           if(!this.isValidPhone(valuePhone)){
             this.toastService.showErrorHTMLWithTimeout('Tồn tại số điện thoại ' + valuePhone + ' sai định dạng', "", 3000);
             this.checkPhoneError = true;
+            this.checkEmailError = true;
           } else if(valuePhone == phoneLogin){
             this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ cho chính mình', "", 3000);
             this.checkPhoneError = true;
+            this.checkEmailError = true;
           } else if (phoneDup.has(valuePhone)) {
             this.toastService.showErrorHTMLWithTimeout(`Số điện thoại "${valuePhone}" đã được nhập nhiều lần`, "", 3000);
             this.checkPhoneError = true;
+            this.checkEmailError = true;
           } else {
             phoneDup.add(valuePhone);
             this.phoneArr.push(valuePhone);
