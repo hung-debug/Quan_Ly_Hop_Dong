@@ -1,256 +1,260 @@
-// Style cho container dialog tổng thể (tùy chọn, có thể style ở cấp global nếu muốn)
-// ::ng-deep .mat-dialog-container {
-//   border-radius: 8px; // Bo góc nhẹ cho dialog
-//   overflow: hidden; // Đảm bảo nội dung bo góc theo container
-// }
+/*
+  Complete SCSS for the Certificate Dialog Component
 
+  Using :host and :host ::ng-deep to ensure styles are applied.
+  Added flex-grow to .cert-dialog-content to make it fill available vertical space.
+*/
 
-// Kiểu chung cho tiêu đề dialog
-.label-header {
-  font-size: 20px;
-  font-weight: 600; // Đậm vừa phải
-  color: #333;
-  padding: 16px 24px 10px; // Padding trên dưới và ngang
-  border-bottom: 1px solid #eee;
-  margin: 0; // Loại bỏ margin mặc định
-  justify-content: center;
-}
-
-// Kiểu cho vùng nội dung dialog
-.cert-dialog-content {
-  padding: 20px 24px; // Padding trên dưới và ngang
-  // Các style scrollable-content sẽ được định nghĩa riêng
-}
-
-// Style cho thông báo khi không có chứng thư
-.no-cert-message {
+// Style the dialog title
+:host .label-header {
   text-align: center;
-  color: #555;
-  font-style: italic;
-  padding: 20px;
+  color: #002060; /* Blue color for the title */
+  font-size: 1.6em;
+  font-weight: bold;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
 }
 
-// Style cho container có scrollbar
-.scrollable-content {
-  max-height: 400px; // Chiều cao tối đa trước khi scroll (có thể điều chỉnh)
-  overflow-y: auto; // Thêm scrollbar dọc khi cần
-  // Tùy chỉnh scrollbar (chỉ hoạt động trên một số trình duyệt)
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #ccc;
+// Style the main content area
+:host .cert-dialog-content {
+  padding: 0 20px;
+  max-height: 400px; /* Adjust as needed, but flex-grow helps manage space */
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height or dialog size */
+  padding-top: 10px;
+  flex-grow: 1; /* <--- NEW: Make this flex item grow to fill space */
+  // align-self: stretch; // Optional: Ensure it stretches horizontally if needed
+  display: flex; // Optional: Use flex for its own children layout if needed later
+  flex-direction: column; // Optional: If .cert-dialog-content needs its own column layout
+}
+
+// Style the message when no certificates are found
+:host .no-cert-message {
+  text-align: center;
+  color: #666;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  // If .cert-dialog-content is flex column, you might need:
+  // flex-shrink: 0; // Prevent shrinking if content fits but message is large
+}
+
+
+// --- Styles for the PrimeNG Table (Desktop View) ---
+// Use :host ::ng-deep to target the internal PrimeNG table structure
+:host .web-table-container {
+    border: 1px solid #ddd;
     border-radius: 4px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-  }
+    overflow: hidden; // Hides border overflow at corners
+    flex-grow: 1; /* <--- NEW: Make table container grow within cert-dialog-content */
+    display: flex; /* <--- NEW: Make table container a flex container */
+    flex-direction: column; /* <--- NEW: Stack table elements vertically */
+}
+
+// Ensure scrollable-content class on container works well with flex
+:host .web-table-container.scrollable-content {
+    // max-height is less relevant when using flex-grow for filling space
+    // overflow-y: auto; // Already there, ensures scrolling
 }
 
 
-// Kiểu cho bảng PrimeNG trên Web
-.web-table-container {
+// Now, use ::ng-deep to style the PrimeNG elements *within* the host component
+:host ::ng-deep .p-datatable {
+  border: none;
   width: 100%;
-  // Không cần border ở đây, border sẽ style trên cell
+  border-collapse: collapse;
+  margin: 0;
+  display: flex; /* <--- NEW: PrimeNG table itself should be a flex container */
+  flex-direction: column; /* <--- NEW: Stack table header and body vertically */
+  flex-grow: 1; /* <--- NEW: Table should grow within its container */
+
+
+  /* Header styles */
+  .p-datatable-thead { // Target thead wrapper
+     flex-shrink: 0; // Prevent header from shrinking
+     background-color: transparent; // White background for header row (as per image)
+    tr {
+      th {
+        padding: 10px 15px;
+        text-align: center; /* Center ALL header text as per image */
+        font-weight: bold;
+        color: #0041C4; /* Blue text color for ALL headers as per image */
+        background-color:#9dbeff ; /* White background for header row (as per image) */
+        border-bottom: none;
+        border-right: 1px solid #ddd; /* Add right border for column dividers */
+        &:first-child {
+            border-left: none;
+        }
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+  }
+
+
+  /* Body styles */
+  .p-datatable-tbody { // Target tbody wrapper
+      overflow-y: auto; /* <--- IMPORTANT: Make the table body scrollable */
+      flex-grow: 1; /* <--- NEW: Table body should grow and handle scrolling */
+      // max-height: none; // Reset any potential max-height from theme
+      tr {
+        td {
+          padding: 10px 15px;
+          vertical-align: middle;
+          border-bottom: 1px solid #eee; /* Light grey line as row separator */
+          border-right: 1px solid #eee; /* Add right border for column dividers */
+          word-break: break-word; /* Prevent long text from overflowing */
+
+           &:first-child {
+              border-left: none;
+          }
+          &:last-child {
+             border-right: none;
+          }
+        }
+        &:last-child td {
+          border-bottom: none; /* No bottom border on the last row */
+        }
+      }
+  }
+
+
+  /* Specific column styles */
+  th.cert-select-header, td.cert-select-cell {
+    width: 60px; /* Adjust width as needed */
+    text-align: center; /* Center the content */
+  }
+
+   td.cert-select-cell input[type="radio"] {
+      cursor: pointer;
+      vertical-align: middle; // Help align radio button vertically
+   }
 }
 
-p-table {
-  width: 100%;
-  border-collapse: collapse; // Đảm bảo border liền mạch
-  border: 1px solid #ddd; // Border xung quanh bảng
 
-  // Kiểu cho header bảng
-  .p-datatable-thead > tr > th {
-    background-color: #eef6ff; // Màu nền xanh nhạt hiện đại hơn
-    color: #106DB6;
-    font-weight: 600;
-    padding: 12px 10px; // Tăng padding nhẹ
-    border: 1px solid #ddd; // Border nhẹ
-    text-align: left;
-    font-size: 14px; // Kích thước chữ
-  }
+// --- Styles for the Mobile View ---
+// Mobile container also needs flex-grow
+:host .mobile-cert-container {
+    padding: 0 10px;
+    flex-grow: 1; /* <--- NEW: Mobile container should grow */
+    display: flex; /* <--- NEW: Make mobile container flex */
+    flex-direction: column; /* <--- NEW: Stack mobile items vertically */
+}
 
-  // Kiểu cho body bảng
-  .p-datatable-tbody > tr > td {
-    padding: 10px;
-    border: 1px solid #eee; // Border nhẹ hơn
-    vertical-align: middle;
-    font-size: 14px; // Kích thước chữ
-    color: #333; // Màu chữ
-  }
-
-  // Kiểu cho cột chọn (header và cell)
-  .cert-select-header, .cert-select-cell {
-    width: 60px; // Chiều rộng nhỏ hơn
-    text-align: center; // Căn giữa
-  }
-
-  // Kiểu cho radio button trong cell
-  .cert-select-cell input[type="radio"] {
-    margin: 0;
-    vertical-align: middle;
-    // Tùy chỉnh màu radio button nếu cần (phức tạp hơn, liên quan đến Material theme)
-  }
-
-  // Hiệu ứng hover cho dòng
-  .p-datatable-tbody > tr:hover {
-    background-color: #f9f9f9; // Màu nền khi hover nhẹ nhàng hơn
-  }
+// Ensure scrollable-content class on mobile container works with flex
+:host .mobile-cert-container.scrollable-content {
+     // max-height is less relevant with flex-grow
+     overflow-y: auto; // Already there, ensures scrolling
 }
 
 
-// Kiểu cho giao diện Mobile (sử dụng div tùy chỉnh)
-.mobile-cert-container {
-  width: 100%; // Chiếm 100% chiều rộng container cha
-  // border: 1px solid #106DB6; // Border xanh (đã có trong HTML gốc, có thể giữ hoặc bỏ)
-  // margin: auto; // Căn giữa (đã có trong HTML gốc, có thể giữ hoặc bỏ)
-  // padding: 0 !important; // Đảm bảo không có padding (đã có trong HTML gốc, có thể giữ hoặc bỏ)
-  box-sizing: border-box;
-  border-radius: 4px; // Bo góc nhẹ cho container mobile
-  overflow: hidden; // Đảm bảo nội dung bo góc theo container
-  border: 1px solid #ddd; // Border nhẹ nhàng hơn
+:host .mobile-header {
+    display: flex;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    color: #007bff;
+    align-items: center;
+    flex-shrink: 0; // Prevent header from shrinking
 }
 
-.mobile-header {
-  display: flex;
-  height: 40px; // Tăng chiều cao header mobile
-  color: #106DB6;
-  background-color: #eef6ff; // Màu nền xanh nhạt hiện đại hơn
-  font-weight: 600;
-  align-items: center;
-  padding: 0 10px;
-  font-size: 14px;
+// Mobile items and their details might also benefit from flex properties
+// to manage spacing and alignment within the scrolling container
+:host .mobile-item {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    &:last-child {
+        border-bottom: none;
+    }
+    flex-shrink: 0; // Prevent individual items from shrinking
 }
 
-.mobile-header-select {
-    width: 20%;
+:host .mobile-radio-choose {
+    flex-basis: 60px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.mobile-header-info {
-    width: 80%;
+:host .mobile-info-details {
+    flex-grow: 1;
     padding-left: 10px;
+    display: flex; // Make details container flex
+    flex-direction: column; // Stack info rows vertically
 }
 
-
-.mobile-item {
-  border-top: 1px solid #eee; // Đường kẻ phân cách item
-  display: flex;
-  padding: 10px;
-  align-items: flex-start;
-  font-size: 14px;
-  color: #333;
-
-  &:last-child {
-      border-bottom: none; // Loại bỏ border dưới cùng cho item cuối
-  }
-}
-
-.mobile-radio-choose {
-    width: 20%;
-    text-align: center;
-    padding-top: 4px; // Căn chỉnh radio button
-}
-
-.mobile-info-details {
-    width: 80%;
-    padding-left: 10px;
-    box-sizing: border-box;
-}
-
-.mobile-info-row {
+:host .mobile-info-row {
+    display: flex;
     margin-bottom: 5px;
     &:last-child {
         margin-bottom: 0;
     }
-    word-wrap: break-word; // Đảm bảo wrap text dài
+    // Optional: Align label and value vertically if needed
+    // align-items: center;
 }
 
-.mobile-info-label {
-    color: #106DB6; // Màu xanh cho label
-    font-weight: 600; // Label đậm vừa phải
+:host .mobile-info-label {
+    font-weight: bold;
     margin-right: 5px;
-    display: inline-block; // Cho phép label và value nằm cùng dòng
-    min-width: 80px; // Chiều rộng tối thiểu cho label để căn chỉnh (tùy chỉnh)
+    flex-basis: 100px; /* Adjust width as needed for labels */
+    flex-shrink: 0;
 }
 
-.mobile-info-value {
-    color: #333333; // Màu chữ cho giá trị
-    display: inline-block;
-    word-wrap: break-word;
-    flex-grow: 1; // Cho phép giá trị chiếm phần còn lại của dòng
+:host .mobile-info-value {
+    flex-grow: 1;
+    word-break: break-word;
 }
 
 
-// Kiểu cho vùng actions dialog (container mới)
-.dialog-actions-container {
-  padding: 15px 24px;
+// --- Styles for the Action Buttons ---
+// This container is likely not meant to grow, it stays at the bottom
+:host .dialog-actions-container {
+  padding: 15px 20px 20px 20px;
+  display: flex;
+  justify-content: center; /* Center buttons horizontally */
+  gap: 10px; // Space between buttons
   border-top: 1px solid #eee;
-  margin-top: 0;
-  display: flex; // Sử dụng flexbox
-  justify-content: flex-end; // Căn nút sang phải
-  align-items: center; // Căn giữa theo chiều dọc
-  gap: 12px; // Khoảng cách giữa các nút
+  margin-top: 15px;
+  flex-shrink: 0; // Prevent actions section from shrinking
+}
 
-  // Style cho các nút button bên trong container actions
-  button {
-    // Áp dụng style từ nút mẫu, điều chỉnh cho phù hợp với flexbox
-    width: 120px; // Chiều rộng cố định cho cả hai nút
-    // flex-grow: 1; // Bỏ flex-grow để width cố định hoạt động
-    // flex-basis: 0; // Bỏ flex-basis
+:host .cancel-button, :host .confirm-button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  min-width: 100px;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  display: inline-block;
+}
 
-    border: none; // **Bỏ viền**
-    border-radius: 6px; // Bo góc 6px như mẫu
-    cursor: pointer;
-    padding: 10px 15px; // Padding (điều chỉnh nhẹ so với mẫu 10px 5px để cân đối hơn)
-    // margin: 5px 5px; // Bỏ margin ở đây, dùng gap trên container flex
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: none; // Ngăn Material chuyển chữ hoa (nếu vẫn còn ảnh hưởng)
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    text-align: center; // Căn giữa text trong nút
-    display: inline-flex; // Sử dụng inline-flex để căn giữa nội dung (text) bên trong nút
-    justify-content: center; // Căn giữa nội dung theo chiều ngang
-    align-items: center; // Căn giữa nội dung theo chiều dọc
-    height: 36px; // Chiều cao cố định
+:host .cancel-button {
+  font-weight: bold;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  color: #333;
+  &:hover {
+    background-color: #bbb;
   }
 }
 
-// Kiểu cho nút Hủy bỏ
-button.cancel-button {
-  background-color: #e0e0e0; // Màu nền xám nhạt
-  color: #070707; // Màu chữ tối
-
-  &:hover:not([disabled]) {
-    background-color: darken(#e0e0e0, 5%); // Tối màu hơn khi hover
+:host .confirm-button {
+  font-weight: bold;
+  background-color: #0041C4;
+  color: white;
+  &:hover {
+    background-color: #0056b3;
   }
-
-  &:active:not([disabled]) {
-    background-color: darken(#e0e0e0, 10%); // Tối màu hơn khi active
+  &:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
   }
-}
-
-// Kiểu cho nút Xác nhận
-button.confirm-button {
-  background-color: #0041c4; // Màu nền xanh theo yêu cầu
-  color: #fff; // Màu chữ trắng
-
-  &:hover:not([disabled]) {
-    background-color: darken(#0041c4, 5%); // Tối màu hơn khi hover
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // Thêm shadow nhẹ
-  }
-
-  &:active:not([disabled]) {
-     background-color: darken(#0041c4, 10%); // Tối màu hơn khi active
-     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); // Shadow nhỏ hơn khi active
-  }
-}
-
-// Kiểu cho nút khi bị disable
-.dialog-actions-container button[disabled] {
-  background-color: #ccc; // Màu nền xám khi disable
-  color: #999; // Màu chữ xám khi disable
-  cursor: not-allowed;
-  box-shadow: none; // Đảm bảo không có shadow khi disable
-  opacity: 1; // Giữ opacity để rõ ràng
 }
