@@ -1,0 +1,256 @@
+// Style cho container dialog tổng thể (tùy chọn, có thể style ở cấp global nếu muốn)
+// ::ng-deep .mat-dialog-container {
+//   border-radius: 8px; // Bo góc nhẹ cho dialog
+//   overflow: hidden; // Đảm bảo nội dung bo góc theo container
+// }
+
+
+// Kiểu chung cho tiêu đề dialog
+.label-header {
+  font-size: 20px;
+  font-weight: 600; // Đậm vừa phải
+  color: #333;
+  padding: 16px 24px 10px; // Padding trên dưới và ngang
+  border-bottom: 1px solid #eee;
+  margin: 0; // Loại bỏ margin mặc định
+  justify-content: center;
+}
+
+// Kiểu cho vùng nội dung dialog
+.cert-dialog-content {
+  padding: 20px 24px; // Padding trên dưới và ngang
+  // Các style scrollable-content sẽ được định nghĩa riêng
+}
+
+// Style cho thông báo khi không có chứng thư
+.no-cert-message {
+  text-align: center;
+  color: #555;
+  font-style: italic;
+  padding: 20px;
+}
+
+// Style cho container có scrollbar
+.scrollable-content {
+  max-height: 400px; // Chiều cao tối đa trước khi scroll (có thể điều chỉnh)
+  overflow-y: auto; // Thêm scrollbar dọc khi cần
+  // Tùy chỉnh scrollbar (chỉ hoạt động trên một số trình duyệt)
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+}
+
+
+// Kiểu cho bảng PrimeNG trên Web
+.web-table-container {
+  width: 100%;
+  // Không cần border ở đây, border sẽ style trên cell
+}
+
+p-table {
+  width: 100%;
+  border-collapse: collapse; // Đảm bảo border liền mạch
+  border: 1px solid #ddd; // Border xung quanh bảng
+
+  // Kiểu cho header bảng
+  .p-datatable-thead > tr > th {
+    background-color: #eef6ff; // Màu nền xanh nhạt hiện đại hơn
+    color: #106DB6;
+    font-weight: 600;
+    padding: 12px 10px; // Tăng padding nhẹ
+    border: 1px solid #ddd; // Border nhẹ
+    text-align: left;
+    font-size: 14px; // Kích thước chữ
+  }
+
+  // Kiểu cho body bảng
+  .p-datatable-tbody > tr > td {
+    padding: 10px;
+    border: 1px solid #eee; // Border nhẹ hơn
+    vertical-align: middle;
+    font-size: 14px; // Kích thước chữ
+    color: #333; // Màu chữ
+  }
+
+  // Kiểu cho cột chọn (header và cell)
+  .cert-select-header, .cert-select-cell {
+    width: 60px; // Chiều rộng nhỏ hơn
+    text-align: center; // Căn giữa
+  }
+
+  // Kiểu cho radio button trong cell
+  .cert-select-cell input[type="radio"] {
+    margin: 0;
+    vertical-align: middle;
+    // Tùy chỉnh màu radio button nếu cần (phức tạp hơn, liên quan đến Material theme)
+  }
+
+  // Hiệu ứng hover cho dòng
+  .p-datatable-tbody > tr:hover {
+    background-color: #f9f9f9; // Màu nền khi hover nhẹ nhàng hơn
+  }
+}
+
+
+// Kiểu cho giao diện Mobile (sử dụng div tùy chỉnh)
+.mobile-cert-container {
+  width: 100%; // Chiếm 100% chiều rộng container cha
+  // border: 1px solid #106DB6; // Border xanh (đã có trong HTML gốc, có thể giữ hoặc bỏ)
+  // margin: auto; // Căn giữa (đã có trong HTML gốc, có thể giữ hoặc bỏ)
+  // padding: 0 !important; // Đảm bảo không có padding (đã có trong HTML gốc, có thể giữ hoặc bỏ)
+  box-sizing: border-box;
+  border-radius: 4px; // Bo góc nhẹ cho container mobile
+  overflow: hidden; // Đảm bảo nội dung bo góc theo container
+  border: 1px solid #ddd; // Border nhẹ nhàng hơn
+}
+
+.mobile-header {
+  display: flex;
+  height: 40px; // Tăng chiều cao header mobile
+  color: #106DB6;
+  background-color: #eef6ff; // Màu nền xanh nhạt hiện đại hơn
+  font-weight: 600;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.mobile-header-select {
+    width: 20%;
+    text-align: center;
+}
+
+.mobile-header-info {
+    width: 80%;
+    padding-left: 10px;
+}
+
+
+.mobile-item {
+  border-top: 1px solid #eee; // Đường kẻ phân cách item
+  display: flex;
+  padding: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  color: #333;
+
+  &:last-child {
+      border-bottom: none; // Loại bỏ border dưới cùng cho item cuối
+  }
+}
+
+.mobile-radio-choose {
+    width: 20%;
+    text-align: center;
+    padding-top: 4px; // Căn chỉnh radio button
+}
+
+.mobile-info-details {
+    width: 80%;
+    padding-left: 10px;
+    box-sizing: border-box;
+}
+
+.mobile-info-row {
+    margin-bottom: 5px;
+    &:last-child {
+        margin-bottom: 0;
+    }
+    word-wrap: break-word; // Đảm bảo wrap text dài
+}
+
+.mobile-info-label {
+    color: #106DB6; // Màu xanh cho label
+    font-weight: 600; // Label đậm vừa phải
+    margin-right: 5px;
+    display: inline-block; // Cho phép label và value nằm cùng dòng
+    min-width: 80px; // Chiều rộng tối thiểu cho label để căn chỉnh (tùy chỉnh)
+}
+
+.mobile-info-value {
+    color: #333333; // Màu chữ cho giá trị
+    display: inline-block;
+    word-wrap: break-word;
+    flex-grow: 1; // Cho phép giá trị chiếm phần còn lại của dòng
+}
+
+
+// Kiểu cho vùng actions dialog (container mới)
+.dialog-actions-container {
+  padding: 15px 24px;
+  border-top: 1px solid #eee;
+  margin-top: 0;
+  display: flex; // Sử dụng flexbox
+  justify-content: flex-end; // Căn nút sang phải
+  align-items: center; // Căn giữa theo chiều dọc
+  gap: 12px; // Khoảng cách giữa các nút
+
+  // Style cho các nút button bên trong container actions
+  button {
+    // Áp dụng style từ nút mẫu, điều chỉnh cho phù hợp với flexbox
+    width: 120px; // Chiều rộng cố định cho cả hai nút
+    // flex-grow: 1; // Bỏ flex-grow để width cố định hoạt động
+    // flex-basis: 0; // Bỏ flex-basis
+
+    border: none; // **Bỏ viền**
+    border-radius: 6px; // Bo góc 6px như mẫu
+    cursor: pointer;
+    padding: 10px 15px; // Padding (điều chỉnh nhẹ so với mẫu 10px 5px để cân đối hơn)
+    // margin: 5px 5px; // Bỏ margin ở đây, dùng gap trên container flex
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: none; // Ngăn Material chuyển chữ hoa (nếu vẫn còn ảnh hưởng)
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    text-align: center; // Căn giữa text trong nút
+    display: inline-flex; // Sử dụng inline-flex để căn giữa nội dung (text) bên trong nút
+    justify-content: center; // Căn giữa nội dung theo chiều ngang
+    align-items: center; // Căn giữa nội dung theo chiều dọc
+    height: 36px; // Chiều cao cố định
+  }
+}
+
+// Kiểu cho nút Hủy bỏ
+button.cancel-button {
+  background-color: #e0e0e0; // Màu nền xám nhạt
+  color: #070707; // Màu chữ tối
+
+  &:hover:not([disabled]) {
+    background-color: darken(#e0e0e0, 5%); // Tối màu hơn khi hover
+  }
+
+  &:active:not([disabled]) {
+    background-color: darken(#e0e0e0, 10%); // Tối màu hơn khi active
+  }
+}
+
+// Kiểu cho nút Xác nhận
+button.confirm-button {
+  background-color: #0041c4; // Màu nền xanh theo yêu cầu
+  color: #fff; // Màu chữ trắng
+
+  &:hover:not([disabled]) {
+    background-color: darken(#0041c4, 5%); // Tối màu hơn khi hover
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // Thêm shadow nhẹ
+  }
+
+  &:active:not([disabled]) {
+     background-color: darken(#0041c4, 10%); // Tối màu hơn khi active
+     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); // Shadow nhỏ hơn khi active
+  }
+}
+
+// Kiểu cho nút khi bị disable
+.dialog-actions-container button[disabled] {
+  background-color: #ccc; // Màu nền xám khi disable
+  color: #999; // Màu chữ xám khi disable
+  cursor: not-allowed;
+  box-shadow: none; // Đảm bảo không có shadow khi disable
+  opacity: 1; // Giữ opacity để rõ ràng
+}

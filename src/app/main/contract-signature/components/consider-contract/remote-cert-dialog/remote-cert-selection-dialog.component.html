@@ -1,0 +1,93 @@
+<h2 mat-dialog-title class="label-header">{{'Danh sách chứng thư số' | translate}}</h2>
+
+<!-- Thêm class cho mat-dialog-content để dễ dàng style -->
+<mat-dialog-content class="cert-dialog-content">
+  <p *ngIf="!certificates || certificates.length === 0" class="no-cert-message">Không tìm thấy chứng thư số hợp lệ.</p>
+
+  <!-- Giao diện cho Web -->
+  <!-- Thêm class để dễ dàng style container và scroll -->
+  <div class="web-table-container scrollable-content" *ngIf="!mobile">
+    <p-table [value]="certificates">
+      <ng-template pTemplate="header">
+        <tr>
+          <!-- Thêm class cho cột chọn để style căn giữa và chiều rộng -->
+          <th class="cert-select-header">{{'choice' | translate}}</th>
+          <th>{{'serialNumber' | translate}}</th> <!-- serialNumber -->
+          <th>{{'Chủ sở hữu' | translate}}</th> <!-- name -->
+          <th>{{'supplier' | translate}}</th> <!-- issuer -->
+          <th>{{'start-date' | translate}}</th> <!-- validFrom -->
+          <th>{{'end-date' | translate}}</th> <!-- validTo -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-cert>
+        <tr>
+          <!-- Thêm class cho ô chọn để style căn giữa -->
+          <td class="cert-select-cell">
+            <!-- Bind radio button với selectedCertSerial -->
+            <input type="radio" name="remoteCertSelection" [value]="cert.serialNumber" [(ngModel)]="selectedCertSerial" (change)="onCertSelected(cert.serialNumber)">
+          </td>
+          <td class="popup_cert">{{cert.serialNumber}}</td>
+          <td class="popup_cert">{{cert.name}}</td> <!-- Sử dụng cert.name -->
+          <td class="popup_cert">{{cert.issuer}}</td> <!-- Sử dụng cert.issuer -->
+          <!-- Sử dụng DatePipe để format ngày tháng -->
+           <td class="popup_cert">{{cert.validFrom | date:'dd/MM/yyyy HH:mm'}}</td>
+          <td class="popup_cert">{{cert.validTo | date:'dd/MM/yyyy HH:mm'}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Giao diện cho Mobile -->
+  <!-- Thêm class để dễ dàng style container và scroll -->
+  <div class="mobile-cert-container scrollable-content" *ngIf="mobile">
+    <!-- Thêm class cho header mobile -->
+    <div class="mobile-header">
+      <!-- Thêm class cho các cột header mobile -->
+      <div class="mobile-header-select">{{'choice' | translate}}</div>
+      <div class="mobile-header-info">{{'information' | translate}}</div>
+    </div>
+
+    <!-- Thêm class cho mỗi item mobile -->
+    <div class="mobile-item" *ngFor="let cert of certificates">
+      <!-- Thêm class cho cột radio mobile -->
+      <div class="mobile-radio-choose">
+         <!-- Bind radio button với selectedCertSerial -->
+        <input type="radio" name="remoteCertSelectionMobile" [value]="cert.serialNumber" [(ngModel)]="selectedCertSerial" (change)="onCertSelected(cert.serialNumber)">
+      </div>
+      <!-- Thêm class cho cột thông tin mobile -->
+      <div class="mobile-info-details">
+        <!-- Thêm class cho từng dòng thông tin -->
+        <div class="mobile-info-row">
+          <span class="mobile-info-label">{{'serialNumber' | translate}}:</span>
+          <span class="mobile-info-value">{{cert.serialNumber}}</span>
+        </div>
+        <div class="mobile-info-row">
+          <span class="mobile-info-label">{{'Chủ sở hữu' | translate}}:</span>
+          <span class="mobile-info-value">{{cert.name}}</span> <!-- Sử dụng cert.name -->
+        </div>
+        <div class="mobile-info-row">
+          <span class="mobile-info-label">{{'supplier' | translate}}:</span>
+          <span class="mobile-info-value">{{cert.issuer}}</span> <!-- Sử dụng cert.issuer -->
+        </div>
+        <div class="mobile-info-row">
+          <span class="mobile-info-label">{{'start-date' | translate}}:</span>
+          <span class="mobile-info-value">{{cert.validFrom | date:'dd/MM/yyyy HH:mm'}}</span> <!-- Sử dụng cert.validTo -->
+        </div>
+         <div class="mobile-info-row">
+          <span class="mobile-info-label">{{'end-date' | translate}}:</span>
+          <span class="mobile-info-value">{{cert.validTo | date:'dd/MM/yyyy HH:mm'}}</span> <!-- Sử dụng cert.validTo -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<!-- Thay thế mat-dialog-actions bằng div -->
+<div class="dialog-actions-container">
+  <!-- Thay thế button mat-button bằng button type="button" -->
+  <button type="button" (click)="onCancel()" class="cancel-button">{{"btn.cancel" | translate}}</button>
+  <!-- Thay thế button mat-flat-button bằng button type="button" -->
+  <!-- Bind disabled trực tiếp -->
+  <button type="button" (click)="onConfirm()" [disabled]="isConfirmDisabled" class="confirm-button">{{"confirm" | translate}}</button>
+</div>

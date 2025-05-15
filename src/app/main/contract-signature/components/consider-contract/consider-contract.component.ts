@@ -56,6 +56,8 @@ import { WebsocketService } from 'src/app/service/websocket.service';
 import { environment } from 'src/environments/environment';
 import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { RemoteCertSelectionDialogComponent } from './remote-cert-dialog/remote-cert-selection-dialog.component';
+import { RemoteCertificate } from './remote-cert-dialog/remote-certificate.interface';
 
 @Component({
   selector: 'app-consider-contract',
@@ -239,6 +241,7 @@ export class ConsiderContractComponent
   ];
   contract_no: any;
   typeUser: any;
+  //serialNumber: string | null = null;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -2392,7 +2395,7 @@ export class ConsiderContractComponent
   font: any;
   font_size: any;
   currentBoxSignType: any
-  async signDigitalDocument(supplierID: any) {
+  async signDigitalDocument(supplierID: any,serialNumber?: string | null) {
     let typeSignDigital = this.typeSignDigital;
     let checkCurrentSigningStatus: any = false;
     checkCurrentSigningStatus = await this.checkCurrentSigningCall()
@@ -3348,7 +3351,6 @@ export class ConsiderContractComponent
               imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
-
             if (fileC && objSign.length) {
               try {
                 const checkSign = await this.contractService.signRemote(
@@ -3357,7 +3359,8 @@ export class ConsiderContractComponent
                   this.isTimestamp,
                   signUpdate.type,
                   supplierID,
-                  this.phoneMobiCA
+                  this.phoneMobiCA,
+                  serialNumber
                 );
                 // this.statusSign = checkSign;   
                 if (!checkSign || (checkSign && !checkSign.success)) {
@@ -3411,7 +3414,8 @@ export class ConsiderContractComponent
                     this.isTimestamp,
                     signUpdate.type,
                     supplierID,
-                    this.phoneMobiCA
+                    this.phoneMobiCA,
+                    serialNumber
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -3504,7 +3508,7 @@ export class ConsiderContractComponent
   }
 
   otp: boolean = false;
-  async signContractSubmit(supplierID:any =!'vnpt') {
+  async signContractSubmit(supplierID:any =!'vnpt', serialNumber?: string | null) {
     this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
@@ -3584,11 +3588,11 @@ export class ConsiderContractComponent
     );
 
     if (signUploadObs$.length == 0 || eKYC == 1) {
-      await this.signContract(true, supplierID);
+      await this.signContract(true, supplierID,serialNumber);
     }
   }
 
-  async signContract(notContainSignImage?: boolean, supplierID =! 'vnpt') {
+  async signContract(notContainSignImage?: boolean, supplierID =! 'vnpt', serialNumber?: string | null) {
     const signUpdateTemp = JSON.parse(
       JSON.stringify(this.isDataObjectSignature)
     );
@@ -3722,7 +3726,7 @@ export class ConsiderContractComponent
         }
       }
     } else {
-      await this.signImageC(signUpdatePayload, notContainSignImage, supplierID);
+      await this.signImageC(signUpdatePayload, notContainSignImage, supplierID, serialNumber);
     }
   }
 
@@ -4172,7 +4176,7 @@ export class ConsiderContractComponent
   }
 
   filePath: any = '';
-  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!'vnpt') {
+  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!'vnpt', serialNumber?: string | null) {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(this.firstHandler) {
@@ -4187,7 +4191,7 @@ export class ConsiderContractComponent
     if (signUpdatePayload) {
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
       if (notContainSignImage) {
-        signDigitalStatus = await this.signDigitalDocument(supplierID);
+        signDigitalStatus = await this.signDigitalDocument(supplierID, serialNumber);
 
         if (this.eKYC == false) {
           signUpdateTempN = signUpdateTempN
@@ -4258,7 +4262,7 @@ export class ConsiderContractComponent
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
                 if (!notContainSignImage) {
-                  await this.signDigitalDocument(supplierID);
+                  await this.signDigitalDocument(supplierID, serialNumber);
                 }
 
                 this.router
@@ -4328,7 +4332,7 @@ export class ConsiderContractComponent
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
-            await this.signDigitalDocument(supplierID);
+            await this.signDigitalDocument(supplierID, serialNumber);
           }
 
           this.router.navigateByUrl('/', { skipLocationChange: true })
@@ -4419,7 +4423,7 @@ export class ConsiderContractComponent
             } else {
               if (!notContainSignImage) {
                 //Ký số
-                await this.signDigitalDocument(supplierID);
+                await this.signDigitalDocument(supplierID, serialNumber);
               }
 
               this.router
@@ -5288,6 +5292,47 @@ export class ConsiderContractComponent
       const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(async (result: any) => {
+        if (result) {
+          this.supplierID = result.type;
+          this.dataCert.cert_id = result.ma_dvcs;
+          this.phoneMobiCA = result.phone;
+          this.suppliersRs = result.suppliers;
+        }
+        this.supplierID = result.type; // Lưu nhà cung cấp đã chọn
+        const userCode = result.ma_dvcs; // Lấy MST/CCCD từ kết quả dialog
+        const phone = result.phone; // Lấy SĐT từ kết quả dialog
+        this.spinner.show();
+        let certificates: RemoteCertificate[] = [];
+        try {
+           certificates = await this.contractService.getRemoteSigningCertificates(this.supplierID, userCode, phone).toPromise();
+        } catch (error) {
+           this.spinner.hide();
+           this.toastService.showErrorHTMLWithTimeout('Lỗi khi lấy danh sách chứng thư số. Vui lòng thử lại.', '', 3000);
+           return;
+        }
+        this.spinner.hide();
+        if (!certificates || certificates.length === 0) {
+            this.toastService.showErrorHTMLWithTimeout('Không tìm thấy chứng thư số hợp lệ cho thông tin đã nhập.', '', 3000);
+            return;
+          } else if (certificates.length === 1) {
+            await this.signContractSubmit(this.supplierID,null);}
+            else if (certificates.length > 1) {
+            // Trường hợp có nhiều hơn 1 chứng thư
+            const dialogConfigCert = new MatDialogConfig();
+            dialogConfigCert.width = '800px'; 
+            dialogConfigCert.data = { certificates: certificates };
+            dialogConfigCert.disableClose = true;
+            dialogConfigCert.panelClass = 'custom-dialog-container';
+
+            const dialogRefCert = this.dialog.open(RemoteCertSelectionDialogComponent, dialogConfigCert);
+            dialogRefCert.afterClosed().subscribe(async (selectedSerial: string | undefined) => {
+              if (selectedSerial) {
+                await this.signContractSubmit(this.supplierID, selectedSerial);
+              } else {
+                this.spinner.hide();
+              }
+            });
+          }
         if(result.type == 2){
           this.loadingText =
           'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
@@ -5301,14 +5346,6 @@ export class ConsiderContractComponent
         // if (result?.type == '1') {
         //   isVnptSmartCA = true;
         // }
-        if (result) {
-          let supplierID = result.type;
-          this.supplierID = result.type;
-          this.dataCert.cert_id = result.ma_dvcs;
-          this.phoneMobiCA = result.phone;
-          this.suppliersRs = result.suppliers;
-          await this.signContractSubmit(supplierID);
-        }
       });
     })
   }
@@ -5699,21 +5736,21 @@ export class ConsiderContractComponent
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
     let result  = this.suppliersRs.find(item => item.id == code);
-    appName = result.name;
-    // switch (supplierID) {
-    //   case "vnpt":
-    //     appName = "VNPT SmartCA";
-    //     break;
-    //   case "MobiFoneCA":
-    //     appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
-    //     break;
-    //   case "mobiCA":
-    //     appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
-    //     break;
-    //   default:
-    //     appName = "CA2 Remote Signing";
-    //     break;
-    // }
+    appName = result.supplierID;
+    switch (supplierID) {
+      case "vnpt":
+        appName = "VNPT SmartCA";
+        break;
+      case "MobiFoneCA":
+        appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      case "mobiCA":
+        appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      default:
+        appName = "CA2 Remote Signing";
+        break;
+    }
   
     switch (code) {
       case "QUA_THOI_GIAN_KY":
