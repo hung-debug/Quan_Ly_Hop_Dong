@@ -279,7 +279,7 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
-    this.preventGestureZoom();
+    // this.preventGestureZoom();
     this.preventDoubleTapZoom();
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
@@ -1105,6 +1105,7 @@ export class ConsiderContractComponent
   eventMouseover() { }
 
   ngAfterViewInit() {
+    this.preventGestureZoom()
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -5991,8 +5992,13 @@ export class ConsiderContractComponent
     }
   }
 
-  
   preventGestureZoom() {
+    // Ẩn scroll toàn trang
+    if(this.isBonBon) {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+
     // Chặn pinch-to-zoom ngay từ touchstart
     document.addEventListener('touchstart', (e) => {
       if (e.touches.length > 1) {
