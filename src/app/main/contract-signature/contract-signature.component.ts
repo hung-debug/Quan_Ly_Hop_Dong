@@ -80,6 +80,7 @@ export class ContractSignatureComponent implements OnInit {
   ascendSortActive : boolean;
   descendSortActive : boolean;
   orderDesc: string;
+  currentSortDirection: 'ascend' | 'descent' = 'ascend';
 
   title: any = '';
 
@@ -245,8 +246,7 @@ export class ContractSignatureComponent implements OnInit {
       this.status = params['status'];
       this.contracts = [];
       this.pageTotal = 0;
-      this.ascendSortActive = false;
-      this.descendSortActive = false;
+      this.currentSortDirection = 'ascend';
       //set title
       this.convertStatusStr();
       this.action = 'receive';
@@ -552,22 +552,24 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
   
+  toggleSort() {
+    // Đảo chiều sắp xếp
+    this.currentSortDirection = this.currentSortDirection === 'ascend' ? 'descent' : 'ascend';
+  
+    // Gọi hàm xử lý logic lọc dữ liệu
+    this.getContractListByOrder(this.currentSortDirection);
+  }
+  
   sortContractList(value: any){
     this.getContractListByOrder(value);
   }
   
   getContractListByOrder(value: any){
-    this.orderDesc = "true";
+    
+    this.orderDesc = value === 'ascend' ? 'false' : 'true';
 
-    if(value == "ascend"){
-      this.orderDesc = "false"
-      this.ascendSortActive = true;
-      this.descendSortActive = false;
-    } else {
-      this.orderDesc = "true"
-      this.ascendSortActive = false;
-      this.descendSortActive = true;
-    }
+    this.ascendSortActive = value === 'ascend';
+    this.descendSortActive = value === 'descent';
 
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
@@ -813,7 +815,7 @@ export class ContractSignatureComponent implements OnInit {
           this.p,
           this.page,
           this.contractStatus,
-          this.orderDesc,
+          this.orderDesc = 'false',
           this.name_or_email_customer,
           this.organization_id
         )
@@ -858,7 +860,7 @@ export class ContractSignatureComponent implements OnInit {
             this.p,
             this.page,
             this.contractStatus,
-            this.orderDesc,
+            this.orderDesc = 'false',
             this.name_or_email_customer,
             this.organization_id
           )
