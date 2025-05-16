@@ -912,9 +912,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
       this.datas.contract_expire_time = this.expire_time;
-      if(this.activeRoute.snapshot.paramMap.get('id'))
-      this.datas.original_contract_id = Number(this.activeRoute.snapshot.paramMap.get('id'));
-
+      const routeId = this.activeRoute.snapshot.paramMap.get('id');
+      if (routeId && this.typeClone !== 'KEEP_ALL' && this.typeClone !== 'KEEP_MY_ORG') {
+        this.datas.original_contract_id = Number(routeId);
+      } else {
+        this.datas.original_contract_id = null;
+      }
       this.defineData(this.datas);
       this.convertUrltoBlob();
       if((this.router.url.includes("edit") && this.datas.countUploadContractFile > 0) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1) ){
