@@ -12,7 +12,7 @@
   font-size: 1.6em;
   font-weight: bold;
   padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
+  //border-bottom: 1px solid #eee;
 }
 
 // Style the main content area
@@ -79,7 +79,7 @@
         text-align: center; /* Center ALL header text as per image */
         font-weight: bold;
         color: #0041C4; /* Blue text color for ALL headers as per image */
-        background-color:#9dbeff ; /* White background for header row (as per image) */
+        background-color:#ebf2fb ; /* White background for header row (as per image) */
         border-bottom: none;
         border-right: 1px solid #ddd; /* Add right border for column dividers */
         &:first-child {
@@ -224,7 +224,7 @@
   display: flex;
   justify-content: center; /* Center buttons horizontally */
   gap: 10px; // Space between buttons
-  border-top: 1px solid #eee;
+  //border-top: 1px solid #eee;
   margin-top: 15px;
   flex-shrink: 0; // Prevent actions section from shrinking
 }
