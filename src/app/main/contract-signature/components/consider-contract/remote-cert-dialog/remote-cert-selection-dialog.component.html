@@ -30,10 +30,6 @@
 
     <div class="mobile-cert-container scrollable-content" *ngIf="mobile">
       <!-- ... mobile code ... -->
-       <div class="mobile-header">
-          <div class="mobile-header-select">{{'' | translate}}</div>
-          <div class="mobile-header-info">{{'information' | translate}}</div>
-        </div>
 
         <div class="mobile-item" *ngFor="let cert of certificates">
 
@@ -43,7 +39,7 @@
           <div class="mobile-info-details">
             <div class="mobile-info-row">
               <span class="mobile-info-label">{{'Số serial' | translate}}:</span>
-              <span class="mobile-info-value">{{cert.serialNumber}}</span>
+              <span class="mobile-info-value serial-number">{{cert.serialNumber}}</span>
             </div>
             <div class="mobile-info-row">
               <span class="mobile-info-label">{{'Chủ sở hữu' | translate}}:</span>
@@ -51,11 +47,11 @@
             </div>
             <div class="mobile-info-row">
               <span class="mobile-info-label">{{'start-date' | translate}}:</span>
-              <span class="mobile-info-value">{{cert.validFrom | date:'dd/MM/yyyy HH:mm'}}</span>
+              <span class="mobile-info-value">{{cert.validFrom }}</span>
             </div>
              <div class="mobile-info-row">
               <span class="mobile-info-label">{{'end-date' | translate}}:</span>
-              <span class="mobile-info-value">{{cert.validTo | date:'dd/MM/yyyy HH:mm'}}</span>
+              <span class="mobile-info-value">{{cert.validTo }}</span>
             </div>
           </div>
         </div>

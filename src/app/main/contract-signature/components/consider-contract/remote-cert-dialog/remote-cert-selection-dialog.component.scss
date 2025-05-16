@@ -173,12 +173,14 @@
 }
 
 :host .mobile-radio-choose {
-    flex-basis: 60px;
+    // flex-basis: 60px;
+    padding: 0 10px;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    padding-left: 2px;
 }
 
 :host .mobile-info-details {
@@ -201,15 +203,19 @@
 :host .mobile-info-label {
     font-weight: bold;
     margin-right: 5px;
-    flex-basis: 100px; /* Adjust width as needed for labels */
+    flex-basis: 90px;
     flex-shrink: 0;
+    color: #0041C4;
 }
 
 :host .mobile-info-value {
     flex-grow: 1;
     word-break: break-word;
 }
-
+.serial-number {
+    color: #01153d;
+    font-weight: bold;
+}
 
 // --- Styles for the Action Buttons ---
 // This container is likely not meant to grow, it stays at the bottom
