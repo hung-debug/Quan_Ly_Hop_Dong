@@ -92,7 +92,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   ascendSortActive : boolean;
   descendSortActive : boolean;
   orderDesc: string;
-  currentSortDirection: 'ascend' | 'descent' = 'ascend';
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -199,8 +198,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.pageTotal = 0;
         this.action = params['action'];
         this.status = params['status'];
-        this.currentSortDirection = 'ascend';
-
+        this.ascendSortActive = false;
+        this.descendSortActive = false;
+  
         //set status
         this.convertStatusStr();
 
@@ -259,24 +259,24 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
   
-  toggleSort() {
-    // Đảo chiều sắp xếp
-    this.currentSortDirection = this.currentSortDirection === 'ascend' ? 'descent' : 'ascend';
-  
-    // Gọi hàm xử lý logic lọc dữ liệu
-    this.getContractListByOrder(this.currentSortDirection);
-  }
   
   sortContractList(value: any){
     this.getContractListByOrder(value);
   }
   
   getContractListByOrder(value: any){
+    this.orderDesc = "true";
 
-    this.orderDesc = value === 'ascend' ? 'true' : 'false';
+    if(value == "ascend"){
+      this.orderDesc = "false"
+      this.ascendSortActive = true;
+      this.descendSortActive = false;
+    } else {
+      this.orderDesc = "true"
+      this.ascendSortActive = false;
+      this.descendSortActive = true;
+    }
 
-    this.ascendSortActive = value === 'ascend';
-    this.descendSortActive = value === 'descent';
 
     this.roleMess = "";
     if (this.isOrg == 'off' && !this.isQLHD_05) {
@@ -793,7 +793,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }
 
       //get list contract
-      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc = 'true', this.handler_name, this.name_or_email_customer).subscribe(data => {
+      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.orderDesc, this.handler_name, this.name_or_email_customer).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         this.checkedAll = false;
