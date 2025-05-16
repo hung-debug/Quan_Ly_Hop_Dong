@@ -117,7 +117,8 @@ export class ShareContractDialogComponent implements OnInit {
   }
   
   getListAllEmailOnFillter(event: any) {
-    this.userList = []
+    this.userList = [];
+    let emailLogin = this.userService.getAuthCurrentUser().email;
     if (this.addFormUser.value.email.length > 0) {
       for (const item of this.addFormUser.value.email) {
         this.userList.push({email: item})
@@ -128,7 +129,8 @@ export class ShareContractDialogComponent implements OnInit {
       if (response) {
         for (const item of response.entities) {
           if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
-            this.userList.push({email: item.email})
+            this.userList.push({email: item.email});
+            this.userList = this.userList.filter((p: any) => p.email != emailLogin);
           }
         }
       }
@@ -136,7 +138,8 @@ export class ShareContractDialogComponent implements OnInit {
   }
   
   getListAllPhoneOnFillter(event: any) {
-    this.listPhone = []
+    this.listPhone = [];
+    let phoneLogin = this.userService.getAuthCurrentUser().phone;
     if (this.addFormUser.value.phone.length > 0) {
       for (const item of this.addFormUser.value.phone) {
         this.listPhone.push({phone: item})
@@ -147,7 +150,8 @@ export class ShareContractDialogComponent implements OnInit {
       if (response) {
         for (const item of response.entities) {
           if (item?.phone != this.listPhone.find((value: any) => value.phone == item.phone)?.phone) {
-            this.listPhone.push({phone: item.phone})
+            this.listPhone.push({phone: item.phone});
+            this.listPhone = this.listPhone.filter((p: any) => p.phone != phoneLogin);
           }
         }
       }
@@ -294,7 +298,7 @@ export class ShareContractDialogComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập Email hoặc SĐT chia sẻ', "", 3000);
         return;
       }
-
+      
       this.contractService.shareContract(this.addFormUser.value.email,this.addFormUser.value.phone, this.data.id).subscribe(data => {
 
         if(data.contract_id != null){

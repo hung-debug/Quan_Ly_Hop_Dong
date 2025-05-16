@@ -21,6 +21,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   userList: Array<any> = [];
+  phoneList: Array<any> = [];
   submittedUser = false;
 
   isList: string = 'off';
@@ -111,13 +112,16 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   getUserByOrg(orgId:any){
 
     let emailLogin = this.userService.getAuthCurrentUser().email;
+    let phoneLogin = this.userService.getAuthCurrentUser().phone;
 
     //lay danh sach email da duoc chia se
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
       this.userService.getUserListShare(orgId, "","").subscribe(data => {
         let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
+        let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1);
         //chi lay danh sach user chua duoc chia se
         this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+        this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
       });
     });
 
