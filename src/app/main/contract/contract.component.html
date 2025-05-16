@@ -58,8 +58,8 @@
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
-            <img *ngIf="currentSortDirection === 'ascend'" src="../../assets/img/sort_up.svg" class="img_icon_up_down sort-blue" (click)="toggleSort()" />
-            <img *ngIf="currentSortDirection === 'descent'" src="../../assets/img/sort_down.svg" class="img_icon_up_down sort-blue"(click)="toggleSort()" />
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
           </div>
           <!-- <div class="col-md-2">{{'expiration-date' | translate}}
             <img src="../../assets/img/sort.svg"/>
@@ -364,8 +364,9 @@
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
             <div class="col-sm-2 bg-header">{{'create-time' | translate}}
-              <img *ngIf="currentSortDirection === 'ascend'" src="../../assets/img/sort_up.svg" class="img_icon_up_down sort-blue" (click)="toggleSort()" />
-              <img *ngIf="currentSortDirection === 'descent'" src="../../assets/img/sort_down.svg" class="img_icon_up_down sort-blue"(click)="toggleSort()" />
+              <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+              <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
+  
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
 
@@ -690,8 +691,8 @@
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
-            <img *ngIf="currentSortDirection === 'ascend'" src="../../assets/img/sort_up.svg" class="img_icon_up_down sort-blue" (click)="toggleSort()" />
-            <img *ngIf="currentSortDirection === 'descent'" src="../../assets/img/sort_down.svg" class="img_icon_up_down sort-blue"(click)="toggleSort()" />
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
           </div>
           <div class="col-sm-2 bg-header">{{'complete-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
@@ -907,8 +908,8 @@
             </div>
             <div class="col-sm-2 bg-header">{{'create-time' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
-              <img *ngIf="currentSortDirection === 'ascend'" src="../../assets/img/sort_up.svg" class="img_icon_up_down sort-blue" (click)="toggleSort()" />
-              <img *ngIf="currentSortDirection === 'descent'" src="../../assets/img/sort_down.svg" class="img_icon_up_down sort-blue"(click)="toggleSort()" />
+              <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+              <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
             </div>
             <div class="col-sm-2 bg-header">{{'complete-time' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
@@ -1213,8 +1214,8 @@
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <div class="col-sm-2 bg-header">{{'create-time' | translate}}
-                <img *ngIf="currentSortDirection === 'ascend'" src="../../assets/img/sort_up.svg" class="img_icon_up_down sort-blue" (click)="toggleSort()" />
-                <img *ngIf="currentSortDirection === 'descent'" src="../../assets/img/sort_down.svg" class="img_icon_up_down sort-blue"(click)="toggleSort()" />
+                <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+                <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <!-- <div class="col-md-2">{{'expiration-date' | translate}}
@@ -1467,8 +1468,8 @@
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <div class="col-sm-2 bg-header">{{'create-time' | translate}}
-                <img *ngIf="currentSortDirection === 'ascend'" src="../../assets/img/sort_up.svg" class="img_icon_up_down sort-blue" (click)="toggleSort()" />
-                <img *ngIf="currentSortDirection === 'descent'" src="../../assets/img/sort_down.svg" class="img_icon_up_down sort-blue"(click)="toggleSort()" />
+                <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+                <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <div class="col-sm-2 bg-header">{{'time.update' | translate}}
@@ -1671,8 +1672,8 @@
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
             <div class="col-sm-2 bg-header">{{'create-time' | translate}}
-              <img *ngIf="currentSortDirection === 'ascend'" src="../../assets/img/sort_up.svg" class="img_icon_up_down sort-blue" (click)="toggleSort()" />
-              <img *ngIf="currentSortDirection === 'descent'" src="../../assets/img/sort_down.svg" class="img_icon_up_down sort-blue"(click)="toggleSort()" />
+              <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+              <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
             <div class="col-sm-2 bg-header">{{'time.update' | translate}}

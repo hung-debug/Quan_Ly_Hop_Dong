@@ -319,9 +319,9 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
+          size +
           orderPrefix +
-          '&process_by=' +
-          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
           if(handlerName != ""){
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
@@ -345,9 +345,9 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
+          size +
           orderPrefix +
-          '&process_by=' +
-          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim() ;
+          '&name_or_email_customer=' + nameOrEmailCustomer.trim() ;
           if(handlerName != ""){
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
@@ -375,16 +375,16 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
+          size + 
           orderPrefix +
-          '&process_by=' +
-          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          '&name_or_email_customer=' + nameOrEmailCustomer.trim();
           if(handlerName != ""){
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
-          '&page=' + page + '&size=' + size + orderPrefix.toString() ? orderPrefix.toString() : "true" + '&process_by=' + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          '&page=' + page + '&size=' + size + orderPrefix.toString() ? orderPrefix.toString() : "true" + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
           if(handlerName != ""){
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }

@@ -82,7 +82,6 @@ export class ContractSignatureComponent implements OnInit {
   ascendSortActive : boolean;
   descendSortActive : boolean;
   orderDesc: string;
-  currentSortDirection: 'ascend' | 'descent' = 'ascend';
 
   title: any = '';
 
@@ -248,7 +247,9 @@ export class ContractSignatureComponent implements OnInit {
       this.status = params['status'];
       this.contracts = [];
       this.pageTotal = 0;
-      this.currentSortDirection = 'ascend';
+      this.ascendSortActive = false;
+      this.descendSortActive = false;
+
       //set title
       this.convertStatusStr();
       this.action = 'receive';
@@ -554,24 +555,22 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
   
-  toggleSort() {
-    // Đảo chiều sắp xếp
-    this.currentSortDirection = this.currentSortDirection === 'ascend' ? 'descent' : 'ascend';
-  
-    // Gọi hàm xử lý logic lọc dữ liệu
-    this.getContractListByOrder(this.currentSortDirection);
-  }
-  
   sortContractList(value: any){
     this.getContractListByOrder(value);
   }
   
   getContractListByOrder(value: any){
-    
-    this.orderDesc = value === 'ascend' ? 'true' : 'false';
+    this.orderDesc = "true";
 
-    this.ascendSortActive = value === 'ascend';
-    this.descendSortActive = value === 'descent';
+    if(value == "ascend"){
+      this.orderDesc = "false"
+      this.ascendSortActive = true;
+      this.descendSortActive = false;
+    } else {
+      this.orderDesc = "true"
+      this.ascendSortActive = false;
+      this.descendSortActive = true;
+    }
 
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
@@ -690,7 +689,7 @@ export class ContractSignatureComponent implements OnInit {
           this.contractService.getContractMyProcessListSignMany(this.keyword, this.filter_type,
             this.filter_contract_no,
             this.filter_from_date,
-            this.filter_to_date).subscribe((data) => {
+            this.filter_to_date, this.orderDesc).subscribe((data) => {
               this.contractsSignMany = data;
               if (this.pageTotal == 0) {
                 this.p = 0;
@@ -723,7 +722,7 @@ export class ContractSignatureComponent implements OnInit {
           this.contractService.getViewContractMyProcessList(this.keyword, this.filter_type,
             this.filter_contract_no,
             this.filter_from_date,
-            this.filter_to_date).subscribe((data) => {
+            this.filter_to_date, this.orderDesc).subscribe((data) => {
               this.contractViewList = data;
               if (this.pageTotal == 0) {
                 this.p = 0;
@@ -732,19 +731,19 @@ export class ContractSignatureComponent implements OnInit {
               } else {
                 this.setPage();
               }
-              this.contractsSignMany.forEach((key: any, v: any) => {
-                this.contractsSignMany[v].contractId = key.participant.contract.id;
-                this.contractsSignMany[v].contractName = key.participant.contract.name;
-                this.contractsSignMany[v].contractNumber = key.participant.contract.code;
-                this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
-                this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
-                this.contractsSignMany[v].contractStatus = key.participant.contract.status;
-                this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
-                this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
-                this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
-                this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
-                this.contractsSignMany[v].checked = false;
-                //this.contractsSignMany[v].isDisable = false;
+              this.contractViewList.forEach((key: any, v: any) => {
+                this.contractViewList[v].contractId = key.participant.contract.id;
+                this.contractViewList[v].contractName = key.participant.contract.name;
+                this.contractViewList[v].contractNumber = key.participant.contract.code;
+                this.contractViewList[v].contractSignTime = key.participant.contract.sign_time;
+                this.contractViewList[v].contractCreateTime = key.participant.contract.created_time;
+                this.contractViewList[v].contractStatus = key.participant.contract.status;
+                this.contractViewList[v].contractCecaPush = key.participant.contract.ceca_push;
+                this.contractViewList[v].contractCecaStatus = key.participant.contract.ceca_status;
+                this.contractViewList[v].contractReleaseState = key.participant.contract.release_state;
+                this.contractViewList[v].typeOfSign = key.sign_type[0]?.name;
+                this.contractViewList[v].checked = false;
+                //this.contractViewList[v].isDisable = false;
               });
 
               this.spinner.hide();
@@ -817,7 +816,7 @@ export class ContractSignatureComponent implements OnInit {
           this.p,
           this.page,
           this.contractStatus,
-          this.orderDesc = 'true',
+          this.orderDesc,
           this.name_or_email_customer,
           this.organization_id
         )
@@ -862,7 +861,7 @@ export class ContractSignatureComponent implements OnInit {
             this.p,
             this.page,
             this.contractStatus,
-            this.orderDesc = 'true',
+            this.orderDesc,
             this.name_or_email_customer,
             this.organization_id
           )
@@ -911,7 +910,7 @@ export class ContractSignatureComponent implements OnInit {
           this.contractService.getContractMyProcessListSignMany(this.keyword, this.filter_type,
             this.filter_contract_no,
             this.filter_from_date,
-            this.filter_to_date).subscribe((data) => {
+            this.filter_to_date, this.orderDesc).subscribe((data) => {
               this.contractsSignMany = data;
               if (this.pageTotal == 0) {
                 this.p = 0;
@@ -944,7 +943,7 @@ export class ContractSignatureComponent implements OnInit {
           this.contractService.getViewContractMyProcessList(this.keyword, this.filter_type,
             this.filter_contract_no,
             this.filter_from_date,
-            this.filter_to_date).subscribe((data) => {
+            this.filter_to_date, this.orderDesc).subscribe((data) => {
               this.contractViewList = data;
               if (this.pageTotal == 0) {
                 this.p = 0;
