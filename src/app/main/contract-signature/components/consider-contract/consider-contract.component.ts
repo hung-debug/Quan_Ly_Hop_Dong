@@ -5307,14 +5307,11 @@ export class ConsiderContractComponent
         try {
            certificates = await this.contractService.getRemoteSigningCertificates(this.supplierID, userCode, phone).toPromise();
         } catch (error) {
-           this.spinner.hide();
-           this.toastService.showErrorHTMLWithTimeout('Lỗi khi lấy danh sách chứng thư số. Vui lòng thử lại.', '', 3000);
-           return;
+            await this.signContractSubmit(this.supplierID);
         }
         this.spinner.hide();
         if (!certificates || certificates.length === 0) {
-            this.toastService.showErrorHTMLWithTimeout('Không tìm thấy chứng thư số hợp lệ cho thông tin đã nhập.', '', 3000);
-            return;
+            await this.signContractSubmit(this.supplierID); 
           } else if (certificates.length === 1) {
             await this.signContractSubmit(this.supplierID);}
             else if (certificates.length > 1) {
