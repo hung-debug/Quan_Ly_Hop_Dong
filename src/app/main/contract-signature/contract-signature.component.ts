@@ -2327,16 +2327,183 @@ export class ContractSignatureComponent implements OnInit {
           try {
              certificates = await this.contractServiceV1.getRemoteSigningCertificates(supplierID, resultRS.ma_dvcs, resultRS.phone).toPromise();
           } catch (error) {
-             this.spinner.hide();
-             this.toastService.showErrorHTMLWithTimeout('Lỗi khi lấy danh sách chứng thư số. Vui lòng thử lại.', '', 3000);
-             return false; 
+             let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+              await this.contractServiceV1.signRemoteMulti(
+                manyRemoteSignData,
+                recipientIds,
+                null,
+                3,
+                supplierID,
+                this.phoneMobiCA
+              ).then(
+                async (res: any) => {
+                  this.spinner.hide();
+
+                  let countSuccess = 0;
+                  let checkSign = res
+                  this.handleContractData(checkSign);
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
+
+                      if (checkSign[i].result.message == 'Tax code do not match!') {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'taxcode.not.match',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'License ky so het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
+                    } else {
+                      countSuccess++;
+                    }
+                  }
+
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    if(supplierID !== 'MobiFoneCA'){
+                      this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                        if (res.isDismissed) {
+                          this.router
+                            .navigateByUrl('/', { skipLocationChange: true })
+                            .then(() => {
+                              this.router.navigate(['main/c/receive/processed']);
+                            });
+                        }
+                      })
+                    } else {
+                      this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                      
+                      this.toastService.showSuccessHTMLWithTimeout(
+                        "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                        '',
+                        3000
+                      );
+                    }
+                  }
+                },
+                (err: any) => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+                }
+              )
           }
 
           this.spinner.hide(); 
           if (!certificates || certificates.length === 0) {            
-              this.toastService.showErrorHTMLWithTimeout('Không tìm thấy chứng thư số hợp lệ cho thông tin đã nhập.', '', 3000);
-              return false;
-          } else if (certificates.length === 1) {
+              let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+              await this.contractServiceV1.signRemoteMulti(
+                manyRemoteSignData,
+                recipientIds,
+                null,
+                3,
+                supplierID,
+                this.phoneMobiCA
+              ).then(
+                async (res: any) => {
+                  this.spinner.hide();
+
+                  let countSuccess = 0;
+                  let checkSign = res
+                  this.handleContractData(checkSign);
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
+
+                      if (checkSign[i].result.message == 'Tax code do not match!') {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'taxcode.not.match',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'License ky so het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
+                    } else {
+                      countSuccess++;
+                    }
+                  }
+
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    if(supplierID !== 'MobiFoneCA'){
+                      this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                        if (res.isDismissed) {
+                          this.router
+                            .navigateByUrl('/', { skipLocationChange: true })
+                            .then(() => {
+                              this.router.navigate(['main/c/receive/processed']);
+                            });
+                        }
+                      })
+                    } else {
+                      this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                      
+                      this.toastService.showSuccessHTMLWithTimeout(
+                        "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                        '',
+                        3000
+                      );
+                    }
+                  }
+                },
+                (err: any) => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+                }
+              )
+          } else if (certificates.length === 1 || !certificates || certificates.length === 0) {
               const serialNumber = certificates[0].serialNumber;
               this.spinner.show();
               let recipientIds: any = contractsSignManyChecked.map(item => item.id)
@@ -2427,7 +2594,7 @@ export class ContractSignatureComponent implements OnInit {
               )
           } else {
               const dialogConfigCert = new MatDialogConfig();
-              dialogConfigCert.width = '680px';
+              dialogConfigCert.width = '700px';
               dialogConfigCert.data = { certificates: certificates };
               dialogConfigCert.disableClose = true;
               dialogConfigCert.panelClass = 'custom-dialog-container';
