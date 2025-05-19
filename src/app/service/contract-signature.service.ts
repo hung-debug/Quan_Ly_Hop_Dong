@@ -146,12 +146,13 @@ export class ContractSignatureService {
     return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
   }
 
-  public getContractMyProcessDashboard(filter_status:any, page:any, size:any): Observable<any> {
+  public getContractMyProcessDashboard(filter_status:any, page:any, size:any, orderDesc: string): Observable<any> {
     this.getCurrentUser();
     if(page != ""){
       page = page - 1;
     }
-    let dashboardContractMyProcessUrl = this.dashboardContractMyProcessUrl + filter_status + "?page=" + page + "&size=" + size;
+    let orderPrefix = orderDesc? '&order_desc=' + orderDesc : '';
+    let dashboardContractMyProcessUrl = this.dashboardContractMyProcessUrl + filter_status + "?page=" + page + "&size=" + size + orderPrefix;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(dashboardContractMyProcessUrl, {headers}).pipe();
   }
