@@ -4667,15 +4667,7 @@ export class ConsiderContractComponent
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    if (localStorage.getItem('lang') == 'vi') {
-      rejectQuestion =
-        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
-      confirm = 'Xác nhận';
-      cancel = 'Huỷ';
-      cancelSuccess = 'Từ chối tài liệu thành công';
-      error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
-      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
-    } else if (localStorage.getItem('lang') == 'en') {
+    if (localStorage.getItem('lang') == 'en') {
       rejectQuestion =
         'Are you sure want to decline this contract? Please enter the reason';
       confirm = 'Confirm';
@@ -4683,6 +4675,14 @@ export class ConsiderContractComponent
       cancelSuccess = 'Successfully refused contract';
       error = 'Error! Please contact to developers';
       rejectReason = 'You need to enter the reason for refusing the contract';
+    } else {
+      rejectQuestion =
+        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
+      confirm = 'Xác nhận';
+      cancel = 'Huỷ';
+      cancelSuccess = 'Từ chối tài liệu thành công';
+      error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
+      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
     }
 
     this.rejectContractLang(
