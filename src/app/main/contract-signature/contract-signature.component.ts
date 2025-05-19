@@ -758,7 +758,8 @@ export class ContractSignatureComponent implements OnInit {
         .getContractMyProcessDashboard(
           this.filter_status % 10,
           this.p,
-          this.page
+          this.page,
+          this.orderDesc
         )
         .subscribe(
           (data) => {
@@ -979,7 +980,8 @@ export class ContractSignatureComponent implements OnInit {
         .getContractMyProcessDashboard(
           this.filter_status % 10,
           this.p,
-          this.page
+          this.page,
+          this.orderDesc
         )
         .subscribe(
           (data) => {
