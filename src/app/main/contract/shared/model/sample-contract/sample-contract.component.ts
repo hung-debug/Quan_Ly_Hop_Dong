@@ -944,8 +944,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               name: element.name,
               text_attribute_name: element.text_attribute_name,
               required: 1,
-              font: element.font,
-              font_size: element.font_size
+              font: this.datas.font || 'Times New Roman', // Lấy từ this.datas hoặc mặc định
+              font_size: this.datas.size || 13 // Lấy từ this.datas.size hoặc mặc định
             }
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong tài liệu
@@ -2246,8 +2246,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if(element.sign_unit == "chu_ky_so") {
               element.type.forEach((res: any) => {
                 res.sign_config.forEach((item: any) => {
-                  item['font'] = item.font ? item.font : 'Times New Roman';
-                  item['font_size'] =  item.size ? item.size : 13;
+                  item['font'] = item.font ? item.font : (this.datas.font || 'Times New Roman');
+                  item['font_size'] =  item.font_size ? item.font_size : (this.datas.size || 13);
                   item['contract_id'] = this.datas.contract_id;
                   item['document_id'] = this.datas.document_id;
                   if (item.text_attribute_name) {
@@ -2281,8 +2281,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             if (element.sign_config.length > 0) {
               element.sign_config.forEach((item: any) => {
-                item['font'] = this.datas.font;
-                item['font_size'] = this.datas.size;
+                item['font'] = item.font ? item.font : (this.datas.font || 'Times New Roman'); // Use item.font if exists, else this.datas.font or default
+                item['font_size'] =  item.font_size ? item.font_size : (this.datas.size || 13);
                 item['contract_id'] = this.datas.contract_id;
                 item['document_id'] = this.datas.document_id;
                 if (item.text_attribute_name) {
