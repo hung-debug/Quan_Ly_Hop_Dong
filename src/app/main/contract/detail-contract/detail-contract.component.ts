@@ -1701,7 +1701,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       if (this.datas?.is_data_contract?.participants?.length) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
-            if (this.currentUser.email == recipient.email) {
+            if((((recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((recipient?.phone === this.currentUser.phone || recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (recipient?.email === this.currentUser.email && this.typeUser === 1)) {
               recipients.push(recipient);
             }
           }
@@ -1724,7 +1727,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       } else if (recipients.length == 1) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
-            if (this.currentUser.email == recipient.email) {
+            if((((recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((recipient?.phone === this.currentUser.phone || recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (recipient?.email === this.currentUser.email && this.typeUser === 1)) {
               this.recipient = recipient;
               return;
             }
