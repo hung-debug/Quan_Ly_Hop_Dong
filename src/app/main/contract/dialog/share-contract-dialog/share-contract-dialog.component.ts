@@ -26,6 +26,7 @@ export class ShareContractDialogComponent implements OnInit {
   submitted = false;
   submittedUser = false;
   organization_id: any;
+  currentUser: any
   get f() { return this.addForm.controls; }
   get fUser() { return this.addFormUser.controls; }
 
@@ -52,6 +53,10 @@ export class ShareContractDialogComponent implements OnInit {
         email: this.fbd.control("", [Validators.required]),
         phone: this.fbd.control("", [Validators.required]),
       });
+      
+      this.currentUser = JSON.parse(
+        localStorage.getItem('currentUser') || ''
+      ).customer.info;
     }
 
   ngOnInit(): void {
@@ -188,6 +193,8 @@ export class ShareContractDialogComponent implements OnInit {
   phoneArr:any[] = [];
   checkPhoneError:boolean;
   onSubmit() {
+    console.log("current",this.currentUser);
+    
     this.emailArr = [];
     this.phoneArr = [];
     if(this.type == 1){
@@ -223,8 +230,8 @@ export class ShareContractDialogComponent implements OnInit {
             this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + valueEmail + ' sai định dạng', "", 3000);
             this.checkEmailError = true;
             this.checkPhoneError = true;
-          } else if(valueEmail == emailLogin){
-            this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ cho chính mình', "", 3000);
+          } else if(valueEmail == emailLogin && (this.currentUser?.loginType === 'EMAIL' || this.currentUser?.loginType === 'EMAIL_AND_SDT')){
+            this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ Email cho chính mình', "", 3000);
             this.checkEmailError = true;
             this.checkPhoneError = true;
           } else if (emailDup.has(valueEmail)) {
@@ -245,8 +252,8 @@ export class ShareContractDialogComponent implements OnInit {
             this.toastService.showErrorHTMLWithTimeout('Tồn tại số điện thoại ' + valuePhone + ' sai định dạng', "", 3000);
             this.checkPhoneError = true;
             this.checkEmailError = true;
-          } else if(valuePhone == phoneLogin){
-            this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ cho chính mình', "", 3000);
+          } else if(valuePhone == phoneLogin && (this.currentUser?.loginType === 'SDT' || this.currentUser?.loginType === 'EMAIL_AND_SDT')){
+            this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ Số điện thoại cho chính mình', "", 3000);
             this.checkPhoneError = true;
             this.checkEmailError = true;
           } else if (phoneDup.has(valuePhone)) {
