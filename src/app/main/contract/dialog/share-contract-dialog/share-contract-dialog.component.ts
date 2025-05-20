@@ -135,7 +135,9 @@ export class ShareContractDialogComponent implements OnInit {
         for (const item of response.entities) {
           if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
             this.userList.push({email: item.email});
-            this.userList = this.userList.filter((p: any) => p.email != emailLogin);
+            if(this.currentUser?.loginType === 'EMAIL' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+              this.userList = this.userList.filter((p: any) => p.email != emailLogin);
+            }
           }
         }
       }
@@ -156,7 +158,9 @@ export class ShareContractDialogComponent implements OnInit {
         for (const item of response.entities) {
           if (item?.phone != this.listPhone.find((value: any) => value.phone == item.phone)?.phone) {
             this.listPhone.push({phone: item.phone});
-            this.listPhone = this.listPhone.filter((p: any) => p.phone != phoneLogin);
+            if(this.currentUser?.loginType === 'SDT' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+              this.listPhone = this.listPhone.filter((p: any) => p.phone != phoneLogin);
+            }
           }
         }
       }
