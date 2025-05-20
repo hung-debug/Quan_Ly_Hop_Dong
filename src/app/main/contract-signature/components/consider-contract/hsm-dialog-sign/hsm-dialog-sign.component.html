@@ -120,7 +120,7 @@
       </div>
     </div>
 
-    <div class="row" style="padding-top: 15px;">
+    <div *ngIf="this.typeUser != 1" class="row" style="padding-top: 15px;">
       <div class="col-md-12 checkbox-confirm">
         <input class="checkbox-hide-processing-thread hover-item" type="checkbox"   [(ngModel)]="confirmConsider" name="confirmConsider" [ngModelOptions]="{standalone: true}"/>
         <div class="title-content" style="text-align: justify;">{{ 'save.information.hsm' | translate }}</div>
