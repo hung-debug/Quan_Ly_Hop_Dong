@@ -1,4 +1,4 @@
-<div class="container-fluid no-zoom" [ngClass]="{ 'cancel-padding': mobile, 'size-web': !mobile }">
+<div class="container-fluid" [ngClass]="{ 'cancel-padding': mobile, 'size-web': !mobile }">
   <div class="sample-contract row" *ngIf="loaded">
     <!--  information contract-->
     <div [ngClass] = "{'col-md-3': this.show_information}" *ngIf="!this.mobile" class="sample-contract__information" style="background-color: white; padding-right: 0px;">
