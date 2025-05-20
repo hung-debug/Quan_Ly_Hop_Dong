@@ -769,9 +769,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   eventMouseover() {}
 
   ngAfterViewInit() {
-    if(this.mobile) {
-      this.preventGestureZoom()
-    }
+    // if(this.mobile) {
+    //   this.preventGestureZoom()
+    // }
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
