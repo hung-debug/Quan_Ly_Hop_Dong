@@ -276,7 +276,7 @@ export class HsmDialogSignComponent implements OnInit {
           data["password"] = this.myForm.value.pass1;
         }
 
-        if(this.confirmConsider) {
+        if(this.confirmConsider && this.typeUser != 1) {
           try{
             let saveInfoSingHsm = await this.userService.saveInfoSingHsm(data).toPromise();
             if(!saveInfoSingHsm.status) {
@@ -326,7 +326,7 @@ export class HsmDialogSignComponent implements OnInit {
         data["password"] = this.myForm.value.pass1;
       }
 
-      if(this.confirmConsider) {
+      if(this.confirmConsider && this.typeUser != 1) {
         try{
           let saveInfoSingHsm = await this.userService.saveInfoSingHsm(data).toPromise();
           if(!saveInfoSingHsm.status) {
