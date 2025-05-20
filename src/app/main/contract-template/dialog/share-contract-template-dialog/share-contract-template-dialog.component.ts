@@ -29,6 +29,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   cols: any[];
   list: any[] = [];
   orgListTmp:any[] = [];
+  currentUser: any;
 
   get fUser() { return this.addFormUser.controls; }
 
@@ -53,6 +54,10 @@ export class ShareContractTemplateDialogComponent implements OnInit {
         { label: 'btn.share', value: 'off' },
         { label: 'btn.list', value: 'on' },
       ];
+      
+      this.currentUser = JSON.parse(
+        localStorage.getItem('currentUser') || ''
+      ).customer.info;
     }
 
   organization_id_user_login:any;
@@ -117,11 +122,23 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     //lay danh sach email da duoc chia se
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
       this.userService.getUserListShare(orgId, "","").subscribe(data => {
-        let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
-        let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1);
-        //chi lay danh sach user chua duoc chia se
-        this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
-        this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
+        if(this.currentUser?.loginType === 'EMAIL'){
+          let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
+          this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+          let dataPhoneFilter = data?.filter((p: any) => p.status == 1);
+          this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
+        } else if(this.currentUser?.loginType === 'SDT'){
+          let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1);
+          this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
+          let dataFilter = data?.filter((p: any) => p.status == 1);
+          this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+        } else if(this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+          let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
+          let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1);
+          // chi lay danh sach user chua duoc chia se
+          this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+          this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
+        }
       });
     });
 
