@@ -2353,7 +2353,7 @@ export class ContractSignatureComponent implements OnInit {
               )
           } else {
               const dialogConfigCert = new MatDialogConfig();
-              dialogConfigCert.width = '700px';
+              dialogConfigCert.width = '800px';
               dialogConfigCert.data = { certificates: certificates };
               dialogConfigCert.disableClose = true;
               dialogConfigCert.panelClass = 'custom-dialog-container';
