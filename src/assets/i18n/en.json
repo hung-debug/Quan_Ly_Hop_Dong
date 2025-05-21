@@ -960,5 +960,6 @@
   "error.phone.exists": "Phone number already exists in the processing handled",
   "document.re-signing": "Document re-signing",
   "contract.cancel.doc":"Reason for document cancellation",
-  "cancel.contract":"REASONS FOR DOCUMENT CANCELLATION"
+  "cancel.contract":"REASONS FOR DOCUMENT CANCELLATION",
+  "save.information.hsm": "Save digital signature information for next signing"
 }

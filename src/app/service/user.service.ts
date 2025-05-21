@@ -58,6 +58,7 @@ export class UserService {
   updateConfigMailServer: any = `${environment.apiUrl}/api/v1/organizations/configMailServer/`;
   getSsoLinkOtpUrl: any = `${environment.apiUrl}/api/v1/customers/sendEmailOTP`;
   syncAccountSsoUrl: any = `${environment.apiUrl}/api/v1/customers/syncUserSSO`;
+  saveInfoSingHsmUrl: any = `${environment.apiUrl}/api/v1/customers/hsm-info`;
 
   token: any;
   customer_id: any;
@@ -571,5 +572,17 @@ export class UserService {
     return throwError(errorMessage);
   }
 
-
+  saveInfoSingHsm(data: any) {
+    this.getCurrentUser()
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+       hsm_supplier: data.supplier,
+       hsm_name: data.username,
+       uuid: data.uuid,
+    };
+    return this.http.patch<any>(this.saveInfoSingHsmUrl, body, { headers: headers })
+      .pipe();
+  }
 }

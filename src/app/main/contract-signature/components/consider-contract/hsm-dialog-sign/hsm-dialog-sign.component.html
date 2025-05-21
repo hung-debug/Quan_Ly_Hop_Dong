@@ -119,6 +119,13 @@
         </div>
       </div>
     </div>
+
+    <div *ngIf="this.typeUser != 1" class="row" style="padding-top: 15px;">
+      <div class="col-md-12 checkbox-confirm">
+        <input class="checkbox-hide-processing-thread hover-item" type="checkbox"   [(ngModel)]="confirmConsider" name="confirmConsider" [ngModelOptions]="{standalone: true}"/>
+        <div class="title-content" style="text-align: justify;">{{ 'save.information.hsm' | translate }}</div>
+      </div>
+    </div>
     <div class="row" style="justify-content: center;padding-top: 25px;padding-bottom: 10px;">
       <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
       <button class="save-button" (click)="onSubmit()">{{'confirm' | translate}}</button>
