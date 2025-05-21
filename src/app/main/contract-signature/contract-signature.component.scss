@@ -17,6 +17,125 @@
   border: 1px solid #C3D7FF;
 }
 
+.sort-blue {
+  filter: invert(30%) sepia(86%) saturate(1010%) hue-rotate(198deg) brightness(96%) contrast(101%);
+}
+
+.img_icon_up_down{
+  width: 15px;
+  cursor: pointer;
+  position: absolute;
+  margin-left: 6%;
+  fill: #0041C4;
+  margin-bottom: 10px;
+}
+@media (max-width: 1650px) {
+  .img_icon_up_down{
+    width: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 7%;
+    fill: #0041C4;
+    margin-bottom: 10px;
+  }
+}
+
+// @media (max-width: 1300px) {
+//   .img_icon_up_down{
+//     width: 15px;
+//     cursor: pointer;
+//     position: absolute;
+//     margin-left: 10%;
+//     fill: #0041C4;
+//     margin-bottom: 10px;
+//   }
+// }
+
+@media screen and (min-width: 1301px) and (max-width: 1500px) {
+  .img_icon_up_down{
+    width: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 8%;
+    fill: #0041C4;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 1101px) and (max-width: 1299px) {
+  .img_icon_up_down{
+    width: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 9%;
+    fill: #0041C4;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 951px) and (max-width: 1100px) {
+  .img_icon_up_down{
+    width: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 11%;
+    fill: #0041C4;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 371px) and (max-width: 450px) {
+  .img_icon_up_down{
+    width: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 26%;
+    fill: #0041C4;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 451px) and (max-width: 575px) {
+  .img_icon_up_down{
+    width: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 22%;
+    fill: #0041C4;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 950px) {
+  .img_icon_up_down{
+    width: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 15%;
+    fill: #0041C4;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 370px) {
+  .img_icon_up_down{
+    width: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 32%;
+    fill: #0041C4;
+    margin-bottom: 10px;
+  }
+}
+
+.img_icon_up_down:hover{
+  width: 16px;
+}
+.disabled {
+  opacity: 0.5; /* hoặc bất kỳ kiểu ẩn nào khác bạn muốn áp dụng */
+  pointer-events: none; /* ngăn chặn sự kiện click */
+}
+
 .status_blue_ceca{
   color: #2D6BE7;
   height: 32px;

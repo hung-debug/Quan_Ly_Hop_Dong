@@ -38,8 +38,11 @@ export class ContractSignatureService {
     this.token = JSON.parse(localStorage.getItem('currentUser')||'').access_token;
   }
 
-  public getContractMyProcessList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any, contractStatus: any, nameOrEmailCustomer: any, orgId: any): Observable<any> {
+  public getContractMyProcessList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any, contractStatus: any, orderDesc: string, nameOrEmailCustomer: any, orgId: any): Observable<any> {
     this.getCurrentUser();
+    
+    let orderPrefix = orderDesc? '&order_desc=' + orderDesc : '';
+    
     if (filter_from_date != "") {
       filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
     }
@@ -49,14 +52,15 @@ export class ContractSignatureService {
     if(page != ""){
       page = page - 1;
     }
-    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus + "&name_or_email_customer=" + nameOrEmailCustomer.trim() + "&organization_id=" + orgId;
+    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus +  orderPrefix + "&name_or_email_customer=" + nameOrEmailCustomer.trim() + "&organization_id=" + orgId;
     
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
   }
 
-  public getContractMyProcessListSignMany(keyword?: string, filter_type?: any, filter_contract_no?: any, filter_from_date?: any, filter_to_date?: any) {
+  public getContractMyProcessListSignMany(keyword?: string, filter_type?: any, filter_contract_no?: any, filter_from_date?: any, filter_to_date?: any, orderDesc?: string) {
     this.getCurrentUser();
+    let orderPrefix = orderDesc? '&order_desc=' + orderDesc : '';
 
     const headers = {'Authorization': 'Bearer ' + this.token};
     const orgId = JSON.parse(
@@ -70,11 +74,12 @@ export class ContractSignatureService {
     filter_to_date = filter_to_date ? this.datepipe.transform(filter_to_date, 'yyyy-MM-dd'): '';
     keyword = keyword ? keyword : '';
     
-    return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web'+'&keyword='+keyword+'&type=' + filter_type+ '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date,{headers}).pipe();
+    return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web'+'&keyword='+keyword+'&type=' + filter_type+ '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + orderPrefix,{headers}).pipe();
   }
 
-  public getViewContractMyProcessList(keyword?: string, filter_type?: any, filter_contract_no?: any, filter_from_date?: any, filter_to_date?: any){
+  public getViewContractMyProcessList(keyword?: string, filter_type?: any, filter_contract_no?: any, filter_from_date?: any, filter_to_date?: any, orderDesc?: string){
     this.getCurrentUser();
+    let orderPrefix = orderDesc? '&order_desc=' + orderDesc : '';
 
     const headers = {'Authorization': 'Bearer ' + this.token};
     const orgId = JSON.parse(
@@ -88,7 +93,7 @@ export class ContractSignatureService {
     filter_to_date = filter_to_date ? this.datepipe.transform(filter_to_date, 'yyyy-MM-dd'): '';
     keyword = keyword ? keyword : '';
 
-    return this.http.get<any[]>(this.getViewContractList+'orgId='+orgId+'&platform=web'+'&keyword='+keyword+'&type=' + filter_type+ '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date,{headers}).pipe();
+    return this.http.get<any[]>(this.getViewContractList+'orgId='+orgId+'&platform=web'+'&keyword='+keyword+'&type=' + filter_type+ '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + orderPrefix,{headers}).pipe();
   }
 
   public getContractMyProcessListDownloadMany(ids: any): Observable<any> {
@@ -123,8 +128,11 @@ export class ContractSignatureService {
     return this.http.post<any>(this.shareContractUrl, body, {'headers': headers}).pipe();
   }
 
-  public getContractShareList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any, contractStatus: any, nameOrEmailCustomer: any, orgId: any): Observable<any> {
+  public getContractShareList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any, contractStatus: any, orderDesc: string, nameOrEmailCustomer: any, orgId: any): Observable<any> {
     this.getCurrentUser();
+    
+    let orderPrefix = orderDesc? '&order_desc=' + orderDesc : '';
+    
     if (filter_from_date != "") {
       filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
     }
@@ -134,17 +142,18 @@ export class ContractSignatureService {
     if(page != ""){
       page = page - 1;
     }
-    let shareListContractUrl = this.shareListContractUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus+ "&name_or_email_customer=" + nameOrEmailCustomer.trim() + "&organization_id=" + orgId;
+    let shareListContractUrl = this.shareListContractUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus + orderPrefix + "&name_or_email_customer=" + nameOrEmailCustomer.trim() + "&organization_id=" + orgId;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
   }
 
-  public getContractMyProcessDashboard(filter_status:any, page:any, size:any): Observable<any> {
+  public getContractMyProcessDashboard(filter_status:any, page:any, size:any, orderDesc: string): Observable<any> {
     this.getCurrentUser();
     if(page != ""){
       page = page - 1;
     }
-    let dashboardContractMyProcessUrl = this.dashboardContractMyProcessUrl + filter_status + "?page=" + page + "&size=" + size;
+    let orderPrefix = orderDesc? '&order_desc=' + orderDesc : '';
+    let dashboardContractMyProcessUrl = this.dashboardContractMyProcessUrl + filter_status + "?page=" + page + "&size=" + size + orderPrefix;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(dashboardContractMyProcessUrl, {headers}).pipe();
   }
