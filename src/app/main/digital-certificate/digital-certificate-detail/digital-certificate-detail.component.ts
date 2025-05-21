@@ -17,7 +17,9 @@ export class DigitalCertificateDetailComponent implements OnInit {
   datas: any;
   addForm: FormGroup;
   emailUser: any[];
+  phoneUser: any[];
   email: any = "";
+  phone: any = "";
   listEmail: any[];
   status: any = "";
   keystoreSerialNumber: any = "";
@@ -66,9 +68,14 @@ export class DigitalCertificateDetailComponent implements OnInit {
   async getData() {
     await this.DigitalCertificateService.getCertById(this.datas.id).toPromise().then(
       data => {
-        this.emailUser = data.customers
-        const listEmail = this.emailUser.map(item => item.email)
-        this.email = listEmail.join(", ")
+
+        // this.emailUser = data.customers,
+        this.emailUser = data.customers.filter((item: any) => item.email);
+        this.phoneUser = data.customers.filter((item: any) => item.phone);
+        const listEmail = this.emailUser.map(item => item.email);
+        const listPhone = this.phoneUser.map(item => item.phone);
+        this.email = listEmail.join(", "),
+        this.phone = listPhone.join(", "),
         this.keystoreSerialNumber = data.keystoreSerialNumber,
         this.keyStoreFileName = data.keyStoreFileName,
         this.keystoreDateStart = data.keystoreDateStart,

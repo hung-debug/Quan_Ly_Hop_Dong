@@ -27,6 +27,7 @@ export interface DigitalCertificate {
 export class DigitalCertificateService {
   addCertificate: any = `${environment.apiUrl}/api/v1/sign/import-cert`;
   getListEmail: any = `${environment.apiUrl}/api/v1/customers/list-email-containing`;
+  getListPhone: any = `${environment.apiUrl}/api/v1/customers/list-phone-containing`;
   getAllCert: any = `${environment.apiUrl}/api/v1/sign/find-cert`;
   updateCert: any = `${environment.apiUrl}/api/v1/sign/update-user-from-cert`;
   deleteUser: any = `${environment.apiUrl}/api/v1/sign/remove-user-from-cert`;
@@ -46,13 +47,14 @@ export class DigitalCertificateService {
     public datepipe: DatePipe,
     public router: Router,) { }
 
-  addImportCTS(file: any, email: any, password: any, status: any) {
+  addImportCTS(file: any, email: any, phone: any, password: any, status: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + this.token);
     let formData = new FormData();
     formData.append('file', file);
     formData.append('list_email', email);
+    formData.append('list_phone', phone);
     formData.append('password', password);
     formData.append('status', status);
     return this.http.post<any>(this.addCertificate, formData, { 'headers': headers }).pipe();
@@ -66,13 +68,14 @@ export class DigitalCertificateService {
     return this.http.get<any>(this.getCertByIdUrl + "?id=" + id, { headers }).pipe();
   }
 
-  updateCTS(id: any, status: any, email: any) {
+  updateCTS(id: any, status: any, email: any, phone: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + this.token);
     let formData = new FormData();
     formData.append('id', id);
     formData.append('list_email', email);
+    formData.append('list_phone', phone);
     formData.append('status', status);
     // formData.append('customers_id', id_customer)
     return this.http.post<any>(this.updateCert, formData, { 'headers': headers }).pipe();
@@ -115,6 +118,15 @@ export class DigitalCertificateService {
       .append('Authorization', 'Bearer ' + this.token);
     let listEmailUrl = this.getListEmail + '?email=' + email + "&orgId=" + orgId;
     return this.http.get<any>(listEmailUrl, { headers });
+  }
+  
+  getListOrgByPhone(phone: string, orgId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listPhoneUrl = this.getListPhone + '?phone=' + phone + "&orgId=" + orgId;
+    return this.http.get<any>(listPhoneUrl, { headers });
   }
 
   public getAllCertificate(FileName: string, status: any, keystoreDateStart: any, keystoreDateEnd: any, number: any, size: any,): Observable<any> {

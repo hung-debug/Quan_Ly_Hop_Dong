@@ -674,6 +674,7 @@
   "end-date": "Ngày hết hạn",
   "add.certificate":"Thêm mới chứng thư số server",
   "email.user":"Email người dùng",
+  "phone.user":"Số điện thoại người dùng",
   "file.certificate": "File chứng thư số server",
   "choose.file.certificate": "Chọn file chứng thư số server(.p12)",
   "notation": "Ký hiệu",
