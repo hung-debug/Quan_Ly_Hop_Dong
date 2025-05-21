@@ -362,11 +362,12 @@ export class UserService {
   public getUserListShare(
     filter_organization_id: any,
     filter_nameOrEmail: any,
+    filter_phone: any,
     filter_email: any,
   ): Observable<any> {
     this.getCurrentUser();
 
-    let listUserEmailPhone = this.getListUserEmailPhone + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim();
+    let listUserEmailPhone = this.getListUserEmailPhone + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone='+ filter_phone.trim() + '&organization_id=' + filter_organization_id + '&email=' + filter_email.trim();
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserEmailPhone, { headers }).pipe();
   }

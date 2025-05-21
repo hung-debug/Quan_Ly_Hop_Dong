@@ -121,7 +121,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
     //lay danh sach email da duoc chia se
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
-      this.userService.getUserListShare(orgId, "","").subscribe(data => {
+      this.userService.getUserListShare(orgId, "", "","").subscribe(data => {
         if(this.currentUser?.loginType === 'EMAIL'){
           let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
           this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
@@ -143,6 +143,77 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     });
 
 
+  }
+  
+  getListAllPhoneOnFillter(event: any) {
+    this.phoneList = [];
+    let phoneLogin = this.userService.getAuthCurrentUser().phone;
+    if (this.addFormUser.value.phone.length > 0) {
+      for (const item of this.addFormUser.value.phone) {
+        this.phoneList.push({phone: item})
+      }
+    }
+    let phone: any = event.filter || ''
+    this.userService.getUserListShare(this.organization_id_user_login,'', phone,'').subscribe((response) => {
+      console.log("respon",response);
+      if (response) {
+        for (const item of response) {
+          if (item?.phone != this.phoneList.find((value: any) => value.phone == item.phone)?.phone) {
+            this.phoneList.push({phone: item.phone});
+            if(this.currentUser?.loginType === 'SDT' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+              this.phoneList = this.phoneList.filter((p: any) => p.phone != phoneLogin);
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  onSelectionChangePhone() {
+    let selectedValues = []
+    selectedValues = this.addFormUser.get('phone')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.phoneList.find((opt: any) => opt.phone === value);
+      if (option) {
+        value = option.phone;
+      }
+    });
+    this.addFormUser.patchValue({ phone: selectedValues });
+  }
+  
+  getListAllEmailOnFillter(event: any) {
+    this.userList = [];
+    let emailLogin = this.userService.getAuthCurrentUser().email;
+    if (this.addFormUser.value.email.length > 0) {
+      for (const item of this.addFormUser.value.email) {
+        this.userList.push({email: item})
+      }
+    }
+    let email: any = event.filter || ''
+    this.userService.getUserListShare(this.organization_id_user_login, email, '','').subscribe((response) => {
+      if (response) {
+        for (const item of response) {
+          if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
+            this.userList.push({email: item.email});
+            if(this.currentUser?.loginType === 'EMAIL' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+              this.userList = this.userList.filter((p: any) => p.email != emailLogin);
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  onSelectionChangeEmail() {
+    let selectedValues = []
+    selectedValues = this.addFormUser.get('email')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.userList.find((opt: any) => opt.email === value);
+      if (option) {
+        value = option.email;
+      }
+    });
+    this.addFormUser.patchValue({ email: selectedValues });
   }
 
   //email:any;
