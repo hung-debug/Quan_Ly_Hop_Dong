@@ -8,7 +8,7 @@ import {
   OnInit,
   Output,
   QueryList,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { ContractService } from '../../../../service/contract.service';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -1103,6 +1103,9 @@ export class ConsiderContractComponent
   eventMouseover() { }
 
   ngAfterViewInit() {
+    if(this.mobile) {
+      this.preventGestureZoom()
+    }
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -4664,15 +4667,7 @@ export class ConsiderContractComponent
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    if (localStorage.getItem('lang') == 'vi') {
-      rejectQuestion =
-        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
-      confirm = 'Xác nhận';
-      cancel = 'Huỷ';
-      cancelSuccess = 'Từ chối tài liệu thành công';
-      error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
-      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
-    } else if (localStorage.getItem('lang') == 'en') {
+    if (localStorage.getItem('lang') == 'en') {
       rejectQuestion =
         'Are you sure want to decline this contract? Please enter the reason';
       confirm = 'Confirm';
@@ -4680,6 +4675,14 @@ export class ConsiderContractComponent
       cancelSuccess = 'Successfully refused contract';
       error = 'Error! Please contact to developers';
       rejectReason = 'You need to enter the reason for refusing the contract';
+    } else {
+      rejectQuestion =
+        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
+      confirm = 'Xác nhận';
+      cancel = 'Huỷ';
+      cancelSuccess = 'Từ chối tài liệu thành công';
+      error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
+      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
     }
 
     this.rejectContractLang(
@@ -5973,5 +5976,70 @@ export class ConsiderContractComponent
       default:
         return false;
     }
+  }
+
+  zoomMobile = 1.0; // 100%
+
+  zoomIn() {
+    if (this.zoomMobile < 5.0) {
+      this.zoomMobile = +(this.zoomMobile + 0.5).toFixed(2);
+    }
+  }
+
+  zoomOut() {
+    if (this.zoomMobile > 1.0) {
+      this.zoomMobile = +(this.zoomMobile - 0.5).toFixed(2);
+    }
+  }
+
+  preventGestureZoom() {
+    // Ẩn scroll toàn trang
+    if(this.isBonBon) {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Chặn pinch-to-zoom ngay từ touchstart
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Chặn pinch-to-zoom khi đang di chuyển
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Chặn double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // iOS Safari gestures
+    document.addEventListener('gesturestart', e => e.preventDefault());
+    document.addEventListener('gesturechange', e => e.preventDefault());
+    document.addEventListener('gestureend', e => e.preventDefault());
+
+    // Desktop Ctrl + wheel
+    document.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Ctrl + key zoom
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
   }
 }

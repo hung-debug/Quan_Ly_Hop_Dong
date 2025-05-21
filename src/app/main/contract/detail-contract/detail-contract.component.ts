@@ -769,6 +769,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   eventMouseover() {}
 
   ngAfterViewInit() {
+    // if(this.mobile) {
+    //   this.preventGestureZoom()
+    // }
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -1931,4 +1934,55 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     return arrSignConfig;
   }
 
+    zoomMobile = 1.0; // 100%
+
+  zoomIn() {
+    if (this.zoomMobile < 5.0) {
+      this.zoomMobile = +(this.zoomMobile + 0.5).toFixed(2);
+    }
+  }
+
+  zoomOut() {
+    if (this.zoomMobile > 1.0) {
+      this.zoomMobile = +(this.zoomMobile - 0.5).toFixed(2);
+    }
+  }
+
+  preventGestureZoom() {
+    // Chặn pinch-to-zoom: Android & iOS
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault(); // chặn zoom bằng 2 ngón
+      }
+    }, { passive: false });
+
+    // Chặn double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault(); // chặn double-tap zoom
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // Chặn gesture zoom (chỉ hoạt động trên iOS/Safari)
+    document.addEventListener('gesturestart', e => e.preventDefault());
+    document.addEventListener('gesturechange', e => e.preventDefault());
+    document.addEventListener('gestureend', e => e.preventDefault());
+
+    // Chặn zoom bằng Ctrl + wheel (desktop)
+    document.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Chặn Ctrl + '+', '-', '=' (desktop)
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+  }
 }

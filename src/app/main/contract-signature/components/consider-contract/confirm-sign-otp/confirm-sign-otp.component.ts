@@ -45,7 +45,11 @@ export class ConfirmSignOtpComponent implements OnInit {
   smsContractUse: any;
   smsContractBuy: any;
   typeUser: any;
-
+  config = {
+    length: 6,
+    isPasswordInput: false,
+    allowNumbersOnly: true
+  };
   @Output() confirmOtpForm = new EventEmitter();
 
   get f() { return this.addForm.controls; }

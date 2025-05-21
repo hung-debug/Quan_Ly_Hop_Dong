@@ -980,7 +980,7 @@
   "report.exporting": "File báo cáo đang được tải xuống",
   "change.phone": "THAY ĐỔI SỐ ĐIỆN THOẠI",
   "hind.text.phone.otp": "Nhập số điện thoại để nhận mã OTP",
-  "confirm.bonbon": "Bạn có đồng ý với các nội dung, điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch.",
+  "confirm.bonbon": "Bạn có đồng ý với điều khoản hợp đồng và chấp thuận giao dịch điện tử không?",
   "error.phone.exists": "Số điện thoại đã tồn tại trong luồng xử lý",
   "document.re-signing": "Trình ký lại tài liệu",
   "contract.cancel.doc":"Lý do hủy bỏ tài liệu",
