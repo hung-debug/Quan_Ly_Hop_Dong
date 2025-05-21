@@ -42,6 +42,7 @@ export class UserService {
   getUserByIdUrl: any = `${environment.apiUrl}/api/v1/customers/`;
   getOrgChildren: any = `${environment.apiUrl}/api/v1/organizations/getParent`;
   listUserUrl: any = `${environment.apiUrl}/api/v1/customers/search`;
+  getListUserEmailPhone: any = `${environment.apiUrl}/api/v1/customers/search-by-phone-or-email`;
   getUserByEmailUrl: any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
   checkPhoneUrl: any = `${environment.apiUrl}/api/v1/customers/check-phone-unique`;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
@@ -365,9 +366,27 @@ export class UserService {
   ): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim();
+    let listUserEmailPhone = this.getListUserEmailPhone + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim();
     const headers = { Authorization: 'Bearer ' + this.token };
-    return this.http.get<User[]>(listUserUrl, { headers }).pipe();
+    return this.http.get<User[]>(listUserEmailPhone, { headers }).pipe();
+  }
+  
+  public getUserListShareOrg(
+    filter_organization_id: any,
+    filter_nameOrEmail: any,
+    filter_phone: any,
+    filter_email: any,
+    row: number = 15, page: any = 0
+  ): Observable<any> {
+    this.getCurrentUser();
+    
+    if (filter_nameOrEmail && filter_nameOrEmail.trim() !== '') {
+      page = 0;
+    }
+
+    let listUserEmailPhone = this.getListUserEmailPhone + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone='+ filter_phone.trim() + '&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
+    const headers = { Authorization: 'Bearer ' + this.token };
+    return this.http.get<User[]>(listUserEmailPhone, { headers }).pipe();
   }
 
   getSignatureUserById(id: any) {

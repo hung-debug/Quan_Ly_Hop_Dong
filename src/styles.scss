@@ -139,5 +139,11 @@
 .chat-container {
   bottom: 150px !important;
 }
+.mat-dialog-container {
+  overflow: visible !important; /* Ghi đè overflow: auto thành visible */
+  /* max-height: none !important; */ /* Có thể thêm dòng này nếu vẫn bị cắt do max-height */
+}
+
+
 
 

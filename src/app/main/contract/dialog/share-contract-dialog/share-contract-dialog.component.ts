@@ -98,7 +98,7 @@ export class ShareContractDialogComponent implements OnInit {
     let phoneLogin = this.userService.getAuthCurrentUser().phone;
     this.organization_id = orgId;
     
-    this.userService.getUserList(orgId, "","","").subscribe(data => {
+    this.userService.getUserListShareOrg(orgId, "","","").subscribe(data => {
 
       this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
       this.listPhone = data.entities.filter((p: any) => p.phone != phoneLogin && p.status == 1);
@@ -130,7 +130,7 @@ export class ShareContractDialogComponent implements OnInit {
       }
     }
     let email: any = event.filter || ''
-    this.userService.getUserList(this.organization_id,'','',email || '').subscribe((response) => {
+    this.userService.getUserListShareOrg(this.organization_id,'','',email || '').subscribe((response) => {
       if (response) {
         for (const item of response.entities) {
           if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
@@ -153,7 +153,7 @@ export class ShareContractDialogComponent implements OnInit {
       }
     }
     let phone: any = event.filter || ''
-    this.userService.getUserList(this.organization_id,'',phone || '','').subscribe((response) => {
+    this.userService.getUserListShareOrg(this.organization_id,'',phone || '','').subscribe((response) => {
       if (response) {
         for (const item of response.entities) {
           if (item?.phone != this.listPhone.find((value: any) => value.phone == item.phone)?.phone) {
