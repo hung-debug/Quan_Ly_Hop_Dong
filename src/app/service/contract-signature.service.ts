@@ -109,13 +109,14 @@ export class ContractSignatureService {
     return this.http.get("/assets/data-contract-received.json");
   }
 
-  shareContract(email: any, id:any) {
+  shareContract(email: any, phone: any, id:any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-      email: email,
+      email: email ? email : [],
+      phone: phone ? phone : [],
       contract_id: id
     });
     

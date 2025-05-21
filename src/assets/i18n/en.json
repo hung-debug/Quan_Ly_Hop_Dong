@@ -961,5 +961,6 @@
   "document.re-signing": "Document re-signing",
   "contract.cancel.doc":"Reason for document cancellation",
   "cancel.contract":"REASONS FOR DOCUMENT CANCELLATION",
-  "save.information.hsm": "Save digital signature information for next signing"
+  "save.information.hsm": "Save digital signature information for next signing",
+  "select.phone": "Select phone"
 }

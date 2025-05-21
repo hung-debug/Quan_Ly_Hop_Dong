@@ -374,7 +374,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
-
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
@@ -575,7 +574,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           } else {
             if (this.mobile) {
               if(this.isAllowFirstHandleEdit) {
-                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient.id, chu_ky_anh, this.idContract).toPromise();
+                
+                this.recipient = this.isDataContract?.participants[0]?.recipients[0]?.id;
+                
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
                   this.pdfSrc = pdfMobile.filePath;
                 } else {
@@ -1701,7 +1703,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       if (this.datas?.is_data_contract?.participants?.length) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
-            if (this.currentUser.email == recipient.email) {
+            if((((recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((recipient?.phone === this.currentUser.phone || recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (recipient?.email === this.currentUser.email && this.typeUser === 1)) {
               recipients.push(recipient);
             }
           }
@@ -1724,7 +1729,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       } else if (recipients.length == 1) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
-            if (this.currentUser.email == recipient.email) {
+            if((((recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((recipient?.phone === this.currentUser.phone || recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (recipient?.email === this.currentUser.email && this.typeUser === 1)) {
               this.recipient = recipient;
               return;
             }
