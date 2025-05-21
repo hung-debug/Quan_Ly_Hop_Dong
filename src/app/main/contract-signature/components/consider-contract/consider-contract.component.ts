@@ -56,6 +56,8 @@ import { WebsocketService } from 'src/app/service/websocket.service';
 import { environment } from 'src/environments/environment';
 import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { RemoteCertSelectionDialogComponent } from './remote-cert-dialog/remote-cert-selection-dialog.component';
+import { RemoteCertificate } from './remote-cert-dialog/remote-certificate.interface';
 
 @Component({
   selector: 'app-consider-contract',
@@ -239,6 +241,7 @@ export class ConsiderContractComponent
   ];
   contract_no: any;
   typeUser: any;
+  serialNumber: string;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -279,6 +282,7 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    console.log('ngOnInit');
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
     // if(this.isBonBon) {
@@ -3351,7 +3355,6 @@ export class ConsiderContractComponent
               imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
-
             if (fileC && objSign.length) {
               try {
                 const checkSign = await this.contractService.signRemote(
@@ -3360,7 +3363,8 @@ export class ConsiderContractComponent
                   this.isTimestamp,
                   signUpdate.type,
                   supplierID,
-                  this.phoneMobiCA
+                  this.phoneMobiCA,
+                  this.serialNumber
                 );
                 // this.statusSign = checkSign;   
                 if (!checkSign || (checkSign && !checkSign.success)) {
@@ -3414,7 +3418,8 @@ export class ConsiderContractComponent
                     this.isTimestamp,
                     signUpdate.type,
                     supplierID,
-                    this.phoneMobiCA
+                    this.phoneMobiCA,
+                    this.serialNumber
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -5291,6 +5296,45 @@ export class ConsiderContractComponent
       const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(async (result: any) => {
+        if (result) {
+          this.supplierID = result.type;
+          this.dataCert.cert_id = result.ma_dvcs;
+          this.phoneMobiCA = result.phone;
+          this.suppliersRs = result.suppliers;
+        }
+        this.supplierID = result.type;
+        const userCode = result.ma_dvcs;
+        const phone = result.phone;
+        this.spinner.show();
+        let certificates: RemoteCertificate[] = [];
+        try {
+           certificates = await this.contractService.getRemoteSigningCertificates(this.supplierID, userCode, phone).toPromise();
+        } catch (error) {
+            await this.signContractSubmit(this.supplierID);
+        }
+        this.spinner.hide();
+        if (!certificates || certificates.length === 0) {
+            await this.signContractSubmit(this.supplierID); 
+          } else if (certificates.length === 1) {
+            await this.signContractSubmit(this.supplierID);}
+            else if (certificates.length > 1) {
+            // Trường hợp có nhiều hơn 1 chứng thư
+            const dialogConfigCert = new MatDialogConfig();
+            dialogConfigCert.width = '800px'; 
+            dialogConfigCert.data = { certificates: certificates };
+            dialogConfigCert.disableClose = true;
+            dialogConfigCert.panelClass = 'custom-dialog-container';
+
+            const dialogRefCert = this.dialog.open(RemoteCertSelectionDialogComponent, dialogConfigCert);
+            dialogRefCert.afterClosed().subscribe(async (selectedSerial: string | undefined) => {
+              if (selectedSerial) {
+                this.serialNumber = selectedSerial;
+                await this.signContractSubmit(this.supplierID);
+              } else {
+                this.spinner.hide();
+              }
+            });
+          }
         if(result.type == 2){
           this.loadingText =
           'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
@@ -5304,14 +5348,6 @@ export class ConsiderContractComponent
         // if (result?.type == '1') {
         //   isVnptSmartCA = true;
         // }
-        if (result) {
-          let supplierID = result.type;
-          this.supplierID = result.type;
-          this.dataCert.cert_id = result.ma_dvcs;
-          this.phoneMobiCA = result.phone;
-          this.suppliersRs = result.suppliers;
-          await this.signContractSubmit(supplierID);
-        }
       });
     })
   }
@@ -5702,21 +5738,20 @@ export class ConsiderContractComponent
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
     let result  = this.suppliersRs.find(item => item.id == code);
-    appName = result.name;
-    // switch (supplierID) {
-    //   case "vnpt":
-    //     appName = "VNPT SmartCA";
-    //     break;
-    //   case "MobiFoneCA":
-    //     appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
-    //     break;
-    //   case "mobiCA":
-    //     appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
-    //     break;
-    //   default:
-    //     appName = "CA2 Remote Signing";
-    //     break;
-    // }
+    switch (supplierID) {
+      case "vnpt":
+        appName = "VNPT SmartCA";
+        break;
+      case "MobiFoneCA":
+        appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      case "mobiCA":
+        appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      default:
+        appName = "CA2 Remote Signing";
+        break;
+    }
   
     switch (code) {
       case "QUA_THOI_GIAN_KY":

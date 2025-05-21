@@ -9,6 +9,7 @@ import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
 import { encode } from 'base64-arraybuffer';
+import { RemoteCertificate } from '../main/contract-signature/components/consider-contract/remote-cert-dialog/remote-certificate.interface';
 
 export interface Contract {
   success: boolean;
@@ -183,6 +184,7 @@ export class ContractService {
   // token v2 fixing ===============================
   listSuppliergUrl: any = `${environment.apiUrl}/api/v1/sign/get-supplier-by-type`
   resubmitRejectionDocumentUrl: any = `${environment.apiUrl}/api/v1/contracts/resign-pending/`
+  getRemoteSigningCertsUrl: any = `${environment.apiUrl}/api/v1/sign/remote-signing/certs`
   
   token: any;
   customer_id: any;
@@ -1361,7 +1363,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, supplierID:any, phoneMobiCA:any) {
+  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, supplierID:any, phoneMobiCA:any, serialNumber?: any | null) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1369,7 +1371,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     const supplier = supplierID || 'vnpt';
-    const body = JSON.stringify({
+    const body: any = {
       userCode: datas.cert_id,
       image_base64: datas.imageBase64,
       isTimestamp: isTimestamp,
@@ -1377,22 +1379,25 @@ export class ContractService {
       field: datas.field,
       supplier: supplier,
       phone: phoneMobiCA
-    });
+    };
+    if (serialNumber !== undefined && serialNumber !== null) {
+        body.serialNumber = serialNumber;
+    }
+    const jsonBody = JSON.stringify(body);
 
     return this.http
-      .post<any>(this.signRemoteUrl + recipientId, body, { headers: headers })
+      .post<any>(this.signRemoteUrl + recipientId, jsonBody, { headers: headers }) // Sử dụng jsonBody
       .toPromise();
   }
 
-  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, supplierID : any, phoneMobiCA:any) {
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, supplierID : any, phoneMobiCA:any,serialNumber?: any | null) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const supplier = supplierID || 'vnpt';
-
-    const body = JSON.stringify({
+    const body: any = {
       userCode: datas.cert_id,
       image_base64: datas.imageBase64,
       isTimestamp: false,
@@ -1400,10 +1405,14 @@ export class ContractService {
       field: datas.field,
       supplier: supplier,
       phone: phoneMobiCA
-    });
+    };
+    if (serialNumber !== undefined && serialNumber !== null) {
+        body.serialNumber = serialNumber;
+    }
+    const jsonBody = JSON.stringify(body)
 
     return this.http
-      .post<any>(this.signManyRemoteUrl + "?id=" + recipientIds, body, { headers: headers })
+      .post<any>(this.signManyRemoteUrl + "?id=" + recipientIds, jsonBody, { headers: headers })
       .toPromise();
   }
 
@@ -2567,4 +2576,19 @@ export class ContractService {
       },
     ];
   }
+  getRemoteSigningCertificates(supplierId: string, userCode?: string, phone?: string): Observable<RemoteCertificate[]> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+      supplier: supplierId,
+      userCode: userCode || "",
+      phone: phone || "" 
+    };
+    return this.http.post<RemoteCertificate[]>(this.getRemoteSigningCertsUrl, body, { headers }).pipe(
+      map(response => response),
+      catchError(this.handleError)
+    );
+    }
 }
