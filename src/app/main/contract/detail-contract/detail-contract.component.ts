@@ -374,7 +374,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
-
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
@@ -575,7 +574,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           } else {
             if (this.mobile) {
               if(this.isAllowFirstHandleEdit) {
-                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient.id, chu_ky_anh, this.idContract).toPromise();
+                
+                this.recipient = this.isDataContract?.participants[0]?.recipients[0]?.id;
+                
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
                   this.pdfSrc = pdfMobile.filePath;
                 } else {
