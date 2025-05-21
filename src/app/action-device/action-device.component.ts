@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {DeviceDetectorService} from "ngx-device-detector";
 import {Router} from "@angular/router";
 
@@ -14,7 +14,10 @@ export class ActionDeviceComponent implements OnInit {
   constructor(private modalService: NgbModal,
               public dialog: MatDialog,
               private deviceService: DeviceDetectorService,
-              private router: Router) { }
+              private router: Router,
+              @Inject(MAT_DIALOG_DATA) public data: any // Inject data
+              ) { }
+              
 
   ngOnInit(): void {
 
@@ -26,7 +29,7 @@ export class ActionDeviceComponent implements OnInit {
     // if (sessionStorage.getItem('url')) {
       // let isUrl = sessionStorage.getItem('url');
 
-      let urlQ = sessionStorage.getItem('url');
+      let urlQ = this.data?.urlQ || sessionStorage.getItem('url');
       let domain = window.location.origin;
 
       domain = domain.replace('http://','').replace('https://','');
