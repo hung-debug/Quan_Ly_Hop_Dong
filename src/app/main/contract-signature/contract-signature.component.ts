@@ -137,6 +137,7 @@ export class ContractSignatureComponent implements OnInit {
   signInfoPKIU: any = {};
   chooseContract: any = [];
   isAllowFirstHandleEdit: boolean[] = [];
+  typeUser: any;
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -159,6 +160,10 @@ export class ContractSignatureComponent implements OnInit {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info; 
+
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   ngOnInit(): void {
@@ -1785,6 +1790,7 @@ export class ContractSignatureComponent implements OnInit {
             processAt: this.isDateTime,
             supplier: resultHsm.supplier,
             uuid: resultHsm.uuid,
+            confirmConsider: resultHsm.confirmConsider,
             type: 3
           };
 
@@ -1852,6 +1858,25 @@ export class ContractSignatureComponent implements OnInit {
                 return;
               } else {
                 countSuccess++;
+              }
+            }
+
+            if(countSuccess > 0 && this.dataHsm.confirmConsider && this.typeUser != 1) {
+              try{
+                let saveInfoSingHsm = await this.userService.saveInfoSingHsm(this.dataHsm).toPromise();
+                if(!saveInfoSingHsm.status) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                    saveInfoSingHsm.message,
+                    '',
+                    3000
+                  );   
+                }
+              } catch(err) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lưu thông tin ký số cho lần ký sau thất bại',
+                  '',
+                  3000
+                );
               }
             }
 
