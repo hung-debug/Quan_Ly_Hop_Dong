@@ -17,6 +17,7 @@ import { DigitalCertificateService } from 'src/app/service/digital-certificate.s
 import { UserService } from 'src/app/service/user.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { UnitService } from 'src/app/service/unit.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user',
@@ -56,7 +57,8 @@ export class DigitalCertificateAddComponent implements OnInit {
   listOrgCombobox: any[];
   selectedNodeOrganization:any = '';
   organization_id:any = "";
-  currentOrgId: any = ""
+  currentOrgId: any = "";
+  environment: any = "";
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -77,6 +79,7 @@ export class DigitalCertificateAddComponent implements OnInit {
       orgId: this.fbd.control("", [Validators.required]),
       status: 1,
     });
+    this.environment = environment
   }
   async ngOnInit(): Promise<void> {
     this.currentOrgId = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId.toString()
