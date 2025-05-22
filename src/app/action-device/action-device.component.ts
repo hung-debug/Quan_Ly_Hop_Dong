@@ -71,9 +71,9 @@ export class ActionDeviceComponent implements OnInit {
           }
           
           if (urlEmail) {
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}/${domain}`;
+            return window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}/${domain}`;
           } else
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${domain}`;
+            return window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${domain}`;
         }
 
       } 
@@ -85,11 +85,11 @@ export class ActionDeviceComponent implements OnInit {
 
           if (urlEmail) {
 
-            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
+            return window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
 
           } else
 
-            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
+            return window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
 
         }
       } else if(urlQ && urlQ.includes('form-contract')){
@@ -110,32 +110,27 @@ export class ActionDeviceComponent implements OnInit {
 
           if (urlEmail) {
 
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${urlEmail}/${domain}`;
+            return window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${urlEmail}/${domain}`;
 
           } else
 
-           window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${domain}`;
+           return window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${domain}`;
 
         }
 
       } 
      else  {
-        window.location.href = `econtract://app/login`;
+        return window.location.href = `econtract://app/login`;
       }
 
     // }
-    console.log('urlQ', urlQ);
-    console.log('urlEmail', urlEmail);
-    console.log('domain', domain);
-    console.log('window.location.origin', window.location.origin);
-    console.log('window.location.href', window.location.href);
   }
 
   downloadApp() {
     if (this.deviceService.os == "iOS") {
-        window.location.href = `https://apps.apple.com/vn/app/mobifonecontract/id1604753922`;
+        return window.location.href = `https://apps.apple.com/vn/app/mobifonecontract/id1604753922`;
     } else if (this.deviceService.os == "Android") {
-        window.location.href = `https://play.google.com/store/apps/details?id=vn.mobifone.econtract`;
+        return window.location.href = `https://play.google.com/store/apps/details?id=vn.mobifone.econtract`;
     }
   }
 
