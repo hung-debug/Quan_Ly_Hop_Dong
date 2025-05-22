@@ -2854,6 +2854,7 @@ export class ConsiderContractComponent
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
               uuid: this.dataHsm.uuid,
+              confirmConsider: this.dataHsm.uuid,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null : (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           } else {
@@ -2865,6 +2866,7 @@ export class ConsiderContractComponent
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
               uuid: this.dataHsm.uuid,
+              confirmConsider: this.dataHsm.uuid,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
@@ -2912,6 +2914,24 @@ export class ConsiderContractComponent
                 return false;
               } else {
                 if (checkSign.success === true) {
+                  if(this.dataHsm.confirmConsider && this.typeUser != 1) {
+                    try{
+                      let saveInfoSingHsm = await this.userService.saveInfoSingHsm(this.dataHsm).toPromise();
+                      if(!saveInfoSingHsm.status) {
+                          this.toastService.showErrorHTMLWithTimeout(
+                          saveInfoSingHsm.message,
+                          '',
+                          3000
+                        );   
+                      }
+                    } catch(err) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lưu thông tin ký số cho lần ký sau thất bại',
+                        '',
+                        3000
+                      );
+                    }
+                  }
                   if (pdfC2) {
                     fileC = pdfC2.path;
                   } else if (pdfC1) {
@@ -2944,6 +2964,24 @@ export class ConsiderContractComponent
                 return false;
               } else {
                 if (checkSign.success === true) {
+                  if(this.dataHsm.confirmConsider && this.typeUser != 1) {
+                    try{
+                      let saveInfoSingHsm = await this.userService.saveInfoSingHsm(this.dataHsm).toPromise();
+                      if(!saveInfoSingHsm.status) {
+                          this.toastService.showErrorHTMLWithTimeout(
+                          saveInfoSingHsm.message,
+                          '',
+                          3000
+                        );   
+                      }
+                    } catch(err) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lưu thông tin ký số cho lần ký sau thất bại',
+                        '',
+                        3000
+                      );
+                    }
+                  }
                   if (pdfC2) {
                     fileC = pdfC2.path;
                   } else if (pdfC1) {
@@ -5200,6 +5238,7 @@ export class ConsiderContractComponent
           this.dataHsm.password = result.password;
           this.dataHsm.password2 = result.password2;
           this.dataHsm.uuid = result.uuid;
+          this.dataHsm.confirmConsider = result.confirmConsider;
           await this.signContractSubmit();
         }
       });

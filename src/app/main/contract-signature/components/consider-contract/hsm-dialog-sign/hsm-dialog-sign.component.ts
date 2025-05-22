@@ -264,6 +264,7 @@ export class HsmDialogSignComponent implements OnInit {
   
         const data: any = {
           supplier: this.myForm.value.hsmSupplier,
+          confirmConsider: this.confirmConsider
           //a_dvcs: this.myForm.value.taxCode,
           // username: this.myForm.value.username,
           // password: this.myForm.value.pass1,
@@ -276,24 +277,24 @@ export class HsmDialogSignComponent implements OnInit {
           data["password"] = this.myForm.value.pass1;
         }
 
-        if(this.confirmConsider && this.typeUser != 1) {
-          try{
-            let saveInfoSingHsm = await this.userService.saveInfoSingHsm(data).toPromise();
-            if(!saveInfoSingHsm.status) {
-                this.toastService.showErrorHTMLWithTimeout(
-                saveInfoSingHsm.message,
-                '',
-                3000
-              );   
-            }
-          } catch(err) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Lưu thông tin ký số cho lần ký sau thất bại',
-              '',
-              3000
-            );
-          }
-        }
+        // if(this.confirmConsider && this.typeUser != 1) {
+        //   try{
+        //     let saveInfoSingHsm = await this.userService.saveInfoSingHsm(data).toPromise();
+        //     if(!saveInfoSingHsm.status) {
+        //         this.toastService.showErrorHTMLWithTimeout(
+        //         saveInfoSingHsm.message,
+        //         '',
+        //         3000
+        //       );   
+        //     }
+        //   } catch(err) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Lưu thông tin ký số cho lần ký sau thất bại',
+        //       '',
+        //       3000
+        //     );
+        //   }
+        // }
         if (!this.data.id) {
           this.dialogRef.close(data);
           //Trường hợp không phải ký nhiều
@@ -313,6 +314,7 @@ export class HsmDialogSignComponent implements OnInit {
     } else {
       const data: any = {
         supplier: this.myForm.value.hsmSupplier,
+        confirmConsider: this.confirmConsider
         //ma_dvcs: this.myForm.value.taxCode,
         // username: this.myForm.value.username,
         // password: this.myForm.value.pass1,
@@ -326,24 +328,24 @@ export class HsmDialogSignComponent implements OnInit {
         data["password"] = this.myForm.value.pass1;
       }
 
-      if(this.confirmConsider && this.typeUser != 1) {
-        try{
-          let saveInfoSingHsm = await this.userService.saveInfoSingHsm(data).toPromise();
-          if(!saveInfoSingHsm.status) {
-              this.toastService.showErrorHTMLWithTimeout(
-              saveInfoSingHsm.message,
-              '',
-              3000
-            );   
-          }
-        } catch(err) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Lưu thông tin ký số cho lần ký sau thất bại',
-            '',
-            3000
-          );
-        }
-      }
+      // if(this.confirmConsider && this.typeUser != 1) {
+      //   try{
+      //     let saveInfoSingHsm = await this.userService.saveInfoSingHsm(data).toPromise();
+      //     if(!saveInfoSingHsm.status) {
+      //         this.toastService.showErrorHTMLWithTimeout(
+      //         saveInfoSingHsm.message,
+      //         '',
+      //         3000
+      //       );   
+      //     }
+      //   } catch(err) {
+      //     this.toastService.showErrorHTMLWithTimeout(
+      //       'Lưu thông tin ký số cho lần ký sau thất bại',
+      //       '',
+      //       3000
+      //     );
+      //   }
+      // }
 
       this.dialogRef.close(data);
     }
