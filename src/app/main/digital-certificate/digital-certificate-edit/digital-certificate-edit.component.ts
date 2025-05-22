@@ -10,6 +10,7 @@ import { parttern_input } from "../../../config/parttern";
 import { parttern } from '../../../config/parttern';
 import { log } from 'console';
 import { UnitService } from 'src/app/service/unit.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-user',
   templateUrl: './digital-certificate-edit.component.html',
@@ -48,7 +49,8 @@ export class DigitalCertificateEditComponent implements OnInit {
   lang: any;
   orgListTmp: any[] = [];
   array_empty: any = [];
-  currentOrgId: string = ""
+  currentOrgId: string = "";
+  environment: any = "";
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -70,6 +72,7 @@ export class DigitalCertificateEditComponent implements OnInit {
       phone: this.fbd.control("", [Validators.required]),
       orgId: this.fbd.control("", [Validators.required])
     });
+    this.environment = environment
   }
   async ngOnInit(): Promise<void> {
     this.currentOrgId = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId.toString()
