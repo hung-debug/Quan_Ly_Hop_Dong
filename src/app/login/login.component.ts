@@ -663,6 +663,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         panelClass: 'custom-modalbox',
         data: {
         urlQ: sessionStorage.getItem("url"),
+        urlEmail: sessionStorage.getItem("recipientEmail")|| sessionStorage.getItem("mail"),
       }
       })
       dialogRef.afterClosed().subscribe((result: any) => {

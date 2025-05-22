@@ -39,7 +39,7 @@ export class ActionDeviceComponent implements OnInit {
         urlQ = urlQ.replace('c/','contract-signature/').replace('s9/','signatures/').replace('c9/','consider/').replace('s8/','secretary/').replace('c8','coordinates/')
         .replace('&type','&loginType').replace('&mail','&recipientEmail');
         
-      const urlEmail = sessionStorage.getItem('recipientEmail') || sessionStorage.getItem('mail');
+      const urlEmail = this.data?.urlEmail || sessionStorage.getItem('recipientEmail') || sessionStorage.getItem('mail');
 
 
       if (urlQ && urlQ.includes('contract-signature/')) {
