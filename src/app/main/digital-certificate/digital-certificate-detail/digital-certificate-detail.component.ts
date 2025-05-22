@@ -6,6 +6,7 @@ import { AppService } from 'src/app/service/app.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user',
@@ -30,7 +31,8 @@ export class DigitalCertificateDetailComponent implements OnInit {
   sub: any[];
   unit: any = "";
   orgList: any[]
-  selectedNodeOrganization: any = "226"
+  selectedNodeOrganization: any = "226";
+  environment: any = "";
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -56,6 +58,7 @@ export class DigitalCertificateDetailComponent implements OnInit {
       // taxCode: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
       idOrg: this.fbd.control(""),
     });
+    this.environment = environment
   }
   async ngOnInit(): Promise<void> {
     this.datas = this.data;
