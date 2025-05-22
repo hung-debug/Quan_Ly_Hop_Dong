@@ -124,6 +124,11 @@ export class ActionDeviceComponent implements OnInit {
       }
 
     // }
+    console.log('urlQ', urlQ);
+    console.log('urlEmail', urlEmail);
+    console.log('domain', domain);
+    console.log('window.location.origin', window.location.origin);
+    console.log('window.location.href', window.location.href);
   }
 
   downloadApp() {
