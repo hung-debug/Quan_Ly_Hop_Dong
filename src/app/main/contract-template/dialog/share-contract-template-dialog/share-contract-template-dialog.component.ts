@@ -155,10 +155,9 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     }
     let phone: any = event.filter || ''
     this.userService.getUserListShare(this.organization_id_user_login,'', phone,'').subscribe((response) => {
-      console.log("respon",response);
       if (response) {
         for (const item of response) {
-          if (item?.phone != this.phoneList.find((value: any) => value.phone == item.phone)?.phone) {
+          if (item?.phone != this.phoneList.find((value: any) => value.phone == item.phone)?.phone && (item.login_type === 'SDT' || item.login_type === 'EMAIL_AND_SDT')) {
             this.phoneList.push({phone: item.phone});
             if(this.currentUser?.loginType === 'SDT' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
               this.phoneList = this.phoneList.filter((p: any) => p.phone != phoneLogin);
@@ -190,10 +189,10 @@ export class ShareContractTemplateDialogComponent implements OnInit {
       }
     }
     let email: any = event.filter || ''
-    this.userService.getUserListShare(this.organization_id_user_login, email, '','').subscribe((response) => {
-      if (response) {
+    this.userService.getUserListShare(this.organization_id_user_login, '', '',email).subscribe((response) => {
+      if (response?.length > 0) {
         for (const item of response) {
-          if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
+          if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email && (item.login_type === 'EMAIL' || item.login_type === 'EMAIL_AND_SDT')) {
             this.userList.push({email: item.email});
             if(this.currentUser?.loginType === 'EMAIL' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
               this.userList = this.userList.filter((p: any) => p.email != emailLogin);
