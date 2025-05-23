@@ -652,6 +652,7 @@ export class ContractSignatureComponent implements OnInit {
           .subscribe(
             (data) => {
               this.contracts = data.entities;
+              this.contractDownloadList = data.entities;
               this.pageTotal = data.total_elements;
               if (this.pageTotal == 0) {
                 this.p = 0;
