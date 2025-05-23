@@ -123,18 +123,18 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
       this.userService.getUserListShare(orgId, "", "","").subscribe(data => {
         if(this.currentUser?.loginType === 'EMAIL'){
-          let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
+          let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1 && (p.login_type === 'EMAIL' || p.login_type === 'EMAIL_AND_SDT'));
           this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
-          let dataPhoneFilter = data?.filter((p: any) => p.status == 1);
+          let dataPhoneFilter = data?.filter((p: any) => p.status == 1 && (p.login_type === 'SDT' || p.login_type === 'EMAIL_AND_SDT'));
           this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
         } else if(this.currentUser?.loginType === 'SDT'){
-          let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1);
+          let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1 && (p.login_type === 'SDT' || p.login_type === 'EMAIL_AND_SDT'));
           this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
-          let dataFilter = data?.filter((p: any) => p.status == 1);
+          let dataFilter = data?.filter((p: any) => p.status == 1 && (p.login_type === 'EMAIL' || p.login_type === 'EMAIL_AND_SDT'));
           this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
         } else if(this.currentUser?.loginType === 'EMAIL_AND_SDT'){
-          let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
-          let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1);
+          let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1 && (p.login_type === 'EMAIL' || p.login_type === 'EMAIL_AND_SDT'));
+          let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1 && (p.login_type === 'SDT' || p.login_type === 'EMAIL_AND_SDT'));
           // chi lay danh sach user chua duoc chia se
           this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
           this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));

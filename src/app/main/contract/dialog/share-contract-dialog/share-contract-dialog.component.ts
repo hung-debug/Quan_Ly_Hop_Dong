@@ -100,8 +100,8 @@ export class ShareContractDialogComponent implements OnInit {
     
     this.userService.getUserListShareOrg(orgId, "","","").subscribe(data => {
 
-      this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
-      this.listPhone = data.entities.filter((p: any) => p.phone != phoneLogin && p.status == 1);
+      this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1 && (p.login_type === 'EMAIL' || p.login_type === 'EMAIL_AND_SDT'));
+      this.listPhone = data.entities.filter((p: any) => p.phone != phoneLogin && p.status == 1 && (p.login_type === 'SDT' || p.login_type === 'EMAIL_AND_SDT'));
 
       this.addFormUser = this.fbd.group({
         orgId: orgId,
