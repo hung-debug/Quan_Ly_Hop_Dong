@@ -652,6 +652,7 @@ export class ContractSignatureComponent implements OnInit {
           .subscribe(
             (data) => {
               this.contracts = data.entities;
+              this.contractDownloadList = data.entities;
               this.pageTotal = data.total_elements;
               if (this.pageTotal == 0) {
                 this.p = 0;
@@ -661,24 +662,45 @@ export class ContractSignatureComponent implements OnInit {
                 this.setPage();
               }
               this.spinner.hide();
-              this.contracts.forEach((key: any, v: any) => {
-                this.contracts[v].contractId = key.participant.contract.id;
-                this.contracts[v].contractName = key.participant.contract.name;
-                this.contracts[v].contractNumber =
-                  key.participant.contract.code;
-                this.contracts[v].contractSignTime =
-                  key.participant.contract.sign_time;
-                this.contracts[v].contractCreateTime =
-                  key.participant.contract.created_time;
-                this.contracts[v].contractStatus =
-                  key.participant.contract.status;
-                this.contracts[v].contractCecaPush =
-                  key.participant.contract.ceca_push;
-                this.contracts[v].contractCecaStatus =
-                  key.participant.contract.ceca_status;
-                this.contracts[v].contractReleaseState =
-                  key.participant.contract.release_state;
-              });
+              if(this.typeDisplay === 'downloadMany'){
+                this.contractDownloadList.forEach((key: any, v: any) => {
+                  this.contractDownloadList[v].contractId = key.participant.contract.id;
+                  this.contractDownloadList[v].contractName = key.participant.contract.name;
+                  this.contractDownloadList[v].contractNumber =
+                    key.participant.contract.code;
+                  this.contractDownloadList[v].contractSignTime =
+                    key.participant.contract.sign_time;
+                  this.contractDownloadList[v].contractCreateTime =
+                    key.participant.contract.created_time;
+                  this.contractDownloadList[v].contractStatus =
+                    key.participant.contract.status;
+                  this.contractDownloadList[v].contractCecaPush =
+                    key.participant.contract.ceca_push;
+                  this.contractDownloadList[v].contractCecaStatus =
+                    key.participant.contract.ceca_status;
+                  this.contractDownloadList[v].contractReleaseState =
+                    key.participant.contract.release_state;
+                });
+              } else{
+                this.contracts.forEach((key: any, v: any) => {
+                  this.contracts[v].contractId = key.participant.contract.id;
+                  this.contracts[v].contractName = key.participant.contract.name;
+                  this.contracts[v].contractNumber =
+                    key.participant.contract.code;
+                  this.contracts[v].contractSignTime =
+                    key.participant.contract.sign_time;
+                  this.contracts[v].contractCreateTime =
+                    key.participant.contract.created_time;
+                  this.contracts[v].contractStatus =
+                    key.participant.contract.status;
+                  this.contracts[v].contractCecaPush =
+                    key.participant.contract.ceca_push;
+                  this.contracts[v].contractCecaStatus =
+                    key.participant.contract.ceca_status;
+                  this.contracts[v].contractReleaseState =
+                    key.participant.contract.release_state;
+                });
+              }
             },
             (error) => {
               setTimeout(() => this.router.navigate(['/login']));
