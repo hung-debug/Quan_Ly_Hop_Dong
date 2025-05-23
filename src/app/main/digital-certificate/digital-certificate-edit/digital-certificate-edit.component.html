@@ -30,7 +30,7 @@
     <div class="row" style="padding-top: 20px;">
       <div class="col-md-12">
         <div class="label text-color">{{'email.user' | translate}}
-          <span class="required-title">*</span>
+          <!-- <span class="required-title">*</span> -->
         </div>
         <div>
           <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
@@ -46,10 +46,10 @@
       </div>
     </div>
     
-    <div class="row" style="padding-top: 20px;">
+    <div class="row" style="padding-top: 20px;" *ngIf="environment.flag == 'KD'">
       <div class="col-md-12">
         <div class="label text-color">{{'phone.user' | translate}}
-          <span class="required-title">*</span>
+          <!-- <span class="required-title">*</span> -->
         </div>
         <div>
           <p-multiSelect panelStyleClass="font" appendTo="body" [options]="phoneList" formControlName="phone"

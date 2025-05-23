@@ -25,6 +25,8 @@ export class ShareContractDialogComponent implements OnInit {
   listPhone: Array<any> = [];
   submitted = false;
   submittedUser = false;
+  organization_id: any;
+  currentUser: any
   get f() { return this.addForm.controls; }
   get fUser() { return this.addFormUser.controls; }
 
@@ -51,6 +53,10 @@ export class ShareContractDialogComponent implements OnInit {
         email: this.fbd.control("", [Validators.required]),
         phone: this.fbd.control("", [Validators.required]),
       });
+      
+      this.currentUser = JSON.parse(
+        localStorage.getItem('currentUser') || ''
+      ).customer.info;
     }
 
   ngOnInit(): void {
@@ -90,8 +96,9 @@ export class ShareContractDialogComponent implements OnInit {
 
     let emailLogin = this.userService.getAuthCurrentUser().email;
     let phoneLogin = this.userService.getAuthCurrentUser().phone;
+    this.organization_id = orgId;
     
-    this.userService.getUserList(orgId, "","").subscribe(data => {
+    this.userService.getUserListShareOrg(orgId, "","","").subscribe(data => {
 
       this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
       this.listPhone = data.entities.filter((p: any) => p.phone != phoneLogin && p.status == 1);
@@ -104,6 +111,85 @@ export class ShareContractDialogComponent implements OnInit {
       });
     });
   }
+  
+  changeOrg(){
+    this.addForm.patchValue({
+      email: this.addFormUser.value.email? this.addFormUser.value.email : [],
+      phone: this.addFormUser.value.phone? this.addFormUser.value.phone : [],
+    })
+    this.getListAllEmailOnFillter(this.organization_id);
+    this.getListAllPhoneOnFillter(this.organization_id);
+  }
+  
+  getListAllEmailOnFillter(event: any) {
+    this.userList = [];
+    let emailLogin = this.userService.getAuthCurrentUser().email;
+    if (this.addFormUser.value.email.length > 0) {
+      for (const item of this.addFormUser.value.email) {
+        this.userList.push({email: item})
+      }
+    }
+    let email: any = event.filter || ''
+    this.userService.getUserListShareOrg(this.organization_id,'','',email || '').subscribe((response) => {
+      if (response) {
+        for (const item of response.entities) {
+          if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
+            this.userList.push({email: item.email});
+            if(this.currentUser?.loginType === 'EMAIL' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+              this.userList = this.userList.filter((p: any) => p.email != emailLogin);
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  getListAllPhoneOnFillter(event: any) {
+    this.listPhone = [];
+    let phoneLogin = this.userService.getAuthCurrentUser().phone;
+    if (this.addFormUser.value.phone.length > 0) {
+      for (const item of this.addFormUser.value.phone) {
+        this.listPhone.push({phone: item})
+      }
+    }
+    let phone: any = event.filter || ''
+    this.userService.getUserListShareOrg(this.organization_id,'',phone || '','').subscribe((response) => {
+      if (response) {
+        for (const item of response.entities) {
+          if (item?.phone != this.listPhone.find((value: any) => value.phone == item.phone)?.phone) {
+            this.listPhone.push({phone: item.phone});
+            if(this.currentUser?.loginType === 'SDT' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+              this.listPhone = this.listPhone.filter((p: any) => p.phone != phoneLogin);
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  onSelectionChangeEmail() {
+    let selectedValues = []
+    selectedValues = this.addFormUser.get('email')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.userList.find((opt: any) => opt.email === value);
+      if (option) {
+        value = option.email;
+      }
+    });
+    this.addFormUser.patchValue({ email: selectedValues });
+  }
+  
+  onSelectionChangePhone() {
+    let selectedValues = []
+    selectedValues = this.addFormUser.get('phone')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.listPhone.find((opt: any) => opt.phone === value);
+      if (option) {
+        value = option.phone;
+      }
+    });
+    this.addFormUser.patchValue({ phone: selectedValues });
+  }
 
   //email:any;
   emailArr:any[] = [];
@@ -111,6 +197,8 @@ export class ShareContractDialogComponent implements OnInit {
   phoneArr:any[] = [];
   checkPhoneError:boolean;
   onSubmit() {
+    console.log("current",this.currentUser);
+    
     this.emailArr = [];
     this.phoneArr = [];
     if(this.type == 1){
@@ -145,12 +233,15 @@ export class ShareContractDialogComponent implements OnInit {
           if(!this.isValidEmail(valueEmail)){
             this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + valueEmail + ' sai định dạng', "", 3000);
             this.checkEmailError = true;
-          } else if(valueEmail == emailLogin){
-            this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ cho chính mình', "", 3000);
+            this.checkPhoneError = true;
+          } else if(valueEmail == emailLogin && (this.currentUser?.loginType === 'EMAIL' || this.currentUser?.loginType === 'EMAIL_AND_SDT')){
+            this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ Email cho chính mình', "", 3000);
             this.checkEmailError = true;
+            this.checkPhoneError = true;
           } else if (emailDup.has(valueEmail)) {
             this.toastService.showErrorHTMLWithTimeout(`Email "${valueEmail}" đã được nhập nhiều lần`, "", 3000);
             this.checkEmailError = true;
+            this.checkPhoneError = true;
           } else {
             emailDup.add(valueEmail);
             this.emailArr.push(valueEmail);
@@ -164,12 +255,15 @@ export class ShareContractDialogComponent implements OnInit {
           if(!this.isValidPhone(valuePhone)){
             this.toastService.showErrorHTMLWithTimeout('Tồn tại số điện thoại ' + valuePhone + ' sai định dạng', "", 3000);
             this.checkPhoneError = true;
-          } else if(valuePhone == phoneLogin){
-            this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ cho chính mình', "", 3000);
+            this.checkEmailError = true;
+          } else if(valuePhone == phoneLogin && (this.currentUser?.loginType === 'SDT' || this.currentUser?.loginType === 'EMAIL_AND_SDT')){
+            this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ Số điện thoại cho chính mình', "", 3000);
             this.checkPhoneError = true;
+            this.checkEmailError = true;
           } else if (phoneDup.has(valuePhone)) {
             this.toastService.showErrorHTMLWithTimeout(`Số điện thoại "${valuePhone}" đã được nhập nhiều lần`, "", 3000);
             this.checkPhoneError = true;
+            this.checkEmailError = true;
           } else {
             phoneDup.add(valuePhone);
             this.phoneArr.push(valuePhone);
@@ -215,7 +309,7 @@ export class ShareContractDialogComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập Email hoặc SĐT chia sẻ', "", 3000);
         return;
       }
-
+      
       this.contractService.shareContract(this.addFormUser.value.email,this.addFormUser.value.phone, this.data.id).subscribe(data => {
 
         if(data.contract_id != null){

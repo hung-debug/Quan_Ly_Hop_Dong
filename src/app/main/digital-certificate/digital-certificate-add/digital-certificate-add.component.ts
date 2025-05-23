@@ -17,6 +17,7 @@ import { DigitalCertificateService } from 'src/app/service/digital-certificate.s
 import { UserService } from 'src/app/service/user.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { UnitService } from 'src/app/service/unit.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user',
@@ -56,7 +57,8 @@ export class DigitalCertificateAddComponent implements OnInit {
   listOrgCombobox: any[];
   selectedNodeOrganization:any = '';
   organization_id:any = "";
-  currentOrgId: any = ""
+  currentOrgId: any = "";
+  environment: any = "";
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -77,6 +79,7 @@ export class DigitalCertificateAddComponent implements OnInit {
       orgId: this.fbd.control("", [Validators.required]),
       status: 1,
     });
+    this.environment = environment
   }
   async ngOnInit(): Promise<void> {
     this.currentOrgId = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId.toString()
@@ -166,8 +169,8 @@ export class DigitalCertificateAddComponent implements OnInit {
   changeOrg(){
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.addForm.patchValue({
-      email: this.addForm.value.email? this.addForm.value.email : [],
-      phone: this.addForm.value.phone? this.addForm.value.phone : []
+      email: this.addForm.value.email.trim() ? this.addForm.value.email.trim() : [],
+      phone: this.addForm.value.phone.trim() ? this.addForm.value.phone.trim() : []
     })
     this.getListAllEmailOnFillter(this.organization_id);
     this.getListAllPhoneOnFillter(this.organization_id)
@@ -256,8 +259,10 @@ export class DigitalCertificateAddComponent implements OnInit {
         this.phoneList.push({phone: item})
       }
     }
-    let phone: any = event.filter || '';
-    // let emailLogin = this.userService.getAuthCurrentUser().email;
+    let inputPhone = event.filter || '';
+    // let phone: any = event.filter || '';
+    let phone: any = inputPhone.trim();
+
     this.DigitalCertificateService.getListOrgByPhone(phone,this.addForm.value.orgId.data || '').subscribe((response) => {
       if (response && response.length > 0) {
         for (const item of response) {

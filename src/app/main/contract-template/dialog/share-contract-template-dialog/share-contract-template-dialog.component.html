@@ -47,6 +47,8 @@
                         [filter]="true"
                         filterBy="email"
                         [showClear]="true"
+                        (onFilter)="getListAllEmailOnFillter($event)"  
+                        (onChange)="onSelectionChangeEmail()"
                         ></p-multiSelect>
                 </div>
                 <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
@@ -62,7 +64,7 @@
                 <p-multiSelect
                     panelStyleClass="font"
                     appendTo="body"
-                    [options]="userList"
+                    [options]="phoneList"
                     formControlName="phone"
                     optionLabel="phone"
                     optionValue="phone"
@@ -70,6 +72,8 @@
                     [filter]="true"
                     filterBy="phone"
                     [showClear]="true"
+                    (onFilter)="getListAllPhoneOnFillter($event)"  
+                    (onChange)="onSelectionChangePhone()"
                     ></p-multiSelect>
             </div>
             <!-- <div *ngIf="submittedUser && fUser.email.errors" class="invalid">

@@ -445,11 +445,52 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 this.customerAnalysis.pushData(analysisData);  
               } catch (error) {
                 console.error("Lấy token hoặc push dữ liệu thất bại:", error);
-              }       
+              }
+              if (sessionStorage.getItem("url")){
+                let urlLink = sessionStorage.getItem("url");
+                let isContractId: any = "";
+                let isRecipientId: any = "";
+
+                if (urlLink) {
+                  let url_check = urlLink.split("/")[urlLink.split("/").length - 1];
+                  isContractId = Number(url_check.split("?")[0]);
+
+                  if (url_check.includes(this.kyTuCach)) {
+                    let data_contractId = url_check.split(this.kyTuCach)[0];
+                    let is_check_contractId = data_contractId.split("?")[url_check.split("?").length - 1];
+                    isRecipientId = is_check_contractId.split("=")[is_check_contractId.split("=").length - 1];
+                  } else {
+                    let is_RecipientId = url_check.split("?")[url_check.split("?").length - 1];
+                    isRecipientId = is_RecipientId.split("=")[is_RecipientId.split("=").length - 1];
+                  }
+                  if (urlLink.includes(this.coordinates)) {
+                    this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
+                  } else if (urlLink.includes(this.consider)) {
+                    this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
+                      {
+                        queryParams: {'recipientId': isRecipientId}
+                      });
+                  } else if (urlLink.includes(this.secretary)) {
+                    this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
+                      {
+                        queryParams: {'recipientId': isRecipientId}
+                      });
+                  } else if (urlLink.includes(this.signatures)) {
+                    this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
+                      {
+                        queryParams: {'recipientId': isRecipientId}
+                      });
+                  } else if (urlLink.includes('contract-template')) {
+                    this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
+                  } else if (urlLink.includes('form-contract')) {
+                    this.router.navigate(['/main/form-contract/detail/' + isContractId]);
+                  }
+                }
+              } else {   
               setTimeout(() => {
                 this.router.navigate(['/main/dashboard'])
                 this.isSSOlogin = false
-              }, 1000);
+              }, 1000);}
               break;
             case '01':
               this.toastService.showErrorHTMLWithTimeout('Tài khoản không hoạt động','',3000)
@@ -620,6 +661,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
         backdrop: 'static',
         keyboard: false,
         panelClass: 'custom-modalbox',
+        data: {
+        urlQ: sessionStorage.getItem("url"),
+        urlEmail: sessionStorage.getItem("recipientEmail")|| sessionStorage.getItem("mail"),
+      }
       })
       dialogRef.afterClosed().subscribe((result: any) => {
 

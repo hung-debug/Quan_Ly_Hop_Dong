@@ -21,6 +21,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   userList: Array<any> = [];
+  phoneList: Array<any> = [];
   submittedUser = false;
 
   isList: string = 'off';
@@ -28,6 +29,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   cols: any[];
   list: any[] = [];
   orgListTmp:any[] = [];
+  currentUser: any;
 
   get fUser() { return this.addFormUser.controls; }
 
@@ -52,6 +54,10 @@ export class ShareContractTemplateDialogComponent implements OnInit {
         { label: 'btn.share', value: 'off' },
         { label: 'btn.list', value: 'on' },
       ];
+      
+      this.currentUser = JSON.parse(
+        localStorage.getItem('currentUser') || ''
+      ).customer.info;
     }
 
   organization_id_user_login:any;
@@ -111,17 +117,103 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   getUserByOrg(orgId:any){
 
     let emailLogin = this.userService.getAuthCurrentUser().email;
+    let phoneLogin = this.userService.getAuthCurrentUser().phone;
 
     //lay danh sach email da duoc chia se
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
-      this.userService.getUserListShare(orgId, "","").subscribe(data => {
-        let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
-        //chi lay danh sach user chua duoc chia se
-        this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+      this.userService.getUserListShare(orgId, "", "","").subscribe(data => {
+        if(this.currentUser?.loginType === 'EMAIL'){
+          let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
+          this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+          let dataPhoneFilter = data?.filter((p: any) => p.status == 1);
+          this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
+        } else if(this.currentUser?.loginType === 'SDT'){
+          let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1);
+          this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
+          let dataFilter = data?.filter((p: any) => p.status == 1);
+          this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+        } else if(this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+          let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
+          let dataPhoneFilter = data?.filter((p: any) => p.phone != phoneLogin && p.status == 1);
+          // chi lay danh sach user chua duoc chia se
+          this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+          this.phoneList = dataPhoneFilter.filter((phone:any) => !listShared.some((phoneList:any) => phone.email === phoneList.email));
+        }
       });
     });
 
 
+  }
+  
+  getListAllPhoneOnFillter(event: any) {
+    this.phoneList = [];
+    let phoneLogin = this.userService.getAuthCurrentUser().phone;
+    if (this.addFormUser.value.phone.length > 0) {
+      for (const item of this.addFormUser.value.phone) {
+        this.phoneList.push({phone: item})
+      }
+    }
+    let phone: any = event.filter || ''
+    this.userService.getUserListShare(this.organization_id_user_login,'', phone,'').subscribe((response) => {
+      console.log("respon",response);
+      if (response) {
+        for (const item of response) {
+          if (item?.phone != this.phoneList.find((value: any) => value.phone == item.phone)?.phone) {
+            this.phoneList.push({phone: item.phone});
+            if(this.currentUser?.loginType === 'SDT' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+              this.phoneList = this.phoneList.filter((p: any) => p.phone != phoneLogin);
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  onSelectionChangePhone() {
+    let selectedValues = []
+    selectedValues = this.addFormUser.get('phone')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.phoneList.find((opt: any) => opt.phone === value);
+      if (option) {
+        value = option.phone;
+      }
+    });
+    this.addFormUser.patchValue({ phone: selectedValues });
+  }
+  
+  getListAllEmailOnFillter(event: any) {
+    this.userList = [];
+    let emailLogin = this.userService.getAuthCurrentUser().email;
+    if (this.addFormUser.value.email.length > 0) {
+      for (const item of this.addFormUser.value.email) {
+        this.userList.push({email: item})
+      }
+    }
+    let email: any = event.filter || ''
+    this.userService.getUserListShare(this.organization_id_user_login, email, '','').subscribe((response) => {
+      if (response) {
+        for (const item of response) {
+          if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
+            this.userList.push({email: item.email});
+            if(this.currentUser?.loginType === 'EMAIL' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
+              this.userList = this.userList.filter((p: any) => p.email != emailLogin);
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  onSelectionChangeEmail() {
+    let selectedValues = []
+    selectedValues = this.addFormUser.get('email')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.userList.find((opt: any) => opt.email === value);
+      if (option) {
+        value = option.email;
+      }
+    });
+    this.addFormUser.patchValue({ email: selectedValues });
   }
 
   //email:any;

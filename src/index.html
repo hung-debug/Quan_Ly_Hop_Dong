@@ -20,21 +20,6 @@
     
     gtag('config', 'G-FX0NLN13RT');
   </script> -->
-  <style>
-    html, body {
-      touch-action: manipulation;
-      -ms-touch-action: manipulation;
-      overflow-x: hidden;
-    }
-
-    input, button, select, textarea, label {
-      touch-action: manipulation;
-    }
-
-    * {
-      -webkit-tap-highlight-color: transparent;
-    }
-  </style>
 <script>
 
   window.addEventListener('load', function() {
@@ -72,9 +57,15 @@
 
 </head>
 <body class="mat-typography" style="background-color: var(--BG, #F3F6FA);">
+  <script>
+    const isMobile = /iPhone|iPod|iPad|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (!isMobile) {
+      document.write('<script src="https://econtractdev.mobifone.ai/script_econtract_tla/script_econtract_tla.js"><\/script>');
+    }
+  </script>
   <app-root></app-root>
 
-  <script>
+  <!-- <script>
     document.addEventListener('gesturestart', function (e) {
       e.preventDefault();
     });
@@ -90,7 +81,7 @@
         e.preventDefault();
       }
     }, { passive: false });
-  </script>
+  </script> -->
   <!-- =====================Under Maintenence Page======================= -->
   <!-- <div style="text-align: center; padding-top: 165px">
     <img style="

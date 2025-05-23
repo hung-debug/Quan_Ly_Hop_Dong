@@ -175,17 +175,29 @@
     </div>
    
     <div *ngIf="this.mobile" class="pdf-viewer-custom">
-      <pdf-viewer [src]="pdfSrc"
-      [render-text]="true"
-      style="width: 100%; height: calc(60vh); border: 1px;"
-      [fit-to-page]="true"
-      [show-borders]="true"
-      [show-all]="true"
-      [(page)]="pageMobile"
-      [stick-to-page]="true"
-      (after-load-complete)="afterLoadComplete($event)"
-      (pagechanging)="pagechanging($event)"
-      ></pdf-viewer>
+      <div class="pdf-viewer-custom">
+        <div class="zoom-controls">
+          <img *ngIf="zoomMobile < 5.0" (click)="zoomIn()" src="assets/img/cong.svg" alt="Zoom In">
+          <img *ngIf="zoomMobile >= 5.0" src="assets/img/cong_disable.svg" alt="Zoom In Disabled">
+
+          <!-- Nút Zoom Out -->
+          <img *ngIf="zoomMobile > 1.0" (click)="zoomOut()" src="assets/img/tru.svg" alt="Zoom Out">
+          <img *ngIf="zoomMobile <= 1.0" src="assets/img/tru_disable.svg" alt="Zoom Out Disabled">
+        </div>
+
+        <pdf-viewer [src]="pdfSrc"
+        [render-text]="true"
+        style="width: 100%; height: calc(67vh); border: 1px;"
+        [fit-to-page]="true"
+        [show-borders]="true"
+        [show-all]="true"
+        [(page)]="pageMobile"
+        [stick-to-page]="true"
+        [zoom]="zoomMobile"
+        (after-load-complete)="afterLoadComplete($event)"
+        (pagechanging)="pagechanging($event)"
+        ></pdf-viewer>
+      </div>
     
       <div style="display: flex; justify-content: center;margin-top: 10px;">
         <button class="call-page input1" (click)="firstPageMobile()">
@@ -197,7 +209,7 @@
             <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
         </button>
     
-        <input class="input1 no-focus" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
+        <input class="input1 no-focus" [(ngModel)]="pageMobile" type="text" [style.width]="(((pageMobile || 1).toString().length) * 10 + 15) + 'px'"/>&nbsp;/ &nbsp;{{this.pageNumber}}
 
         <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPageMobile()" id="prev">
             <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">

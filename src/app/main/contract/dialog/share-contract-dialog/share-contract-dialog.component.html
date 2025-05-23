@@ -58,7 +58,6 @@
                 <div>
                     <p-dropdown 
                         panelStyleClass="font"
-                        appendTo="body"
                         [options]="orgList" 
                         formControlName="orgId" 
                         optionLabel="name" 
@@ -68,6 +67,7 @@
                         filterBy="name" 
                         [showClear]="true"  
                         (onChange)="getUserByOrg(orgId.value)"
+                        (onNodeSelect)="changeOrg()"
                         #orgId
                         ></p-dropdown>
                 </div>
@@ -79,7 +79,6 @@
                 <div>
                     <p-multiSelect 
                         panelStyleClass="font"
-                        appendTo="body"
                         [options]="userList" 
                         formControlName="email" 
                         optionLabel="email" 
@@ -87,7 +86,9 @@
                         placeholder="Chọn email" 
                         [filter]="true" 
                         filterBy="email" 
-                        [showClear]="true"  
+                        [showClear]="true"
+                        (onFilter)="getListAllEmailOnFillter($event)"  
+                        (onChange)="onSelectionChangeEmail()"
                         ></p-multiSelect>
                 </div>
                 <!-- <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
@@ -102,7 +103,6 @@
               <div>
                   <p-multiSelect 
                       panelStyleClass="font"
-                      appendTo="body"
                       [options]="listPhone" 
                       formControlName="phone" 
                       optionLabel="phone" 
@@ -111,6 +111,8 @@
                       [filter]="true" 
                       filterBy="phone" 
                       [showClear]="true"  
+                      (onFilter)="getListAllPhoneOnFillter($event)"  
+                      (onChange)="onSelectionChangePhone()"
                       ></p-multiSelect>
               </div>
               <!-- <div *ngIf="submittedUser && fUser.email.errors" class="invalid">

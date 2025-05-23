@@ -8,7 +8,7 @@ import {
   OnInit,
   Output,
   QueryList,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { ContractService } from '../../../../service/contract.service';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -56,6 +56,8 @@ import { WebsocketService } from 'src/app/service/websocket.service';
 import { environment } from 'src/environments/environment';
 import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { RemoteCertSelectionDialogComponent } from './remote-cert-dialog/remote-cert-selection-dialog.component';
+import { RemoteCertificate } from './remote-cert-dialog/remote-certificate.interface';
 
 @Component({
   selector: 'app-consider-contract',
@@ -239,6 +241,7 @@ export class ConsiderContractComponent
   ];
   contract_no: any;
   typeUser: any;
+  serialNumber: string;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -279,6 +282,7 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    console.log('ngOnInit');
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
     // if(this.isBonBon) {
@@ -1103,6 +1107,9 @@ export class ConsiderContractComponent
   eventMouseover() { }
 
   ngAfterViewInit() {
+    if(this.mobile) {
+      this.preventGestureZoom()
+    }
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -2847,6 +2854,7 @@ export class ConsiderContractComponent
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
               uuid: this.dataHsm.uuid,
+              confirmConsider: this.dataHsm.uuid,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null : (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           } else {
@@ -2858,6 +2866,7 @@ export class ConsiderContractComponent
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
               uuid: this.dataHsm.uuid,
+              confirmConsider: this.dataHsm.uuid,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
@@ -2905,6 +2914,24 @@ export class ConsiderContractComponent
                 return false;
               } else {
                 if (checkSign.success === true) {
+                  if(this.dataHsm.confirmConsider && this.typeUser != 1) {
+                    try{
+                      let saveInfoSingHsm = await this.userService.saveInfoSingHsm(this.dataHsm).toPromise();
+                      if(!saveInfoSingHsm.status) {
+                          this.toastService.showErrorHTMLWithTimeout(
+                          saveInfoSingHsm.message,
+                          '',
+                          3000
+                        );   
+                      }
+                    } catch(err) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lưu thông tin ký số cho lần ký sau thất bại',
+                        '',
+                        3000
+                      );
+                    }
+                  }
                   if (pdfC2) {
                     fileC = pdfC2.path;
                   } else if (pdfC1) {
@@ -2937,6 +2964,24 @@ export class ConsiderContractComponent
                 return false;
               } else {
                 if (checkSign.success === true) {
+                  if(this.dataHsm.confirmConsider && this.typeUser != 1) {
+                    try{
+                      let saveInfoSingHsm = await this.userService.saveInfoSingHsm(this.dataHsm).toPromise();
+                      if(!saveInfoSingHsm.status) {
+                          this.toastService.showErrorHTMLWithTimeout(
+                          saveInfoSingHsm.message,
+                          '',
+                          3000
+                        );   
+                      }
+                    } catch(err) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lưu thông tin ký số cho lần ký sau thất bại',
+                        '',
+                        3000
+                      );
+                    }
+                  }
                   if (pdfC2) {
                     fileC = pdfC2.path;
                   } else if (pdfC1) {
@@ -3348,7 +3393,6 @@ export class ConsiderContractComponent
               imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
-
             if (fileC && objSign.length) {
               try {
                 const checkSign = await this.contractService.signRemote(
@@ -3357,7 +3401,8 @@ export class ConsiderContractComponent
                   this.isTimestamp,
                   signUpdate.type,
                   supplierID,
-                  this.phoneMobiCA
+                  this.phoneMobiCA,
+                  this.serialNumber
                 );
                 // this.statusSign = checkSign;   
                 if (!checkSign || (checkSign && !checkSign.success)) {
@@ -3411,7 +3456,8 @@ export class ConsiderContractComponent
                     this.isTimestamp,
                     signUpdate.type,
                     supplierID,
-                    this.phoneMobiCA
+                    this.phoneMobiCA,
+                    this.serialNumber
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -4664,15 +4710,7 @@ export class ConsiderContractComponent
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    if (localStorage.getItem('lang') == 'vi') {
-      rejectQuestion =
-        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
-      confirm = 'Xác nhận';
-      cancel = 'Huỷ';
-      cancelSuccess = 'Từ chối tài liệu thành công';
-      error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
-      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
-    } else if (localStorage.getItem('lang') == 'en') {
+    if (localStorage.getItem('lang') == 'en') {
       rejectQuestion =
         'Are you sure want to decline this contract? Please enter the reason';
       confirm = 'Confirm';
@@ -4680,6 +4718,14 @@ export class ConsiderContractComponent
       cancelSuccess = 'Successfully refused contract';
       error = 'Error! Please contact to developers';
       rejectReason = 'You need to enter the reason for refusing the contract';
+    } else {
+      rejectQuestion =
+        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
+      confirm = 'Xác nhận';
+      cancel = 'Huỷ';
+      cancelSuccess = 'Từ chối tài liệu thành công';
+      error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
+      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
     }
 
     this.rejectContractLang(
@@ -5192,6 +5238,7 @@ export class ConsiderContractComponent
           this.dataHsm.password = result.password;
           this.dataHsm.password2 = result.password2;
           this.dataHsm.uuid = result.uuid;
+          this.dataHsm.confirmConsider = result.confirmConsider;
           await this.signContractSubmit();
         }
       });
@@ -5288,6 +5335,45 @@ export class ConsiderContractComponent
       const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(async (result: any) => {
+        if (result) {
+          this.supplierID = result.type;
+          this.dataCert.cert_id = result.ma_dvcs;
+          this.phoneMobiCA = result.phone;
+          this.suppliersRs = result.suppliers;
+        }
+        this.supplierID = result.type;
+        const userCode = result.ma_dvcs;
+        const phone = result.phone;
+        this.spinner.show();
+        let certificates: RemoteCertificate[] = [];
+        try {
+           certificates = await this.contractService.getRemoteSigningCertificates(this.supplierID, userCode, phone).toPromise();
+        } catch (error) {
+            await this.signContractSubmit(this.supplierID);
+        }
+        this.spinner.hide();
+        if (!certificates || certificates.length === 0) {
+            await this.signContractSubmit(this.supplierID); 
+          } else if (certificates.length === 1) {
+            await this.signContractSubmit(this.supplierID);}
+            else if (certificates.length > 1) {
+            // Trường hợp có nhiều hơn 1 chứng thư
+            const dialogConfigCert = new MatDialogConfig();
+            dialogConfigCert.width = '800px'; 
+            dialogConfigCert.data = { certificates: certificates };
+            dialogConfigCert.disableClose = true;
+            dialogConfigCert.panelClass = 'custom-dialog-container';
+
+            const dialogRefCert = this.dialog.open(RemoteCertSelectionDialogComponent, dialogConfigCert);
+            dialogRefCert.afterClosed().subscribe(async (selectedSerial: string | undefined) => {
+              if (selectedSerial) {
+                this.serialNumber = selectedSerial;
+                await this.signContractSubmit(this.supplierID);
+              } else {
+                this.spinner.hide();
+              }
+            });
+          }
         if(result.type == 2){
           this.loadingText =
           'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
@@ -5301,14 +5387,6 @@ export class ConsiderContractComponent
         // if (result?.type == '1') {
         //   isVnptSmartCA = true;
         // }
-        if (result) {
-          let supplierID = result.type;
-          this.supplierID = result.type;
-          this.dataCert.cert_id = result.ma_dvcs;
-          this.phoneMobiCA = result.phone;
-          this.suppliersRs = result.suppliers;
-          await this.signContractSubmit(supplierID);
-        }
       });
     })
   }
@@ -5699,21 +5777,20 @@ export class ConsiderContractComponent
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
     let result  = this.suppliersRs.find(item => item.id == code);
-    appName = result.name;
-    // switch (supplierID) {
-    //   case "vnpt":
-    //     appName = "VNPT SmartCA";
-    //     break;
-    //   case "MobiFoneCA":
-    //     appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
-    //     break;
-    //   case "mobiCA":
-    //     appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
-    //     break;
-    //   default:
-    //     appName = "CA2 Remote Signing";
-    //     break;
-    // }
+    switch (supplierID) {
+      case "vnpt":
+        appName = "VNPT SmartCA";
+        break;
+      case "MobiFoneCA":
+        appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      case "mobiCA":
+        appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      default:
+        appName = "CA2 Remote Signing";
+        break;
+    }
   
     switch (code) {
       case "QUA_THOI_GIAN_KY":
@@ -5973,5 +6050,70 @@ export class ConsiderContractComponent
       default:
         return false;
     }
+  }
+
+  zoomMobile = 1.0; // 100%
+
+  zoomIn() {
+    if (this.zoomMobile < 5.0) {
+      this.zoomMobile = +(this.zoomMobile + 0.5).toFixed(2);
+    }
+  }
+
+  zoomOut() {
+    if (this.zoomMobile > 1.0) {
+      this.zoomMobile = +(this.zoomMobile - 0.5).toFixed(2);
+    }
+  }
+
+  preventGestureZoom() {
+    // Ẩn scroll toàn trang
+    if(this.isBonBon) {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Chặn pinch-to-zoom ngay từ touchstart
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Chặn pinch-to-zoom khi đang di chuyển
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Chặn double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // iOS Safari gestures
+    document.addEventListener('gesturestart', e => e.preventDefault());
+    document.addEventListener('gesturechange', e => e.preventDefault());
+    document.addEventListener('gestureend', e => e.preventDefault());
+
+    // Desktop Ctrl + wheel
+    document.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Ctrl + key zoom
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
   }
 }

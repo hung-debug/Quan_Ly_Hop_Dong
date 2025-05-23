@@ -120,8 +120,8 @@ export class ContractSignatureService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-      email: email,
-      phone: phone,
+      email: email ? email : [],
+      phone: phone ? phone : [],
       contract_id: id
     });
     
