@@ -133,7 +133,7 @@ export class ShareContractDialogComponent implements OnInit {
     this.userService.getUserListShareOrg(this.organization_id,'','',email || '').subscribe((response) => {
       if (response) {
         for (const item of response.entities) {
-          if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email) {
+          if (item?.email != this.userList.find((value: any) => value.email == item.email)?.email  && (item.login_type === 'EMAIL' || item.login_type === 'EMAIL_AND_SDT')) {
             this.userList.push({email: item.email});
             if(this.currentUser?.loginType === 'EMAIL' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
               this.userList = this.userList.filter((p: any) => p.email != emailLogin);
@@ -156,7 +156,7 @@ export class ShareContractDialogComponent implements OnInit {
     this.userService.getUserListShareOrg(this.organization_id,'',phone || '','').subscribe((response) => {
       if (response) {
         for (const item of response.entities) {
-          if (item?.phone != this.listPhone.find((value: any) => value.phone == item.phone)?.phone) {
+          if (item?.phone != this.listPhone.find((value: any) => value.phone == item.phone)?.phone  && (item.login_type === 'SDT' || item.login_type === 'EMAIL_AND_SDT')) {
             this.listPhone.push({phone: item.phone});
             if(this.currentUser?.loginType === 'SDT' || this.currentUser?.loginType === 'EMAIL_AND_SDT'){
               this.listPhone = this.listPhone.filter((p: any) => p.phone != phoneLogin);
