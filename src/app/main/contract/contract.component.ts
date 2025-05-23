@@ -200,7 +200,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.status = params['status'];
         this.ascendSortActive = false;
         this.descendSortActive = false;
-
+  
         //set status
         this.convertStatusStr();
 
@@ -259,6 +259,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
   
+  
   sortContractList(value: any){
     this.getContractListByOrder(value);
   }
@@ -275,6 +276,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.ascendSortActive = false;
       this.descendSortActive = true;
     }
+
 
     this.roleMess = "";
     if (this.isOrg == 'off' && !this.isQLHD_05) {
