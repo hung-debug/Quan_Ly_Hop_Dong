@@ -76,8 +76,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log("this.data",this.datas);
-    
     if (this.datas.determine_contract)
       this.is_determine_clone = [...this.datas.determine_contract];
     else
@@ -85,17 +83,10 @@ export class DetermineSignerComponent implements OnInit {
   
     this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     
-    // console.log("this.is_determine_clone",this.is_determine_clone);
-    // console.log("this.data_parnter_organization",this.data_parnter_organization);
-    
     this.data_parnter_organization.forEach((data: any) =>{
       let dataSigner = data.recipients.filter((item: any) => item.role == 3);
-      // console.log("dataSigner",dataSigner);
       this.login_by = dataSigner[0]?.login_by;
-      // console.log("this.login_by",this.login_by);
-      
     })
-    // console.log("this.login_by11",this.login_by);
     this.isCheckRadio = this.login_by === "phone" ? false : true;
     
     this.dropdownSignTypeSettings = {
@@ -220,7 +211,7 @@ export class DetermineSignerComponent implements OnInit {
             count++;
             break;
           }
-          if (!dataArrPartner[j].recipients[k].email) {
+          if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k]?.login_by === 'email') {
             this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
             count++;
             break;
@@ -577,8 +568,21 @@ export class DetermineSignerComponent implements OnInit {
     
   }
   
-  changeTypeSign(d: any) {
-    d === 1 ? this.isCheckRadio = false : this.isCheckRadio = true
+  changeTypeSign(index: any, d: any) {
+    this.login_by = d.login_by
+    // index === 1 ? this.isCheckRadio = false : this.isCheckRadio = true;
+    this.isCheckRadio = index !== 1;
+
+    // Gán giá trị login_by tương ứng với radio được chọn
+    this.login_by = index === 1 ? 'phone' : 'email';
+    
+    // Gán lại cho d để giữ đồng bộ
+    d.login_by = this.login_by;
+    
+    if (d.login_by == 'phone' || d.login_by == 'email') {
+      d.email = '';
+      d.phone = '';
+    }
   }
 
   getValueData(data: any, index: any) {
