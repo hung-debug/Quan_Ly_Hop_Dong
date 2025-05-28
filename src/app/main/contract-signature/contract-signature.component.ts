@@ -4004,7 +4004,12 @@ export class ContractSignatureComponent implements OnInit {
           a.setAttribute('style', 'display: none');
           a.href = url;
           // a.download = 'Contracts'+ '_' + formattedDate;
-          a.download = name;
+          // a.download = name;
+          let fileName = name;
+          if (!fileName.toLowerCase().endsWith('.pdf')) {
+            fileName += '.pdf';
+          }
+          a.download = fileName;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
