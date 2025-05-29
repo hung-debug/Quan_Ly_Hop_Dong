@@ -203,7 +203,7 @@ export class DashboardComponent implements OnInit {
           let countNotiWarning: number = localStorage.getItem('countNoti') as any
           countNotiWarning++;
           localStorage.setItem("countNoti",countNotiWarning.toString())
-          if(count == '0'){
+          if(!dataOrg?.parent_id){
             countNotiWarning++;
             localStorage.setItem("countNoti",countNotiWarning.toString())
             this.currentDate = new Date();
