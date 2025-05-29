@@ -963,5 +963,7 @@
   "contract.cancel.doc":"Reason for document cancellation",
   "cancel.contract":"REASONS FOR DOCUMENT CANCELLATION",
   "save.information.hsm": "Save digital signature information for next signing",
-  "select.phone": "Select phone"
+  "select.phone": "Select phone",
+  "login.type": "Login type",
+  "email.and.phone": "Email and Phone"
 }

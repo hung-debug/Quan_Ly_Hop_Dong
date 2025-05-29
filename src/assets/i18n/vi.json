@@ -987,5 +987,7 @@
   "contract.cancel.doc":"Lý do hủy bỏ tài liệu",
   "cancel.contract": "LÝ DO HỦY BỎ TÀI LIỆU",
   "save.information.hsm": "Lưu thông tin ký số cho lần ký sau",
-  "select.phone": "Chọn số điện thoại"
+  "select.phone": "Chọn số điện thoại",
+  "login.type": "Hình thức đăng nhập",
+  "email.and.phone": "Email và SĐT"
 }
