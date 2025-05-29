@@ -1240,8 +1240,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
         document.body.appendChild(a);
         a.setAttribute('style', 'display: none');
         a.href = url;
-        // a.download = data.filename;
-        a.download = name;
+        a.download = data.filename;
+        // a.download = name;
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
@@ -1273,9 +1273,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          // a.download = 'Contracts'+ '_' + formattedDate;
-          // a.download = filteredData[0].filename;
-          a.download = name;
+          let fileName = name;
+          if (!fileName.toLowerCase().endsWith('.pdf')) {
+            fileName += '.pdf';
+          }
+          a.download = fileName;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
