@@ -7,6 +7,7 @@ import { UserService } from 'src/app/service/user.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { RoleService } from 'src/app/service/role.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -21,7 +22,8 @@ export class UserComponent implements OnInit {
     private importService: ImportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private translate: TranslateService
     ) { }
 
   organization_id_user_login:any;
@@ -36,6 +38,7 @@ export class UserComponent implements OnInit {
   totalRecords: number = 0;
   row: number = 15;
   page: number = 0;
+  login_type: any;
 
 
   //phan quyen
@@ -118,6 +121,7 @@ export class UserComponent implements OnInit {
       {header: 'unit.name', style:'text-align: left;' },
       {header: 'unit.status', style:'text-align: left;' },
       {header: 'menu.role.list', style:'text-align: left;' },
+      {header: 'login.type', style:'text-align: center;' },
       {header: 'unit.manage', style:'text-align: center;' },
     ];
   }
@@ -205,6 +209,19 @@ export class UserComponent implements OnInit {
       this.totalRecords = response.total_elements;
       // log
     });
+  }
+  
+  getLoginTypeText(type: string): string {
+    switch (type) {
+      case 'EMAIL':
+        return 'Email';
+      case 'SDT':
+        return this.translate.instant('user.phone');
+      case 'EMAIL_AND_SDT':
+        return this.translate.instant('email.and.phone');
+      default:
+        return '';
+    }
   }
   
   toRecord() {

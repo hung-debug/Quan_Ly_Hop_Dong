@@ -201,7 +201,7 @@ export class MainComponent implements OnInit {
   }
 
   checkSubTitle() {
-    return this.subTitle.length > 0;
+    return this.subTitle?.length > 0;
   }
 
   readAll(){
