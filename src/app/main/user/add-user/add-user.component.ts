@@ -431,7 +431,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       const checkEmail = await this.userService.getUserByEmail(data.email,data.login_type).toPromise(); 
         this.userService.updateUser(data).subscribe(
           dataOut => {
-            if(dataOut?.status == false){
+            if(dataOut?.status === false){
               this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
               this.spinner.hide();  
             }else{
