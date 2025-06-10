@@ -228,7 +228,8 @@ export class ForwardContractComponent implements OnInit {
     this.login = e.target.value;
     
     if(this.login == 'phone') {
-      this.dataSign = this.dataSign.filter((item: any) => item.id != 2 && item.id != 7);
+      console.log("1");
+      // this.dataSign = this.dataSign.filter((item: any) => item.id != 2 && item.id != 7);
 
       if(this.myForm.get('dataSign')?.value && this.myForm.get('dataSign')?.value.length > 0) {
         if(this.myForm.get('dataSign')?.value[0].id == 2) {
@@ -245,6 +246,7 @@ export class ForwardContractComponent implements OnInit {
       }
 
     } else {
+      console.log("2");
       const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
 
       if(currentRecipientData.sign_type.length > 0) {
