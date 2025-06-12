@@ -50,10 +50,10 @@ export class AuthenticationService {
   }
   loginAuthencation(username: string, password: string, type: number, isContractId: number | null) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    let body = JSON.stringify({email: username.trim().toLowerCase(), password: password, type: type});
+    let body = JSON.stringify({email: username.trim(), password: password, type: type});
 
     if(isContractId) {
-      body = JSON.stringify({email: username.trim().toLowerCase(), password: password, type, contractId: isContractId});
+      body = JSON.stringify({email: username.trim(), password: password, type, contractId: isContractId});
     }
 
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
