@@ -784,6 +784,17 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/main/contract/create/draft']);
     });
   }
+  buyPackage(){
+  const redirectUrl =
+    'https://auth-sso.mobifone.vn:8080/oauth/realms/sso-mobifone/protocol/openid-connect/auth?' +
+    'client_id=CBS_SOLUTION' +
+    '&scope=openid' +
+    '&response_type=code' +
+    '&redirect_uri=' +
+    encodeURIComponent('https://solutions.mobifone.vn/auth/callback/aHR0cHM6Ly9zb2x1dGlvbnMubW9iaWZvbmUudm4vdmkvaG9wLWRvbmctZGllbi10dS1tb2JpZm9uZS1lY29udHJhY3Q=');
+
+  window.open(redirectUrl, '_blank');
+  }
   
   clickAddContract(type: number){
     if (type === 1) {
