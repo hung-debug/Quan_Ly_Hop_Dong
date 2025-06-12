@@ -90,10 +90,7 @@
                 <td class="table_col_not_bold" *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
 
                 <td class="table_col_not_bold">{{list.role?.name}}</td>
-                <!-- <td class="table_col_not_bold" style="text-align: center" *ngIf="list.login_type === 'EMAIL'">Email</td>
-                <td class="table_col_not_bold" style="text-align: center" *ngIf="list.login_type === 'SDT'">{{'user.phone' | translate}}</td>
-                <td class="table_col_not_bold" style="text-align: center" *ngIf="list.login_type === 'EMAIL_AND_SDT'">{{'email.and.phone' | translate}}</td> -->
-                <td class="table_col_not_bold" style="text-align: center">
+                <td class="table_col_not_bold" style="text-align: center" *ngIf="environment.flag == 'KD'">
                   {{ getLoginTypeText(list.login_type) }}
                 </td>
                 <td class="table_col_not_bold" style="text-align: center">
