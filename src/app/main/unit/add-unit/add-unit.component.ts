@@ -94,13 +94,6 @@ export class AddUnitComponent implements OnInit {
           this.emailOld = data.email;
           this.phoneOld = data.phone;
 
-          // BẮT BUỘC gọi sau khi tạo form
-          const pid = this.addForm.get('parent_id')?.value;
-          if (!pid) {
-            this.addForm.get('taxCode')?.disable();
-          } else {
-            this.addForm.get('taxCode')?.enable();
-          }
       
           //set name
           if(data.parent_id != null){

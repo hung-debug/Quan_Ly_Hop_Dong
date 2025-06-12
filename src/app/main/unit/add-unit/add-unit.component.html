@@ -78,8 +78,8 @@
             <!--Mã số thuế-->
             <div class="col-md-6">
                 <div class="label text-color">{{'tax_code' | translate}}</div>
-                <div class="input-data" [ngClass]="{ 'hidden-color': addForm.get('taxCode')?.disabled }">
-                    <input type="text" formControlName="taxCode" [readonly]="addForm.get('taxCode')?.disabled" [ngClass]="{ 'hidden-color': addForm.get('taxCode')?.disabled }">
+                <div class="input-data" [ngClass]="{ 'hidden-color': !addForm.get('parent_id')?.value }">
+                    <input type="text" formControlName="taxCode" [readonly]="!addForm.get('parent_id')?.value" [ngClass]="{ 'hidden-color': !addForm.get('parent_id')?.value }">
                 </div>
                 <div *ngIf="submitted && f.taxCode.errors" class="invalid">
                     <div *ngIf="f.taxCode.errors.pattern">{{'Mã số thuế không đúng định dạng' | translate}}</div>
