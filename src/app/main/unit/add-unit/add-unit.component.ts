@@ -63,8 +63,6 @@ export class AddUnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.fileCeCaOptions = fileCeCaOptions;
-    console.log("this.currentUser",this.currentUser);
-    
     let orgId = this.userService.getInforUser().organization_id;
   
     this.datas = this.data;
@@ -95,6 +93,14 @@ export class AddUnitComponent implements OnInit {
           this.codeOld = data.code;
           this.emailOld = data.email;
           this.phoneOld = data.phone;
+
+          // BẮT BUỘC gọi sau khi tạo form
+          const pid = this.addForm.get('parent_id')?.value;
+          if (!pid) {
+            this.addForm.get('taxCode')?.disable();
+          } else {
+            this.addForm.get('taxCode')?.enable();
+          }
       
           //set name
           if(data.parent_id != null){
