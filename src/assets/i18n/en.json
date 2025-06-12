@@ -965,5 +965,6 @@
   "save.information.hsm": "Save digital signature information for next signing",
   "select.phone": "Select phone",
   "login.type": "Login type",
-  "email.and.phone": "Email and Phone"
+  "email.and.phone": "Email and Phone",
+  "buy.package": "Buy more package"
 }
