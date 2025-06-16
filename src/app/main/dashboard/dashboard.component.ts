@@ -791,7 +791,7 @@ export class DashboardComponent implements OnInit {
     '&scope=openid' +
     '&response_type=code' +
     '&redirect_uri=' +
-    encodeURIComponent('https://solutions.mobifone.vn/auth/callback/aHR0cHM6Ly9zb2x1dGlvbnMubW9iaWZvbmUudm4vdmkvaG9wLWRvbmctZGllbi10dS1tb2JpZm9uZS1lY29udHJhY3Q=');
+    encodeURIComponent('http://10.38.23.153/auth/callback/aHR0cDovLzEwLjM4LjIzLjE1My92aS9ob3AtZG9uZy1kaWVuLXR1LW1vYmlmb25lLWVjb250cmFjdA==');
 
   window.open(redirectUrl, '_blank');
   }
