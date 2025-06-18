@@ -55,7 +55,7 @@ export class ContractTemplateService {
   //   return this.http.get("/assets/data-contract-template.json");
   // }
 
-  public getContractTemplateList(isShare: any, filter_name: any, filter_type: any, page: any, size: any): Observable<any> {
+  public getContractTemplateList(isShare: any, filter_name: any, filter_type: any, page: any, size: any, login_type: any): Observable<any> {
     this.getCurrentUser();
 
     if (page != "") {
@@ -68,7 +68,7 @@ export class ContractTemplateService {
     if (isShare == 'off') {
       listContractTemplateUrl = this.listContractTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
     } else {
-      listContractTemplateUrl = this.listContractShareTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
+      listContractTemplateUrl = this.listContractShareTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&login_type=" + login_type + "&page=" + page + "&size=" + size;
     }
     
     const headers = { 'Authorization': 'Bearer ' + this.token }
@@ -327,13 +327,14 @@ export class ContractTemplateService {
     return this.http.get<any>(this.getDataContractV2 + idContract, { headers });
   }
 
-  shareContract(email: any, id: any) {
+  shareContract(email: any, phone: any, id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-      email: email,
+      email: email ? email : [],
+      phone: phone ? phone : [],
       contract_id: id
     });
     

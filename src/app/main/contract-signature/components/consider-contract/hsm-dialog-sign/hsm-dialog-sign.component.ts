@@ -24,18 +24,11 @@ export class HsmDialogSignComponent implements OnInit {
   currentUser: any;
   taxCode: any;
   hsmSupplier: any;
-  suppliers: any[] = [
-    {
-      id: 'mobifone',
-      name: 'MobiFone'
-    },
-    {
-      id: 'icorp',
-      name: 'I-CA'
-    }
-  ];
+  suppliers: any[] = [];
   dataGetUserById: any;
-  isHsmIcorp: boolean = false
+  isHsmIcorp: boolean = true;
+  typeUser: any;
+  confirmConsider: boolean = true;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -54,9 +47,14 @@ export class HsmDialogSignComponent implements OnInit {
       pass2: this.fbd.control("", [Validators.required]),
       uuid: this.fbd.control("", [Validators.required]),
     });
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
-  ngOnInit(): void {
+
+  async ngOnInit(): Promise<void> {
     this.datas = this.data;
     
     this.user = this.userService.getInforUser();
@@ -70,9 +68,9 @@ export class HsmDialogSignComponent implements OnInit {
 
     if (this.user.organization_id != 0) {
       this.userService.getUserById(this.id).subscribe((response) => {
-        this.isHsmIcorp = response.hsm_supplier === "icorp";
+        this.isHsmIcorp = response.hsm_supplier === "mobifone";
         this.dataGetUserById = response;
-        if(this.isHsmIcorp) {
+        if(!this.isHsmIcorp) {
           this.myForm = this.fbd.group({
             hsmSupplier: this.fbd.control(response.hsm_supplier, [Validators.required]),
             username: this.fbd.control(response.hsm_name, [Validators.required]),
@@ -119,12 +117,22 @@ export class HsmDialogSignComponent implements OnInit {
           }
         }
       })
+    
+      //
+    let listSupplier = await this.contractService.getListSupplier(1).toPromise();
+    
+    if(listSupplier) {
+      this.suppliers = listSupplier.map((item: any) => ({
+        id: item.code,
+        name: item.supplierName
+      }));
+    }
   }
 
   onSupplierChange(event: any) {
-    this.isHsmIcorp = event.value === "icorp";
+    this.isHsmIcorp = event.value === "mobifone";
     if(this.user.organization_id != 0) {
-      if(this.isHsmIcorp) {
+      if(!this.isHsmIcorp) {
         this.myForm = this.fbd.group({
           hsmSupplier: this.fbd.control(event.value, [Validators.required]),
           username: this.fbd.control(this.dataGetUserById.hsm_name, [Validators.required]),
@@ -138,7 +146,7 @@ export class HsmDialogSignComponent implements OnInit {
         });
       }
     } else {
-      if(this.isHsmIcorp) {
+      if(!this.isHsmIcorp) {
         this.myForm = this.fbd.group({
           hsmSupplier: this.fbd.control(event.value, [Validators.required]),
           username: this.fbd.control("", [Validators.required]),
@@ -213,7 +221,10 @@ export class HsmDialogSignComponent implements OnInit {
   
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
-          if (item.email === this.currentUser.email) {
+          if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (item.email === this.currentUser.email && this.typeUser === 1)) {
             ArrRecipientsNew = true
             return
           }
@@ -253,15 +264,37 @@ export class HsmDialogSignComponent implements OnInit {
   
         const data: any = {
           supplier: this.myForm.value.hsmSupplier,
+          confirmConsider: this.confirmConsider
           //a_dvcs: this.myForm.value.taxCode,
-          username: this.myForm.value.username,
-          password: this.myForm.value.pass1,
+          // username: this.myForm.value.username,
+          // password: this.myForm.value.pass1,
         };
-        if (!this.isHsmIcorp) {
+        if (this.isHsmIcorp) {
           data["password2"] = this.myForm.value.pass2;
           data["uuid"] = this.myForm.value.uuid;
+        } else {
+          data["username"] = this.myForm.value.username;
+          data["password"] = this.myForm.value.pass1;
         }
-  
+
+        // if(this.confirmConsider && this.typeUser != 1) {
+        //   try{
+        //     let saveInfoSingHsm = await this.userService.saveInfoSingHsm(data).toPromise();
+        //     if(!saveInfoSingHsm.status) {
+        //         this.toastService.showErrorHTMLWithTimeout(
+        //         saveInfoSingHsm.message,
+        //         '',
+        //         3000
+        //       );   
+        //     }
+        //   } catch(err) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Lưu thông tin ký số cho lần ký sau thất bại',
+        //       '',
+        //       3000
+        //     );
+        //   }
+        // }
         if (!this.data.id) {
           this.dialogRef.close(data);
           //Trường hợp không phải ký nhiều
@@ -281,16 +314,38 @@ export class HsmDialogSignComponent implements OnInit {
     } else {
       const data: any = {
         supplier: this.myForm.value.hsmSupplier,
+        confirmConsider: this.confirmConsider
         //ma_dvcs: this.myForm.value.taxCode,
-        username: this.myForm.value.username,
-        password: this.myForm.value.pass1,
-        // password2: this.myForm.value.pass2
+        // username: this.myForm.value.username,
+        // password: this.myForm.value.pass1,
       };
 
-      if (!this.isHsmIcorp) {
+      if (this.isHsmIcorp) {
         data["password2"] = this.myForm.value.pass2;
         data["uuid"] = this.myForm.value.uuid;
+      } else {
+        data["username"] = this.myForm.value.username;
+        data["password"] = this.myForm.value.pass1;
       }
+
+      // if(this.confirmConsider && this.typeUser != 1) {
+      //   try{
+      //     let saveInfoSingHsm = await this.userService.saveInfoSingHsm(data).toPromise();
+      //     if(!saveInfoSingHsm.status) {
+      //         this.toastService.showErrorHTMLWithTimeout(
+      //         saveInfoSingHsm.message,
+      //         '',
+      //         3000
+      //       );   
+      //     }
+      //   } catch(err) {
+      //     this.toastService.showErrorHTMLWithTimeout(
+      //       'Lưu thông tin ký số cho lần ký sau thất bại',
+      //       '',
+      //       3000
+      //     );
+      //   }
+      // }
 
       this.dialogRef.close(data);
     }

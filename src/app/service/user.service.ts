@@ -42,6 +42,7 @@ export class UserService {
   getUserByIdUrl: any = `${environment.apiUrl}/api/v1/customers/`;
   getOrgChildren: any = `${environment.apiUrl}/api/v1/organizations/getParent`;
   listUserUrl: any = `${environment.apiUrl}/api/v1/customers/search`;
+  getListUserEmailPhone: any = `${environment.apiUrl}/api/v1/customers/search-by-phone-or-email`;
   getUserByEmailUrl: any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
   checkPhoneUrl: any = `${environment.apiUrl}/api/v1/customers/check-phone-unique`;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
@@ -58,6 +59,7 @@ export class UserService {
   updateConfigMailServer: any = `${environment.apiUrl}/api/v1/organizations/configMailServer/`;
   getSsoLinkOtpUrl: any = `${environment.apiUrl}/api/v1/customers/sendEmailOTP`;
   syncAccountSsoUrl: any = `${environment.apiUrl}/api/v1/customers/syncUserSSO`;
+  saveInfoSingHsmUrl: any = `${environment.apiUrl}/api/v1/customers/hsm-info`;
 
   token: any;
   customer_id: any;
@@ -232,8 +234,9 @@ export class UserService {
       status: datas.status,
       role_id: datas.role,
       is_show_phone_pki: datas.is_show_phone_pki,
-      // login_type: datas.login_type,
+      login_type: datas.login_type,
       sign_image: datas.sign_image,
+      stampImage: datas.stampImage,
 
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,
@@ -269,7 +272,7 @@ export class UserService {
       is_show_phone_pki: datas.is_show_phone_pki,
       sign_image: datas.sign_image,
       stampImage: datas.stampImage,
-      // login_type: datas.login_type,
+      login_type: datas.login_type,
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,
 
@@ -324,13 +327,14 @@ export class UserService {
     );
   }
 
-  getUserByEmail(email: any) {
+  getUserByEmail(email: any,loginType: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       email: email,
+      loginType: loginType,
     });
 
     return this.http.post<User>(this.getUserByEmailUrl, body, {
@@ -341,25 +345,49 @@ export class UserService {
   public getUserList(
     filter_organization_id: any,
     filter_nameOrEmail: any,
+    filter_phone: any,
     filter_email: any,
     row: number = 15, page: any = 0
   ): Observable<any> {
     this.getCurrentUser();
+    
+    if (filter_nameOrEmail && filter_nameOrEmail.trim() !== '') {
+      page = 0;
+    }
 
-    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
+    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone='+ filter_phone.trim() + '&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }
   public getUserListShare(
     filter_organization_id: any,
     filter_nameOrEmail: any,
+    filter_phone: any,
     filter_email: any,
   ): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim();
+    let listUserEmailPhone = this.getListUserEmailPhone + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone='+ filter_phone.trim() + '&organization_id=' + filter_organization_id + '&email=' + filter_email.trim();
     const headers = { Authorization: 'Bearer ' + this.token };
-    return this.http.get<User[]>(listUserUrl, { headers }).pipe();
+    return this.http.get<User[]>(listUserEmailPhone, { headers }).pipe();
+  }
+  
+  public getUserListShareOrg(
+    filter_organization_id: any,
+    filter_nameOrEmail: any,
+    filter_phone: any,
+    filter_email: any,
+    row: number = 15, page: any = 0
+  ): Observable<any> {
+    this.getCurrentUser();
+    
+    if (filter_nameOrEmail && filter_nameOrEmail.trim() !== '') {
+      page = 0;
+    }
+
+    let listUserEmailPhone = this.getListUserEmailPhone + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone='+ filter_phone.trim() + '&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
+    const headers = { Authorization: 'Bearer ' + this.token };
+    return this.http.get<User[]>(listUserEmailPhone, { headers }).pipe();
   }
 
   getSignatureUserById(id: any) {
@@ -426,13 +454,14 @@ export class UserService {
       );
   }
 
-  checkPhoneUser(phone: any) {
+  checkPhoneUser(phone: any,loginType: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       phone_tel: phone,
+      loginType: loginType,
     });
     return this.http.post<any>(this.checkPhoneUrl, body, { headers }).pipe();
   }
@@ -564,5 +593,17 @@ export class UserService {
     return throwError(errorMessage);
   }
 
-
+  saveInfoSingHsm(data: any) {
+    this.getCurrentUser()
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+       hsm_supplier: data.supplier,
+       hsm_name: data.username,
+       uuid: data.uuid,
+    };
+    return this.http.patch<any>(this.saveInfoSingHsmUrl, body, { headers: headers })
+      .pipe();
+  }
 }

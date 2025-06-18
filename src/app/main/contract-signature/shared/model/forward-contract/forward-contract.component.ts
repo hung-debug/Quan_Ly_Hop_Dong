@@ -10,6 +10,7 @@ import { parttern, parttern_input } from 'src/app/config/parttern';
 import { environment } from 'src/environments/environment';
 import { type_signature } from 'src/app/config/variable';
 import { TranslateService } from '@ngx-translate/core';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 @Component({
   selector: 'app-forward-contract',
@@ -25,7 +26,8 @@ export class ForwardContractComponent implements OnInit {
 
   isReqCardIdToken: boolean = false;
   isReqCardIdHsm: boolean = false;
-  isReqCardIdCts: boolean = false
+  isReqCardIdCts: boolean = false;
+  isReqCardIdRemoteSigning: boolean = false;
   site: string;
   login: string;
   type: any = 0;
@@ -34,7 +36,9 @@ export class ForwardContractComponent implements OnInit {
   dropdownSignTypeSettings: any = {};
   dataSign: any;
   signTypeList: Array<any> = type_signature;
-  currentSignType: any = null
+  currentSignType: any = null;
+  typeUser: any;
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -44,9 +48,12 @@ export class ForwardContractComponent implements OnInit {
     public dialogRef: MatDialogRef<ForwardContractComponent>,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private customerAnalysis: CustomerAnalysis
   ) {
-   
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
 
@@ -71,8 +78,12 @@ export class ForwardContractComponent implements OnInit {
     this.locale = currentRecipientData?.locale ? currentRecipientData?.locale: 'vi';
 
     for (const d of this.datas.dataContract.is_data_contract.participants) {
-      for (const q of d.recipients) {
-        if (q.email == this.currentUser.customer.info.email && q.status == 1) {
+      for (const q of d.recipients) {  
+        if (((((q.email == this.currentUser.customer.info.email && this.currentUser?.customer?.info?.loginType == 'EMAIL') || 
+        (q.phone == this.currentUser.customer.info.phone && this.currentUser?.customer?.info?.loginType == 'SDT') ||
+        ((q.phone == this.currentUser.customer.info.phone || q.email == this.currentUser.customer.info.email) && this.currentUser?.customer?.info?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (q.email == this.currentUser.customer.info.email && this.typeUser === 1)) && q.status == 1) {
+          
           let data_sign_cka = q.sign_type.filter((p: any) => p.id == 1)[0];
 
           //Chữ ký eKYC
@@ -86,7 +97,8 @@ export class ForwardContractComponent implements OnInit {
 
           //Chữ ký CTS
           let data_sign_cts = q.sign_type.filter((p: any) => p.id == 6)[0];
-
+          
+          //Chữ ký RS
           let data_sign_rs = q.sign_type.filter((p: any) => p.id == 8)[0];
 
           if (data_sign_cka) {
@@ -103,8 +115,11 @@ export class ForwardContractComponent implements OnInit {
           if (data_sign_cardIdToken) {
             this.isReqCardIdToken = true;
           }
-          if (data_sign_cts || data_sign_rs) {
+          if (data_sign_cts) {
             this.isReqCardIdCts = true;
+          }
+          if (data_sign_rs) {
+            this.isReqCardIdRemoteSigning = true;
           }
 
           break
@@ -173,17 +188,21 @@ export class ForwardContractComponent implements OnInit {
       this.isReqCardIdHsm = true;
       this.isReqCardIdToken = false;
       this.isReqCardIdCts = false;
+      this.isReqCardIdRemoteSigning = false;
     } else if(event.id == 2) {
       //Ký token
       this.isReqCardIdHsm = false;
       this.isReqCardIdToken = true;
       this.isReqCardIdCts = false;
+      this.isReqCardIdRemoteSigning = false;
     } else if(event.id == 6){
       this.isReqCardIdCts = true;
       this.isReqCardIdHsm = false;
       this.isReqCardIdToken = false;
+      this.isReqCardIdRemoteSigning = false;
     } else if(event.id == 8){
-      this.isReqCardIdCts = true;
+      this.isReqCardIdRemoteSigning = true;
+      this.isReqCardIdCts = false;
       this.isReqCardIdHsm = false;
       this.isReqCardIdToken = false;
       this.isReqPhone = false;
@@ -209,7 +228,8 @@ export class ForwardContractComponent implements OnInit {
     this.login = e.target.value;
     
     if(this.login == 'phone') {
-      this.dataSign = this.dataSign.filter((item: any) => item.id != 2 && item.id != 7);
+      console.log("1");
+      // this.dataSign = this.dataSign.filter((item: any) => item.id != 2 && item.id != 7);
 
       if(this.myForm.get('dataSign')?.value && this.myForm.get('dataSign')?.value.length > 0) {
         if(this.myForm.get('dataSign')?.value[0].id == 2) {
@@ -226,6 +246,7 @@ export class ForwardContractComponent implements OnInit {
       }
 
     } else {
+      console.log("2");
       const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
 
       if(currentRecipientData.sign_type.length > 0) {
@@ -235,15 +256,23 @@ export class ForwardContractComponent implements OnInit {
             this.isReqCardIdToken = true;
             this.isReqCardIdHsm = false;
             this.isReqCardIdCts = false;
+            this.isReqCardIdRemoteSigning = false;
           } else if (currentRecipientData.sign_type[0].id == 4 ) {
             this.isReqCardIdToken = false;
             this.isReqCardIdHsm = true;
             this.isReqCardIdCts = false;
-          } else if (currentRecipientData.sign_type[0].id == 6 || currentRecipientData.sign_type[0].id == 8) {
+            this.isReqCardIdRemoteSigning = false;
+          } else if (currentRecipientData.sign_type[0].id == 6) {
             this.isReqCardIdCts = true;
             this.isReqCardIdToken = false;
             this.isReqCardIdHsm = false;
-          } 
+            this.isReqCardIdRemoteSigning = false;
+          } else if (currentRecipientData.sign_type[0].id == 8) {
+            this.isReqCardIdRemoteSigning = true;
+            this.isReqCardIdCts = false;
+            this.isReqCardIdToken = false;
+            this.isReqCardIdHsm = false;
+          }
         } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
           this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
         } else if(currentRecipientData.sign_type[0].id == 3 || currentRecipientData.sign_type[0].id == 7) {
@@ -304,7 +333,10 @@ export class ForwardContractComponent implements OnInit {
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }
@@ -359,10 +391,12 @@ export class ForwardContractComponent implements OnInit {
         return;
       }
       if (this.isReqCardId && !String(this.myForm.value.card_id)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD/Số hộ chiếu người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
-      } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD', '', 3000);
+      } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) 
+        && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)
+        && !String(this.myForm.value.card_id).match(parttern.card_id_passport)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD/Số hộ chiếu', '', 3000);
         return;
       }
       //Mã số thuế hsm
@@ -386,6 +420,13 @@ export class ForwardContractComponent implements OnInit {
         return;
       } else if (this.isReqCardIdCts && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng MST/CMT/CCCD', '', 3000);
+        return;
+      } else if (this.isReqCardIdRemoteSigning && !String(this.myForm.value.card_id)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập MST/CMT/CCCD/Số hộ chiếu người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
+        return;
+      } else if (this.isReqCardIdRemoteSigning  && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid) 
+        && !String(this.myForm.value.card_id).match(parttern.card_id_passport)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng MST/CMT/CCCD/Số hộ chiếu', '', 3000);
         return;
       }
 
@@ -413,7 +454,10 @@ export class ForwardContractComponent implements OnInit {
         let id_recipient_signature = null;
         for (const d of this.datas.dataContract.is_data_contract.participants) {
           for (const q of d.recipients) {
-            if (q.email == this.currentUser.email && q.status == 1) {
+            if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
               id_recipient_signature = q.id;
               break
             }
@@ -454,7 +498,7 @@ export class ForwardContractComponent implements OnInit {
           }
 
           await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
-            data => {
+            async data => {
               if (!data.success) {
                 if (data.message == 'Tax code has existed') {
                   this.spinner.hide();
@@ -463,6 +507,23 @@ export class ForwardContractComponent implements OnInit {
               } else {
                 this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp/Ủy quyền' : 'Ủy quyền/Chuyển tiếp') + ' thành công!'
                   , "", 3000);
+                  try {
+                    let data = {
+                      eventName: "uyQuyen/chuyenTiep",
+                      params: {
+                        tenHĐ: this.datas.dataContract.is_data_contract.name,
+                        maHĐ: this.datas.dataContract.is_data_contract.contract_uid,
+                        idHĐ: this.datas.dataContract.is_data_contract.id,
+                        nguoiXuLy:this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
+                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+                        trangThai: "Thành công",
+                      },
+                      link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+                    };
+                    await this.customerAnalysis.pushData(data);
+                  } catch (error) {
+                    console.error('Lỗi khi gửi dữ liệu phân tích Ủy quyền/Chuyển tiếp:', error);
+                  }
                 this.dialogRef.close();
                 this.spinner.hide();
                 this.router.navigate(['/main/form-contract/detail/forward/' + this.datas?.dataContract?.is_data_contract?.id]);

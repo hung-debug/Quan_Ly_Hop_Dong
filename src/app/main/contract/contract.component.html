@@ -58,6 +58,8 @@
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
           </div>
           <!-- <div class="col-md-2">{{'expiration-date' | translate}}
             <img src="../../assets/img/sort.svg"/>
@@ -362,6 +364,9 @@
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
             <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+              <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+              <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
+  
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
 
@@ -492,6 +497,10 @@
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
+                      <button mat-menu-item  class="div_icon" *ngIf = "(this.filter_status == 31 || this.filter_status == 32) && this.isOrg == 'off'" (click)="submitDocuments(item.id)">
+                        <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'document.re-signing' | translate}}</span>
+                      </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'" (click)="openEdit(item.id)">
                         <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.edit' | translate}}</span>
@@ -520,10 +529,10 @@
                         <mat-icon><img src="../../assets/img/slash.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.cancel' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'cancel' && this.isOrg == 'off'" (click)="ViewReasonCancel(item.id)">
+                      <!-- <button mat-menu-item class="div_icon" *ngIf="status == 'cancel' && this.isOrg == 'off'" (click)="ViewReasonCancel(item.id)">
                         <mat-icon><img src="../../assets/img/cancel_notes.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'reasson.cancel.contract' | translate}}</span>
-                      </button>
+                      </button> -->
                       <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="deleteContract(item.id)">
                         <mat-icon><img src="../../assets/img/trash_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.delete' | translate}}</span>
@@ -682,6 +691,8 @@
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
           </div>
           <div class="col-sm-2 bg-header">{{'complete-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
@@ -788,6 +799,10 @@
                     </button>
                     <mat-menu #menu="matMenu">
                       <!-- <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on'" (click)="downloadContract(item.id);"> -->
+                      <button mat-menu-item [matMenuTriggerFor]="subMenu">
+                        <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{ 'create.document.holds.signing.stream' | translate }}</span>
+                      </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on'" (click)="downloadFileContract(item.id, item.name);">
                         <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.download' | translate}}</span>
@@ -800,6 +815,17 @@
                       <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
                         <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
+                      </button>
+                    </mat-menu>
+
+                    <mat-menu #subMenu="matMenu" [overlapTrigger]="false" class="custom-sub-menu">
+                      <button mat-menu-item (click)="cloneFullStream(item.id)">
+                        <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon" /></mat-icon>
+                        <span class="three_dot_text">{{ 'keep.signature.stream.all' | translate }}</span>
+                      </button>
+                      <button mat-menu-item (click)="cloneStreamOrganizational(item.id)">
+                        <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon" /></mat-icon>
+                        <span class="three_dot_text">{{ 'keep.signature.stream.organizational' | translate }}</span>
                       </button>
                     </mat-menu>
                   </div>
@@ -882,6 +908,8 @@
             </div>
             <div class="col-sm-2 bg-header">{{'create-time' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
+              <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+              <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
             </div>
             <div class="col-sm-2 bg-header">{{'complete-time' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
@@ -1186,6 +1214,8 @@
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+                <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+                <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <!-- <div class="col-md-2">{{'expiration-date' | translate}}
@@ -1438,6 +1468,8 @@
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+                <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+                <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <div class="col-sm-2 bg-header">{{'time.update' | translate}}
@@ -1640,6 +1672,8 @@
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
             <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+              <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+              <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
             <div class="col-sm-2 bg-header">{{'time.update' | translate}}

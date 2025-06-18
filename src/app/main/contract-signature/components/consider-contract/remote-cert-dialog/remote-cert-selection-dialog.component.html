@@ -1,0 +1,66 @@
+<div class="my-cert-dialog-container">
+  <div class="label-header">{{'Danh sách chứng thư số' | translate}}</div>
+  <div class="cert-dialog-content">
+    <p *ngIf="!certificates || certificates.length === 0" class="no-cert-message">Không tìm thấy chứng thư số hợp lệ.</p>
+
+    <div class="web-table-container scrollable-content" *ngIf="!mobile">
+      <p-table [value]="certificates">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="cert-select-header">{{'' | translate}}</th>
+            <th>{{'Số serial' | translate}}</th>
+            <th>{{'Chủ sở hữu' | translate}}</th>
+            <th>{{'start-date' | translate}}</th>
+            <th>{{'end-date' | translate}}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cert>
+          <tr>
+            <td class="cert-select-cell">
+              <input type="radio" name="remoteCertSelection" [value]="cert.serialNumber" [(ngModel)]="selectedCertSerial" (change)="onCertSelected(cert.serialNumber)">
+            </td>
+            <td class="popup_cert">{{cert.serialNumber}}</td>
+            <td class="popup_cert">{{cert.name}}</td>
+             <td class="popup_cert">{{cert.validFrom }}</td>
+            <td class="popup_cert">{{cert.validTo }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <div class="mobile-cert-container scrollable-content" *ngIf="mobile">
+      <!-- ... mobile code ... -->
+
+        <div class="mobile-item" *ngFor="let cert of certificates">
+
+          <div class="mobile-radio-choose">
+            <input type="radio" name="remoteCertSelectionMobile" [value]="cert.serialNumber" [(ngModel)]="selectedCertSerial" (change)="onCertSelected(cert.serialNumber)">
+          </div>
+          <div class="mobile-info-details">
+            <div class="mobile-info-row">
+              <span class="mobile-info-label">{{'Số serial' | translate}}:</span>
+              <span class="mobile-info-value serial-number">{{cert.serialNumber}}</span>
+            </div>
+            <div class="mobile-info-row">
+              <span class="mobile-info-label">{{'Chủ sở hữu' | translate}}:</span>
+              <span class="mobile-info-value">{{cert.name}}</span>
+            </div>
+            <div class="mobile-info-row">
+              <span class="mobile-info-label">{{'start-date' | translate}}:</span>
+              <span class="mobile-info-value">{{cert.validFrom }}</span>
+            </div>
+             <div class="mobile-info-row">
+              <span class="mobile-info-label">{{'end-date' | translate}}:</span>
+              <span class="mobile-info-value">{{cert.validTo }}</span>
+            </div>
+          </div>
+        </div>
+    </div>
+
+  </div>
+
+  <div class="dialog-actions-container">
+    <button type="button" (click)="onCancel()" class="cancel-button">{{"btn.cancel" | translate}}</button>
+    <button type="button" (click)="onConfirm()" [disabled]="isConfirmDisabled" class="confirm-button">{{"confirm" | translate}}</button>
+  </div>
+</div>

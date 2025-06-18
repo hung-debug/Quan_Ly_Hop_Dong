@@ -363,6 +363,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.toastService.showWarningHTMLWithTimeout("File tài liệu yêu cầu định dạng PDF, docx", "", 3000);
         }
       } else {
+        e.target.value = null;
         this.spinner.hide()
         this.toastService.showWarningHTMLWithTimeout(checkSizeFile.message, "", 3000);
       }
@@ -407,7 +408,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       let file1 = e.target.files[i];
       if (file1) {
         let file = new File([file1], this.convertFileName(file1.name));
-        if (file.size <= 10*(Math.pow(1024, 2))) {
+        if (file.size <= 20*(Math.pow(1024, 2))) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
 
@@ -438,7 +439,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu tối đa 10MB", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu tối đa 20MB", "", 3000);
           break;
         }
       }
@@ -471,14 +472,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contractNameRequired();
     this.contractFileRequired();
     this.contractCeCaValid();
+    this.endTimeRequired();
     if (environment.flag == 'NB') {
       this.contractTypeValid();
-      if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid() || !this.contractTypeValid()) {
+      if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid() || !this.contractTypeValid() || !this.endTimeRequired()) {
         // this.spinner.hide();
         return false;
       }
     } else if (environment.flag == 'KD' && 
-      (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid())) {
+      (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid() || !this.endTimeRequired())) {
         return false
     }
 
@@ -910,9 +912,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
       this.datas.contract_expire_time = this.expire_time;
-      if(this.activeRoute.snapshot.paramMap.get('id'))
-      this.datas.original_contract_id = Number(this.activeRoute.snapshot.paramMap.get('id'));
-
+      const routeId = this.activeRoute.snapshot.paramMap.get('id');
+      if (routeId && this.typeClone !== 'KEEP_ALL' && this.typeClone !== 'KEEP_MY_ORG') {
+        this.datas.original_contract_id = Number(routeId);
+      } else {
+        this.datas.original_contract_id = null;
+      }
       this.defineData(this.datas);
       this.convertUrltoBlob();
       if((this.router.url.includes("edit") && this.datas.countUploadContractFile > 0) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1) ){
@@ -1337,6 +1342,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.errorContractFile = "";
     if (!this.datas.contractFile && !this.datas.file_name) {
       this.errorContractFile = "error.contract.file.required";
+      return false;
+    }
+    return true;
+  }
+  
+  endTimeRequired(){
+    this.errorSignTime = "";
+    if(!this.sign_time){
+      this.errorSignTime = "error.notTime";
       return false;
     }
     return true;

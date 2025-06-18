@@ -67,7 +67,7 @@ header {
   // width: 100%;
   background-size: cover;
   height: 60px;
-  padding: 0 1rem;
+  padding: 0 0 0 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -517,4 +517,132 @@ h3 {
 
 .img-responsive {
   height: 45px;
+}
+
+.img-responsive-bonbon {
+  height: 32px;
+}
+
+.header-bonbon {
+  height: 48px !important;
+}
+
+/* Overlay */
+.overlay1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 999;
+}
+
+.overlay1.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Sidebar */
+.sidebar-workspace {
+  position: fixed;
+  top: 0;
+  right: -316px;
+  width: 316px;
+  height: 100%;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  background-color: #F3F6FA;
+}
+
+.sidebar-workspace.open {
+  right: 0;
+}
+
+.title-sidebar-workspace {
+  color: #002060;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 20px;
+  background-color: #FFFFFF;
+}
+
+.workspace-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.workspace-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.workspace-icon {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 5px;
+  border: 1px solid #E6EDFA;
+  border-radius: 16px;
+  transition: box-shadow 0.3s;
+  width: 63px;
+  height: 63px;
+  background-color: #FFFFFF;
+}
+
+.workspace-icon:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid #286CF5 !important;
+}
+
+.workspace-name {
+  color: #002060;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+  height: auto;
+  word-break: break-word;
+}
+
+.tenant-dropdown {
+  top: 0;
+  right: 100%;
+  transform: translateX(-10px);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background: white;
+  padding: 6px;
+  position: absolute;
+  z-index: 1000;
+  width: max-content;
+}
+
+.tenant-option {
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.tenant-option:hover {
+  background-color: #f0f0f0;
 }

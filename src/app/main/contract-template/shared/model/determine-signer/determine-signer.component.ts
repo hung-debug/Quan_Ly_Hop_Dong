@@ -162,13 +162,13 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if(d.login_by == 'phone') {
-      d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
+      // d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
     }
 
     if(role == 'sign_partner') {
         if (d.login_by == 'phone') {
 
-          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5,7].includes(p.id));
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
 
 
         } else {
@@ -177,13 +177,13 @@ export class DetermineSignerComponent implements OnInit {
         }
     } else if(role == 'signer') {
       if (d.login_by == 'phone') {
-        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5, 7].includes(p.id));
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
       } else {
         d.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
       }
     } else if(role == 'personal') {
       if (d.login_by == 'phone') {
-        d.isListSignPersonal = this.signTypeList.filter((p) => ![2, 7].includes(p.id));
+        // d.isListSignPersonal = this.signTypeList.filter((p) => ![2, 7].includes(p.id));
       } else {
         d.isListSignPersonal = this.signTypeList;
       }
@@ -433,13 +433,13 @@ export class DetermineSignerComponent implements OnInit {
     if (type == 'organization') {
       //Nếu là người ký
       if (data.role == 3) {
-        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0 && this.getDataSignCert(data).length == 0) {
+        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0 && this.getDataSignCert(data).length == 0 && this.getDataSignRemote(data).length == 0) {
           data.card_id = "";
         }
       }
       //Nếu là văn thư
       else if (data.role == 4) {
-        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
+        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0 && this.getDataSignRemote(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
             data.card_id=res.parent_tax_code;})
         }
@@ -545,7 +545,10 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignCert(data: any){
-    return data.sign_type.filter((p: any) => p.id == 6 || p.id == 8);
+    return data.sign_type.filter((p: any) => p.id == 6);
+  }
+  getDataSignRemote(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 8);
   }
 
   // valid data step 2
@@ -597,7 +600,7 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
       if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5 || p.id == 4 || p.id == 2 || p.id == 6 || p.id == 8).length > 0) {
-        this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+        this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD/Số hộ chiếu của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       }
@@ -629,8 +632,8 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
       // valid cccd number
-      if (dataArr[i].card_id.trim() && !this.pattern.cardid.test(dataArr[i].card_id.trim())) {
-        this.getNotificationValid("MST/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+      if (dataArr[i].card_id.trim() && !this.pattern.cardid.test(dataArr[i].card_id.trim()) && !this.pattern.card_id_passport.test(dataArr[i].card_id.trim())) {
+        this.getNotificationValid("MST/CMT/CCCD/Số hộ chiếu của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }

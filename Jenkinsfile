@@ -47,12 +47,23 @@ pipeline {
                 script {
                     sh 'node -v'
                     sh 'npm -v'
-                    sh 'npm install'
-                    sh 'cp libs/angular/common.d.ts node_modules/@angular/common'
-                    sh 'cp libs/interactjs/index.d.ts node_modules/@interactjs/types'
-                    sh 'cp libs/lodash/common.d.ts node_modules/@types/lodash/common'
+                    sh '''
+						echo "Check TypeScript version"
+						npx tsc -v
 
-                    sh 'npm run build'
+						echo "Clean install dependencies"
+						rm -rf node_modules package-lock.json
+						npm cache clean --force
+						npm install
+
+						echo "Copy custom typings"
+						cp libs/angular/common.d.ts node_modules/@angular/common
+						cp libs/interactjs/index.d.ts node_modules/@interactjs/types
+						cp libs/lodash/common.d.ts node_modules/@types/lodash/common
+
+						echo "Build Angular app"
+						npx ng build --configuration production
+					'''
                     sh 'cp -r dist/eContract-web builds/'
                     dir("builds"){
                       sh 'ls -l'

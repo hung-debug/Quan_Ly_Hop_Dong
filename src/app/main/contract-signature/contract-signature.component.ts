@@ -31,8 +31,18 @@ import { TimeService } from 'src/app/service/time.service';
 import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
+import { RemoteCertSelectionDialogComponent } from './components/consider-contract/remote-cert-dialog/remote-cert-selection-dialog.component';
+import { RemoteCertificate } from './components/consider-contract/remote-cert-dialog/remote-certificate.interface';
 // import { ContractService } from 'src/app/service/contract.service';
-
+interface SignInfo {
+  recipientId: number;
+  result: {
+    success: boolean;
+    message: string;
+  };
+}
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -47,6 +57,7 @@ export class ContractSignatureComponent implements OnInit {
     contract: {},
     action_title: 'Điều phối',
   };
+  
 
   action: string;
   status: string;
@@ -68,6 +79,9 @@ export class ContractSignatureComponent implements OnInit {
   totalBoxSignPki: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
+  ascendSortActive : boolean;
+  descendSortActive : boolean;
+  orderDesc: string;
 
   title: any = '';
 
@@ -80,6 +94,9 @@ export class ContractSignatureComponent implements OnInit {
   filter_status: any = 1;
   contractStatus: any = '';
   name_or_email_customer: any;
+  loadingText: string = 'Đang xử lý...';
+  phoneMobiCA: any;
+  isHiddenMobiCA: boolean = false;
 
   typeDisplay: string = 'signOne';
   // typeDisplay: string = 'downloadOne';
@@ -119,8 +136,13 @@ export class ContractSignatureComponent implements OnInit {
   inputTimeout: any
   numberPage: number;
   enterPage: number = 1;
+  signedContract: any;
+  networkCode: string;
+  supplierID: any;
   signInfoPKIU: any = {};
   chooseContract: any = [];
+  isAllowFirstHandleEdit: boolean[] = [];
+  typeUser: any;
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -135,13 +157,18 @@ export class ContractSignatureComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private downloadPluginService: DowloadPluginService,
-    private timeService: TimeService
+    private timeService: TimeService,
+    private customerAnalysis: CustomerAnalysis
   ) {
     this.constantModel = contractModel;
 
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info; 
+
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   ngOnInit(): void {
@@ -225,6 +252,9 @@ export class ContractSignatureComponent implements OnInit {
       this.status = params['status'];
       this.contracts = [];
       this.pageTotal = 0;
+      this.ascendSortActive = false;
+      this.descendSortActive = false;
+
       //set title
       this.convertStatusStr();
       this.action = 'receive';
@@ -361,7 +391,7 @@ export class ContractSignatureComponent implements OnInit {
     this.typeDisplay = 'downloadMany';
     this.enterPage = this.p;
     this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status,
-      this.p, this.page, 30, this.name_or_email_customer,this.organization_id).subscribe((data) => {
+      this.p, this.page, 30, this.orderDesc, this.name_or_email_customer,this.organization_id).subscribe((data) => {
         this.checkedAll = false;
         this.dataChecked = [];
 
@@ -454,6 +484,7 @@ export class ContractSignatureComponent implements OnInit {
         this.p,
         this.page,
         this.contractStatus,
+        this.orderDesc,
         this.name_or_email_customer,
         this.organization_id
       )
@@ -528,25 +559,34 @@ export class ContractSignatureComponent implements OnInit {
       return recipient.process_at;
     }
   }
+  
+  sortContractList(value: any){
+    this.getContractListByOrder(value);
+  }
+  
+  getContractListByOrder(value: any){
+    this.orderDesc = "true";
 
-  getContractList() {
-    this.spinner.show();
-    const checkBox = document.getElementById('all') as HTMLInputElement | null;
-    if (checkBox != null) {
-      checkBox.checked = false;
+    if(value == "ascend"){
+      this.orderDesc = "false"
+      this.ascendSortActive = true;
+      this.descendSortActive = false;
+    } else {
+      this.orderDesc = "true"
+      this.ascendSortActive = false;
+      this.descendSortActive = true;
     }
-    this.dataChecked = [];
-    this.contracts = [];
-    this.contractsSignMany = [];
-    this.totalBoxSignPki = 0;
+
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
     }
+    
     this.contractServiceV1.sidebarContractEvent.subscribe((event: any) => {
       if (event = 'contract-signature')
         this.p = 1;
     });
     this.enterPage = this.p;
+    
     //get list contract share
     if (this.filter_status == -1) {
       this.contractService
@@ -560,6 +600,7 @@ export class ContractSignatureComponent implements OnInit {
           this.p,
           this.page,
           this.contractStatus,
+          this.orderDesc,
           this.name_or_email_customer,
           this.organization_id
         )
@@ -604,6 +645,251 @@ export class ContractSignatureComponent implements OnInit {
             this.p,
             this.page,
             this.contractStatus,
+            this.orderDesc,
+            this.name_or_email_customer,
+            this.organization_id
+          )
+          .subscribe(
+            (data) => {
+              this.contracts = data.entities;
+              this.contractDownloadList = data.entities;
+              this.pageTotal = data.total_elements;
+              if (this.pageTotal == 0) {
+                this.p = 0;
+                this.pageStart = 0;
+                this.pageEnd = 0;
+              } else {
+                this.setPage();
+              }
+              this.spinner.hide();
+              if(this.typeDisplay === 'downloadMany'){
+                this.contractDownloadList.forEach((key: any, v: any) => {
+                  this.contractDownloadList[v].contractId = key.participant.contract.id;
+                  this.contractDownloadList[v].contractName = key.participant.contract.name;
+                  this.contractDownloadList[v].contractNumber =
+                    key.participant.contract.code;
+                  this.contractDownloadList[v].contractSignTime =
+                    key.participant.contract.sign_time;
+                  this.contractDownloadList[v].contractCreateTime =
+                    key.participant.contract.created_time;
+                  this.contractDownloadList[v].contractStatus =
+                    key.participant.contract.status;
+                  this.contractDownloadList[v].contractCecaPush =
+                    key.participant.contract.ceca_push;
+                  this.contractDownloadList[v].contractCecaStatus =
+                    key.participant.contract.ceca_status;
+                  this.contractDownloadList[v].contractReleaseState =
+                    key.participant.contract.release_state;
+                });
+              } else{
+                this.contracts.forEach((key: any, v: any) => {
+                  this.contracts[v].contractId = key.participant.contract.id;
+                  this.contracts[v].contractName = key.participant.contract.name;
+                  this.contracts[v].contractNumber =
+                    key.participant.contract.code;
+                  this.contracts[v].contractSignTime =
+                    key.participant.contract.sign_time;
+                  this.contracts[v].contractCreateTime =
+                    key.participant.contract.created_time;
+                  this.contracts[v].contractStatus =
+                    key.participant.contract.status;
+                  this.contracts[v].contractCecaPush =
+                    key.participant.contract.ceca_push;
+                  this.contracts[v].contractCecaStatus =
+                    key.participant.contract.ceca_status;
+                  this.contracts[v].contractReleaseState =
+                    key.participant.contract.release_state;
+                });
+              }
+            },
+            (error) => {
+              setTimeout(() => this.router.navigate(['/login']));
+              this.toastService.showErrorHTMLWithTimeout(
+                'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+                '',
+                3000
+              );
+            }
+          );
+      } else {
+        if (this.typeDisplay == 'signMany') {
+          this.contractService.getContractMyProcessListSignMany(this.keyword, this.filter_type,
+            this.filter_contract_no,
+            this.filter_from_date,
+            this.filter_to_date, this.orderDesc).subscribe((data) => {
+              this.contractsSignMany = data;
+              if (this.pageTotal == 0) {
+                this.p = 0;
+                this.pageStart = 0;
+                this.pageEnd = 0;
+              } else {
+                this.setPage();
+              }
+              this.contractsSignMany.forEach((key: any, v: any) => {
+                this.contractsSignMany[v].contractId = key.participant.contract.id;
+                this.contractsSignMany[v].contractName = key.participant.contract.name;
+                this.contractsSignMany[v].contractNumber = key.participant.contract.code;
+                this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
+                this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
+                this.contractsSignMany[v].contractStatus = key.participant.contract.status;
+                this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
+                this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
+                this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
+                this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
+                this.contractsSignMany[v].checked = false;
+                //this.contractsSignMany[v].isDisable = false;
+              });
+
+              this.spinner.hide();
+            }, error => {
+              setTimeout(() => this.router.navigate(['/login']));
+              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+            });
+        } else if (this.typeDisplay == 'viewMany') {
+          this.contractService.getViewContractMyProcessList(this.keyword, this.filter_type,
+            this.filter_contract_no,
+            this.filter_from_date,
+            this.filter_to_date, this.orderDesc).subscribe((data) => {
+              this.contractViewList = data;
+              if (this.pageTotal == 0) {
+                this.p = 0;
+                this.pageStart = 0;
+                this.pageEnd = 0;
+              } else {
+                this.setPage();
+              }
+              this.contractViewList.forEach((key: any, v: any) => {
+                this.contractViewList[v].contractId = key.participant.contract.id;
+                this.contractViewList[v].contractName = key.participant.contract.name;
+                this.contractViewList[v].contractNumber = key.participant.contract.code;
+                this.contractViewList[v].contractSignTime = key.participant.contract.sign_time;
+                this.contractViewList[v].contractCreateTime = key.participant.contract.created_time;
+                this.contractViewList[v].contractStatus = key.participant.contract.status;
+                this.contractViewList[v].contractCecaPush = key.participant.contract.ceca_push;
+                this.contractViewList[v].contractCecaStatus = key.participant.contract.ceca_status;
+                this.contractViewList[v].contractReleaseState = key.participant.contract.release_state;
+                this.contractViewList[v].typeOfSign = key.sign_type[0]?.name;
+                this.contractViewList[v].checked = false;
+                //this.contractViewList[v].isDisable = false;
+              });
+
+              this.spinner.hide();
+            }, error => {
+              setTimeout(() => this.router.navigate(['/login']));
+              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+            });
+        }
+      }
+    } else {
+      this.contractService
+        .getContractMyProcessDashboard(
+          this.filter_status % 10,
+          this.p,
+          this.page,
+          this.orderDesc
+        )
+        .subscribe(
+          (data) => {
+            this.contracts = data.entities;
+            this.pageTotal = data.total_elements;
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+            this.spinner.hide();
+          },
+          (error) => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout(
+              'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+              '',
+              3000
+            );
+          }
+        );
+      }
+  }
+
+  getContractList() {
+    this.spinner.show();
+    const checkBox = document.getElementById('all') as HTMLInputElement | null;
+    if (checkBox != null) {
+      checkBox.checked = false;
+    }
+    this.dataChecked = [];
+    this.contracts = [];
+    this.contractsSignMany = [];
+    this.totalBoxSignPki = 0;
+    if (this.filter_status % 10 == 1) {
+      this.filter_status = 1;
+    }
+    this.contractServiceV1.sidebarContractEvent.subscribe((event: any) => {
+      if (event = 'contract-signature')
+        this.p = 1;
+    });
+    this.enterPage = this.p;
+    //get list contract share
+    if (this.filter_status == -1) {
+      this.contractService
+        .getContractShareList(
+          this.filter_name,
+          this.filter_type,
+          this.filter_contract_no,
+          this.filter_from_date,
+          this.filter_to_date,
+          this.filter_status,
+          this.p,
+          this.page,
+          this.contractStatus,
+          this.orderDesc,
+          this.name_or_email_customer,
+          this.organization_id
+        )
+        .subscribe(
+          (data) => {
+            this.contracts = data.entities;
+            this.pageTotal = data.total_elements;
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+            this.spinner.hide();
+          },
+          (error) => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout(
+              'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+              '',
+              3000
+            );
+          }
+        );
+    } else if (this.filter_status == 1 || this.filter_status == 4) {
+      if (
+        this.typeDisplay == 'signOne' ||
+        this.typeDisplay === 'downloadMany'
+      ) {
+        if (this.typeDisplay === 'downloadMany') {
+          this.contractStatus = 30;
+        }
+        this.contractService
+          .getContractMyProcessList(
+            this.filter_name,
+            this.filter_type,
+            this.filter_contract_no,
+            this.filter_from_date,
+            this.filter_to_date,
+            this.filter_status,
+            this.p,
+            this.page,
+            this.contractStatus,
+            this.orderDesc,
             this.name_or_email_customer,
             this.organization_id
           )
@@ -652,7 +938,7 @@ export class ContractSignatureComponent implements OnInit {
           this.contractService.getContractMyProcessListSignMany(this.keyword, this.filter_type,
             this.filter_contract_no,
             this.filter_from_date,
-            this.filter_to_date).subscribe((data) => {
+            this.filter_to_date, this.orderDesc).subscribe((data) => {
               this.contractsSignMany = data;
               if (this.pageTotal == 0) {
                 this.p = 0;
@@ -685,7 +971,7 @@ export class ContractSignatureComponent implements OnInit {
           this.contractService.getViewContractMyProcessList(this.keyword, this.filter_type,
             this.filter_contract_no,
             this.filter_from_date,
-            this.filter_to_date).subscribe((data) => {
+            this.filter_to_date, this.orderDesc).subscribe((data) => {
               this.contractViewList = data;
               if (this.pageTotal == 0) {
                 this.p = 0;
@@ -721,7 +1007,8 @@ export class ContractSignatureComponent implements OnInit {
         .getContractMyProcessDashboard(
           this.filter_status % 10,
           this.p,
-          this.page
+          this.page,
+          this.orderDesc
         )
         .subscribe(
           (data) => {
@@ -745,7 +1032,7 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
         );
-    }
+      }
   }
 
   sortParticipant(list: any) {
@@ -1252,6 +1539,8 @@ export class ContractSignatureComponent implements OnInit {
     if (this.dataChecked.length === 0) {
       return
     }
+    let checkSign: any = [];
+    this.signedContract = [];
     const dialogRef = this.dialog.open(DialogViewManyComponentComponent, {
       width: '580px',
     });
@@ -1261,6 +1550,21 @@ export class ContractSignatureComponent implements OnInit {
         try {
           for (let index = 0; index < this.dataChecked.length; index++) {
             await this.contractServiceV1.updateInfoContractConsider([], this.dataChecked[index].id).toPromise(); // Nếu phương thức trả về Observable, cần chuyển đổi sang Promise
+            let matchedContract = this.getContractId(this.contractViewList, this.dataChecked[index].selectedId);
+
+            if (matchedContract !== null) {
+              this.signedContract.push(matchedContract);
+            
+              const infoSign: SignInfo = {
+                recipientId: matchedContract.contractId, // Lấy contractId từ object
+                result: {
+                  success: true,
+                  message: "",
+                },
+              };
+            
+              checkSign.push(infoSign);
+            }
           }
         } catch (error) {
           this.toastService.showErrorHTMLWithTimeout(
@@ -1269,6 +1573,7 @@ export class ContractSignatureComponent implements OnInit {
             3000
           );
         }
+        this.handleContractData(checkSign);
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this.router.navigate(['main/c/receive/processed']);
         });
@@ -1323,7 +1628,7 @@ export class ContractSignatureComponent implements OnInit {
     }
     //Lay hop dong ky nhieu bang hsm hay usb token
     let signId = contractsSignManyChecked[0]?.sign_type[0]?.id;
-
+    this.signedContract = contractsSignManyChecked;
     let recipientId: any = [];
     let taxCode: any = [];
     let idSignMany: any = [];
@@ -1420,7 +1725,7 @@ export class ContractSignatureComponent implements OnInit {
         this.chooseContract.push(itemChoose);
       })
     }
-
+    
     this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
   }
 
@@ -1527,6 +1832,7 @@ export class ContractSignatureComponent implements OnInit {
         // Await the dialog close event
         const result: any = await dialogRef.afterClosed().toPromise();
         if(result) {
+          this.networkCode = result.networkCode;
           this.spinner.show();
           const checkSign = await this.contractServiceV1.signPkiDigitalMulti(
             result.phone,
@@ -1579,12 +1885,15 @@ export class ContractSignatureComponent implements OnInit {
 
           if(resultsTrue.length == 0 && resultsFalse.length == checkSign.length) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Ký số thất bại',
+              'Ký số thất bại, đã có lỗi trong quá trình ký số',
               '',
               10000
             );
-          }
-
+            for (let i = 0; i < checkSign.length; i++) {
+              if (checkSign[i].result.success == false) {
+                  checkSign[i].result.message = 'Ký số thất bại, đã có lỗi trong quá trình ký số';
+              }}
+          }   
           if(resultsFalse.length == 0 && resultsTrue.length == checkSign.length) {
             this.toastService.showSuccessHTMLWithTimeout(
               'Ký số thành công',
@@ -1592,7 +1901,7 @@ export class ContractSignatureComponent implements OnInit {
               10000
             );
           }
-
+          this.handleContractData(checkSign);     
           if(!(resultsTrue.length == 0 && resultsFalse.length == checkSign.length)) {
             this.router
             .navigateByUrl('/', { skipLocationChange: true })
@@ -1616,6 +1925,7 @@ export class ContractSignatureComponent implements OnInit {
       let idContract: any = [];
       let fileC: any = [];
       let documentId: any = [];
+      this.isAllowFirstHandleEdit = [];
 
       //lấy field id được tích vào
       idSignMany = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].id);
@@ -1636,6 +1946,7 @@ export class ContractSignatureComponent implements OnInit {
           determineCoordination.recipients.forEach((item: any) => {
             if (item.id == recipientId[i]) {
               taxCode.push(item.fields[0].recipient.cardId);
+              this.isAllowFirstHandleEdit.push(determineCoordination.isAllowFirstHandleEdit || false);
             }
           });
         } catch (err) {
@@ -1706,6 +2017,9 @@ export class ContractSignatureComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async (resultHsm: any) => {
         if (resultHsm) {
+          let contractsSignManyChecked = this.contractsSignMany.filter(
+            (opt) => opt.checked
+          );
           this.nameCompany = resultHsm.ma_dvcs;
           let imageRender = null;
 
@@ -1741,6 +2055,7 @@ export class ContractSignatureComponent implements OnInit {
             processAt: this.isDateTime,
             supplier: resultHsm.supplier,
             uuid: resultHsm.uuid,
+            confirmConsider: resultHsm.confirmConsider,
             type: 3
           };
 
@@ -1753,7 +2068,7 @@ export class ContractSignatureComponent implements OnInit {
             );
 
             let countSuccess = 0;
-
+            this.handleContractData(checkSign);
             for (let i = 0; i < checkSign.length; i++) {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
@@ -1808,6 +2123,25 @@ export class ContractSignatureComponent implements OnInit {
                 return;
               } else {
                 countSuccess++;
+              }
+            }
+
+            if(countSuccess > 0 && this.dataHsm.confirmConsider && this.typeUser != 1) {
+              try{
+                let saveInfoSingHsm = await this.userService.saveInfoSingHsm(this.dataHsm).toPromise();
+                if(!saveInfoSingHsm.status) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                    saveInfoSingHsm.message,
+                    '',
+                    3000
+                  );   
+                }
+              } catch(err) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lưu thông tin ký số cho lần ký sau thất bại',
+                  '',
+                  3000
+                );
               }
             }
 
@@ -1933,12 +2267,18 @@ export class ContractSignatureComponent implements OnInit {
             // Count successful responses
             if (checkSignResults[0][0]?.result?.success == false) {
               this.spinner.hide()
-              return this.toastService.showErrorHTMLWithTimeout("sign.cert.err","",3000)
+              let checkSign: any = [];
+              checkSign = this.updateCheckSign(checkSign, recipientId);
+              checkSign = this.updateMessage(checkSign, checkSignResults[0][0]?.result?.message);
+              this.handleContractData(checkSign);
+              return this.toastService.showErrorHTMLWithTimeout(checkSignResults[0][0]?.result?.message,"",3000)
             }
             let countSuccess = 0;
-            for (const checkSign of checkSignResults) {
-              countSuccess += checkSign.length;
-            }
+            let dataSign = checkSignResults.flat();
+            this.handleContractData(dataSign)
+            // for (const checkSign of checkSignResults) {
+            //   countSuccess += checkSign.length;
+            // }
 
             if (checkSignResults[0][0].result.success && this.currentDate < this.endDate) {
               this.toastService.showSuccessHTMLWithTimeout(
@@ -1975,7 +2315,8 @@ export class ContractSignatureComponent implements OnInit {
         id: 1,
         title: 'CHỮ KÝ REMOTE SIGNING',
         is_content: 'forward_contract',
-        userCode: taxCode[0]
+        userCode: taxCode[0],
+        isHidden: this.isHiddenMobiCA
       };
 
       const dialogConfig = new MatDialogConfig();
@@ -1999,10 +2340,14 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
+          if(resultRS.type == 2){
+            this.loadingText =
+            'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
+          }
           let supplierID = resultRS.type;
-        
+          this.supplierID = supplierID;
           this.nameCompany = resultRS.ma_dvcs;
-
+          this.phoneMobiCA = resultRS.phone;
           try {
             this.isDateTime = new Date();
           } catch(err) {
@@ -2025,77 +2370,518 @@ export class ContractSignatureComponent implements OnInit {
           }
 
           this.spinner.show();
-          let recipientIds: any = contractsSignManyChecked.map(item => item.id)
-          //Call api ký nhiều remote signing
-          await this.contractServiceV1.signRemoteMulti(
-            manyRemoteSignData,
-            recipientIds,
-            null,
-            3,
-            supplierID
-          ).then(
-            (res: any) => {
-              this.spinner.hide();
-
-              let countSuccess = 0;
-              let checkSign = res
-              for (let i = 0; i < checkSign.length; i++) {
-                if (checkSign[i].result.success == false) {
+          let certificates: RemoteCertificate[] = [];
+          try {
+             certificates = await this.contractServiceV1.getRemoteSigningCertificates(supplierID, resultRS.ma_dvcs, resultRS.phone).toPromise();
+          } catch (error) {
+             let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+              await this.contractServiceV1.signRemoteMulti(
+                manyRemoteSignData,
+                recipientIds,
+                null,
+                3,
+                supplierID,
+                this.phoneMobiCA
+              ).then(
+                async (res: any) => {
                   this.spinner.hide();
 
-                  if (checkSign[i].result.message == 'Tax code do not match!') {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'taxcode.not.match',
-                      '',
-                      3000
-                    );
-                  } else if (
-                    checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
-                  ) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Mật khẩu cấp 2 không đúng',
-                      '',
-                      3000
-                    );
-                  } else if (
-                    checkSign[i].result.message == 'License ky so het han!'
-                  ) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'License ký số hết hạn!',
-                      '',
-                      3000
-                    );
-                  } else {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      checkSign[i].result.message,
-                      '',
-                      3000
-                    );
-                  }
-                  return;
-                } else {
-                  countSuccess++;
-                }
-              }
+                  let countSuccess = 0;
+                  let checkSign = res
+                  this.handleContractData(checkSign);
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
 
-              if (countSuccess == checkSign.length) {
-                this.spinner.hide();
-                this.remoteDialogSuccessOpen(supplierID).then((res) => {
-                  if (res.isDismissed) {
-                    this.router
+                      if (checkSign[i].result.message == 'Tax code do not match!') {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'taxcode.not.match',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'License ky so het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
+                    } else {
+                      countSuccess++;
+                    }
+                  }
+
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    if(supplierID !== 'MobiFoneCA'){
+                      this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                        if (res.isDismissed) {
+                          this.router
+                            .navigateByUrl('/', { skipLocationChange: true })
+                            .then(() => {
+                              this.router.navigate(['main/c/receive/processed']);
+                            });
+                        }
+                      })
+                    } else {
+                      this.router
                       .navigateByUrl('/', { skipLocationChange: true })
                       .then(() => {
                         this.router.navigate(['main/c/receive/processed']);
                       });
+                      
+                      this.toastService.showSuccessHTMLWithTimeout(
+                        "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                        '',
+                        3000
+                      );
+                    }
                   }
-                })
-              }
-            },
-            (err: any) => {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
-            }
-          )
+                },
+                (err: any) => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+                }
+              )
+          }
+
+          this.spinner.hide(); 
+          if (!certificates || certificates.length === 0) {            
+              let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+              await this.contractServiceV1.signRemoteMulti(
+                manyRemoteSignData,
+                recipientIds,
+                null,
+                3,
+                supplierID,
+                this.phoneMobiCA
+              ).then(
+                async (res: any) => {
+                  this.spinner.hide();
+
+                  let countSuccess = 0;
+                  let checkSign = res
+                  this.handleContractData(checkSign);
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
+
+                      if (checkSign[i].result.message == 'Tax code do not match!') {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'taxcode.not.match',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'License ky so het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
+                    } else {
+                      countSuccess++;
+                    }
+                  }
+
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    if(supplierID !== 'MobiFoneCA'){
+                      this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                        if (res.isDismissed) {
+                          this.router
+                            .navigateByUrl('/', { skipLocationChange: true })
+                            .then(() => {
+                              this.router.navigate(['main/c/receive/processed']);
+                            });
+                        }
+                      })
+                    } else {
+                      this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                      
+                      this.toastService.showSuccessHTMLWithTimeout(
+                        "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                        '',
+                        3000
+                      );
+                    }
+                  }
+                },
+                (err: any) => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+                }
+              )
+          } else if (certificates.length === 1 || !certificates || certificates.length === 0) {
+              const serialNumber = certificates[0].serialNumber;
+              this.spinner.show();
+              let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+              await this.contractServiceV1.signRemoteMulti(
+                manyRemoteSignData,
+                recipientIds,
+                null,
+                3,
+                supplierID,
+                this.phoneMobiCA
+              ).then(
+                async (res: any) => {
+                  this.spinner.hide();
+
+                  let countSuccess = 0;
+                  let checkSign = res
+                  this.handleContractData(checkSign);
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
+
+                      if (checkSign[i].result.message == 'Tax code do not match!') {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'taxcode.not.match',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'License ky so het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
+                    } else {
+                      countSuccess++;
+                    }
+                  }
+
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    if(supplierID !== 'MobiFoneCA'){
+                      this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                        if (res.isDismissed) {
+                          this.router
+                            .navigateByUrl('/', { skipLocationChange: true })
+                            .then(() => {
+                              this.router.navigate(['main/c/receive/processed']);
+                            });
+                        }
+                      })
+                    } else {
+                      this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                      
+                      this.toastService.showSuccessHTMLWithTimeout(
+                        "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                        '',
+                        3000
+                      );
+                    }
+                  }
+                },
+                (err: any) => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+                }
+              )
+          } else {
+              const dialogConfigCert = new MatDialogConfig();
+              dialogConfigCert.width = '800px';
+              dialogConfigCert.data = { certificates: certificates };
+              dialogConfigCert.disableClose = true;
+              dialogConfigCert.panelClass = 'custom-dialog-container';
+
+              const dialogRefCert = this.dialog.open(RemoteCertSelectionDialogComponent, dialogConfigCert);
+
+              dialogRefCert.afterClosed().subscribe(async (selectedSerial: string | undefined) => {
+                if (selectedSerial) {
+                this.spinner.show();
+                let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+              await this.contractServiceV1.signRemoteMulti(
+                manyRemoteSignData,
+                recipientIds,
+                null,
+                3,
+                supplierID,
+                this.phoneMobiCA,
+                selectedSerial
+              ).then(
+                async (res: any) => {
+                  this.spinner.hide();
+
+                  let countSuccess = 0;
+                  let checkSign = res
+                  this.handleContractData(checkSign);
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
+
+                      if (checkSign[i].result.message == 'Tax code do not match!') {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'taxcode.not.match',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message == 'License ky so het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
+                    } else {
+                      countSuccess++;
+                    }
+                  }
+
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    if(supplierID !== 'MobiFoneCA'){
+                      this.remoteDialogSuccessOpen(supplierID).then((res) => {
+                        if (res.isDismissed) {
+                          this.router
+                            .navigateByUrl('/', { skipLocationChange: true })
+                            .then(() => {
+                              this.router.navigate(['main/c/receive/processed']);
+                            });
+                        }
+                      })
+                    } else {
+                      // for (let i = 0; i < recipientIds.length; i++) {
+                      //   let updateInfo: any = null;
+                      //   try {
+                      //     updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+                      //       processAt: this.isDateTime
+                      //     }],recipientIds[i]);
+                      //   } catch (err) {
+                      //     this.spinner.hide()
+                      //     this.toastService.showErrorHTMLWithTimeout(
+                      //       'Lỗi cập nhật trạng thái tài liệu',
+                      //       '',
+                      //       3000
+                      //     );
+                      //     return false;
+                      //   }
+      
+                      //   if (!updateInfo.id || !updateInfo) {
+                      //     this.spinner.hide()
+                      //     this.toastService.showErrorHTMLWithTimeout(
+                      //       'Lỗi cập nhật trạng thái tài liệu',
+                      //       '',
+                      //       3000
+                      //     );
+                      //     return false;
+                      //   }
+                      // }
+                      this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                      
+                      this.toastService.showSuccessHTMLWithTimeout(
+                        "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+                        '',
+                        3000
+                      );
+                    }
+                  }
+                },
+                (err: any) => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+                }
+              )
+                } else {
+                  // Người dùng đã hủy dialog chọn chứng thư
+                  this.spinner.hide(); // Đảm bảo spinner đã ẩn
+                  console.log("Người dùng đã hủy chọn chứng thư.");
+                }})}
+          // let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+          // //Call api ký nhiều remote signing
+          // await this.contractServiceV1.signRemoteMulti(
+          //   manyRemoteSignData,
+          //   recipientIds,
+          //   null,
+          //   3,
+          //   supplierID,
+          //   this.phoneMobiCA
+          // ).then(
+          //   async (res: any) => {
+          //     this.spinner.hide();
+
+          //     let countSuccess = 0;
+          //     let checkSign = res
+          //     this.handleContractData(checkSign);
+          //     for (let i = 0; i < checkSign.length; i++) {
+          //       if (checkSign[i].result.success == false) {
+          //         this.spinner.hide();
+
+          //         if (checkSign[i].result.message == 'Tax code do not match!') {
+          //           this.toastService.showErrorHTMLWithTimeout(
+          //             'taxcode.not.match',
+          //             '',
+          //             3000
+          //           );
+          //         } else if (
+          //           checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+          //         ) {
+          //           this.toastService.showErrorHTMLWithTimeout(
+          //             'Mật khẩu cấp 2 không đúng',
+          //             '',
+          //             3000
+          //           );
+          //         } else if (
+          //           checkSign[i].result.message == 'License ky so het han!'
+          //         ) {
+          //           this.toastService.showErrorHTMLWithTimeout(
+          //             'License ký số hết hạn!',
+          //             '',
+          //             3000
+          //           );
+          //         } else {
+          //           this.toastService.showErrorHTMLWithTimeout(
+          //             checkSign[i].result.message,
+          //             '',
+          //             3000
+          //           );
+          //         }
+          //         return;
+          //       } else {
+          //         countSuccess++;
+          //       }
+          //     }
+
+          //     if (countSuccess == checkSign.length) {
+          //       this.spinner.hide();
+          //       if(supplierID !== 'MobiFoneCA'){
+          //         this.remoteDialogSuccessOpen(supplierID).then((res) => {
+          //           if (res.isDismissed) {
+          //             this.router
+          //               .navigateByUrl('/', { skipLocationChange: true })
+          //               .then(() => {
+          //                 this.router.navigate(['main/c/receive/processed']);
+          //               });
+          //           }
+          //         })
+          //       } else {
+          //         // for (let i = 0; i < recipientIds.length; i++) {
+          //         //   let updateInfo: any = null;
+          //         //   try {
+          //         //     updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+          //         //       processAt: this.isDateTime
+          //         //     }],recipientIds[i]);
+          //         //   } catch (err) {
+          //         //     this.spinner.hide()
+          //         //     this.toastService.showErrorHTMLWithTimeout(
+          //         //       'Lỗi cập nhật trạng thái tài liệu',
+          //         //       '',
+          //         //       3000
+          //         //     );
+          //         //     return false;
+          //         //   }
+  
+          //         //   if (!updateInfo.id || !updateInfo) {
+          //         //     this.spinner.hide()
+          //         //     this.toastService.showErrorHTMLWithTimeout(
+          //         //       'Lỗi cập nhật trạng thái tài liệu',
+          //         //       '',
+          //         //       3000
+          //         //     );
+          //         //     return false;
+          //         //   }
+          //         // }
+          //         this.router
+          //         .navigateByUrl('/', { skipLocationChange: true })
+          //         .then(() => {
+          //           this.router.navigate(['main/c/receive/processed']);
+          //         });
+                  
+          //         this.toastService.showSuccessHTMLWithTimeout(
+          //           "Bạn vừa thực hiện ký nhiều thành công. Tài liệu đã được hoàn thành xử lý",
+          //           '',
+          //           3000
+          //         );
+          //       }
+          //     }
+          //   },
+          //   (err: any) => {
+          //     this.spinner.hide();
+          //     this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+          //   }
+          // )
         }
       });
     }
@@ -2104,13 +2890,13 @@ export class ContractSignatureComponent implements OnInit {
   remoteDialogSuccessOpen(supplierID:any) {
       let message = "";
       switch (supplierID) {
-        case "1":
+        case "vnpt":
           message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
-        case "2":
+        case "MobiFoneCA":
           message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
-        case "3":
+        case "mobiCA":
           message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
         default:
@@ -2167,6 +2953,8 @@ export class ContractSignatureComponent implements OnInit {
 
     let currentHeight: any[] = [];
     let dataObjectSignature: any = [];
+    let checkSign: any = [];
+    checkSign = this.updateCheckSign(checkSign, idContract);
     //tao mang currentHeight toan so 0;
     // for (let i = 0; i < fileC.length; i++) {
     //   currentHeight[i] = 0;
@@ -2234,15 +3022,24 @@ export class ContractSignatureComponent implements OnInit {
                   dataObjectSignature = await this.contractServiceV1
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
-                  let fieldsSignature = dataObjectSignature;
+                  let fieldsSignature;
+                  if (this.isAllowFirstHandleEdit[i]) {
+                    fieldsSignature = dataObjectSignature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.value && item.action_in_contract == false || item.type == 4 && item.recipient_id && item.value && item.action_in_contract == false);
+                  } else {
+                    fieldsSignature = dataObjectSignature.filter(
+                      (item: any) => item.type == 3 && item.recipient.id == recipientId[i]
+                    );
+                  }                  
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
 
                   try {
                     let saveFieldsData = await this.contractServiceV1.savefirstHandler(fieldsSignature).toPromise();
                     if(!saveFieldsData || saveFieldsData && saveFieldsData.success === false) {
                       this.spinner.hide()
+                      checkSign = this.updateMessage(checkSign, 'Lỗi lưu ô Số tài liệu hoặc ô Text')
+                      this.handleContractData(checkSign);
                       this.toastService.showErrorHTMLWithTimeout(
-                        'Lỗi lưu ô Số tài liệu hoặc ô Text ',
+                        'Lỗi lưu ô Số tài liệu hoặc ô Text',
                         '',
                         3000
                       );
@@ -2265,8 +3062,10 @@ export class ContractSignatureComponent implements OnInit {
                     dataBase64StringPdf = encode(base64StringPdf);
                   } catch (err) {
                     this.spinner.hide()
+                    checkSign = this.updateMessage(checkSign, 'Lỗi lưu ô Số tài liệu hoặc ô Text')
+                    this.handleContractData(checkSign);
                     this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi lưu ô Số tài liệu hoặc ô Text ',
+                      'Lỗi lưu ô Số tài liệu hoặc ô Text',
                       '',
                       3000
                     );
@@ -2366,6 +3165,8 @@ export class ContractSignatureComponent implements OnInit {
                         dataBase64StringPdf = dataSignMobi.data.FileDataSigned
                     } catch (err) {
                       this.spinner.hide()
+                      checkSign = this.updateMessage(checkSign, 'Lỗi call api ký USB Token')
+                      this.handleContractData(checkSign);
                       this.toastService.showErrorHTMLWithTimeout(
                         'Lỗi call api ký USB Token ',
                         '',
@@ -2376,6 +3177,8 @@ export class ContractSignatureComponent implements OnInit {
 
                     if (!dataSignMobi.data.FileDataSigned || !dataSignMobi) {
                       this.spinner.hide()
+                      checkSign = this.updateMessage(checkSign, 'Lỗi ký USB Token ' + dataSignMobi.data.ErrorDetail)
+                      this.handleContractData(checkSign);
                       this.toastService.showErrorHTMLWithTimeout(
                         'Lỗi ký USB Token ' + dataSignMobi.data.ErrorDetail,
                         '',
@@ -2397,6 +3200,8 @@ export class ContractSignatureComponent implements OnInit {
 
                     } catch (err) {
                       this.spinner.hide()
+                      checkSign = this.updateMessage(checkSign, 'Lỗi  đẩy file sau khi ký USB Token')
+                      this.handleContractData(checkSign);
                       this.toastService.showErrorHTMLWithTimeout(
                         'Lỗi  đẩy file sau khi ký USB Token ',
                         '',
@@ -2407,6 +3212,8 @@ export class ContractSignatureComponent implements OnInit {
 
                     if (!sign.recipient_id || !sign) {
                       this.spinner.hide()
+                      checkSign = this.updateMessage(checkSign, 'Lỗi  đẩy file sau khi ký USB Token')
+                      this.handleContractData(checkSign);
                       this.toastService.showErrorHTMLWithTimeout(
                         'Lỗi đẩy file sau khi ký USB Token ',
                         '',
@@ -2422,6 +3229,8 @@ export class ContractSignatureComponent implements OnInit {
                       }],recipientId[i]);
                     } catch (err) {
                       this.spinner.hide()
+                      checkSign = this.updateMessage(checkSign, 'Lỗi cập nhật trạng thái tài liệu')
+                      this.handleContractData(checkSign);
                       this.toastService.showErrorHTMLWithTimeout(
                         'Lỗi cập nhật trạng thái tài liệu ',
                         '',
@@ -2429,15 +3238,23 @@ export class ContractSignatureComponent implements OnInit {
                       );
                       return false;
                     }
+                    const existingSign = checkSign.find((sign: any) => sign.recipientId === idContract[i]);
 
                     if (!updateInfo.id || !updateInfo) {
                       this.spinner.hide()
+                      checkSign = this.updateMessage(checkSign, 'Lỗi cập nhật trạng thái tài liệu')
+                      this.handleContractData(checkSign);
                       this.toastService.showErrorHTMLWithTimeout(
                         'Lỗi cập nhật trạng thái tài liệu ',
                         '',
                         3000
                       );
                       return false;
+                    } else {
+                      if(existingSign) {
+                        existingSign.result.success = true;
+                        existingSign.result.message = '';
+                      }
                     }
                   }
                   if (i == fileC.length - 1) {
@@ -2455,6 +3272,7 @@ export class ContractSignatureComponent implements OnInit {
                       });
                   }
                 }
+                this.handleContractData(checkSign);
               } else {
                 this.spinner.hide();
                 Swal.fire({
@@ -2538,6 +3356,8 @@ export class ContractSignatureComponent implements OnInit {
     let boxTypes: any = []
     let certInfoBase64 = '';
     let sessionId: any;
+    let checkSign: any = [];
+    checkSign = this.updateCheckSign(checkSign, idContract);
     //tao mang currentHeight toan so 0;
     for (let i = 0; i < fileC.length; i++) {
       currentHeight[i] = 0;
@@ -2547,7 +3367,6 @@ export class ContractSignatureComponent implements OnInit {
     try {
       let preparePromises = fileC.map( async (_: any, i: any) => {
         const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
-
         base64String.push(encode(base64StringPdf));
 
         //Lấy toạ độ ô ký của từng tài liệu
@@ -2676,6 +3495,11 @@ export class ContractSignatureComponent implements OnInit {
         this.certInfoBase64 = certInfoBase64
         this.nameCompany = utf8.decode(cert.certInfo.CommonName);
       } else {
+        checkSign.forEach((sign: SignInfo) => {
+          sign.result.success = false;
+          sign.result.message = 'Lỗi không lấy được thông tin usb token';
+        });
+        this.handleContractData(checkSign);
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi không lấy được thông tin usb token',
           '',
@@ -2808,6 +3632,11 @@ export class ContractSignatureComponent implements OnInit {
             );
 
             if (!sign.recipient_id) {
+              checkSign.forEach((sign: SignInfo) => {
+                sign.result.success = false;
+                sign.result.message = 'Lỗi ký usb token không cập nhật được recipient id';
+              });
+              this.handleContractData(checkSign);
               this.toastService.showErrorHTMLWithTimeout(
                 'Lỗi ký usb token không cập nhật được recipient id',
                 '',
@@ -2815,21 +3644,32 @@ export class ContractSignatureComponent implements OnInit {
               );
               return false;
             }
-
+            let infoSign: any;
             const updateInfo =
-              await this.contractServiceV1.updateInfoContractConsiderPromise(
-                [{
-                  processAt: this.isDateTime
-                }],
-                recipientId[i]
-              );
+            await this.contractServiceV1.updateInfoContractConsiderPromise(
+              [{
+                processAt: this.isDateTime
+              }],
+              recipientId[i]
+            );
+            
+            const existingSign = checkSign.find((sign: any) => sign.recipientId === idContract[i]);
 
             if (!updateInfo.id) {
+              if(existingSign) {
+                existingSign.result.success = false;
+                existingSign.result.message = 'Lỗi cập nhật trạng thái tài liệu';
+              }
               this.toastService.showErrorHTMLWithTimeout(
                 'Lỗi cập nhật trạng thái tài liệu ',
                 '',
                 3000
               );
+            } else {
+              if(existingSign) {
+                existingSign.result.success = true;
+                existingSign.result.message = '';
+              }
             }
 
             if (i == fileC.length - 1) {
@@ -2968,6 +3808,9 @@ export class ContractSignatureComponent implements OnInit {
         //   });
       })
       await Promise.all(promises)
+      
+      this.handleContractData(checkSign);
+      //await Promise.all(promises)
       // token v2 - optimizing
       await this.signV2FixingProcess()
       this.toastService.showSuccessHTMLWithTimeout(
@@ -3161,7 +4004,12 @@ export class ContractSignatureComponent implements OnInit {
           a.setAttribute('style', 'display: none');
           a.href = url;
           // a.download = 'Contracts'+ '_' + formattedDate;
-          a.download = name;
+          // a.download = name;
+          let fileName = name;
+          if (!fileName.toLowerCase().endsWith('.pdf')) {
+            fileName += '.pdf';
+          }
+          a.download = fileName;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
@@ -3400,6 +4248,165 @@ export class ContractSignatureComponent implements OnInit {
       }
     } else if (currentSigningStatus.success) {
       return true
+    }
+  }
+
+  updateCheckSign(checkSign: SignInfo[], recipientId: any): SignInfo[] | null {
+    for (let i = 0; i < recipientId.length; i++) {
+      const infoSign: SignInfo = {
+        recipientId: recipientId[i],
+        result: {
+          success: false,
+          message: "",
+        },
+      };
+      checkSign.push(infoSign);
+    }
+    return checkSign;
+  }
+
+  updateMessage(checkSign: SignInfo[], message: string) {
+    checkSign.forEach((sign: SignInfo) => {
+      sign.result.success = false;
+      sign.result.message = message;
+    });
+    return checkSign;
+  }
+
+  mapRecipientStatus(a: any, b: any) {
+    const idOrder = a.split(', ').map(Number);
+    
+    const idToResult = b.reduce((acc: any, item: any) => {
+        acc[item.recipientId || item.recipients] = item.result.success ? 'Thành công' : `Thất bại: ${item.result.message}`;
+        return acc;
+    }, {});
+
+    const result = idOrder.map((id: any) => idToResult[id]).join(', ');
+    
+    return result;
+  }
+
+  mapRecipientStatusRS(a: any, b: any) {
+    const idOrder = a.split(', ').map(Number);
+    
+    const idToResult = b.reduce((acc: any, item: any) => {
+        acc[item.recipientId || item.recipients] = item.result.success ? 'Gửi yêu cầu ký thành công' : `Gửi yêu cầu ký thất bại: ${item.result.message}`;
+        return acc;
+    }, {});
+
+    const result = idOrder.map((id: any) => idToResult[id]).join(', ');
+    
+    return result;
+  }
+
+  mapRecipientStatusPKI(recipientIds: string, results: any[]): string {
+    const idOrder: number[] = [];
+    const idToResultMap = new Map<number, string>()
+    if (recipientIds && /^\d+(?:, \d+)*$/.test(recipientIds)) {
+      recipientIds.split(', ').map(Number).forEach(id => {
+        idOrder.push(id);
+        idToResultMap.set(id, 'Thất bại: Ký số thất bại, đã có lỗi trong quá trình ký số.'); 
+      });
+    }
+    if (results) {
+      results.forEach(item => {
+        if (item.recipientId !== undefined && typeof item.recipientId === 'number') {
+          const resultMessage = item.result.success
+            ? 'Thành công'
+            : `Thất bại: ${item.result.message || 'Ký số thất bại, đã có lỗi trong quá trình ký số.'}`; // Sửa đổi quan trọng
+          idToResultMap.set(item.recipientId, resultMessage);
+        }
+      });
+    }
+    const finalStatus: string[] = idOrder.map(id => idToResultMap.get(id)!);
+  
+    return finalStatus.join(', ');
+  }
+
+  getContractId(contractViewList: any[], selectedId: number): any | null {
+    const matchedItem = contractViewList.find((item) => item.id === selectedId);
+    return matchedItem || null;
+  }
+
+  async handleContractData(dataContract: any) {
+    try {
+      let eventName;
+      let tenHD = this.signedContract.map((contract: any) => contract.contractName).join(', ');
+      let idHĐ = this.signedContract.map((contract: any) => contract.contractId).join(', ');
+      let recipientId = this.signedContract.map((contract: any) => contract.id).join(', ');
+      let maHĐ = this.signedContract.map((contract: any) => contract.contract_uid).join(', ');
+      let status;
+      
+      if(this.signedContract[0]?.sign_type?.length == 0) {
+        eventName = 'xemxetLoHĐ'
+        status = this.mapRecipientStatus(idHĐ, dataContract);
+      } else {
+        let typesign = this.signedContract[0]?.sign_type[0]?.id;
+        if(typesign == 2) {
+          status = this.mapRecipientStatus(idHĐ, dataContract);
+        } else if (typesign == 3) {
+          status = this.mapRecipientStatusPKI(recipientId, dataContract);
+        } else if (typesign == 8) {
+          status = this.mapRecipientStatusRS(recipientId, dataContract);
+        } else {
+          if(dataContract.length && dataContract[0].recipientId == 0 && typesign == 4) {
+            status = recipientId
+            .split(",")
+            .map(() => `Thất bại: ${dataContract[0].result?.message}`)
+            .join(", ");
+          } else {
+            status = this.mapRecipientStatus(recipientId, dataContract);
+          }
+        }
+        if (typesign == 4) {
+          if(this.dataHsm?.supplier == 'mobifone') {
+            eventName = 'kyLoHsm_mbf'
+          } else if (this.dataHsm?.supplier == 'icorp'){
+            eventName = 'kyLoHsm_ica'
+          } else {
+            eventName = 'kyLoHsm'
+          }
+        } else if (typesign == 3) {
+          if(this.networkCode == 'MobiFone') {
+            eventName = 'kyLoSimPKI_MobiFone'
+          } else if (this.networkCode == 'Viettel') {
+            eventName = 'kyLoSimPKI_Viettel'
+          } else if (this.networkCode == "bcy"){
+            eventName = 'kyLoSimPKI_BCY'
+          } else {
+            eventName = 'kyLoSimPKI'
+          }
+        } else if (typesign == 6) {
+          eventName = 'kyLoCTS'
+        } else if (typesign == 8) {
+          if(this.supplierID == 'vnpt') {
+            eventName = 'kyLoRS_VNPTSmartCA'
+          } else if (this.supplierID == 'MobiFoneCA') {
+            eventName = 'kyLoRS_MobifoneCA'
+          } else if (this.supplierID == 'mobiCA'){
+            eventName = 'kyLoRS_Nacencomm'
+          } else {
+            eventName = 'kyLoRS'
+          }
+        } else if(typesign == 2) {
+          eventName = 'kyLoUSBtoken'
+        }
+      }
+      let data = {
+        eventName: eventName,
+        params: {
+          tenHĐ: tenHD,
+          maHĐ: maHĐ,
+          idHĐ: idHĐ,
+          nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
     }
   }
 }

@@ -69,7 +69,7 @@ export class InforContractBatchComponent implements OnInit {
   numContractBuy: any;
   eKYCContractBuy: any;
   smsContractBuy: any;
-
+  brandName: any;
   optionsCeCa: any;
   optionsCeCaValue: any = 0;
 
@@ -257,6 +257,7 @@ export class InforContractBatchComponent implements OnInit {
           );
         }
       } else {
+        e.target.value = null;
         this.toastService.showErrorHTMLWithTimeout(
           checkSizeFile.message,
           '',
@@ -354,6 +355,7 @@ export class InforContractBatchComponent implements OnInit {
 
           this.orgId = this.userService.getInforUser().organization_id;
           let checkSmsMethod: any = null;
+          let brandName: any = null;
           this.unitService
             .getUnitById(this.orgId)
             .toPromise()
@@ -370,6 +372,7 @@ export class InforContractBatchComponent implements OnInit {
                         this.eKYCContractUse = data.ekyc;
                         this.smsContractUse = data.sms;
                         checkSmsMethod = data.sms_send_method;
+                        brandName = data.brand_name;
                         //lay so luong hop dong da mua
                         this.unitService
                           .getNumberContractBuyOriganzation(this.orgId)
@@ -379,6 +382,7 @@ export class InforContractBatchComponent implements OnInit {
                               this.numContractBuy = data.contract;
                               this.eKYCContractBuy = data.ekyc;
                               this.smsContractBuy = data.sms;
+                              this.brandName = data.brand_name;
 
                               if (
                                 Number(this.eKYCContractUse) +
@@ -390,10 +394,20 @@ export class InforContractBatchComponent implements OnInit {
                                   '',
                                   3000
                                 );
-                              } else if (
+                              } else if (checkSmsMethod == 'API' && this.brandName != 'mContract') {
+                                if (responseUpload.status == 204) {
+                                  //next step
+                                  this.step = variable.stepSampleContractBatch.step2;
+                                  this.datasBatch.stepLast = this.step;
+                                  this.nextOrPreviousStep(this.step);
+                                  
+                                  this.spinner.hide();
+                                }
+                                }
+                                else if (
                                 (Number(this.smsContractUse) +
                                   Number(countSMS) >
-                                Number(this.smsContractBuy)) && checkSmsMethod == 'API'
+                                Number(this.smsContractBuy)) && checkSmsMethod == 'API' && this.brandName == 'mContract'
                               ) {
                                 this.toastService.showErrorHTMLWithTimeout(
                                   'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000

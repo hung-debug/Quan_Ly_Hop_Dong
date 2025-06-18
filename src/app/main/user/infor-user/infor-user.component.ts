@@ -13,6 +13,8 @@ import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { error } from 'console';
 import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component';
+import { ContractService } from 'src/app/service/contract.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -54,12 +56,14 @@ export class InforUserComponent implements OnInit {
   imgSignPathMark: any;
 
   phoneOld:any;
+  currentUser: any;
+  environment: any = "";
 
   organizationName:any;
   roleName:any;
   maxDate: Date = moment().toDate();
   isDisable: any;
-  isHsmIcorp: boolean = false
+  isHsmIcorp: boolean = true
   // Tham chiếu đến các component ImageCropper
   @ViewChild('imageCropperSign') imageCropperSign: ImageCropperComponentv2;
   @ViewChild('imageCropperMark') imageCropperMark: ImageCropperComponentv2;
@@ -88,7 +92,8 @@ export class InforUserComponent implements OnInit {
     public router: Router,
     private roleService: RoleService,
     private uploadService:UploadService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private contractService: ContractService,
     ) {
       this.addInforForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -99,7 +104,7 @@ export class InforUserComponent implements OnInit {
         role: this.fbd.control("", [Validators.required]),
         status: 1,
         organization_change:null,
-        // login_type: 'EMAIL'
+        login_type: 'EMAIL'
       });
      
       this.addKpiForm = this.fbd.group({
@@ -118,43 +123,68 @@ export class InforUserComponent implements OnInit {
           ),
         password1Hsm: null
       });
+      
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+
 
  }
 
   async ngOnInit(): Promise<void> {
+    this.environment = environment
     //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
       this.orgList = data.entities;
     });
-    // this.addInforForm.get('login_type')?.disable();
+    this.addInforForm.get('login_type')?.disable();
     //lay danh sach vai tro
     this.roleService.getRoleList('', '').subscribe(data => {
       this.roleList = data.entities;
     });
 
-    this.networkList = networkList;
-    this.supplierList = supplier;
+    try {
+      let listSupplierPki = await this.contractService.getListSupplier(2).toPromise();
+      if(listSupplierPki) {
+        this.networkList = listSupplierPki.map((supplier: any) => ({
+          id: supplier.pkiIndex,
+          name: supplier.supplierName,
+          code: supplier.code
+        }));
+        this.networkList.sort((a, b) => a.id - b.id);
+      }
+
+      let listSupplierHsm = await this.contractService.getListSupplier(1).toPromise();
+      if(listSupplierHsm) {
+        this.supplierList = listSupplierHsm.map((item: any) => ({
+          id: item.code,
+          name: item.supplierName
+        }));
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
+    //this.networkList = networkList;
+    //this.supplierList = supplier;
     this.user = this.userService.getInforUser();
     this.appService.setTitle('user.information');
     this.appService.setSubTitle('');
 
     this.id = this.user.customer_id;
     let arrUser = await this.userService.getUserById(this.id).toPromise();
-    // this.isDisable = arrUser.login_type;
+    this.isDisable = arrUser.login_type;
 
     this.userService.getUserById(this.id).subscribe(
       data => {
-        // if (data.login_type == null) {
-        //   data.login_type = 'EMAIL';
-        // }
-        // if(data.login_type == 'EMAIL'){
-        //   this.addInforForm.get('email')?.disable();
-        // }else if(data.login_type == 'SDT'){
-        //   this.addInforForm.get('phone')?.disable();
-        // }else if(data.login_type == 'EMAIL_AND_SDT'){
-        //   this.addInforForm.get('email')?.disable();
-        //   this.addInforForm.get('phone')?.disable();
-        // }
+        if (data.login_type == null) {
+          data.login_type = 'EMAIL';
+        }
+        if(data.login_type == 'EMAIL'){
+          this.addInforForm.get('email')?.disable();
+        }else if(data.login_type == 'SDT'){
+          this.addInforForm.get('phone')?.disable();
+        }else if(data.login_type == 'EMAIL_AND_SDT'){
+          this.addInforForm.get('email')?.disable();
+          this.addInforForm.get('phone')?.disable();
+        }
 
         this.addInforForm = this.fbd.group({
           name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -165,7 +195,7 @@ export class InforUserComponent implements OnInit {
           role: this.fbd.control(data.role_id, [Validators.required]),
           status: data.status,
           organization_change: data.organization_change,
-          // login_type: data.login_type ? data.login_type : 'EMAIL',
+          login_type: data.login_type ? data.login_type : 'EMAIL',
         });
         this.phoneOld = data.phone;
 
@@ -188,10 +218,10 @@ export class InforUserComponent implements OnInit {
 
         this.addKpiForm = this.fbd.group({
           phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-          networkKpi: data.phone_tel == 3 ? 'bcy': data.phone_tel,
+          networkKpi: data.phone_tel,
           is_show_phone_pki: data.is_show_phone_pki, 
         });
-        this.isHsmIcorp = data.hsm_supplier === "icorp";
+        this.isHsmIcorp = data.hsm_supplier === "mobifone";
         this.addHsmForm = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
@@ -241,7 +271,7 @@ export class InforUserComponent implements OnInit {
   }
 
   onSupplierChange(event: any) {
-    this.isHsmIcorp = event.value === "icorp";
+    this.isHsmIcorp = event.value === "mobifone";
   }
 
   fieldTextType: boolean = false;
@@ -389,7 +419,7 @@ export class InforUserComponent implements OnInit {
       fileImage: this.attachFile,
       fileImageMark: this.attachFileMark,
       sign_image: [],
-      // login_type: this.addInforForm.value.login_type,
+      login_type: this.addInforForm.value.login_type,
       phoneKpi: this.addKpiFormOld.value.phoneKpi,
       networkKpi: this.addKpiFormOld.value.networkKpi,
       is_show_phone_pki: this.addKpiFormOld.value.is_show_phone_pki,
@@ -401,7 +431,7 @@ export class InforUserComponent implements OnInit {
     }
     //neu thay doi so dien thoai thi can check lai
     if(data.phone != this.phoneOld){
-      this.userService.checkPhoneUser(data.phone).subscribe(
+      this.userService.checkPhoneUser(data.phone, this.currentUser.loginType).subscribe(
         dataByPhone => {
           if(dataByPhone.code == '00'){
 
@@ -500,7 +530,7 @@ export class InforUserComponent implements OnInit {
       stampImage: [],
 
       phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi == 'bcy' ? 3 : this.addKpiForm.value.networkKpi,
+      networkKpi: this.addKpiForm.value.networkKpi,
       is_show_phone_pki: this.addKpiForm.value.is_show_phone_pki,
       hsm_supplier: this.addHsmForm.value.supplier,
       uuid: this.addHsmForm.value.uuid,

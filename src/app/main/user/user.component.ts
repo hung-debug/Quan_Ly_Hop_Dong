@@ -7,6 +7,8 @@ import { UserService } from 'src/app/service/user.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { RoleService } from 'src/app/service/role.service';
+import { TranslateService } from '@ngx-translate/core';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -21,8 +23,11 @@ export class UserComponent implements OnInit {
     private importService: ImportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private roleService: RoleService
-    ) { }
+    private roleService: RoleService,
+    private translate: TranslateService
+    ) {
+      this.environment = environment
+     }
 
   organization_id_user_login:any;
   organization_id:any = "";
@@ -36,7 +41,8 @@ export class UserComponent implements OnInit {
   totalRecords: number = 0;
   row: number = 15;
   page: number = 0;
-
+  login_type: any;
+  environment: any = "";
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -110,16 +116,29 @@ export class UserComponent implements OnInit {
       this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
     }
     );
+    if(this.environment.flag === 'KD'){
+      this.cols = [
+        {header: 'user.name', style:'text-align: left;' },
+        {header: 'user.email', style:'text-align: left;' },
+        {header: 'user.phone', style:'text-align: left;' },
+        {header: 'unit.name', style:'text-align: left;' },
+        {header: 'unit.status', style:'text-align: left;' },
+        {header: 'menu.role.list', style:'text-align: left;' },
+        {header: 'login.type', style:'text-align: center;' },
+        {header: 'unit.manage', style:'text-align: center;' },
+      ];
+    }else{
+      this.cols = [
+        {header: 'user.name', style:'text-align: left;' },
+        {header: 'user.email', style:'text-align: left;' },
+        {header: 'user.phone', style:'text-align: left;' },
+        {header: 'unit.name', style:'text-align: left;' },
+        {header: 'unit.status', style:'text-align: left;' },
+        {header: 'menu.role.list', style:'text-align: left;' },
+        {header: 'unit.manage', style:'text-align: center;' },
+      ];
+    }
 
-    this.cols = [
-      {header: 'user.name', style:'text-align: left;' },
-      {header: 'user.email', style:'text-align: left;' },
-      {header: 'user.phone', style:'text-align: left;' },
-      {header: 'unit.name', style:'text-align: left;' },
-      {header: 'unit.status', style:'text-align: left;' },
-      {header: 'menu.role.list', style:'text-align: left;' },
-      {header: 'unit.manage', style:'text-align: center;' },
-    ];
   }
 
   // onInputChange(event: any) {
@@ -199,12 +218,25 @@ export class UserComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, this.name, this.row, this.page).subscribe(response => {
+    this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, "",this.name, this.row, this.page).subscribe(response => {
       this.spinner.hide();
       this.list = response.entities;
       this.totalRecords = response.total_elements;
       // log
     });
+  }
+  
+  getLoginTypeText(type: string): string {
+    switch (type) {
+      case 'EMAIL':
+        return 'Email';
+      case 'SDT':
+        return this.translate.instant('user.phone');
+      case 'EMAIL_AND_SDT':
+        return this.translate.instant('email.and.phone');
+      default:
+        return '';
+    }
   }
   
   toRecord() {

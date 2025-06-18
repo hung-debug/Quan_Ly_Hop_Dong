@@ -10,6 +10,17 @@
   margin: 5px 5px;
 }
 
+.action-button1 {
+  background: #0041C4;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 5px 5px;
+}
+
 .action-button-both{
   width: 155px;
   background: #0041C4;
@@ -133,4 +144,59 @@ input {
   margin: 5px 5px;
 }
 
+.btn_footer {
+  display: flex;
+  justify-content: space-between;
+}
 
+.refuseBonBon {
+  background: #F3F6FA;
+  border: 1px solid #C6D2EA;
+  height: 38px;
+  width: 100%;
+  border-radius: 7px;
+  cursor: pointer;
+  color: #011660;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.aconfirmBonBon {
+  background: #0041C4;
+  border: 1px solid #0041C4;
+  height: 38px;
+  width: 100%;
+  border-radius: 7px;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.aconfirmBonBonDisable {
+  background-color: #8E9AB0;
+  color: #FFFFFF;
+  border: 1px solid #C6D2EA;
+  height: 38px;
+  width: 100%;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.refuseBonBonDisable {
+  background-color: #8E9AB0;
+  color: #FFFFFF;
+  border: 1px solid #C6D2EA;
+  height: 38px;
+  width: 100%;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}

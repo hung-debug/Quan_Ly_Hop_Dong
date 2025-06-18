@@ -10,6 +10,7 @@ import { parttern_input } from "../../../config/parttern";
 import { parttern } from '../../../config/parttern';
 import { log } from 'console';
 import { UnitService } from 'src/app/service/unit.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-user',
   templateUrl: './digital-certificate-edit.component.html',
@@ -31,10 +32,12 @@ export class DigitalCertificateEditComponent implements OnInit {
   unit: any = "";
   pattern = parttern;
   emailList: any = [];
+  phoneList: any = [];
   submitted = false;
   listSelectedEmail: any = [];
   listID: any[];
   errorEmail: any = '';
+  errorPhone: any = '';
   errorOrg: any = '';
   orgList: Array<any> = [];
   orgIdSelected: any;
@@ -46,7 +49,8 @@ export class DigitalCertificateEditComponent implements OnInit {
   lang: any;
   orgListTmp: any[] = [];
   array_empty: any = [];
-  currentOrgId: string = ""
+  currentOrgId: string = "";
+  environment: any = "";
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -65,8 +69,10 @@ export class DigitalCertificateEditComponent implements OnInit {
       password: this.fbd.control("", [Validators.pattern(parttern.password)]),
       status: 1,
       email: this.fbd.control("", [Validators.required]),
+      phone: this.fbd.control("", [Validators.required]),
       orgId: this.fbd.control("", [Validators.required])
     });
+    this.environment = environment
   }
   async ngOnInit(): Promise<void> {
     this.currentOrgId = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId.toString()
@@ -100,16 +106,29 @@ export class DigitalCertificateEditComponent implements OnInit {
   async getData() {
     await this.DigitalCertificateService.getCertById(this.datas.id).toPromise().then(
       data => {
-        this.emailList.push(...data.customers);
 
-        const listCustomer = data.customers.map((item: any) => item.email);
+        // this.emailList.push(...data.customers);
+        // this.phoneList.push(...data.customers);
+        
+        const customersWithEmail = data.customers.filter((item: any) => item.email);
+        const customersWithPhone = data.customers.filter((item: any) => item.phone);
+
+        this.emailList.push(...customersWithEmail);
+        this.phoneList.push(...customersWithPhone);
+
+        const listCustomerEmail = data.customers.map((item: any) => item?.email);
+        const listCustomerPhone = data.customers.map((item: any) => item?.phone);
         this.addForm.patchValue({
           status: data.status,
-          email: listCustomer
+          // email: listCustomerEmail,
+          // phone: listCustomerPhone
+          email: listCustomerEmail.filter((e: string | null) => e),
+          phone: listCustomerPhone.filter((p: string | null) => p)
         })
 
         // set emailOptionsList
-        this.getListAllEmailFirstCall()
+        this.getListAllEmailFirstCall();
+        this.getListAllPhoneFirstCall();
         this.listID = data.customers
         this.orgID = data.orgAdminCreate.toString()
         this.keystoreSerialNumber = data.keystoreSerialNumber,
@@ -126,15 +145,16 @@ export class DigitalCertificateEditComponent implements OnInit {
         this.orgID = data.orgAdminCreate.toString()
       }
     )
-
   }
 
   changeOrg(){
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.addForm.patchValue({
-      email: this.addForm.value.email? this.addForm.value.email : []
+      email: this.addForm.value.email? this.addForm.value.email : [],
+      phone: this.addForm.value.phone? this.addForm.value.phone : []
     })
-    this.getListAllEmailOnFillter(this.organization_id)
+    this.getListAllEmailOnFillter(this.organization_id);
+    this.getListAllPhoneOnFillter(this.organization_id)
   }
 
   convertData(){
@@ -187,7 +207,7 @@ export class DigitalCertificateEditComponent implements OnInit {
   handleCancel() {
     this.dialogRef.close();
   }
-  onSelectionChange() {
+  onSelectionChangeEmail() {
     let selectedValues = []
     selectedValues = this.addForm.get('email')?.value;
     selectedValues.forEach((value: any) => {
@@ -198,9 +218,30 @@ export class DigitalCertificateEditComponent implements OnInit {
     });
     this.addForm.patchValue({ email: selectedValues });
   }
+  
+  onSelectionChangePhone() {
+    let selectedValues = []
+    selectedValues = this.addForm.get('phone')?.value;
+    selectedValues.forEach((value: any) => {
+      const option = this.phoneList.find((opt: any) => opt.phone === value);
+      if (option) {
+        value = option.phone;
+      }
+    });
+    this.addForm.patchValue({ phone: selectedValues });
+  }
+  
   save() {
     this.submitted = true;
     if(!this.validData()){
+      return;
+    }
+    
+    let emailInput = this.addForm.value.email[0]?.trim();
+    let phoneInput = this.addForm.value.phone[0]?.trim();
+
+    if(!emailInput && !phoneInput){
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn giá trị Email hoặc SĐT', "", 3000);
       return;
     }
 
@@ -218,7 +259,7 @@ export class DigitalCertificateEditComponent implements OnInit {
           return
         } else {
           checkDelete = true;
-          this.DigitalCertificateService.updateCTS(this.data.id, this.addForm.value.status, this.addForm.value.email).subscribe(response => {
+          this.DigitalCertificateService.updateCTS(this.data.id, this.addForm.value.status, this.addForm.value.email, this.addForm.value.phone).subscribe(response => {
             if (response.success == false) {
               this.toastService.showErrorHTMLWithTimeout(response.message, "", 3000)
               return
@@ -252,6 +293,29 @@ export class DigitalCertificateEditComponent implements OnInit {
       }
     });
   }
+  
+  getListAllPhoneOnFillter(event: any) {
+    this.phoneList = []
+    if (this.addForm.value.phone.length > 0) {
+      for (const item of this.addForm.value.phone) {
+        this.phoneList.push({phone: item})
+      }
+    }
+    let phone: any = event.filter || '';
+    this.DigitalCertificateService.getListOrgByPhone(phone,this.addForm.value.orgId.data || '').subscribe((response) => {
+      if (response && response.length > 0) {
+        for (const item of response) {
+          if (item?.phone != this.phoneList.find((value: any) => value.phone == item.phone)?.phone) {
+            this.phoneList.push({phone: item.phone})
+          }
+        }
+      }
+
+    }, (error) => {
+      console.log(error)
+    }
+    );
+  }
 
   getListAllEmailFirstCall() {
     this.DigitalCertificateService.getListOrgByEmail("", this.currentOrgId || '').subscribe((response) => {
@@ -264,12 +328,33 @@ export class DigitalCertificateEditComponent implements OnInit {
       }
     });
   }
+  
+  getListAllPhoneFirstCall() {
+    this.DigitalCertificateService.getListOrgByPhone("", this.currentOrgId || '').subscribe((response) => {
+      if (response && response.length > 0) {
+        for (const item of response) {
+          if (item?.phone != this.phoneList.find((value: any) => value.phone == item.phone)?.phone) {
+            this.phoneList.push({phone: item.phone})
+          }
+        }
+      }
+    });
+  }
 
 
   validateEmail() {
     this.errorEmail = "";
     if (!this.addForm.controls.email.valid) {
       this.errorEmail = "error.email.required";
+      return false;
+    }
+    return true;
+  }
+  
+  validatePhone() {
+    this.errorPhone = "";
+    if (!this.addForm.controls.email.valid) {
+      this.errorPhone = "error.phone.required";
       return false;
     }
     return true;
@@ -292,10 +377,11 @@ export class DigitalCertificateEditComponent implements OnInit {
   validData() {
     this.clearError();
     let validateResult = {
-      email: this.validateEmail(),
+      // email: this.validateEmail(),
+      // phone: this.validatePhone(),
       orgId:this.validateOrg()
     }
-    if (!validateResult.email|| !validateResult.orgId) {
+    if (!validateResult.orgId) {
       return false;
     }
     return true

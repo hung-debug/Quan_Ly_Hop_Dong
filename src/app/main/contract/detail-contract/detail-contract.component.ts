@@ -165,6 +165,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   page1: boolean = false;
   pageLast: boolean = true;
   enviroment: any = "";
+  typeUser: any;
 
   pageRendering: any;
   pageNumPending: any = null;
@@ -201,6 +202,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   async ngOnInit(): Promise<void> {
@@ -369,7 +374,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
-
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
@@ -570,7 +574,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           } else {
             if (this.mobile) {
               if(this.isAllowFirstHandleEdit) {
-                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient.id, chu_ky_anh, this.idContract).toPromise();
+                
+                this.recipient = this.isDataContract?.participants[0]?.recipients[0]?.id;
+                
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
                   this.pdfSrc = pdfMobile.filePath;
                 } else {
@@ -764,6 +771,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   eventMouseover() {}
 
   ngAfterViewInit() {
+    // if(this.mobile) {
+    //   this.preventGestureZoom()
+    // }
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -1485,7 +1495,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         signUpdate &&
         signUpdate.type == 2 &&
         this.datas.roleContractReceived == 3 &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+        ((((signUpdate?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((signUpdate?.recipient?.phone === this.currentUser.phone || signUpdate?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT'))&&this.typeUser === 0) || 
+        (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         const formData = {
@@ -1519,7 +1532,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     const signUpdate = this.isDataObjectSignature
       .filter(
         (item: any) =>
-          item?.recipient?.email === this.currentUser.email &&
+          ((((item?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((item?.recipient?.phone === this.currentUser.phone || item?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           item?.recipient?.role === this.datas?.roleContractReceived
       )
       .map((item: any) => {
@@ -1605,7 +1621,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
       (item: any) =>
-        item?.recipient?.email === this.currentUser.email &&
+        ((((item?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item?.recipient?.phone === this.currentUser.phone || item?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         item?.recipient?.role === this.datas?.roleContractReceived &&
         item.required &&
         !item.value &&
@@ -1684,7 +1703,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       if (this.datas?.is_data_contract?.participants?.length) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
-            if (this.currentUser.email == recipient.email) {
+            if((((recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((recipient?.phone === this.currentUser.phone || recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (recipient?.email === this.currentUser.email && this.typeUser === 1)) {
               recipients.push(recipient);
             }
           }
@@ -1707,7 +1729,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       } else if (recipients.length == 1) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
-            if (this.currentUser.email == recipient.email) {
+            if((((recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((recipient?.phone === this.currentUser.phone || recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (recipient?.email === this.currentUser.email && this.typeUser === 1)) {
               this.recipient = recipient;
               return;
             }
@@ -1917,4 +1942,55 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     return arrSignConfig;
   }
 
+    zoomMobile = 1.0; // 100%
+
+  zoomIn() {
+    if (this.zoomMobile < 5.0) {
+      this.zoomMobile = +(this.zoomMobile + 0.5).toFixed(2);
+    }
+  }
+
+  zoomOut() {
+    if (this.zoomMobile > 1.0) {
+      this.zoomMobile = +(this.zoomMobile - 0.5).toFixed(2);
+    }
+  }
+
+  preventGestureZoom() {
+    // Chặn pinch-to-zoom: Android & iOS
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault(); // chặn zoom bằng 2 ngón
+      }
+    }, { passive: false });
+
+    // Chặn double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault(); // chặn double-tap zoom
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // Chặn gesture zoom (chỉ hoạt động trên iOS/Safari)
+    document.addEventListener('gesturestart', e => e.preventDefault());
+    document.addEventListener('gesturechange', e => e.preventDefault());
+    document.addEventListener('gestureend', e => e.preventDefault());
+
+    // Chặn zoom bằng Ctrl + wheel (desktop)
+    document.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Chặn Ctrl + '+', '-', '=' (desktop)
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+  }
 }

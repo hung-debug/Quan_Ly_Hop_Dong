@@ -25,7 +25,7 @@ import { InforContractBatchComponent } from '../batch-contract/infor-contract-ba
 import { ConfirmContractBatchComponent } from '../batch-contract/confirm-contract-batch/confirm-contract-batch.component';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { environment } from 'src/environments/environment';
-
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 @Component({
   selector: 'app-add-contract',
   templateUrl: './add-contract.component.html',
@@ -133,7 +133,6 @@ export class AddContractComponent implements OnInit {
   message: any;
   shareData: object;
   is_disable: boolean = false;
-
   constructor(
     private formBuilder: FormBuilder,
     private appService: AppService,
@@ -144,7 +143,8 @@ export class AddContractComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private userService: UserService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private customerAnalysis: CustomerAnalysis
   ) { }
 
   isQLHD_01: boolean = true;
@@ -163,7 +163,7 @@ export class AddContractComponent implements OnInit {
           this.action = params['action'];
           this.typeClone = params['type'];
           this.status = params['status'];
-
+          this.is_disable = this.action === 'add-contract-liquidation';
           //lay id user
           let userId = this.userService.getAuthCurrentUser().id;
           this.userService.getUserById(userId).subscribe(
@@ -267,7 +267,9 @@ export class AddContractComponent implements OnInit {
                   i_data_file_contract: rs[1],
                   is_data_object_signature: rs[2],
                 };
-
+                if(data_api?.is_data_contract?.isHistoryResignPending) {
+                  this.is_disable = true
+                }
                 this.getDataContractCreated(data_api);
               },
               () => {

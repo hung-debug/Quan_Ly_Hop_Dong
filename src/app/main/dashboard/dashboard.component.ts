@@ -92,6 +92,7 @@ export class DashboardComponent implements OnInit {
   loadData2: boolean = false;
   step: any;
   endDateService: any;
+  adminEmail: any;
   //type = 1 => Hop dong don le khong theo mau
   //type = 2 => Hop dong don le theo mau
   //type = 3 => Hop dong theo lo
@@ -183,6 +184,7 @@ export class DashboardComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
+        this.adminEmail = data?.role?.code;
         this.currentName = data.name       
         //lay id role
         if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
@@ -203,7 +205,7 @@ export class DashboardComponent implements OnInit {
           let countNotiWarning: number = localStorage.getItem('countNoti') as any
           countNotiWarning++;
           localStorage.setItem("countNoti",countNotiWarning.toString())
-          if(count == '0'){
+          if(!dataOrg?.parent_id){
             countNotiWarning++;
             localStorage.setItem("countNoti",countNotiWarning.toString())
             this.currentDate = new Date();
@@ -770,7 +772,7 @@ export class DashboardComponent implements OnInit {
     this.contractService.getContractList('off','','','','','','',0,'',1,'','','').subscribe(data => {
       this.contractConnectList = data.entities;
     })
-    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'','','').subscribe(data => {
+    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'','true','','').subscribe(data => {
       this.contractRequestList = data.entities;  
       this.contractRecipienteList.forEach((item: any) => {
 
@@ -783,6 +785,17 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/contract/create/draft']);
     });
+  }
+  buyPackage(){
+  const redirectUrl =
+    'https://auth-sso.mobifone.vn:8080/oauth/realms/sso-mobifone/protocol/openid-connect/auth?' +
+    'client_id=CBS_SOLUTION' +
+    '&scope=openid' +
+    '&response_type=code' +
+    '&redirect_uri=' +
+    encodeURIComponent('http://10.38.23.153/auth/callback/aHR0cDovLzEwLjM4LjIzLjE1My92aS9ob3AtZG9uZy1kaWVuLXR1LW1vYmlmb25lLWVjb250cmFjdA==');
+
+  window.open(redirectUrl, '_blank');
   }
   
   clickAddContract(type: number){

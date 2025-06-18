@@ -10,6 +10,8 @@ import { ContractTemplateService } from 'src/app/service/contract-template.servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviewContractTemplateComponent } from '../preview-contract-template/preview-contract-template.component';
 import { isTemplateExpression } from 'typescript';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-confirm-infor-contract',
   templateUrl: './confirm-infor-contract.component.html',
@@ -29,6 +31,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     private toastService: ToastService,
     private contractTypeService: ContractTypeService,
     private dialog: MatDialog,
+    private customerAnalysis: CustomerAnalysis,
     ) {
     this.step = variable.stepSampleContract.step4
   }
@@ -118,19 +121,23 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         .toPromise(); // Chuyển Observable thành Promise
   
       // Sau khi API trên hoàn thành, gọi API changeStatusContract
-      await this.contractTemplateService
+      let reponse = await this.contractTemplateService
         .changeStatusContract(this.datas.id, 10)
         .toPromise(); // Đợi API này hoàn thành
-  
-      // Xử lý khi cả hai API thành công
-      await this.router.navigateByUrl('/', { skipLocationChange: true });
-      this.router.navigate(['/main/contract-template']);
-  
-      this.toastService.showSuccessHTMLWithTimeout(
-        'Tạo mẫu tài liệu thành công!',
-        '',
-        3000
-      );
+      
+      if (reponse.errors?.length > 0 && reponse.errors[0].code === 1017) {
+        this.handleContractData('Thất bại: Số tài liệu đã tồn tại ', 'taoMauHĐ');
+      } else {
+        this.handleContractData('Thành công', 'taoMauHĐ');
+        await this.router.navigateByUrl('/', { skipLocationChange: true });
+        this.router.navigate(['/main/contract-template']);
+    
+        this.toastService.showSuccessHTMLWithTimeout(
+          'Tạo mẫu tài liệu thành công!',
+          '',
+          3000
+        );  
+      }
     } catch (error) {
       // Xử lý lỗi nếu xảy ra ở bất kỳ API nào
       console.error('Error:', error);
@@ -373,10 +380,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           });
         }, (error) => {
           this.spinner.hide();
+          this.handleContractData('Thất bại: Vui lòng liên hệ đội hỗ trợ để được xử lý', 'capNhatMauHD');
           this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
+          await this.handleContractData('Thất bại', 'capNhatMauHD');
           break;
         }
       }
@@ -425,6 +434,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       await this.contractTemplateService.getContractSample(dataSignNotId).toPromise().then((data) => {
         this.spinner.hide();
       }, error => {
+        this.handleContractData('Thất bại: Vui lòng liên hệ đội hỗ trợ để được xử lý', 'capNhatMauHD');
         isErrorNotId = true;
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
@@ -442,6 +452,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     }
 
     if (isSuccess == 0) {
+      this.handleContractData('Thành công', 'capNhatMauHD');
       if (action != 'saveDraft_contract') {
         this.spinner.hide();
 
@@ -463,6 +474,25 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
+    }
+  }
+
+  async handleContractData(status: string, eventName: string) {
+    try {
+      let data = {
+        eventName: eventName,
+        params: {
+          tenMauHĐ: this.datas.name,
+          maMauHĐ: this.datas.contract_no,
+          idHD: this.datas.id,
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
     }
   }
 

@@ -131,6 +131,8 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <ng-container [ngSwitch]="filter_status">
@@ -291,10 +293,10 @@
                             <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.group.download' | translate}}</span>
                           </button>
-                          <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 32" (click)="ViewReasonCancel(item.contractId);">
+                          <!-- <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 32" (click)="ViewReasonCancel(item.contractId);">
                             <mat-icon><img src="../../assets/img/cancel_notes.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'reasson.cancel.contract' | translate}}</span>
-                          </button>
+                          </button> -->
                           <button mat-menu-item class="div_icon" (click)="processHandleContract(item.contractId)">
                             <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
@@ -509,6 +511,8 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-md-2 bg-header">{{'create-time' | translate}}
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-md-2 bg-header">{{'sign-time' | translate}}
@@ -643,6 +647,8 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')"/>
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'sign-expired-time' | translate}}
@@ -892,6 +898,8 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'create-time' | translate}}
+            <img src="../../assets/img/back-up-icon.svg" class="img_icon_up_down" [ngClass]="{'disabled': ascendSortActive}" (click)="sortContractList('ascend')" />
+            <img src="../../assets/img/back-down-icon.svg" class="img_icon_up_down" style="margin-top: 20px;" [ngClass]="{'disabled': descendSortActive}" (click)="sortContractList('descent')" />
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-sm-2 bg-header">{{'sign-expired-time' | translate}}
@@ -1105,7 +1113,8 @@
 
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
-    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+    <!-- <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p> -->
+    <p style="font-size: 18px; color: white; text-align: center;white-space: pre-line;">{{loadingText}}</p>
 </ngx-spinner>
 
 

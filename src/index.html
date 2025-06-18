@@ -20,7 +20,6 @@
     
     gtag('config', 'G-FX0NLN13RT');
   </script> -->
-
 <script>
 
   window.addEventListener('load', function() {
@@ -58,8 +57,31 @@
 
 </head>
 <body class="mat-typography" style="background-color: var(--BG, #F3F6FA);">
+  <script>
+    const isMobile = /iPhone|iPod|iPad|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (!isMobile) {
+      document.write('<script src="https://econtractdev.mobifone.ai/script_econtract_tla/script_econtract_tla.js"><\/script>');
+    }
+  </script>
   <app-root></app-root>
 
+  <!-- <script>
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
+    document.addEventListener('gesturechange', function (e) {
+      e.preventDefault();
+    });
+    document.addEventListener('gestureend', function (e) {
+      e.preventDefault();
+    });
+
+    document.addEventListener('touchmove', function (e) {
+      if (e.scale !== 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+  </script> -->
   <!-- =====================Under Maintenence Page======================= -->
   <!-- <div style="text-align: center; padding-top: 165px">
     <img style="

@@ -9,6 +9,7 @@ import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
 import { encode } from 'base64-arraybuffer';
+import { RemoteCertificate } from '../main/contract-signature/components/consider-contract/remote-cert-dialog/remote-certificate.interface';
 
 export interface Contract {
   success: boolean;
@@ -181,7 +182,10 @@ export class ContractService {
   mergeTimestampFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/merge-time-stampError`
   checkCurrentSigningUrl: any = `${environment.apiUrl}/api/v1/sign/check-process-is-sign`
   // token v2 fixing ===============================
-
+  listSuppliergUrl: any = `${environment.apiUrl}/api/v1/sign/get-supplier-by-type`
+  resubmitRejectionDocumentUrl: any = `${environment.apiUrl}/api/v1/contracts/resign-pending/`
+  getRemoteSigningCertsUrl: any = `${environment.apiUrl}/api/v1/sign/remote-signing/certs`
+  
   token: any;
   customer_id: any;
   organization_id: any;
@@ -265,11 +269,15 @@ export class ContractService {
   public getContractList(isOrg: any, organization_id: any, filter_name: any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status: any,
     page: any,
     size: any,
+    orderDesc: string,
     handlerName: any,
     nameOrEmailCustomer: any,
     issue?: any,
+    isDelete?: any
   ): Observable<any> {
     this.getCurrentUser();
+    
+    let orderPrefix = orderDesc? '&order_desc=' + orderDesc : '';
 
     if (filter_from_date != '') {
       filter_from_date = this.datepipe.transform(
@@ -290,7 +298,6 @@ export class ContractService {
     let listContractUrl = '';
     if (isOrg == 'off') {
       if (filter_status == '50') {
-        console.log("1");
         
         filter_status = '30';
         listContractUrl =
@@ -312,12 +319,13 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          size +
+          orderPrefix +
+          + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
           if(handlerName != ""){
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
-        console.log("2");
         listContractUrl =
           this.listContractUrl +
           '?keyword=' +
@@ -337,15 +345,15 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim() ;
+          size +
+          orderPrefix +
+          '&name_or_email_customer=' + nameOrEmailCustomer.trim() ;
           if(handlerName != ""){
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       }
     } else {
-      console.log("3");
       if (organization_id == '') {
-        console.log("4");
         listContractUrl =
           this.listContractOrgChildrenUrl +
           '?organizationId=' +
@@ -367,15 +375,16 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          size + 
+          orderPrefix +
+          '&name_or_email_customer=' + nameOrEmailCustomer.trim();
           if(handlerName != ""){
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
-        console.log("5");
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
-          '&page=' + page + '&size=' + size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          '&page=' + page + '&size=' + size + orderPrefix + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
           if(handlerName != ""){
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
@@ -384,6 +393,10 @@ export class ContractService {
 
     if (issue) {
       listContractUrl += '&issue=' + issue;
+    }
+
+    if (isDelete) {
+      listContractUrl += '&is_delete=' + isDelete;
     }
     //
     const headers = { Authorization: 'Bearer ' + this.token };
@@ -1354,56 +1367,56 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, supplierID:any) {
+  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, supplierID:any, phoneMobiCA:any, serialNumber?: any | null) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const supplierMap: { [key: number]: string } = {
-        1: 'vnpt',
-        2: 'mobiCA',
-        3: 'nacencomm'
-      };
-    const supplier = supplierMap[supplierID] || 'vnpt';
-    const body = JSON.stringify({
+
+    const supplier = supplierID || 'vnpt';
+    const body: any = {
       userCode: datas.cert_id,
       image_base64: datas.imageBase64,
       isTimestamp: isTimestamp,
       type: boxType,
       field: datas.field,
-      supplier: supplier
-    });
+      supplier: supplier,
+      phone: phoneMobiCA
+    };
+    if (serialNumber !== undefined && serialNumber !== null) {
+        body.serialNumber = serialNumber;
+    }
+    const jsonBody = JSON.stringify(body);
 
     return this.http
-      .post<any>(this.signRemoteUrl + recipientId, body, { headers: headers })
+      .post<any>(this.signRemoteUrl + recipientId, jsonBody, { headers: headers }) // Sử dụng jsonBody
       .toPromise();
   }
 
-  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, supplierID : any) {
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, supplierID : any, phoneMobiCA:any,serialNumber?: any | null) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const supplierMap: { [key: number]: string } = {
-        1: 'vnpt',
-        2: 'mobiCA',
-        3: 'nacencomm'
-      };
-    const supplier = supplierMap[supplierID] || 'vnpt';
-
-    const body = JSON.stringify({
+    const supplier = supplierID || 'vnpt';
+    const body: any = {
       userCode: datas.cert_id,
       image_base64: datas.imageBase64,
       isTimestamp: false,
       type: boxType,
       field: datas.field,
-      supplier: supplier
-    });
+      supplier: supplier,
+      phone: phoneMobiCA
+    };
+    if (serialNumber !== undefined && serialNumber !== null) {
+        body.serialNumber = serialNumber;
+    }
+    const jsonBody = JSON.stringify(body)
 
     return this.http
-      .post<any>(this.signManyRemoteUrl + "?id=" + recipientIds, body, { headers: headers })
+      .post<any>(this.signManyRemoteUrl + "?id=" + recipientIds, jsonBody, { headers: headers })
       .toPromise();
   }
 
@@ -1872,6 +1885,14 @@ export class ContractService {
     return this.http.get<any>(this.getCopyContract + id, { headers });
   }
 
+  resubmitRejectionDocument(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.resubmitRejectionDocumentUrl + id, { headers });
+  }
+
   convertUrltoBinary(res: any) {
     const headers = new HttpHeaders().append(
       'Content-Type',
@@ -2174,6 +2195,23 @@ export class ContractService {
       .post<any>(this.mergeTimestampFixingUrl, body, { headers: headers })
       .pipe();
   }
+
+  getListSupplier(type: number) {
+    this.getCurrentUser();
+    
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.token
+    });
+  
+    return this.http
+      .get<any>(this.listSuppliergUrl + '?typeId=' + type, {
+        headers: headers,
+      })
+      .pipe();
+  }
+  
+
   // tokenV2 fixing =======================================================
 
   checkCurrentSigning(recipientId: string) {
@@ -2542,4 +2580,19 @@ export class ContractService {
       },
     ];
   }
+  getRemoteSigningCertificates(supplierId: string, userCode?: string, phone?: string): Observable<RemoteCertificate[]> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+      supplier: supplierId,
+      userCode: userCode || "",
+      phone: phone || "" 
+    };
+    return this.http.post<RemoteCertificate[]>(this.getRemoteSigningCertsUrl, body, { headers }).pipe(
+      map(response => response),
+      catchError(this.handleError)
+    );
+    }
 }

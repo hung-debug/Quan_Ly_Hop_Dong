@@ -5,8 +5,11 @@
 .container-fluid{
   background-color: #FFFFFF;
   border-radius: 12px;
+  // min-height: 92vh;
+}
+
+.size-web {
   padding-top: 18px;
-  min-height: 92vh;
 }
 
 .sample-contract {
@@ -293,7 +296,35 @@
   border: 0 none;
   border-radius: 6px;
   cursor: pointer;
-  margin: 5px 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.action-button-mobile {
+  width: 95%;
+  height: 42px;
+  background: #0041C4;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.action-button1-mobile {
+  width: 95%;
+  height: 42px;
+  background: #106DB6;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis
@@ -354,7 +385,7 @@
 
 .input-mobile {
   box-sizing: border-box;
-  width: 50px;
+  //width: 50px;
   height: 30px;
   background: #FFFFFF;
   border: 1px solid #87CAFF;
@@ -630,3 +661,62 @@ a.info-contract {
     width: calc(100% - 120px);
   }
 }
+
+:host ::ng-deep .pdf-viewer-custom .page {
+  width: 100% !important;
+}
+
+.input1 {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19px;
+  box-sizing: border-box;
+  text-align: center;
+  width: 24px;
+  height: 24px;
+  background: #FFFFFF;
+  border: none;
+  border-radius: 3px;
+}
+
+.no-focus {
+  &:focus {
+    outline: none; /* Ensure no outline on focus */
+    box-shadow: none; /* Remove box-shadow */
+  }
+}
+
+.pdf-viewer-custom {
+  position: relative;
+}
+
+.zoom-controls {
+  position: absolute;
+  bottom: 5px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.zoom-controls img {
+  width: 32px;
+  height: 32px;
+  margin: 2px 0;
+  cursor: pointer;
+}
+
+.zoom-controls img[alt$="Disabled"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+// .no-zoom {
+//   touch-action: manipulation;       /* Ngăn double-tap zoom */
+//   -ms-touch-action: manipulation;
+//   user-select: none;
+//   -webkit-user-select: none;
+//   -webkit-touch-callout: none;
+//   pointer-events: auto;
+// }

@@ -7,7 +7,8 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from "ngx-spinner";
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-confirm-info-contract',
   templateUrl: './confirm-info-contract.component.html',
@@ -20,6 +21,7 @@ export class ConfirmInfoContractComponent implements OnInit {
 
   currentUser: any;
   emailRecipients: any;
+  typeUser: any;
   arrVariableRemove = [
     'id',
     'sign_unit',
@@ -46,8 +48,12 @@ export class ConfirmInfoContractComponent implements OnInit {
     private router: Router,
     private spinner: NgxSpinnerService,
     private dialog: MatDialog,
-    private toastService: ToastService,) {
-    this.step = variable.stepSampleContract.step4
+    private toastService: ToastService,
+    private customerAnalysis: CustomerAnalysis) {
+    this.step = variable.stepSampleContract.step4;
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   data_sample_contract: any = [];
@@ -109,7 +115,10 @@ export class ConfirmInfoContractComponent implements OnInit {
     for (const d of this.datas.is_data_contract.participants) {
       for (const q of d.recipients) {
         if (q.email) {
-          if (q.email == this.currentUser.email && q.status == 1) {
+          if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+          (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
             id_recipient_signature = q.id;
             break
           }
@@ -127,7 +136,10 @@ export class ConfirmInfoContractComponent implements OnInit {
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }
@@ -322,8 +334,25 @@ export class ConfirmInfoContractComponent implements OnInit {
 
       if (!isCheckFail) {
         // arrCoordination (data old, request) thay bằng response_determine_contract.recipients (response)
-        await this.contractService.coordinationContract(participantId, response_determine_contract.recipients, this.datas.recipient_id_coordition).toPromise().then((data) => {
+        await this.contractService.coordinationContract(participantId, response_determine_contract.recipients, this.datas.recipient_id_coordition).toPromise().then(async (data) => {
           this.toastService.showSuccessHTMLWithTimeout("Điều phối tài liệu thành công!", "", 3000);
+          try {
+            let data = {
+              eventName: "dieuPhoiHĐ",
+              params: {
+                tenHĐ: this.datas.is_data_contract.name,
+                maHĐ: this.datas.is_data_contract.contract_uid,
+                idHĐ: this.datas.is_data_contract.id,
+                nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
+                thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+                trangThai: "Thành công",
+              },
+              link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+            };
+            await this.customerAnalysis.pushData(data);
+          } catch (error) {
+            console.error('Lỗi khi gửi dữ liệu phân tích Điều phối:', error);
+          }
           // save local check khi user f5 reload lại trang sẽ ko còn action điều phối tài liệu
           // localStorage.setItem('coordination_complete', JSON.stringify(true));
           // this.spinner.hide();

@@ -66,6 +66,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   page: number = 5;
   code: any;
   id_form: number;
+  errorEndTime:any='';
 
   attachFormFileNameArr: any[] = [];
   attachFileArr: any[] = [];
@@ -308,7 +309,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   getContractList() {
     this.contractService
-      .getContractList('off', '', '', '', '', '', '', 30, '', 10000,'','')
+      .getContractList('off', '', '', '', '', '', '', 30, '', 10000,'true','','')
       .subscribe(
         (data) => {
           this.contractConnectList = data.entities;
@@ -492,6 +493,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       this.datasForm.fileAttachForm = [];
     }
     for (let i = 0; i < files.length; i++) {
+      let isCheck = true;
       let file1 = e.target.files[i];
       // const file = e.target.files[i];
 
@@ -499,28 +501,35 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       if (file1) {
         let file = new File([file1], this.convertFileName(file1.name));
         const extension: any = file.name.split('.').pop();
+        const file_name = file.name;
+        if (
+          this?.datasForm?.fileAttachForm && this?.datasForm?.fileAttachForm.filter((p: any) => file.name == p.filename || file.name == p.name).length > 0
+        ) {
+          this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
+          isCheck = false;
+        }
 
-        if (file.size <= 10*(Math.pow(1024, 2))) {
+        if (file.size <= 20*(Math.pow(1024, 2))) {
 
           if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
           || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
           || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
-            const file_name = file.name;
-            if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
-              this.listFileAttach.push(file);
-            }
-
-            if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
-              this.datasForm.fileAttachForm.push(file);
+            if(isCheck) {
+              if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
+                this.listFileAttach.push(file);
+              }
+  
+              if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
+                this.datasForm.fileAttachForm.push(file);
+              }
             }
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
-
         } else {
           this.datasForm.file_name_attach = '';
           this.datasForm.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng tối đa 10MB','',3000);
+          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng tối đa 20MB','',3000);
           break;
         }
       }
@@ -530,12 +539,13 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
     const valueEmpty: any = document.getElementById('attachFile');
     valueEmpty.value = '';
+    e.target.value = null;
   }
 
   deleteFileAttach(item: any, index_dlt: number) {
     if (item.id && this.action == 'edit') {
       this.spinner.show();
-      let data = this.datasForm.fileAttachForm.filter(
+      let data = this?.datasForm?.fileAttachForm.filter(
         (p: any) => p.id == item.id
       )[0];
       if (data) data.status = 0;
@@ -577,6 +587,15 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     return false;
   }
 
+  endTimeRequired(){
+    this.errorEndTime = "";
+    if(!this.datasForm.sign_time){
+      this.errorEndTime = "error.notTime";
+      return false;
+    }
+    return true;
+  }
+
 
   validDataForm() {
     if (!this.datasForm.template_contract_id) {
@@ -589,6 +608,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       this.toastService.showWarningHTMLWithTimeout(this.translate.instant('please.choose.contract.name'),'',3000);
       return false;
     }
+    
+    // this.endTimeRequired();
+    const isValid = this.endTimeRequired();
+    if (!isValid) return;
 
     //Check khong có type_id và type_id đó không nằm trong typeList thì báo valid
     if (environment.flag == 'NB') {

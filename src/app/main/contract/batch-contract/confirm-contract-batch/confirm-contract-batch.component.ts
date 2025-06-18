@@ -24,6 +24,8 @@ import { ContractTemplateService } from 'src/app/service/contract-template.servi
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-confirm-contract-batch',
   templateUrl: './confirm-contract-batch.component.html',
@@ -103,6 +105,7 @@ export class ConfirmContractBatchComponent
   loaded = false;
   isDisablePrevious = false;
   isDisableNext = false;
+  isDisableNextSubmit = false;
   difX: number;
   arrDifPage: any = [];
 
@@ -128,6 +131,7 @@ export class ConfirmContractBatchComponent
     private contractTemplateService: ContractTemplateService,
     private router: Router,
     private userService: UserService,
+    private customerAnalysis: CustomerAnalysis,
   ) {
     this.step = variable.stepSampleContractBatch.step2;
   }
@@ -892,6 +896,10 @@ export class ConfirmContractBatchComponent
 
   user: any;
   submit() {
+    // this.isDisableNextSubmit = true;
+    // setTimeout(() => {
+    //   this.isDisableNextSubmit = false;
+    // }, 3000);
 
     if (!this.datasBatch.ceca_push)
       this.datasBatch.ceca_push = 0;
@@ -962,18 +970,20 @@ export class ConfirmContractBatchComponent
         this.spinner.show();
         const confirmContractBatchCall = await this.contractService.confirmContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,isCeCA).toPromise()
         let response = confirmContractBatchCall
-
+        let reason;
         if(response.errors?.length > 0) {
           if(response.errors[0].code == 1015) {
+            reason = 'Số lượng tài liệu đã mua không còn đủ để tạo tài liệu'
             this.toastService.showErrorHTMLWithTimeout('Số lượng tài liệu đã mua không còn đủ để tạo tài liệu','',3000);
             this.spinner.hide();
-            return;
           } else {
+            reason = 'Tạo tài liệu theo lô thất bại'
             this.toastService.showErrorHTMLWithTimeout('Tạo tài liệu theo lô thất bại','',3000);
             this.spinner.hide();
-            return;
           }
+          await this.handleContractData('Thất bại: ' + reason, response);
         } else {
+          await this.handleContractData('Thành công', response);
           this.router
           .navigateByUrl('/', { skipLocationChange: true })
           .then(() => {
@@ -990,6 +1000,33 @@ export class ConfirmContractBatchComponent
         this.spinner.hide()
         this.toastService.showErrorHTMLWithTimeout(error.error.message,'',3000);
       }
+    }
+  }
+
+  async handleContractData(status: string, response: any) {
+    try {
+      let tenHĐ = response.map((contract: any) => contract.name).join(', ');
+      let maHD = response.map((contract: any) => contract.contract_uid).join(', ');
+      let idHD = response.map((contract: any) => contract.id).join(', ');
+      let data = {
+        eventName: "taoHDTheoLo",
+        params: {
+          tenHĐ: tenHĐ,
+          maHD: maHD,
+          idHD: idHD,
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        } as any,
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      };
+  
+      if (response.errors?.length > 0 && response.errors[0].code == 1015) {
+        delete data.params.idHD;
+        delete data.params.maHD;
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
     }
   }
 

@@ -12,7 +12,8 @@ import { DeviceDetectorService } from "ngx-device-detector";
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
 import { ConsiderContractComponent } from "src/app/main/contract-signature/components/consider-contract/consider-contract.component";
 import { log } from 'console';
-
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-cert-dialog-sign',
@@ -29,8 +30,10 @@ export class CertDialogSignComponent implements OnInit {
   list: any[];
   selectedCert: any;
   dataCardId: any;
+  dataMST:any;
   currentUser: any;
   loginType: any;
+  typeUser: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -44,12 +47,13 @@ export class CertDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private DigitalCertificateService: DigitalCertificateService,
     private deviceService: DeviceDetectorService,
+    private customerAnalysis: CustomerAnalysis
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    this.loginType = JSON.parse(
+    this.typeUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
   }
@@ -136,47 +140,84 @@ export class CertDialogSignComponent implements OnInit {
       )
     }
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    const uidCert = this.getValueByKey(this.selectedCert.certInformation, "UID")
-    this.dataCardId = uidCert?.split(":")[1];
-
+    // const uidCert = this.getValueByKey(this.selectedCert.certInformation, "UID=CCCD")
+    // this.dataCardId = uidCert?.split(":")[1];
+    const cccdMatch = this.selectedCert.certInformation.match(/UID=CCCD:([\d]+)/);
+    const mstMatch = this.selectedCert.certInformation.match(/UID=MST:([\d-]+)/);
+    
+    this.dataCardId = cccdMatch ? cccdMatch[1] : null;
+    this.dataMST = mstMatch ? mstMatch[1] : null;
+    
     if (!this.data.id) {
       //trường hợp ký đơn
       for (const signUpdate of this.data.isDataObjectSignature) {
-        if (signUpdate?.recipient?.email === this.currentUser.email &&
-          this.dataCardId === signUpdate?.recipient?.cardId && signUpdate?.recipient?.status === 1) {
+        if (((((signUpdate?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((signUpdate?.recipient?.phone === this.currentUser.phone || signUpdate?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
+          signUpdate?.recipient?.status === 1) {
           this.dialogRef.close(this.selectedCert);
           return;
         }
-        else {
-          if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
-              '',
-              3000
-            );
-            return;
-          }
-        }
+        // else {
+        //   if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
+        //       '',
+        //       3000
+        //     );
+        //     return;
+        //   }
+        // }
       }
     } else if (this.data.id == 1) {
       //trường hợp ký nhiều
       for (const signUpdate of this.data.isDataObjectSignature) {
-        if (signUpdate?.email === this.currentUser.email &&
-          this.dataCardId === signUpdate?.cardId && signUpdate?.status === 1) {
+        if (((((signUpdate?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((signUpdate?.phone === this.currentUser.phone || signUpdate?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (signUpdate?.email === this.currentUser.email && this.typeUser === 1)) &&
+         signUpdate?.status === 1) {
           this.dialogRef.close(this.selectedCert);
           return;
         }
-        else {
-          if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
-              '',
-              3000
-            );
-            return;
-          }
-        }
+        // else {
+        //   if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
+        //       '',
+        //       3000
+        //     );
+        //     return;
+        //   }
+        // }
       }
+    }
+  }
+
+  async handleFalseContractData(status: any) {
+    try {
+      let eventName = 'kyLoCTS'
+      let tenHD = this.data.isDataObjectSignature.map((contract: any) => contract.contractName).join(', ');
+      let idHĐ = this.data.isDataObjectSignature.map((contract: any) => contract.contractId).join(', ');
+      let recipientId = this.data.isDataObjectSignature.map((contract: any) => contract.id).join(', ');
+      let maHĐ = this.data.isDataObjectSignature.map((contract: any) => contract.contract_uid).join(', ');
+    
+      let data = {
+        eventName: eventName,
+        params: {
+          tenHĐ: tenHD,
+          maHĐ: maHĐ,
+          idHĐ: idHĐ,
+          nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: 'Thất bại: ' + status,
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
     }
   }
 }

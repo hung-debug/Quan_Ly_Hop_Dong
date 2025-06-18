@@ -8,7 +8,7 @@ import {
   OnInit,
   Output,
   QueryList,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { ContractService } from '../../../../service/contract.service';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -55,6 +55,9 @@ import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketService } from 'src/app/service/websocket.service';
 import { environment } from 'src/environments/environment';
 import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { RemoteCertSelectionDialogComponent } from './remote-cert-dialog/remote-cert-selection-dialog.component';
+import { RemoteCertificate } from './remote-cert-dialog/remote-certificate.interface';
 
 @Component({
   selector: 'app-consider-contract',
@@ -83,7 +86,7 @@ export class ConsiderContractComponent
     pages: [],
   };
   confirmConsider = null;
-  confirmSignature = null;
+  confirmSignature: any = null;
 
   taxCodePartnerStep2: any;
 
@@ -91,6 +94,8 @@ export class ConsiderContractComponent
 
   dataVersion2: any;
   type: any = 0;
+  
+  isHiddenMobiCA: boolean = true;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -142,7 +147,8 @@ export class ConsiderContractComponent
   allFileAttachment: any[];
   allRelateToContract: any[];
   firstHandler: boolean = false;
-
+  supplierID: any;
+  suppliersRs: any[] = [];
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
     { item_id: 2, item_text: 'Ký số bằng USB token' },
@@ -175,6 +181,8 @@ export class ConsiderContractComponent
   dataCert: any;
   trustedUrl: any;
   idPdfSrcMobile: any;
+  phoneMobiCA: any;
+  // statusSign: any;
 
   sessionIdUsbToken: any;
   emailRecipients: any;
@@ -216,6 +224,8 @@ export class ConsiderContractComponent
   page1: boolean = false;
   pageLast: boolean = true;
   isXemXet: boolean = false;
+  isBonBon: boolean = false;
+  confirmConsiderBonBon: boolean = true;
   zoomOptions = [
     { percent: '25%', value: 0.25 },
     { percent: '50%', value: 0.5 },
@@ -230,6 +240,8 @@ export class ConsiderContractComponent
     { percent: '500%', value: 5.0 },
   ];
   contract_no: any;
+  typeUser: any;
+  serialNumber: string;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -250,6 +262,7 @@ export class ConsiderContractComponent
     private detectCoordinateService: DetectCoordinateService,
     private timeService: TimeService,
     private websocketService: WebsocketService,
+    private customerAnalysis: CustomerAnalysis
 
   ) {
     this.currentUser = JSON.parse(
@@ -259,12 +272,22 @@ export class ConsiderContractComponent
     this.loginType = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
 
   }
 
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    console.log('ngOnInit');
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    this.isBonBon = getStatusBonBon === "true";
+    // if(this.isBonBon) {
+    //   this.confirmSignature = 1;
+    // }
     if (environment.flag == "NB") {
       this.isNB = true
     } else {
@@ -300,8 +323,16 @@ export class ConsiderContractComponent
   async getCurrentFieldsData() {
     let res = await this.contractService.getDetermineCoordination(this.recipientId).toPromise()
     let recipData: any = []
-    recipData = res?.recipients.filter((item: any) => item.email == this.currentUser.email)
+    recipData = res?.recipients.filter((item: any) => (((item.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+    (item.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+    ((item.phone == this.currentUser.phone || item.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+    (item.email == this.currentUser.email && this.typeUser === 1));
+    
     this.isContainSignField = recipData[0]?.fields.some((ele: any) => ele.type == 3)
+  }
+
+  async submitEventsBonBon(e: any) {
+    this.confirmSignature = e;
   }
 
   firstPageMobile() {
@@ -711,7 +742,7 @@ export class ConsiderContractComponent
         for (const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
+            ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
             if (signUpdate.recipient?.sign_type) {
@@ -892,13 +923,20 @@ export class ConsiderContractComponent
     const processRoleRecipients = (roleRecipients: any[]) => {
       if (roleRecipients.length === 0) return false;
   
-      if (roleRecipients.length === 1) return roleRecipients[0].email === email;
+      // if (roleRecipients.length === 1) return roleRecipients[0].email === email;
+      if (roleRecipients.length === 1) return ((((roleRecipients[0].email === email && this.currentUser?.loginType == 'EMAIL') || 
+      (roleRecipients[0].phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((roleRecipients[0].email === email || roleRecipients[0].phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (roleRecipients[0].email === email && this.typeUser === 1));
   
       const minOrdering = Math.min(...roleRecipients.map((r: any) => r.ordering));
       const minOrderingRecipient = roleRecipients.find((r: any) => r.ordering === minOrdering);
       const minOrderingCount = roleRecipients.filter((r: any) => r.ordering === minOrdering).length;
   
-      return minOrderingCount === 1 && minOrderingRecipient.email === email;
+      return minOrderingCount === 1 && ((((minOrderingRecipient.email === email && this.currentUser?.loginType == 'EMAIL') || 
+      (minOrderingRecipient.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((minOrderingRecipient.email === email || minOrderingRecipient.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (minOrderingRecipient.email === email && this.typeUser === 1));
     };
   
     // Kiểm tra theo thứ tự ưu tiên: 2 -> 3 -> 4
@@ -1069,6 +1107,9 @@ export class ConsiderContractComponent
   eventMouseover() { }
 
   ngAfterViewInit() {
+    if(this.mobile) {
+      this.preventGestureZoom()
+    }
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -1333,7 +1374,7 @@ export class ConsiderContractComponent
     ) {
       let dataSignature = this.datas.is_data_object_signature.filter(
         (item: any) =>
-          item?.recipient?.email === this.currentUser.email &&
+          ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           item?.recipient?.role === this.datas?.roleContractReceived
       );
       if(this.firstHandler && !this.mobile) {
@@ -1480,6 +1521,9 @@ export class ConsiderContractComponent
   currentNullElement: any
   isRemoteSigningExpired: boolean = false
   isRemoteSigningProcessing: boolean = false
+  ArrRecipientsEmail: any;
+  ArrRecipientsPhone: any;
+  ArrRecipientsEmailAndPhone: any;
 
   isRemoteSigningType: boolean = false
   countReject: number = 0
@@ -1582,8 +1626,14 @@ export class ConsiderContractComponent
               this.ArrRecipientsNew = response.recipients.filter(
                 (x: any) => x.email === this.currentUser.email
               );
+              this.ArrRecipientsEmail = response.recipients.filter((x: any) => x.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL');
+              this.ArrRecipientsPhone = response.recipients.filter((x: any) => x.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT');
+              this.ArrRecipientsEmailAndPhone = response.recipients.filter((x: any) => (x.email === this.currentUser.email || x.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT');
 
-              if (this.ArrRecipientsNew.length === 0) {
+              if (((this.ArrRecipientsEmail.length === 0 && this.currentUser?.loginType == 'EMAIL') || 
+              (this.ArrRecipientsPhone.length === 0 && this.currentUser?.loginType == 'SDT') || 
+              (this.ArrRecipientsEmailAndPhone.length === 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT') && this.typeUser === 0) || 
+              (this.ArrRecipientsNew.length === 0 && this.typeUser === 1)) {
                 this.toastService.showErrorHTMLWithTimeout(
                   'Bạn không có quyền xử lý tài liệu này!',
                   '',
@@ -1777,7 +1827,10 @@ export class ConsiderContractComponent
                     this.confirmSignature == 2) ||
                   (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
                 ) &&
-                this.ArrRecipientsNew.length > 0
+                ((((this.ArrRecipientsEmail.length > 0 && this.currentUser?.loginType == 'EMAIL') || 
+                (this.ArrRecipientsPhone.length > 0 && this.currentUser?.loginType == 'SDT') || 
+                (this.ArrRecipientsEmailAndPhone.length > 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+                (this.ArrRecipientsNew.length > 0 && this.typeUser === 1))
               ) {
                 let swalfire = null;
                 let value: string;
@@ -1879,8 +1932,14 @@ export class ConsiderContractComponent
                       this.ArrRecipientsNew = response.recipients.filter(
                         (x: any) => x.email === this.currentUser.email
                       );
+                      this.ArrRecipientsEmail = response.recipients.filter((x: any) => x.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL');
+                      this.ArrRecipientsPhone = response.recipients.filter((x: any) => x.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT');
+                      this.ArrRecipientsEmailAndPhone = response.recipients.filter((x: any) => (x.email === this.currentUser.email || x.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT');
 
-                      if (this.ArrRecipientsNew.length === 0) {
+                      if (((this.ArrRecipientsEmail.length === 0 && this.currentUser?.loginType == 'EMAIL') || 
+                      (this.ArrRecipientsPhone.length === 0 && this.currentUser?.loginType == 'SDT') || 
+                      (this.ArrRecipientsEmailAndPhone.length === 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT') && this.typeUser === 0) || 
+                      (this.ArrRecipientsNew.length === 0 && this.typeUser === 1)) {
                         this.toastService.showErrorHTMLWithTimeout(
                           'Bạn không có quyền xử lý tài liệu này!',
                           '',
@@ -1904,7 +1963,10 @@ export class ConsiderContractComponent
                       //
                       for (const d of this.datas.is_data_contract.participants) {
                         for (const q of d.recipients) {
-                          if (q.email == this.currentUser.email && q.status == 1) {
+                          if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+                          (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+                          ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+                          (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
                             id_recipient_signature = q.id;
                             this.phoneOtp = phone_recipient_signature = q.phone;
                             this.userOtp = q.name;
@@ -2094,6 +2156,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px';
     dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
@@ -2120,7 +2183,10 @@ export class ConsiderContractComponent
           //
           for (const d of this.datas.is_data_contract.participants) {
             for (const q of d.recipients) {
-              if (q.email == this.currentUser.email && q.status == 1) {
+              if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+              (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+              ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+              (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
                 id_recipient_signature = q.id;
                 this.phoneOtp = phone_recipient_signature = q.phone;
                 this.userOtp = q.name;
@@ -2342,13 +2408,15 @@ export class ConsiderContractComponent
       if (this.signCertDigital) {
         for (const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4 || signUpdate.type == 5) && [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email && signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) && 
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
             let fileC: any
             try {
               fileC = await this.contractService.getFileContractPromise(
                 this.idContract
               );
             } catch (error) {
+              this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
               return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
             }
             const pdfC2 = fileC.find((p: any) => p.type == 2);
@@ -2480,6 +2548,7 @@ export class ConsiderContractComponent
             try {
               base64String = await this.contractService.getDataFileUrlPromise(fileC);
             } catch (error) {
+              this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
               return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
             }
 
@@ -2489,6 +2558,7 @@ export class ConsiderContractComponent
               try {
                 await this.createEmptySignature(signUpdate, signDigital, signI);
               } catch (err) {
+                this.handleContractData("Thất bại: Lỗi ký usb token" + err)
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký usb token ' + err,
                   '',
@@ -2507,6 +2577,7 @@ export class ConsiderContractComponent
               );
               if (!sign.recipient_id) {
                 this.spinner.hide()
+                this.handleContractData("Thất bại: Lỗi ký USB Token")
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký USB Token',
                   '',
@@ -2523,6 +2594,7 @@ export class ConsiderContractComponent
 
               if (!dataSignMobi.data.FileDataSigned) {
                 this.spinner.hide()
+                this.handleContractData("Thất bại: Lỗi ký USB Token")
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký USB Token',
                   '',
@@ -2536,6 +2608,7 @@ export class ConsiderContractComponent
               );
 
               if (!sign.recipient_id) {
+                this.handleContractData("Thất bại: Lỗi đẩy file sau khi ký usb token")
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi đẩy file sau khi ký usb token',
                   '',
@@ -2551,6 +2624,7 @@ export class ConsiderContractComponent
         }
         return true;
       } else {
+        this.handleContractData("Thất bại: Lỗi ký USB Token")
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi ký USB Token',
           '',
@@ -2564,7 +2638,7 @@ export class ConsiderContractComponent
           signUpdate &&
           signUpdate.type == 3 &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
       );
       let fileC: any
@@ -2573,6 +2647,7 @@ export class ConsiderContractComponent
           this.idContract
         );
       } catch (error) {
+        this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
         return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
       }
       const pdfC2 = fileC.find((p: any) => p.type == 2);
@@ -2626,6 +2701,7 @@ export class ConsiderContractComponent
           );
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
+            this.handleContractData("Thất bại: 'Ký số không thành công!")
             this.toastService.showErrorHTMLWithTimeout(
               'Ký số không thành công!',
               '',
@@ -2647,6 +2723,7 @@ export class ConsiderContractComponent
           );
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
+            this.handleContractData("Thất bại: 'Ký số không thành công!")
             this.toastService.showErrorHTMLWithTimeout(
               'Ký số không thành công!',
               '',
@@ -2668,7 +2745,7 @@ export class ConsiderContractComponent
             signUpdate.type == 3 ||
             signUpdate.type == 4 || signUpdate.type == 5) &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
           const objSign = this.isDataObjectSignature.filter(
@@ -2676,7 +2753,7 @@ export class ConsiderContractComponent
               signUpdate &&
               (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
               [3, 4].includes(this.datas.roleContractReceived) &&
-              signUpdate?.recipient?.email === this.currentUser.email &&
+              ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
@@ -2686,6 +2763,7 @@ export class ConsiderContractComponent
               this.idContract
             );
           } catch (error) {
+            this.handleContractData(this.translate.instant('get.contract.data.err'))
             return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
           }
 
@@ -2776,6 +2854,7 @@ export class ConsiderContractComponent
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
               uuid: this.dataHsm.uuid,
+              confirmConsider: this.dataHsm.uuid,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null : (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           } else {
@@ -2787,6 +2866,7 @@ export class ConsiderContractComponent
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
               uuid: this.dataHsm.uuid,
+              confirmConsider: this.dataHsm.uuid,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
@@ -2808,18 +2888,21 @@ export class ConsiderContractComponent
                   );
                 } else if (checkSign.message) {
                   if (checkSign.message.includes('Cannot authenticate hsm')) {
+                    this.handleContractData('Thất bại: Không thể xác thực hsm')
                     this.toastService.showErrorHTMLWithTimeout(
                       'Không thể xác thực hsm',
                       '',
                       3000
                     );
                   } else if (checkSign.message.includes('Tax code do not match')) {
+                    this.handleContractData("Thất bại: " + this.translate.instant('taxcode.not.match'))
                     this.toastService.showErrorHTMLWithTimeout(
                       'taxcode.not.match',
                       '',
                       3000
                     );
                   } else {
+                    this.handleContractData("Thất bại: " + checkSign.message)
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign.message,
                       '',
@@ -2831,6 +2914,24 @@ export class ConsiderContractComponent
                 return false;
               } else {
                 if (checkSign.success === true) {
+                  if(this.dataHsm.confirmConsider && this.typeUser != 1) {
+                    try{
+                      let saveInfoSingHsm = await this.userService.saveInfoSingHsm(this.dataHsm).toPromise();
+                      if(!saveInfoSingHsm.status) {
+                          this.toastService.showErrorHTMLWithTimeout(
+                          saveInfoSingHsm.message,
+                          '',
+                          3000
+                        );   
+                      }
+                    } catch(err) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lưu thông tin ký số cho lần ký sau thất bại',
+                        '',
+                        3000
+                      );
+                    }
+                  }
                   if (pdfC2) {
                     fileC = pdfC2.path;
                   } else if (pdfC1) {
@@ -2852,6 +2953,7 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else if (checkSign.message) {
+                  this.handleContractData("Thất bại: " + checkSign.message)
                   this.toastService.showErrorHTMLWithTimeout(
                     checkSign.message,
                     '',
@@ -2862,6 +2964,24 @@ export class ConsiderContractComponent
                 return false;
               } else {
                 if (checkSign.success === true) {
+                  if(this.dataHsm.confirmConsider && this.typeUser != 1) {
+                    try{
+                      let saveInfoSingHsm = await this.userService.saveInfoSingHsm(this.dataHsm).toPromise();
+                      if(!saveInfoSingHsm.status) {
+                          this.toastService.showErrorHTMLWithTimeout(
+                          saveInfoSingHsm.message,
+                          '',
+                          3000
+                        );   
+                      }
+                    } catch(err) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lưu thông tin ký số cho lần ký sau thất bại',
+                        '',
+                        3000
+                      );
+                    }
+                  }
                   if (pdfC2) {
                     fileC = pdfC2.path;
                   } else if (pdfC1) {
@@ -2880,7 +3000,7 @@ export class ConsiderContractComponent
           signUpdate &&
           (signUpdate.type == 3 || signUpdate.type == 2) &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
       );
 
@@ -2890,6 +3010,7 @@ export class ConsiderContractComponent
           this.idContract
         );
       } catch (error) {
+        this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
         return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
       }
       const pdfC2 = fileC.find((p: any) => p.type == 2);
@@ -2912,7 +3033,7 @@ export class ConsiderContractComponent
             signUpdate.type == 4 ||
             signUpdate.type == 5)  &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
           const objSign = this.isDataObjectSignature.filter(
@@ -2920,7 +3041,7 @@ export class ConsiderContractComponent
               signUpdate &&
               (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
               [3, 4].includes(this.datas.roleContractReceived) &&
-              signUpdate?.recipient?.email === this.currentUser.email &&
+              ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
@@ -2930,6 +3051,7 @@ export class ConsiderContractComponent
               this.idContract
             );
           } catch (error) {
+            this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
             return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
           }
 
@@ -2950,6 +3072,7 @@ export class ConsiderContractComponent
               .certInfoCert(this.cert_id)
               .toPromise();
           } catch (error) {
+            this.handleContractData("Thất bại: " + this.translate.instant('get.cert.data.err'))
             return this.toastService.showErrorHTMLWithTimeout("get.cert.data.err","",3000)
           }
           this.name = inforCert.name;
@@ -3082,6 +3205,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   } else if (checkSign.message) {
+                    this.handleContractData("Thất bại: " + checkSign.message)
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign.message,
                       '',
@@ -3100,6 +3224,7 @@ export class ConsiderContractComponent
                   }
                 }
               } catch (error) {
+                this.handleContractData("Thất bại: " + this.translate.instant('error.server'))
                 this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
                 return false
               }
@@ -3117,6 +3242,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   } else if (checkSign.message) {
+                    this.handleContractData("Thất bại: " + checkSign.message)
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign.message,
                       '',
@@ -3134,6 +3260,7 @@ export class ConsiderContractComponent
                   }
                 }
               } catch (error) {
+                this.handleContractData("Thất bại: " + this.translate.instant('error.server'))
                 this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
                 return false
               }
@@ -3163,7 +3290,7 @@ export class ConsiderContractComponent
             signUpdate.type == 3 ||
             signUpdate.type == 4 || signUpdate.type == 5) &&
           [3, 4].includes(this.datas.roleContractReceived) &&
-          signUpdate?.recipient?.email === this.currentUser.email &&
+          ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
           const objSign = this.isDataObjectSignature.filter(
@@ -3171,7 +3298,7 @@ export class ConsiderContractComponent
               signUpdate &&
               signUpdate.type == 3 &&
               [3, 4].includes(this.datas.roleContractReceived) &&
-              signUpdate?.recipient?.email === this.currentUser.email &&
+              ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
@@ -3181,6 +3308,7 @@ export class ConsiderContractComponent
               this.idContract
             );
           } catch (error) {
+            this.handleContractData("Thất bại: " + this.translate.instant('get.contract.data.err'))
             return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
           }
 
@@ -3206,7 +3334,8 @@ export class ConsiderContractComponent
             height: signUpdate.height,
             page: signUpdate.page,
           };
-
+          // console.log("fieldRemoteSigning",fieldRemoteSigning);
+          
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             // this.textSign = this.contractNoValueSign
 
@@ -3264,7 +3393,6 @@ export class ConsiderContractComponent
               imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
-
             if (fileC && objSign.length) {
               try {
                 const checkSign = await this.contractService.signRemote(
@@ -3272,8 +3400,11 @@ export class ConsiderContractComponent
                   this.recipientId,
                   this.isTimestamp,
                   signUpdate.type,
-                  supplierID
+                  supplierID,
+                  this.phoneMobiCA,
+                  this.serialNumber
                 );
+                // this.statusSign = checkSign;   
                 if (!checkSign || (checkSign && !checkSign.success)) {
                   if (!checkSign.message) {
                     this.toastService.showErrorHTMLWithTimeout(
@@ -3282,6 +3413,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   } else if (checkSign.message) {
+                    this.handleContractData("Thất bại: " + checkSign.message)
                     this.toastService.showErrorHTMLWithTimeout(
                       checkSign.message,
                       '',
@@ -3297,9 +3429,11 @@ export class ConsiderContractComponent
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
                     }
+                    this.handleContractData("Gửi yêu cầu ký thành công");
                   }
                 }
               } catch (error) {
+                this.handleContractData("Thất bại: " + this.translate.instant('error.server'))
                 return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
               }
 
@@ -3321,7 +3455,9 @@ export class ConsiderContractComponent
                     this.recipientId,
                     this.isTimestamp,
                     signUpdate.type,
-                    supplierID
+                    supplierID,
+                    this.phoneMobiCA,
+                    this.serialNumber
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -3331,6 +3467,7 @@ export class ConsiderContractComponent
                         3000
                       );
                     } else if (checkSign.message) {
+                      this.handleContractData("Thất bại: " + checkSign.message)
                       this.toastService.showErrorHTMLWithTimeout(
                         checkSign.message,
                         '',
@@ -3346,9 +3483,11 @@ export class ConsiderContractComponent
                       } else if (pdfC1) {
                         fileC = pdfC1.path;
                       }
+                      this.handleContractData("Gửi yêu cầu ký thành công");
                     }
                   }
                 } catch (error) {
+                  this.handleContractData("Thất bại: " + this.translate.instant('error.server'))
                   return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
                 }
               }
@@ -3411,7 +3550,7 @@ export class ConsiderContractComponent
   }
 
   otp: boolean = false;
-  async signContractSubmit(supplierID:any=!1) {
+  async signContractSubmit(supplierID:any =!'vnpt') {
     this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
@@ -3425,7 +3564,7 @@ export class ConsiderContractComponent
         signUpdate &&
         signUpdate.type == 2 &&
         [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+        ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         otpOrEkyc = true;
@@ -3495,7 +3634,7 @@ export class ConsiderContractComponent
     }
   }
 
-  async signContract(notContainSignImage?: boolean, supplierID =! 1) {
+  async signContract(notContainSignImage?: boolean, supplierID =! 'vnpt') {
     const signUpdateTemp = JSON.parse(
       JSON.stringify(this.isDataObjectSignature)
     );
@@ -3506,7 +3645,7 @@ export class ConsiderContractComponent
       signUpdatePayload = signUpdateTemp
         .filter(
           (item: any) =>
-            item?.recipient?.email === this.currentUser.email &&
+            ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
             item?.recipient?.role === this.datas?.roleContractReceived
         )
         .map((item: any) => {
@@ -3547,7 +3686,7 @@ export class ConsiderContractComponent
       signUpdatePayload = signUpdateTemp
         .filter(
           (item: any) =>
-            item?.recipient?.email === this.currentUser.email &&
+            ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
             item?.recipient?.role === this.datas?.roleContractReceived
         )
         .map((item: any) => {
@@ -3583,7 +3722,7 @@ export class ConsiderContractComponent
         signUpdate &&
         (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
         [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+        ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         if (signUpdate.recipient?.sign_type) {
@@ -3695,8 +3834,15 @@ export class ConsiderContractComponent
           this.ArrRecipientsNew = response.recipients.filter(
             (x: any) => x.email === this.currentUser.email
           );
+          
+          this.ArrRecipientsEmail = response.recipients.filter((x: any) => x.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL');
+          this.ArrRecipientsPhone = response.recipients.filter((x: any) => x.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT');
+          this.ArrRecipientsEmailAndPhone = response.recipients.filter((x: any) => (x.email === this.currentUser.email || x.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT');
 
-          if (this.ArrRecipientsNew.length === 0) {
+          if (((this.ArrRecipientsEmail.length === 0 && this.currentUser?.loginType == 'EMAIL') || 
+          (this.ArrRecipientsPhone.length === 0 && this.currentUser?.loginType == 'SDT') || 
+          (this.ArrRecipientsEmailAndPhone.length === 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT') && this.typeUser === 0) || 
+          (this.ArrRecipientsNew.length === 0 && this.typeUser === 1)) {
             this.toastService.showErrorHTMLWithTimeout(
               'Bạn không có quyền xử lý tài liệu này!',
               '',
@@ -3956,6 +4102,7 @@ export class ConsiderContractComponent
         recipientIdFixing
       );
     } catch (err: any) {
+      this.handleContractData("Thất bại: " + this.translate.instant("err ? err.statusText : 'callMergeTimeStamp error'"))
       console.warn("err ? err.statusText : 'callMergeTimeStamp error'")
       return;
     }
@@ -4021,6 +4168,7 @@ export class ConsiderContractComponent
 
       if (dataSignatureToken.ResponseCode != 0) {
         this.spinner.hide()
+        this.handleContractData("Thất bại: Lỗi ký usb token" + dataSignatureToken.ResponseMsg)
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi ký usb token ' + dataSignatureToken.ResponseMsg,
           '',
@@ -4039,6 +4187,7 @@ export class ConsiderContractComponent
       );
     } catch (err: any) {
       this.spinner.hide()
+      this.handleContractData("Thất bại: Lỗi ký usb token" + this.translate.instant(`${err ? err.statusText : 'error'}`))
       this.toastService.showErrorHTMLWithTimeout(
         `Lỗi ký usb token (${err ? err.statusText : 'error'})` ,
         '',
@@ -4069,13 +4218,14 @@ export class ConsiderContractComponent
   }
 
   filePath: any = '';
-  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!1) {
+  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!'vnpt') {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(this.firstHandler) {
       let savefirstHandler = await this.savefirstHandler();
       if(!savefirstHandler) {
         this.spinner.hide();
+        this.handleContractData("Thất bại: Lỗi lưu ô Số tài liệu hoặc ô Text")
         this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
         return false;
       }
@@ -4089,7 +4239,7 @@ export class ConsiderContractComponent
           signUpdateTempN = signUpdateTempN
             .filter(
               (item: any) =>
-                item?.recipient?.email === this.currentUser.email &&
+                ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
                 item?.recipient?.role === this.datas?.roleContractReceived
             )
             .map((item: any) => {
@@ -4175,6 +4325,7 @@ export class ConsiderContractComponent
 
                 setTimeout(() => {
                   if (!this.mobile) {
+                    this.handleContractData("Thành công");
                     this.toastService.showSuccessHTMLWithTimeout(
                       [3, 4].includes(this.datas.roleContractReceived)
                         ? 'Ký tài liệu thành công'
@@ -4183,6 +4334,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   } else {
+                    this.handleContractData("Thành công");
                     if ([3, 4].includes(this.datas.roleContractReceived)) {
                       alert('Ký tài liệu thành công');
                     } else {
@@ -4194,6 +4346,7 @@ export class ConsiderContractComponent
                 }, 1000);
               },
               (error) => {
+                this.handleContractData("Lỗi");
                 this.toastService.showErrorHTMLWithTimeout(
                   'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
                   '',
@@ -4213,7 +4366,7 @@ export class ConsiderContractComponent
       this.spinner.hide();
       return;
     }
-
+    // notContainSignImage && this.eKYC == false && ((this.currentBoxSignType == 8 && supplierID == 2) || (this.currentBoxSignType != 8 && supplierID != 2)) điều kiện chuyển đổi trạng thái ký mobiCA
     if (notContainSignImage && this.eKYC == false && this.currentBoxSignType !== 8) {
       signUpdateTempN[0] = {
         "processAt": this.isDateTime
@@ -4253,6 +4406,7 @@ export class ConsiderContractComponent
           }
           setTimeout(() => {
             if (!this.mobile) {
+              this.handleContractData("Thành công");
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived)
                   ? (isCheckSing ? 'success_sign' : 'sign_next_person')
@@ -4261,6 +4415,7 @@ export class ConsiderContractComponent
                 3000
               );
             } else {
+              this.handleContractData("Thành công");
               if ([3, 4].includes(this.datas.roleContractReceived)) {
                 alert('Ký tài liệu thành công');
               } else {
@@ -4272,6 +4427,7 @@ export class ConsiderContractComponent
           }, 1000);
         },
         (error) => {
+          this.handleContractData("Lỗi");
           this.toastService.showErrorHTMLWithTimeout(
             'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
             '',
@@ -4342,6 +4498,7 @@ export class ConsiderContractComponent
               }
               setTimeout(() => {
                 if (!this.mobile) {
+                  this.handleContractData("Thành công");
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
                       ? (isCheckSing ? 'success_sign' : 'sign_next_person')
@@ -4350,6 +4507,7 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else {
+                  this.handleContractData("Thành công");
                   if ([3, 4].includes(this.datas.roleContractReceived)) {
                     alert('Ký tài liệu thành công');
                   } else {
@@ -4362,6 +4520,7 @@ export class ConsiderContractComponent
             }
           },
           (error) => {
+            this.handleContractData("Lỗi");
             this.toastService.showErrorHTMLWithTimeout(
               'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
               '',
@@ -4373,13 +4532,34 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        this.remoteDialogSuccessOpen(supplierID).then(result => {
-          if (result.isDismissed) {
-            this.router.navigate([
-              'main/form-contract/detail/' + this.idContract,
-            ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
-          }
-        })
+        if(supplierID == 'vnpt' || supplierID == 'mobiCA'){
+          this.remoteDialogSuccessOpen(supplierID).then(result => {
+            if (result.isDismissed) {
+              this.router.navigate([
+                'main/form-contract/detail/' + this.idContract,
+              ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+            }
+          })
+        }else if(supplierID == 'MobiFoneCA'){
+          this.router.navigate([
+            'main/form-contract/detail/' + this.idContract,
+          ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+          
+          this.toastService.showSuccessHTMLWithTimeout(
+            "Bạn vừa thực hiện ký thành công. Tài liệu đã được hoàn thành xử lý",
+            '',
+            3000
+          );
+        }
+        
+        // this.remoteDialogSuccessOpen(supplierID).then(result => {
+        //   // console.log("statusSign",this.statusSign);
+        //   if (result.isDismissed) {
+        //     this.router.navigate([
+        //       'main/form-contract/detail/' + this.idContract,
+        //     ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
+        //   }
+        // })
       }
     }
   }
@@ -4393,7 +4573,7 @@ export class ConsiderContractComponent
         signUpdate &&
         signUpdate.type == 3 &&
         [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+        ((this.checkSignRecipientMatch(signUpdate) && this.typeUser === 0) || (signUpdate?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         const formData = {
@@ -4433,7 +4613,7 @@ export class ConsiderContractComponent
     const signUpdatePayload = signUpdateTemp
       .filter(
         (item: any) =>
-          item?.recipient?.email === this.currentUser.email &&
+          ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
           item.type == 3 &&
           item?.recipient?.role === this.datas?.roleContractReceived
       )
@@ -4530,15 +4710,7 @@ export class ConsiderContractComponent
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    if (localStorage.getItem('lang') == 'vi') {
-      rejectQuestion =
-        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
-      confirm = 'Xác nhận';
-      cancel = 'Huỷ';
-      cancelSuccess = 'Từ chối tài liệu thành công';
-      error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
-      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
-    } else if (localStorage.getItem('lang') == 'en') {
+    if (localStorage.getItem('lang') == 'en') {
       rejectQuestion =
         'Are you sure want to decline this contract? Please enter the reason';
       confirm = 'Confirm';
@@ -4546,6 +4718,14 @@ export class ConsiderContractComponent
       cancelSuccess = 'Successfully refused contract';
       error = 'Error! Please contact to developers';
       rejectReason = 'You need to enter the reason for refusing the contract';
+    } else {
+      rejectQuestion =
+        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
+      confirm = 'Xác nhận';
+      cancel = 'Huỷ';
+      cancelSuccess = 'Từ chối tài liệu thành công';
+      error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
+      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
     }
 
     this.rejectContractLang(
@@ -4594,8 +4774,15 @@ export class ConsiderContractComponent
           this.ArrRecipientsNew = response.recipients.filter(
             (x: any) => x.email === this.currentUser.email
           );
+          
+          this.ArrRecipientsEmail = response.recipients.filter((x: any) => x.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL');
+          this.ArrRecipientsPhone = response.recipients.filter((x: any) => x.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT');
+          this.ArrRecipientsEmailAndPhone = response.recipients.filter((x: any) => (x.email === this.currentUser.email || x.phone === this.currentUser.phone) && this.currentUser?.loginType == 'EMAIL_AND_SDT');
 
-          if (this.ArrRecipientsNew.length === 0) {
+          if (((this.ArrRecipientsEmail.length === 0 && this.currentUser?.loginType == 'EMAIL') || 
+          (this.ArrRecipientsPhone.length === 0 && this.currentUser?.loginType == 'SDT') || 
+          (this.ArrRecipientsEmailAndPhone.length === 0 && this.currentUser?.loginType == 'EMAIL_AND_SDT') && this.typeUser === 0) || 
+          (this.ArrRecipientsNew.length === 0 && this.typeUser === 1)) {
             this.toastService.showErrorHTMLWithTimeout(
               'Bạn không có quyền xử lý tài liệu này!',
               '',
@@ -4622,6 +4809,7 @@ export class ConsiderContractComponent
                   3000
                 );
                 this.spinner.hide();
+                this.handleContractData("Từ chối: " + textRefuse);
                 this.router.navigate([
                   '/main/form-contract/detail/reject/' + this.idContract,
                 ]);
@@ -4638,7 +4826,7 @@ export class ConsiderContractComponent
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
       (item: any) =>
-        item?.recipient?.email === this.currentUser.email &&
+        ((this.checkRecipientMatch(item) && this.typeUser === 0) || (item?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         item?.recipient?.role === this.datas?.roleContractReceived &&
         item.required &&
         (!item.valueSign && !this.otpValueSign) &&
@@ -4710,7 +4898,10 @@ export class ConsiderContractComponent
           if (this.recipientId == recipient.id) {
             this.recipient = recipient;
             this.isRemoteSigningType = recipient.sign_type.some((item: any) => item.id == 8)
-            if (this.currentUser?.email != this.recipient?.email) {
+            if ((((this.currentUser?.email != this.recipient?.email && (this.currentUser?.loginType == 'EMAIL')) || 
+            (this.currentUser?.phone != this.recipient?.phone && this.currentUser?.loginType == 'SDT') ||
+            (this.currentUser.email != this.recipient?.email && this.currentUser?.phone != this.recipient?.phone && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (this.currentUser?.email != this.recipient?.email && this.typeUser === 1)) {
               this.router.navigate([
                 'main/form-contract/detail/' + this.idContract,
               ]);
@@ -4731,7 +4922,10 @@ export class ConsiderContractComponent
       }
     }
     if (
-      this.recipient?.email == this.currentUser.email &&
+      ((((this.recipient?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+      (this.recipient?.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+      ((this.recipient?.phone == this.currentUser.phone || this.recipient?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+      (this.recipient?.email == this.currentUser.email && this.typeUser === 1)) &&
       typeSignDigital &&
       typeSignDigital == 3
     ) {
@@ -4806,8 +5000,8 @@ export class ConsiderContractComponent
   async eKYCStart(ekycDocType: string) {
     const data = {
       id: 0,
-      title: 'Xác thực CMT/CCCD mặt trước',
-      noti: 'Vui lòng đưa CMT/CCCD mặt trước vào gần khung hình',
+      title: 'Xác thực CMT/CCCD/Hộ chiếu mặt trước',
+      noti: 'Vui lòng đưa CMT/CCCD/Hộ chiếu mặt trước vào gần khung hình',
       recipientId: this.recipientId,
       contractId: this.idContract,
       ekycDocType: ekycDocType
@@ -4823,7 +5017,8 @@ export class ConsiderContractComponent
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result) => {
-      this.cccdFront = result;
+      // this.cccdFront = result;
+      this.cccdFront = result.base64Img;
 
       if (this.recipient.name && this.recipient.card_id) {
         this.nameCompany = this.recipient.name;
@@ -4839,7 +5034,27 @@ export class ConsiderContractComponent
           });
       }
 
-      if (result) this.eKYCSignOpenAfter();
+      // if (result) this.eKYCSignOpenAfter();
+      if (result.docType == "OLD ID" || result.docType == "NEW ID") this.eKYCSignOpenAfter()
+        else {
+          const dialogConfig = new MatDialogConfig();
+  
+          const dataFace = {
+            cccdFront: this.cccdFront,
+            contractId: this.idContract,
+          };
+    
+          dialogConfig.data = dataFace;
+          dialogConfig.disableClose = true;
+    
+          const final = this.dialog.open(EkycDialogSignComponent, dialogConfig);
+  
+          final.afterClosed().subscribe(async (result: any) => {
+            if (result == 2) {
+              await this.signContractSubmit();
+            }
+          });
+        }
     });
   }
 
@@ -4971,7 +5186,10 @@ export class ConsiderContractComponent
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }
@@ -5020,6 +5238,7 @@ export class ConsiderContractComponent
           this.dataHsm.password = result.password;
           this.dataHsm.password2 = result.password2;
           this.dataHsm.uuid = result.uuid;
+          this.dataHsm.confirmConsider = result.confirmConsider;
           await this.signContractSubmit();
         }
       });
@@ -5033,6 +5252,7 @@ export class ConsiderContractComponent
       is_content: 'forward_contract',
       recipientId: recipientId,
       dataContract: this.recipient,
+      isHidden: this.isHiddenMobiCA
     };
     const determineCoordination = await this.contractService.getDetermineCoordination(recipientId).toPromise();
 
@@ -5076,7 +5296,10 @@ export class ConsiderContractComponent
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }
@@ -5112,6 +5335,50 @@ export class ConsiderContractComponent
       const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(async (result: any) => {
+        if (result) {
+          this.supplierID = result.type;
+          this.dataCert.cert_id = result.ma_dvcs;
+          this.phoneMobiCA = result.phone;
+          this.suppliersRs = result.suppliers;
+        }
+        this.supplierID = result.type;
+        const userCode = result.ma_dvcs;
+        const phone = result.phone;
+        this.spinner.show();
+        let certificates: RemoteCertificate[] = [];
+        try {
+           certificates = await this.contractService.getRemoteSigningCertificates(this.supplierID, userCode, phone).toPromise();
+        } catch (error) {
+            await this.signContractSubmit(this.supplierID);
+        }
+        this.spinner.hide();
+        if (!certificates || certificates.length === 0) {
+            await this.signContractSubmit(this.supplierID); 
+          } else if (certificates.length === 1) {
+            await this.signContractSubmit(this.supplierID);}
+            else if (certificates.length > 1) {
+            // Trường hợp có nhiều hơn 1 chứng thư
+            const dialogConfigCert = new MatDialogConfig();
+            dialogConfigCert.width = '800px'; 
+            dialogConfigCert.data = { certificates: certificates };
+            dialogConfigCert.disableClose = true;
+            dialogConfigCert.panelClass = 'custom-dialog-container';
+
+            const dialogRefCert = this.dialog.open(RemoteCertSelectionDialogComponent, dialogConfigCert);
+            dialogRefCert.afterClosed().subscribe(async (selectedSerial: string | undefined) => {
+              if (selectedSerial) {
+                this.serialNumber = selectedSerial;
+                await this.signContractSubmit(this.supplierID);
+              } else {
+                this.spinner.hide();
+              }
+            });
+          }
+        if(result.type == 2){
+          this.loadingText =
+          'Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing (MobiFoneCA).\n Vui lòng mở app để ký tài liệu!';
+        }
+
         let signI = null;
         let imageRender = null;
 
@@ -5120,11 +5387,6 @@ export class ConsiderContractComponent
         // if (result?.type == '1') {
         //   isVnptSmartCA = true;
         // }
-        if (result) {
-          let supplierID = result.type;
-          this.dataCert.cert_id = result.ma_dvcs;
-          await this.signContractSubmit(supplierID);
-        }
       });
     })
   }
@@ -5232,7 +5494,10 @@ export class ConsiderContractComponent
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
-        sign?.recipient?.email === this.currentUser.email &&
+        ((((sign?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (sign?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((sign?.recipient?.phone === this.currentUser.phone || sign?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (sign?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
@@ -5267,7 +5532,10 @@ export class ConsiderContractComponent
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
-        sign?.recipient?.email === this.currentUser.email &&
+        ((((sign?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (sign?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((sign?.recipient?.phone === this.currentUser.phone || sign?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (sign?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
@@ -5298,7 +5566,10 @@ export class ConsiderContractComponent
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
-        sign?.recipient?.email === this.currentUser.email &&
+        ((((sign?.recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (sign?.recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((sign?.recipient?.phone === this.currentUser.phone || sign?.recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (sign?.recipient?.email === this.currentUser.email && this.typeUser === 1)) &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
@@ -5412,8 +5683,9 @@ export class ConsiderContractComponent
                   }
                 );
               });
-
+              
               setTimeout(() => {
+                this.handleContractData("Thành công");
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
@@ -5423,6 +5695,7 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else {
+                  this.handleContractData("Thành công");
                   if ([3, 4].includes(this.datas.roleContractReceived)) {
                     alert('Ký tài liệu thành công');
                   } else {
@@ -5448,7 +5721,7 @@ export class ConsiderContractComponent
         message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!!";
         break;
       case "2":
-        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
+        message = "Tài liệu đã ký thành công!";
         break;
       case "3":
         message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
@@ -5503,14 +5776,15 @@ export class ConsiderContractComponent
 
   getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
+    let result  = this.suppliersRs.find(item => item.id == code);
     switch (supplierID) {
-      case "1":
+      case "vnpt":
         appName = "VNPT SmartCA";
         break;
-      case "2":
-        appName = "MobiCA"; // Hoặc tên app chính xác của Nacencomm
+      case "MobiFoneCA":
+        appName = "mobiCA"; // Hoặc tên app chính xác của Nacencomm
         break;
-      case "3":
+      case "mobiCA":
         appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
         break;
       default:
@@ -5668,5 +5942,178 @@ export class ConsiderContractComponent
       0,
       canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
     );
+  }
+
+  async handleContractData(status: string) {
+    try {
+      let eventName;
+      if(this.recipient?.sign_type.length == 0) {
+        eventName = 'xemxetHĐ'
+      } else {
+        let typesign = this.recipient?.sign_type[0]?.id
+          if (typesign == 1) {
+          eventName = 'kyOTP'
+        }
+          else if (typesign == 2) {
+          eventName = 'kyUSBtoken'
+        } else if (typesign == 3) {
+            if(this.dataNetworkPKI?.networkCode == 'MobiFone') {
+            eventName = 'kySimPKI_MobiFone'
+          } else if (this.dataNetworkPKI?.networkCode == 'Viettel') {
+            eventName = 'kySimPKI_Viettel'
+          } else if (this.dataNetworkPKI?.networkCode == "bcy"){
+            eventName = 'kySimPKI_BCY'
+          } else {
+            eventName = 'kySimPKI'
+          }
+        } else if (typesign == 4) {
+          if(this.dataHsm?.supplier == 'mobifone') {
+            eventName = 'kyHsm_mbf'
+          } else if (this.dataHsm?.supplier == 'icorp'){
+            eventName = 'kyHsm_ica'
+          } else {
+            eventName = 'kyHsm'
+          }
+        } else if (typesign == 5) {
+          eventName = 'kyEKYC'
+        } else if (typesign == 6) {
+          eventName = 'kyCTS'
+        } else if (typesign == 7) {
+          eventName = 'kyUSBtokenBCY'
+        } else if (typesign == 8) {
+          if(this.supplierID == 'vnpt') {
+            eventName = 'kyRS_VNPTSmartCA'
+          } else if (this.supplierID == 'MobiFoneCA') {
+            eventName = 'kyRS_MobifoneCA'
+          } else if (this.supplierID == 'mobiCA'){
+            eventName = 'kyRS_Nacencomm'
+          } else {
+             eventName = 'kyRS'
+          }
+        } 
+      }
+      let data = {
+        eventName: eventName,
+        params: {
+          tenHĐ: this.datas.is_data_contract.name,
+          maHĐ: this.datas.is_data_contract.contract_uid,
+          idHĐ: this.datas.is_data_contract.id,
+          nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
+    }
+  }
+  
+  checkRecipientMatch(item: any): boolean {
+    const recipient = item?.recipient;
+    const user = this.currentUser;
+  
+    if (!recipient || !user) return false;
+  
+    const emailMatch = recipient?.email === user.email;
+    const phoneMatch = recipient?.phone === user.phone;
+  
+    switch (user.loginType) {
+      case 'EMAIL':
+        return emailMatch;
+      case 'SDT':
+        return phoneMatch;
+      case 'EMAIL_AND_SDT':
+        return emailMatch || phoneMatch;
+      default:
+        return false;
+    }
+  }
+  
+  checkSignRecipientMatch(signUpdate: any): boolean {
+    const recipient = signUpdate?.recipient;
+    const user = this.currentUser;
+  
+    if (!recipient || !user) return false;
+  
+    const emailMatch = recipient?.email === user.email;
+    const phoneMatch = recipient?.phone === user.phone;
+  
+    switch (user.loginType) {
+      case 'EMAIL':
+        return emailMatch;
+      case 'SDT':
+        return phoneMatch;
+      case 'EMAIL_AND_SDT':
+        return emailMatch || phoneMatch;
+      default:
+        return false;
+    }
+  }
+
+  zoomMobile = 1.0; // 100%
+
+  zoomIn() {
+    if (this.zoomMobile < 5.0) {
+      this.zoomMobile = +(this.zoomMobile + 0.5).toFixed(2);
+    }
+  }
+
+  zoomOut() {
+    if (this.zoomMobile > 1.0) {
+      this.zoomMobile = +(this.zoomMobile - 0.5).toFixed(2);
+    }
+  }
+
+  preventGestureZoom() {
+    // Ẩn scroll toàn trang
+    if(this.isBonBon) {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Chặn pinch-to-zoom ngay từ touchstart
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Chặn pinch-to-zoom khi đang di chuyển
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Chặn double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // iOS Safari gestures
+    document.addEventListener('gesturestart', e => e.preventDefault());
+    document.addEventListener('gesturechange', e => e.preventDefault());
+    document.addEventListener('gestureend', e => e.preventDefault());
+
+    // Desktop Ctrl + wheel
+    document.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Ctrl + key zoom
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
   }
 }

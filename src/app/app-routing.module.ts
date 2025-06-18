@@ -59,6 +59,7 @@ import { ReportContractReceiveComponent } from './main/report/report-contract-re
 import { environment } from 'src/environments/environment';
 import { SystemConfigComponent } from './main/system-config/system-config.component';
 import { DeleteConfigDialogComponent } from './main/system-config/delete-config-dialog/delete-config-dialog.component';
+import { BonBonComponent } from './bon-bon/bon_bon.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -70,6 +71,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'bonbon/:username/:pass/:type/:isContractId/:recipientId',
+    component: BonBonComponent
   },
   {
     path: 'handle/:data',

@@ -125,6 +125,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   pageNum: number = 1;
   page1: boolean = false;
   pageLast: boolean = true;
+  typeUser: any;
 
   pageRendering:any;
   pageNumPending: any = null;
@@ -139,6 +140,9 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     public translate: TranslateService,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   ngOnInit(): void {
@@ -223,7 +227,10 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     //lay thong tin user dang nhap
     let userLogin = this.userService.getAuthCurrentUser();
     this.contractTemplateService.getEmailShareList(this.idContract, userLogin.organizationId).subscribe(listShared => {
-      let isShare = listShared.filter((p:any) => p.email === userLogin.email);
+      let isShare = listShared.filter((p:any) => ((((p.email === userLogin.email && userLogin?.loginType == 'EMAIL') || 
+      (p?.phone === userLogin?.phone && userLogin?.loginType == 'SDT') ||
+      ((p?.phone === userLogin?.phone || p?.email === userLogin?.email) && userLogin?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+      (p?.email === this.currentUser.email && this.typeUser === 1)));
       if(isShare.length > 0){
         this.roleAccess = true;
       }
@@ -245,7 +252,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
         this.allFileAttachment = this.allFileAttachment.map((item: any) => ({...item, path: item.path.includes('.txt') ? item.path : item.path.replace("/tmp/","/tmp/v2/")}))
         this.checkIsViewContract();
-
+                  
         if(this.datas.is_data_contract?.created_by == userLogin.id){
           this.roleAccess = true;
         }else{
@@ -886,7 +893,10 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     if (this.datas?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          if (this.currentUser.email == recipient.email) {
+          if ((((recipient?.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (recipient?.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((recipient?.phone === this.currentUser.phone || recipient?.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+          (recipient?.email === this.currentUser.email && this.typeUser === 1)) {
             this.recipient = recipient;
             return;
           }

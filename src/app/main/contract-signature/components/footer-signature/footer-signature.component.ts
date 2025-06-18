@@ -21,6 +21,7 @@ export class FooterSignatureComponent implements OnInit {
   @Input() view: any;
   @Input() recipientId: any;
   @Output() submitChanges = new EventEmitter<number>();
+  @Output() submitChangesBonBon = new EventEmitter<number>();
   @Input() confirmSignature: any;
   @Input() coordinateY: any;
   @Input() idElement: any;
@@ -30,6 +31,7 @@ export class FooterSignatureComponent implements OnInit {
   @Input() pageLast: boolean;
   @Input() firstHandler: boolean;
   @Input() confirmConsider: any;
+  @Input() confirmConsiderBonBon: any;
   @Input() pageNum: number;
 
   @Input() pageBefore: number;
@@ -48,6 +50,7 @@ export class FooterSignatureComponent implements OnInit {
   contractId: any;
 
   currentUser: any;
+  typeUser: any;
   emailRecipients: any;
   
   pageRendering: any;
@@ -57,6 +60,7 @@ export class FooterSignatureComponent implements OnInit {
   phone: string = "phone";
   currentRecipient: any;
   type: any = 0;
+  isBonBon: boolean = false;
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
@@ -68,11 +72,19 @@ export class FooterSignatureComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<FooterSignatureComponent>
   ) {
+    this.currentUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info;
+    
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   lang: string;
   ngOnInit(): void {
-    
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    this.isBonBon = getStatusBonBon === "true";
     this.getDeviceApp();
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -91,7 +103,10 @@ export class FooterSignatureComponent implements OnInit {
     let isBreak = false;
     for (let i = 0; i < data_coordination.length; i++) {
       for (let j = 0; j < data_coordination[i].recipients.length; j++) {
-        if (data_coordination[i].recipients[j].email == emailCurrent) {
+
+        if ((((data_coordination[i]?.recipients[j]?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (data_coordination[i]?.recipients[j]?.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((data_coordination[i]?.recipients[j]?.phone == this.currentUser.phone || data_coordination[i]?.recipients[j]?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || (data_coordination[i].recipients[j].email == emailCurrent && this.typeUser === 1)) {
           this.is_data_coordination = data_coordination[i];
           this.currentRecipient = data_coordination[i].recipients[j]
           isBreak = true;
@@ -108,7 +123,11 @@ export class FooterSignatureComponent implements OnInit {
         //@ts-ignore
         let element = this.is_data_coordination.recipients[i];
         if (!this.recipientId) {
-          if (element.role == 1 && element.email == emailCurrent) {
+
+          if (element.role == 1 && ((((element?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (element?.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((element?.phone == this.currentUser.phone || element?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (element.email == emailCurrent && this.typeUser === 1))) {
             if (element.status != 1) {
               this.is_show_coordination = true;
               this.view = true;
@@ -119,7 +138,10 @@ export class FooterSignatureComponent implements OnInit {
             }
           }
         } else {
-          if (element.role == 1 && element.email == emailCurrent && element.id == this.recipientId) {
+          if (element.role == 1 && ((((element?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (element?.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((element?.phone == this.currentUser.phone || element?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (element.email == emailCurrent && this.typeUser === 1)) && element.id == this.recipientId) {
             if (element.status != 1) {
               this.is_show_coordination = true;
               this.view = true;
@@ -146,6 +168,9 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   getStyleButton() {
+    return {
+
+    }
     if (window.innerWidth >= 396) {
       return {
         "position": 'absolute',
@@ -249,6 +274,11 @@ export class FooterSignatureComponent implements OnInit {
     this.pageNum = this.pageNumber;
   }
 
+  confirm(e: any) {
+    this.submitChangesBonBon.emit(e);
+    this.action();
+  }
+
   onNextPage() {
     if (this.pageNum >= this.thePDF?.numPages) {
       return;
@@ -298,7 +328,10 @@ export class FooterSignatureComponent implements OnInit {
       for (const d of this.datas.is_data_contract.participants) {
         for (const q of d.recipients) {
           if (q.email) {
-            if (q.email == this.currentUser.email && q.status == 1) {
+            if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
               id_recipient_signature = q.id;
               break
             }
@@ -315,7 +348,10 @@ export class FooterSignatureComponent implements OnInit {
 
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
-          if (item.email === this.currentUser.email) {
+          if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (item.email === this.currentUser.email && this.typeUser === 1)) {
             ArrRecipientsNew = true
             return
           }
@@ -362,7 +398,6 @@ export class FooterSignatureComponent implements OnInit {
         this.datas.step = variable.stepSampleContract.step_confirm_coordination; // set step 2
       }
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-
       this.contractService.getDetermineCoordination(this.recipientId).subscribe((response) => {
         if (response.recipients[0].sign_type.length > 0 && response.recipients[0].sign_type[0].id == 5) {
 
@@ -410,7 +445,7 @@ export class FooterSignatureComponent implements OnInit {
 
 
         } else {
-          this.submitChanges.emit(1);
+          this.submitChanges.emit(1); 
         }
       })
 
@@ -441,7 +476,10 @@ export class FooterSignatureComponent implements OnInit {
       for (const d of this.datas.is_data_contract.participants) {
         for (const q of d.recipients) {
           if (q.email) {
-            if (q.email == this.currentUser.email && q.status == 1) {
+            if (((((q.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+            (q.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+            ((q.phone == this.currentUser.phone || q.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+            (q.email == this.currentUser.email && this.typeUser === 1)) && q.status == 1) {
               id_recipient_signature = q.id;
               break
             }
@@ -456,7 +494,10 @@ export class FooterSignatureComponent implements OnInit {
 
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
-          if (item.email === this.currentUser.email) {
+          if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+          (item.email === this.currentUser.email && this.typeUser === 1)) {
             ArrRecipientsNew = true
             return
           }
@@ -509,7 +550,9 @@ export class FooterSignatureComponent implements OnInit {
       let emailCurrent = this.contractService.getAuthCurrentUser().email;
       for (let i = 0; i < data_coordination.length; i++) {
         for (let j = 0; j < data_coordination[i].recipients.length; j++) {
-          if (data_coordination[i].recipients[j].email == emailCurrent) {
+          if ((((data_coordination[i]?.recipients[j]?.email == this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+          (data_coordination[i]?.recipients[j]?.phone == this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+          ((data_coordination[i]?.recipients[j]?.phone == this.currentUser.phone || data_coordination[i]?.recipients[j]?.email == this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || (data_coordination[i].recipients[j].email == emailCurrent && this.typeUser === 1)) {
             recipient_data = data_coordination[i];
             break;
           }
@@ -572,11 +615,13 @@ export class FooterSignatureComponent implements OnInit {
 
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }
@@ -677,7 +722,10 @@ export class FooterSignatureComponent implements OnInit {
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if ((((item.email === this.currentUser.email && this.currentUser?.loginType == 'EMAIL') || 
+        (item.phone === this.currentUser.phone && this.currentUser?.loginType == 'SDT') ||
+        ((item.phone === this.currentUser.phone || item.email === this.currentUser.email) && this.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) ||
+        (item.email === this.currentUser.email && this.typeUser === 1)) {
           ArrRecipientsNew = true
           return
         }

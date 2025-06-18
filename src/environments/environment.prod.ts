@@ -2,6 +2,8 @@ import { truncate } from "lodash";
 
 export const environment = {
   production: true,
+  enableCustomerAnalysis: true,
+  appVersion: '2.14.0',
   // usedSSO: true,
   //apiUrl: 'https://econtract-demo.mobifone.ai/service',
   apiUrl: 'https://econtractdev.mobifone.ai/service',
@@ -28,6 +30,17 @@ export const environment = {
   //KD
   // apiUrl: 'https://mobifone-econtract.vn/service',
   flag: 'KD',
+  urlgetTokenAnalysis: 'https://ottcall.mobifone.vn/pthv_cms_api',
+  urlAnalysis: 'https://ott.mobifone.vn/parse',
+  
+  appNameAnalysis: 'eContract web dev',
+  apiKeyAnalysis: 'XDQPiyOSljfHCJpa37e0NkUbAbCPJnc2',
+
+    // appNameAnalysis: 'eContract NB',
+  // apiKeyAnalysis: '7p2bwu4abWHFiLqKw0hTayX5QGvCYNJj',
+
+  // appNameAnalysis: 'eContract KD',
+  // apiKeyAnalysis: 'tCndQPm8PDWpg1dFTyP5bOUSbthDdxsj',
 
   logoWeb: '/images/logo_web.png',
   bannerWeb: '/images/banner_web.png',

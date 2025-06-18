@@ -1,11 +1,11 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
 
   <main class="page-content" [ngStyle]="getStyleWithSideBar()" style="padding-bottom: 25px;">
-    <div class="sidebar-header sidebar-header-custom">
+    <div *ngIf ="!mobile" class="sidebar-header sidebar-header-custom">
       <img [src]="logoWeb" (click)="backToDashboard()" alt="Logo" class="img-responsive"/>
     </div>
     <app-sidebar *ngIf="getShowHideSideBar() && this.mobile === false" (evenSelectSidebar)="getName($event)"></app-sidebar>
-    <header [ngStyle]="getStyleSideBar()">
+    <header *ngIf="!isBonBon" [ngStyle]="getStyleSideBar()">
 
       <div class="search-wrapper">
         <div style="padding-right: 8px;">
@@ -126,8 +126,9 @@
             </div>
           </div>
         </div>
+
         <div ngbDropdown class="d-inline-block">
-          <div class="social-icons" ngbDropdownToggle>
+          <div class="social-icons" [ngStyle]="flag ? {'margin-right': '0px'} : {}" ngbDropdownToggle>
             <span class="user_login"></span>
             <div style="display: flex; flex-direction: column;">
               <div class="label" style="color: #001A4D;">{{nameCurrentUser}}</div>
@@ -203,8 +204,15 @@
           </div>
         </div>
 
-
+        <div *ngIf = "this.flag" class="social-icons" (click)="openWorkspace()">
+          <img src="assets/img/Variant2.svg" style="height: 100%;">
+        </div>
       </div>
+    </header>
+
+    <header class="header-bonbon" *ngIf="isBonBon" [ngStyle]="getStyleSideBar()">
+      <img [src]="logoWeb" alt="Logo" class="img-responsive-bonbon"/>
+      <img src="assets/img/ec-header.png" style="height: 100%;">
     </header>
 
     <div class="container-fluid" [ngStyle]="getStyle()">
@@ -220,3 +228,47 @@
     </div> -->
   </main>
 </div>
+
+
+<div class="overlay1" [class.active]="isSidebarOpen" (click)="closeWorkspace()"></div>
+
+<div class="sidebar-workspace" [class.open]="isSidebarOpen">
+  <div class="title-sidebar-workspace">ỨNG DỤNG CỦA TÔI</div>
+
+  <div class="workspace-container">
+    <div *ngFor="let workspace of listWorkSpace" class="workspace-item">
+      
+      <!-- Nếu chỉ có 1 domain thì dùng <a> -->
+      <a
+        *ngIf="workspace.tenantsList?.length === 1"
+        [href]="workspace.tenantsList[0].domain"
+        target="_blank"
+        class="workspace-icon">
+        <img *ngIf="workspace.available" [src]="workspace.icon" alt="icon" width="32px" height="32px" />
+        <img *ngIf="!workspace.available" [src]="'data:image/png;base64,' + workspace.icon" alt="icon" width="100%" height="100%" />
+      </a>
+  
+      <!-- Nếu có nhiều hơn 1 domain thì mở dropdown -->
+      <div
+        *ngIf="workspace.tenantsList?.length > 1"
+        class="workspace-icon"
+        (click)="toggleDropdown(workspace)"
+        (clickOutside)="closeDropdown(workspace)">
+        <img [src]="'data:image/png;base64,' + workspace.icon" alt="icon" width="100%" height="100%" />
+      </div>
+  
+      <div class="workspace-name">{{ workspace.clientName }}</div>
+  
+      <!-- Dropdown domain -->
+      <div *ngIf="workspace.showDropdown" class="tenant-dropdown">
+        <div
+          *ngFor="let tenant of workspace.tenantsList"
+          class="tenant-option"
+          (click)="openDomain(tenant.domain, $event, workspace)">
+          {{ tenant.domain }}
+        </div>
+      </div>
+    </div>
+  </div>      
+</div>
+

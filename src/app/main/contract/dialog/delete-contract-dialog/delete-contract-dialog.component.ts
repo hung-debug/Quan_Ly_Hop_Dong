@@ -36,8 +36,8 @@ export class DeleteContractDialogComponent implements OnInit {
       }else{
         if(data.message == 'E02'){
           this.toastService.showErrorHTMLWithTimeout("Tài liệu không phải bản nháp!", "", 3000);
-        }else{
-          this.toastService.showErrorHTMLWithTimeout("Xóa tài liệu thất bại!", "", 3000);
+        }else if(data.message == 'E04'){
+          this.toastService.showErrorHTMLWithTimeout("Không thể xóa hợp đồng được tạo lại do Hủy bỏ/Từ chối!", "", 3000);
         }
         
         this.dialogRef.close();

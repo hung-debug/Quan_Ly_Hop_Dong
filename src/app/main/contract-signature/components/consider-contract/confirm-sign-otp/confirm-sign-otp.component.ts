@@ -21,6 +21,7 @@ import { environment } from 'src/environments/environment';
 import { TimeService } from 'src/app/service/time.service';
 import { DialogChangePhoneComponent } from '../dialog-change-phone/dialog-change-phone.component';
 import { TranslateService } from '@ngx-translate/core';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 @Component({
   selector: 'app-confirm-sign-otp',
@@ -43,7 +44,12 @@ export class ConfirmSignOtpComponent implements OnInit {
   userOtp:any;
   smsContractUse: any;
   smsContractBuy: any;
-
+  typeUser: any;
+  config = {
+    length: 6,
+    isPasswordInput: false,
+    allowNumbersOnly: true
+  };
   @Output() confirmOtpForm = new EventEmitter();
 
   get f() { return this.addForm.controls; }
@@ -62,7 +68,12 @@ export class ConfirmSignOtpComponent implements OnInit {
     private unitService: UnitService,
     private timeService: TimeService,
     public translate: TranslateService,
-  ) { }
+    private customerAnalysis: CustomerAnalysis
+  ) {
+    this.typeUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
+   }
 
 
 
@@ -81,12 +92,15 @@ export class ConfirmSignOtpComponent implements OnInit {
     //Lấy số lượng tài liệu đã sử dụng
     const numberContractUseOriganzation = await this.unitService.getNumberContractUseOriganzation(this.data.orgId).toPromise();
     this.smsContractUse = numberContractUseOriganzation.sms;
-
+    let numberContractUseOrg: any = null;
+    let checkSmsMethod: any = null;
+    let brandName:any=null;
     //Lấy số lượng tài liệu đã mua
     const getNumberContractBuyOriganzation = await this.unitService.getNumberContractBuyOriganzation(this.data.orgId).toPromise();
     this.smsContractBuy = getNumberContractBuyOriganzation.sms;
-
-    if(Number(this.smsContractUse) + Number(1) > Number(this.smsContractBuy)) {
+    checkSmsMethod = getNumberContractBuyOriganzation.sms_send_method;
+    brandName = getNumberContractBuyOriganzation.brand_name;
+    if(Number(this.smsContractUse) + Number(1) > Number(this.smsContractBuy) && checkSmsMethod == 'API' && brandName == 'mContract') {
       this.toastService.showErrorHTMLWithTimeout('Số lượng SMS của tổ chức không đủ để nhận thông tin ký tài liệu. Liên hệ với Admin để tiếp tục sử dụng dịch vụ','',3000);
       return;
     } else {
@@ -232,7 +246,10 @@ export class ConfirmSignOtpComponent implements OnInit {
       for (const signUpdate of this.datas.is_data_object_signature) {
 
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
-          && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+          && ((((signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+        ((signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone || signUpdate?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1))
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
 
@@ -253,7 +270,10 @@ export class ConfirmSignOtpComponent implements OnInit {
     } else {
       for (const signUpdate of this.datas.is_data_object_signature) {
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
-          && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+          && ((((signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+        (signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+        ((signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone || signUpdate?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1))
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
           const formData = {
@@ -310,7 +330,11 @@ export class ConfirmSignOtpComponent implements OnInit {
     //neu khong chua chu ky anh
     if (notContainSignImage) {
       signUpdatePayload = signUpdateTemp.filter(
-        (item: any) => item?.recipient?.email === this.datasOtp.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        (item: any) => ((((item?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+        ((item?.recipient?.phone === this.datasOtp.currentUser.phone || item?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (item?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1)) 
+        && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
           return {
             id: item.id,
@@ -340,7 +364,11 @@ export class ConfirmSignOtpComponent implements OnInit {
 
 
       signUpdatePayload = signUpdateTemp.filter(
-        (item: any) => item?.recipient?.email === this.datasOtp.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        (item: any) => ((((item?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+        (item?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+        ((item?.recipient?.phone === this.datasOtp.currentUser.phone || item?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+        (item?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1)) 
+        && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
           return {
             otp: this.addForm.value.otp,
@@ -371,7 +399,10 @@ export class ConfirmSignOtpComponent implements OnInit {
     let typeSignDigital = null;
     for (const signUpdate of this.datas.is_data_object_signature) {
       if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
-        && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+        && ((((signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.datasOtp.currentUser?.loginType == 'EMAIL') || 
+      (signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone && this.datasOtp.currentUser?.loginType == 'SDT') ||
+      ((signUpdate?.recipient?.phone === this.datasOtp.currentUser.phone || signUpdate?.recipient?.email === this.datasOtp.currentUser.email) && this.datasOtp.currentUser?.loginType == 'EMAIL_AND_SDT')) && this.typeUser === 0) || 
+      (signUpdate?.recipient?.email === this.datasOtp.currentUser.email && this.typeUser === 1))
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         if (signUpdate.recipient?.sign_type) {
@@ -423,18 +454,22 @@ export class ConfirmSignOtpComponent implements OnInit {
         async (result) => {
           if(result?.success == false){
             if(result.message == 'Wrong otp'){
+              this.handleContractData('Thất bại: Mã OTP không đúng')
               this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);
               this.spinner.hide();
             }else if(result.message == 'Otp code has been expired'){
+              this.handleContractData('Thất bại: Mã OTP quá hạn')
               this.toastService.showErrorHTMLWithTimeout('Mã OTP quá hạn', '', 3000);
               this.spinner.hide();
             }else if(result.message == 'You have entered wrong otp 5 times in a row'){
+              this.handleContractData('Thất bại: Bạn đã nhập sai OTP 5 lần liên tiếp')
               this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(result.nextAttempt, "dd/MM/yyyy HH:mm"), '', 3000);
               this.dialog.closeAll();
               this.spinner.hide();
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
 
             } else{
+              this.handleContractData('Thất bại: Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!')
               this.toastService.showErrorHTMLWithTimeout('Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!',
                 'Thực hiện ký không thành công!', 3000);
               this.dialog.closeAll();
@@ -444,29 +479,57 @@ export class ConfirmSignOtpComponent implements OnInit {
             if(this.data.firstHandler) {
               let savefirstHandler = await this.savefirstHandler();
               if(!savefirstHandler) {
+                this.handleContractData('Thất bại: Lỗi lưu ô Số tài liệu hoặc ô Text')
                 this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
               }
             }
             if (!notContainSignImage) {
             }
             setTimeout(() => {
-
-              this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
-              this.toastService.showSuccessHTMLWithTimeout(
-                [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!' : 'Xem xét tài liệu thành công'
-                , [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '', 3000);
-                this.dialog.closeAll();
-                this.spinner.hide();
+              this.handleContractData('Thành công')
+              if (result.url_call_back) {
+                // Nếu có url_call_back thì điều hướng tới đó
+                localStorage.removeItem('isBonBon');
+                window.location.href = result.url_call_back;
+              } else {
+                this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
+                this.toastService.showSuccessHTMLWithTimeout(
+                  [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!' : 'Xem xét tài liệu thành công'
+                  , [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '', 3000);
+                  this.dialog.closeAll();
+                  this.spinner.hide();
+              }
             }, 1000);
           }
 
         }, error => {
+          this.handleContractData('Thất bại: Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý')
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
           this.spinner.hide();
         }
       )
     }
 
+  }
+
+  async handleContractData(status: string) {
+    try {
+      let data = {
+        eventName: "kyOTP",
+        params: {
+          tenHĐ: this.datas.is_data_contract.name,
+          maHĐ: this.datas.is_data_contract.contract_uid,
+          idHĐ: this.datas.is_data_contract.id,
+          nguoiXuLy: this.datasOtp.currentUser.email || this.datasOtp.currentUser.phone,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      };
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
+    }
   }
 
   changePhone(){

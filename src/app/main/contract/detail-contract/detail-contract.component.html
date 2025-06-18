@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" [ngClass]="{ 'cancel-padding': mobile, 'size-web': !mobile }">
   <div class="sample-contract row" *ngIf="loaded">
     <!--  information contract-->
     <div [ngClass] = "{'col-md-3': this.show_information}" *ngIf="!this.mobile" class="sample-contract__information" style="background-color: white; padding-right: 0px;">
@@ -174,45 +174,57 @@
       </div>
     </div>
    
-    <div *ngIf="this.mobile">
-      <pdf-viewer [src]="pdfSrc"
-      [render-text]="true"
-      style="width: 95%; height: calc(70vh); border: 1px;"
-      [fit-to-page]="true"
-      [show-borders]="true"
-      [show-all]="true"
-      [(page)]="pageMobile"
-      [stick-to-page]="true"
-      (after-load-complete)="afterLoadComplete($event)"
-      (pagechanging)="pagechanging($event)"
-      ></pdf-viewer>
-  
-      <div class="flex-column" style="text-align: center;margin-top: 2px;">
-        <button class="call-page" (click)="firstPageMobile()">
-          <img width="14px" height="18px" *ngIf="this.page1" src="assets/img/previousbold.svg">
-          <img width="14px" height="18px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
-        </button>
-        <button class="call-page1" (click)="previousPageMobile()">
-          <img width="10px" height="14px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-          <img width="10px" height="14px" *ngIf="!this.page1" src="assets/img/previous.svg">
-        </button>
-  
-        <input class="input-mobile" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
-  
-        <button class="call-page1" id="prev" (click)="onNextPageMobile()">
-          <img width="10px" height="14px" *ngIf="this.pageLast" src="assets/img/next.svg">
-          <img width="10px" height="14px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
-        </button>
-  
-        <button class="call-page1" id="prev" (click)="lastPageMobile()">
-          <img width="14px" height="18px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-          <img width="14px" height="18px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-        </button>
+    <div *ngIf="this.mobile" class="pdf-viewer-custom">
+      <div class="pdf-viewer-custom">
+        <div class="zoom-controls">
+          <img *ngIf="zoomMobile < 5.0" (click)="zoomIn()" src="assets/img/cong.svg" alt="Zoom In">
+          <img *ngIf="zoomMobile >= 5.0" src="assets/img/cong_disable.svg" alt="Zoom In Disabled">
+
+          <!-- Nút Zoom Out -->
+          <img *ngIf="zoomMobile > 1.0" (click)="zoomOut()" src="assets/img/tru.svg" alt="Zoom Out">
+          <img *ngIf="zoomMobile <= 1.0" src="assets/img/tru_disable.svg" alt="Zoom Out Disabled">
+        </div>
+
+        <pdf-viewer [src]="pdfSrc"
+        [render-text]="true"
+        style="width: 100%; height: calc(67vh); border: 1px;"
+        [fit-to-page]="true"
+        [show-borders]="true"
+        [show-all]="true"
+        [(page)]="pageMobile"
+        [stick-to-page]="true"
+        [zoom]="zoomMobile"
+        (after-load-complete)="afterLoadComplete($event)"
+        (pagechanging)="pagechanging($event)"
+        ></pdf-viewer>
       </div>
-  
-      <a *ngIf="role || this.status == 30" style="position: absolute; right: 5px;">
-        <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
-        <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4">{{checkStatusUser(status, role) | translate}}</button>
+    
+      <div style="display: flex; justify-content: center;margin-top: 10px;">
+        <button class="call-page input1" (click)="firstPageMobile()">
+            <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+            <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
+        </button>
+        <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPageMobile()">
+            <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+            <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
+        </button>
+    
+        <input class="input1 no-focus" [(ngModel)]="pageMobile" type="text" [style.width]="(((pageMobile || 1).toString().length) * 10 + 15) + 'px'"/>&nbsp;/ &nbsp;{{this.pageNumber}}
+
+        <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPageMobile()" id="prev">
+            <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+            <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
+        </button>
+    
+        <button class="call-page input1" (click)="lastPageMobile()" id="prev">
+            <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+            <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
+        </button>  
+      </div>
+      
+      <a *ngIf="role || this.status == 30" style="justify-content: center; display: flex; margin: 10px 0px;">
+        <button  type="button" name="next" class="next action-button-mobile" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
+        <button  type="button" name="next" class="next action-button1-mobile" *ngIf="view && loaded && status == 4">{{checkStatusUser(status, role) | translate}}</button>
       </a>
     </div>  
   </div>

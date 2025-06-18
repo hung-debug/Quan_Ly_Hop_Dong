@@ -64,6 +64,7 @@ import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 import { ImageDialogSignV2Component } from './components/consider-contract/image-dialog-sign-v2/image-dialog-sign-v2.component';
 import { ImageCropperComponent } from '../contract/shared/model/image-cropper/image-cropper.component';
+import { RemoteCertSelectionDialogComponent } from './components/consider-contract/remote-cert-dialog/remote-cert-selection-dialog.component';
 
 import { NgOtpInputModule } from  'ng-otp-input';
 import { DialogChangePhoneComponent } from './components/consider-contract/dialog-change-phone/dialog-change-phone.component';
@@ -134,7 +135,8 @@ export const contractSignatureRoutes1: Routes = [
     PkiDialogSignMultiComponent,
     ImageCropperComponent,
     PkiDialogSignMultiComponent,
-    DialogChangePhoneComponent
+    DialogChangePhoneComponent,
+    RemoteCertSelectionDialogComponent
     // AddContractComponent
   ],
   imports: [

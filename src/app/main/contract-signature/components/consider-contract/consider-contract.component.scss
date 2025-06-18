@@ -171,6 +171,9 @@
 .container-fluid{
   background-color: #FFFFFF;
   border-radius: 12px;
+}
+
+.size-web {
   padding-top: 18px;
   min-height: 92vh;
 }
@@ -333,7 +336,7 @@
 
 .input-mobile {
   box-sizing: border-box;
-  width: 50px;
+  // width: 50px;
   height: 30px;
   background: #FFFFFF;
   border: 1px solid #87CAFF;
@@ -630,4 +633,87 @@ a.info-contract {
   .custom-xl-width-col-xl-9 {
     width: calc(100% - 120px);
   }
+}
+
+:host ::ng-deep .pdf-viewer-custom .page {
+  width: 100% !important;
+}
+
+.checkbox-confirm {
+  margin: 5px 10px 0px 10px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.checkbox-confirm .text {
+  margin-left: 5px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #011660;
+}
+
+.checkbox-hide-processing-thread {
+  -webkit-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  -moz-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  min-width: 24px;
+  min-height: 24px;
+  margin: auto 8px auto 0;
+  border-radius: 6px;
+  display: block;
+  border: 1px solid #A8B5CE; /* Thêm border */
+  position: relative;
+  cursor: pointer;
+  background-color: #fff; /* Màu nền mặc định */
+}
+.checkbox-hide-processing-thread:checked {
+  // background-color: #fff;
+  background-color: #0041C4;
+}
+
+.checkbox-hide-processing-thread:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px; /* Kích thước ảnh */
+  height: 10px; /* Kích thước ảnh */
+  background-image: url('../../../../../assets/img/Vector.png'); /* Replace with your image URL */
+  background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
+  transform: translate(-50%, -50%);
+}
+
+.pdf-viewer-custom {
+  position: relative;
+}
+
+.zoom-controls {
+  position: absolute;
+  bottom: 5px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.zoom-controls img {
+  width: 32px;
+  height: 32px;
+  margin: 2px 0;
+  cursor: pointer;
+}
+
+.zoom-controls img[alt$="Disabled"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.no-zoom {
+  touch-action: manipulation;       /* Ngăn double-tap zoom */
+  -ms-touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: auto;
 }

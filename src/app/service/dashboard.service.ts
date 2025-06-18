@@ -21,6 +21,7 @@ export class DashboardService {
   readAllViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/view-all`;
   getNotificationHeaderUrl:any = `${environment.apiUrl}/api/v1/notification/get_config_notification`;
   listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
+  getWorkSpaceUrl: any = `${environment.apiUrl}/api/v1/customers/internal/get-information-customer-sso`;
 
   token:any;
   customer_id:any;
@@ -110,6 +111,15 @@ export class DashboardService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.get<any[]>(this.getNotificationHeaderUrl, {headers}).pipe(catchError(this.handleError));
+  }
+
+  getWorkSpace() {
+    this.getCurrentUser();
+    let uuid = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.ssoCustomerId;
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getWorkSpaceUrl + '?uuid=' + uuid, {headers});
   }
 
   handleError(error: HttpErrorResponse) {

@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthenticationService } from '../service/authentication.service';
+import { CustomerAnalysis } from '../service/customer-analysis';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -40,6 +41,10 @@ export class MainComponent implements OnInit {
   messageNotification: string;
   isMessageNotificationSet = false;
   logoWeb: string;
+  isBonBon: boolean = false;
+  isSidebarOpen = false;
+  listWorkSpace: any[] = [];
+  flag: boolean = false;
   @ViewChild('scrollingText', { static: false }) scrollingTextElement: ElementRef<any>;
   constructor(private router: Router,
               private appService: AppService,
@@ -54,7 +59,8 @@ export class MainComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private toastService: ToastService,
               private keycloakService: KeycloakService,
-              private authenticationService: AuthenticationService
+              private authenticationService: AuthenticationService,
+              private customerAnalysis: CustomerAnalysis
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
@@ -102,6 +108,42 @@ export class MainComponent implements OnInit {
 
   lang: any;
   async ngOnInit() {
+    if(environment.flag == 'KD' && environment.usedSSO) {
+      this.flag = true;
+      try{
+        this.listWorkSpace = [
+          {
+            "id": 0,
+            "clientId": "TTCNTT-WORK-SPACE",
+            "clientName": "Workspace",
+            "icon": "../../assets/img/icon-account.png",
+            "note": "EContract Workspace",
+            "url": "https://auth-sso.mobifone.vn/",
+            "createdAt": null,
+            "listAdmin": null,
+            "available": true,
+            "tenantsList": [
+                {
+                    "id": null,
+                    "clientId": "TTCNTT-WORK-SPACE",
+                    "tenantCode": "TTCNTT-WORK-SPACE-TENANT",
+                    "domain": "https://auth-sso.mobifone.vn/",
+                    "admin": "75f4a3cb-6ea7-490a-9c9d-e970634c71e2"
+                }
+              ]
+          }
+        ];
+        let listWorkSpace = await this.dashboardService.getWorkSpace().toPromise();
+        if(listWorkSpace.length) {
+          listWorkSpace = listWorkSpace.filter((item: any) => item.clientId !== environment.SSO_CLIENTID);
+          this.listWorkSpace = this.listWorkSpace.concat(listWorkSpace);
+        }
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    let getStatusBonBon = localStorage.getItem('isBonBon');
+    this.isBonBon = getStatusBonBon === "true";
     let url = environment.apiUrl.replace("/service", "");
     this.logoWeb = url + environment.logoWeb;
     if(localStorage.getItem('lang') == 'vi') {
@@ -159,7 +201,7 @@ export class MainComponent implements OnInit {
   }
 
   checkSubTitle() {
-    return this.subTitle.length > 0;
+    return this.subTitle?.length > 0;
   }
 
   readAll(){
@@ -185,6 +227,19 @@ export class MainComponent implements OnInit {
 
   //click logout
   async logout() {
+    try {
+      let data = {
+        eventName: "Logout",
+        params: {
+          username: JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email,
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(),
+        },
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      };
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error("Lấy token thất bại:", error);
+    }
     //call api delete token
     if (environment.flag == 'NB' && environment.usedSSO) {
       this.contractService.deleteToken().subscribe((res:any) => {
@@ -319,7 +374,7 @@ export class MainComponent implements OnInit {
 
   getStyle() {
 
-    if (this.router.url.includes("contract-signature")) {
+    if (this.router.url.includes("contract-signature") || this.isBonBon) {
       return {
         'margin-top': '40px'
       }
@@ -382,4 +437,29 @@ export class MainComponent implements OnInit {
     sessionStorage.setItem('lang', lang);
   }
 
+  openWorkspace() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeWorkspace() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    document.body.style.overflow = '';
+  }
+
+  toggleDropdown(workspace: any) {
+    this.listWorkSpace.forEach(ws => ws.showDropdown = false);
+    workspace.showDropdown = !workspace.showDropdown;
+  }
+  
+  openDomain(domain: string, event: MouseEvent, workspace: any) {
+    event.stopPropagation();
+    window.open(domain, '_blank');
+    workspace.showDropdown = false;
+  }
+  
+  closeDropdown(workspace: any) {
+    workspace.showDropdown = false;
+  }
+  
 }

@@ -20,6 +20,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-confirm-contract-form',
@@ -39,7 +41,8 @@ export class ConfirmContractFormComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private dialog: MatDialog,
-    private ContractTemplateService: ContractTemplateService
+    private ContractTemplateService: ContractTemplateService,
+    private customerAnalysis: CustomerAnalysis
   ) {
     this.stepForm = variable.stepSampleContractForm.step4;
   }
@@ -256,15 +259,15 @@ export class ConfirmContractFormComponent implements OnInit {
       const statusResponse: any = await this.contractService
         .changeStatusContract(this.datasForm.id, 10, '')
         .toPromise(); // Đợi kết quả từ API
-        
       // Kiểm tra kết quả trả về từ changeStatusContract
-      if (statusResponse.errors?.length > 0) {
-        if (statusResponse.errors[0].code === 1017) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
-          return;
-        }
+      let reason;
+      if (statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017) {
+        this.spinner.hide();
+        reason = 'Số tài liệu đã tồn tại'
+        await this.handleContractData('Thất bại: ' + reason, statusResponse);
+        this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
       } else {
+        await this.handleContractData('Thành công', statusResponse);
         // Điều hướng nếu thành công
         this.router.navigate(['/main/contract/create/processing']);
         await this.router.navigateByUrl('/', { skipLocationChange: true });
@@ -282,6 +285,31 @@ export class ConfirmContractFormComponent implements OnInit {
     } 
       
   }
+
+  async handleContractData(status: string, statusResponse: any) {
+    try {
+      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+      let data = {
+        eventName: "taoHDDonLeTheoMau",
+        params: {
+          tenHD: this.datasForm.name,
+          maHD: statusResponse.contract_uid || '',
+          idHD: statusResponse.id || '',
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(),
+          trangThai: status,
+        } as any,
+        link: environment.apiUrl.replace(/\/service$/, '') + this.router.url,
+      };
+  
+      if (statusResponse.errors?.length > 0 && statusResponse.errors[0].code === 1017) {
+        delete data.params.maHD;
+        delete data.params.idHD;
+      }
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu:', error);
+    }
+  }  
 
   user: any;
   submit(action: string) {

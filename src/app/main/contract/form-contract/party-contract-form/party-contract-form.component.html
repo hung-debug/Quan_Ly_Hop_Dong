@@ -110,22 +110,21 @@
                 </div> 
               </div>
 
-              <div class="row mt-7px">            
+              <div class="row mt-7px">
                 <div class="col-md-6" style="padding-right: 7px">
-                  <div class="label-text">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">  
-                    <input class="content-input hover-item" *ngIf="d.login_by === 'email'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                      (focusin)="onFocusIn($event, index, 'view')" (ngxInputSearch)="doTheSearch($event, index, 'view')"
-                      [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
-  
-                    <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                      (focusin)="onFocusIn($event, index, 'view')" [(ngModel)]="d.name"
-                      (focusout)="onFocusOut($event, d)">
+                  <div class="label-text">{{ "user.name" | translate }}&nbsp;<span class="required-title">*</span></div>
+                  
+                  <div class="input-data">
+                    <input class="content-input hover-item" type="text"
+                      placeholder="{{ 'nhap_ho_va_ten' | translate }}" (focusin)="onFocusIn($event, index, 'view')"
+                      (ngxInputSearch)="doTheSearch($event, index, 'view')" [(ngModel)]="d.name"
+                      (focusout)="onFocusOut($event, d)" />
                   </div>
                   <div class="search-name"
                     *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0">
-                    <button  class="search-name-items" *ngFor="let t of this.arrSearchNameView"
-                      (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})
+                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameView"
+                      (click)="onSelectName(t, d)">
+                      {{ t.name }} {{ d.login_by === 'email' ? '(' + t.email + ')' : '(' + t.phone + ')' }}
                     </button>
                   </div>
                 </div>
@@ -363,27 +362,19 @@
 
               <div class="row mt-7px">
                 <div class="col-md-6" style="padding-right: 7px">
-                  <div class="label-text">
-                    {{ "user.name" | translate }}&nbsp;<span class="required-title">*</span>
-                  </div>
+                  <div class="label-text">{{ "user.name" | translate }}&nbsp;<span class="required-title">*</span></div>
+                  
                   <div class="input-data">
-                    <input class="content-input hover-item" *ngIf="d.login_by === 'email'" type="text" placeholder="{{ 'nhap_ho_va_ten' | translate }}"
-                      (focusin)="onFocusIn($event, index, 'signature')"
+                    <input class="content-input hover-item" type="text"
+                      placeholder="{{ 'nhap_ho_va_ten' | translate }}" (focusin)="onFocusIn($event, index, 'signature')"
                       (ngxInputSearch)="doTheSearch($event, index, 'signature')" [(ngModel)]="d.name"
                       (focusout)="onFocusOut($event, d)" />
-
-                    <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{ 'nhap_ho_va_ten' | translate }}"
-                      (focusin)="onFocusIn($event, index, 'signature')" [(ngModel)]="d.name"
-                      (focusout)="onFocusOut($event, d)" />
                   </div>
-                  <div class="search-name" *ngIf="
-                      this.arrSearch[index] &&
-                      this.arrSearchNameSignature &&
-                      arrSearchNameSignature.length > 0
-                    ">
+                  <div class="search-name"
+                    *ngIf="this.arrSearch[index] && this.arrSearchNameSignature && arrSearchNameSignature.length > 0">
                     <button class="search-name-items" *ngFor="let t of this.arrSearchNameSignature"
                       (click)="onSelectName(t, d)">
-                      {{ t.name }} ({{ t.email }})
+                      {{ t.name }} {{ d.login_by === 'email' ? '(' + t.email + ')' : '(' + t.phone + ')' }}
                     </button>
                   </div>
                 </div>
@@ -510,7 +501,21 @@
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
-                  </div>    
+                  </div>
+                  
+                  <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là Remote Signing-->
+                  <div class="participants--input" *ngIf="getDataSignRemote(d).length > 0">
+                    <div class="participants__name">
+                      <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                        <span class="required-title">*</span>
+                        <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                      </div>
+                      <div class="input-data">
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
+                          oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      </div>
+                    </div>
+                  </div>  
                 </div>
               </div>
 
@@ -612,6 +617,20 @@
                       </div>
                       <div class="input-data">
                         <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                          oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là remote signing-->
+                  <div class="col-md-6" *ngIf="getDataSignRemote(d).length > 0" style="padding-right: 7px;">
+                    <div class="participants__name">
+                      <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                        <span class="required-title">*</span>
+                        <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                      </div>
+                      <div class="input-data">
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -872,6 +891,20 @@
                     </div>
                   </div>
                 </div>
+                
+                <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là remote signing-->
+                <div class="col-md-6" *ngIf="getDataSignRemote(d).length > 0" style="padding-right: 7px;">
+                  <div class="participants__name">
+                    <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="row mt-7px" *ngIf="this.site == 'KD'">
@@ -921,6 +954,20 @@
                     </div>
                     <div class="input-data">
                       <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+                
+                <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là remote Signing-->
+                <div class="col-md-6" *ngIf="getDataSignRemote(d).length > 0" style="padding-left: 7px;">
+                  <div class="participants__name">
+                    <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -1219,6 +1266,7 @@
   
                         <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{ 'nhap_ho_va_ten' | translate }}"
                           (focusin)="onFocusIn($event, index, 'view')" [(ngModel)]="d.name"
+                          (ngxInputSearch)="doTheSearch($event, index, 'view')"
                           (focusout)="onFocusOut($event, d)" />
                       </div>
                     </div>
@@ -1606,6 +1654,20 @@
                         </div>
                       </div>
                     </div>
+                    
+                    <!--trường hiển thị khi người ký của đối tác chọn loại ký là remote signing-->
+                    <div class="col-md-6" style="padding-left: 7px;" *ngIf="getDataSignRemote(d).length > 0">
+                      <div class="participants__name">
+                        <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                          <span class="required-title">*</span>
+                          <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                        </div>
+                        <div class="input-data">
+                          <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
+                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <!--NB email-->
@@ -1748,6 +1810,20 @@
                         </div>
                         <div class="input-data">
                           <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!--trường hiển thị khi người ký của đối tác chọn loại ký là remote signing-->
+                    <div class="col-md-6" *ngIf="getDataSignRemote(d).length > 0">
+                      <div class="participants__name">
+                        <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                          <span class="required-title">*</span>
+                          <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                        </div>
+                        <div class="input-data">
+                          <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
                             oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                         </div>
                       </div>
@@ -2003,6 +2079,20 @@
                         </div>
                         <div class="input-data">
                           <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!--trường hiển thị khi văn thư đối tác chọn loại ký là chứng thư số-->
+                    <div class="col-md-6" *ngIf="getDataSignRemote(d).length > 0">
+                      <div class="participants__name">
+                        <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                          <span class="required-title">*</span>
+                          <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                        </div>
+                        <div class="input-data">
+                          <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
                             oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                         </div>
                       </div>
@@ -2302,10 +2392,10 @@
                     <div class="col-md-6 mt-7px" *ngIf="getDataSignEkyc(d).length > 0">
                       <div class="participants__name">
                         <div class="label-text">
-                          {{'cardId' | translate}}&nbsp;<span class="required-title">*</span>
+                          {{'cardId.passport' | translate}}&nbsp;<span class="required-title">*</span>
                         </div>
                         <div class="input-data">
-                          <input class="content-input hover-item" type="text" placeholder="{{ 'enter.cardId' | translate }}" [(ngModel)]="d.card_id"
+                          <input class="content-input hover-item" type="text" placeholder="{{ 'enter.cardId.passport' | translate }}" [(ngModel)]="d.card_id"
                             oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
                         </div>
                       </div>
@@ -2345,6 +2435,20 @@
                         </div>
                         <div class="input-data">
                           <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!--trường hiển thị khi người ký đối tác cá nhân chọn loại ký là chứng thư số-->
+                    <div class="col-md-6 mt-7px" *ngIf="getDataSignRemote(d).length > 0">
+                      <div class="participants__name">
+                        <div class="label-text flex">{{'tax_code.cardId.passport' | translate}}&nbsp;
+                          <span class="required-title">*</span>
+                          <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                        </div>
+                        <div class="input-data">
+                          <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId.passport' | translate}}" [(ngModel)]="d.card_id"
                             oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                         </div>
                       </div>
