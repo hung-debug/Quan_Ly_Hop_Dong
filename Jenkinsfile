@@ -48,6 +48,7 @@ pipeline {
                     sh 'node -v'
                     sh 'npm -v'
                     sh 'npm install'
+                    sh 'npm install typescript@latest --save-dev'
                     sh 'cp libs/angular/common.d.ts node_modules/@angular/common'
                     sh 'cp libs/interactjs/index.d.ts node_modules/@interactjs/types'
                     sh 'cp libs/lodash/common.d.ts node_modules/@types/lodash/common'
