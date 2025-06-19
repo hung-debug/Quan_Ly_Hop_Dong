@@ -1,5 +1,5 @@
 def pathInServer = "/u01/app"
-def patheContractStaging = "/u01/app/eContract-web"
+def patheContractDev = "/u01/app/eContract-web"
 def message = "*Start build Front-end eContract Dev*"
 def groupEChatWorkId = "65f95fbcd49bf204c8d6eb9b"
 pipeline {
@@ -88,7 +88,7 @@ pipeline {
                     echo "-------------------Run backup.sh done-------------------"
 
                     echo "-------------------Start push file to server-------------------"
-                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${pathInServer}/"
+                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${patheContractDev}/"
                     echo "-------------------Push file to server done-------------------"
 
                     sh """
