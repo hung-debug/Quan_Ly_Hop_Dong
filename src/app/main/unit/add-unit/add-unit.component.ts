@@ -63,8 +63,6 @@ export class AddUnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.fileCeCaOptions = fileCeCaOptions;
-    console.log("this.currentUser",this.currentUser);
-    
     let orgId = this.userService.getInforUser().organization_id;
   
     this.datas = this.data;
@@ -95,6 +93,7 @@ export class AddUnitComponent implements OnInit {
           this.codeOld = data.code;
           this.emailOld = data.email;
           this.phoneOld = data.phone;
+
       
           //set name
           if(data.parent_id != null){
