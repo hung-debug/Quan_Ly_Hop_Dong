@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage("Get all commit") {
               steps {
+                    echo '----------------------Start get all commit----------------------'
                     script {
                            def changeLogSets = currentBuild.changeSets
                            for (int i = 0; i < changeLogSets.size(); i++) {
