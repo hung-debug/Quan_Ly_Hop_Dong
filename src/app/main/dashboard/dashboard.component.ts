@@ -92,6 +92,7 @@ export class DashboardComponent implements OnInit {
   loadData2: boolean = false;
   step: any;
   endDateService: any;
+  adminEmail: any;
   //type = 1 => Hop dong don le khong theo mau
   //type = 2 => Hop dong don le theo mau
   //type = 3 => Hop dong theo lo
@@ -183,6 +184,7 @@ export class DashboardComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
+        this.adminEmail = data?.role?.code;
         this.currentName = data.name       
         //lay id role
         if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
