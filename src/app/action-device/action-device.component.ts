@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {DeviceDetectorService} from "ngx-device-detector";
 import {Router} from "@angular/router";
 
@@ -14,7 +14,10 @@ export class ActionDeviceComponent implements OnInit {
   constructor(private modalService: NgbModal,
               public dialog: MatDialog,
               private deviceService: DeviceDetectorService,
-              private router: Router) { }
+              private router: Router,
+              @Inject(MAT_DIALOG_DATA) public data: any // Inject data
+              ) { }
+              
 
   ngOnInit(): void {
 
@@ -26,7 +29,7 @@ export class ActionDeviceComponent implements OnInit {
     // if (sessionStorage.getItem('url')) {
       // let isUrl = sessionStorage.getItem('url');
 
-      let urlQ = sessionStorage.getItem('url');
+      let urlQ = this.data?.urlQ || sessionStorage.getItem('url');
       let domain = window.location.origin;
 
       domain = domain.replace('http://','').replace('https://','');
@@ -36,7 +39,7 @@ export class ActionDeviceComponent implements OnInit {
         urlQ = urlQ.replace('c/','contract-signature/').replace('s9/','signatures/').replace('c9/','consider/').replace('s8/','secretary/').replace('c8','coordinates/')
         .replace('&type','&loginType').replace('&mail','&recipientEmail');
         
-      const urlEmail = sessionStorage.getItem('recipientEmail') || sessionStorage.getItem('mail');
+      const urlEmail = this.data?.urlEmail || sessionStorage.getItem('recipientEmail') || sessionStorage.getItem('mail');
 
 
       if (urlQ && urlQ.includes('contract-signature/')) {
@@ -68,9 +71,9 @@ export class ActionDeviceComponent implements OnInit {
           }
           
           if (urlEmail) {
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}/${domain}`;
+            return window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}/${domain}`;
           } else
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${domain}`;
+            return window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${domain}`;
         }
 
       } 
@@ -82,11 +85,11 @@ export class ActionDeviceComponent implements OnInit {
 
           if (urlEmail) {
 
-            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
+            return window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
 
           } else
 
-            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
+            return window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
 
         }
       } else if(urlQ && urlQ.includes('form-contract')){
@@ -107,17 +110,17 @@ export class ActionDeviceComponent implements OnInit {
 
           if (urlEmail) {
 
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${urlEmail}/${domain}`;
+            return window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${urlEmail}/${domain}`;
 
           } else
 
-           window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${domain}`;
+           return window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${domain}`;
 
         }
 
       } 
      else  {
-        window.location.href = `econtract://app/login`;
+        return window.location.href = `econtract://app/login`;
       }
 
     // }
@@ -125,9 +128,9 @@ export class ActionDeviceComponent implements OnInit {
 
   downloadApp() {
     if (this.deviceService.os == "iOS") {
-        window.location.href = `https://apps.apple.com/vn/app/mobifonecontract/id1604753922`;
+        return window.location.href = `https://apps.apple.com/vn/app/mobifonecontract/id1604753922`;
     } else if (this.deviceService.os == "Android") {
-        window.location.href = `https://play.google.com/store/apps/details?id=vn.mobifone.econtract`;
+        return window.location.href = `https://play.google.com/store/apps/details?id=vn.mobifone.econtract`;
     }
   }
 

@@ -568,25 +568,25 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if (d.login_by == 'phone') {
-      d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
+      // d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
     }
 
     if (role == 'sign_partner') {
       if (d.login_by == 'phone') {
-        d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1, 2, 5, 7].includes(p.id));
+        d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
       } else {
 
         d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1, 5, 9].includes(p.id));
       }
     } else if (role == 'signer') {
       if (d.login_by == 'phone') {
-        this.isListSignNotPerson[index] = this.signTypeList.filter((p) => ![1, 2, 5, 7].includes(p.id));
+        this.isListSignNotPerson[index] = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
       } else {
         this.isListSignNotPerson[index] = this.signTypeList.filter((p) => ![1, 5, 9].includes(p.id));
       }
     } else if (role == 'personal') {
       if (d.login_by == 'phone') {
-        d.isListSignPersonal = this.signTypeList.filter((p) => ![2, 7].includes(p.id));
+        // d.isListSignPersonal = this.signTypeList.filter((p) => ![2, 7].includes(p.id));
       } else {
         d.isListSignPersonal = this.signTypeList;
       }
