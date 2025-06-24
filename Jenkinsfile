@@ -89,7 +89,7 @@ pipeline {
                     echo "-------------------Run backup.sh done-------------------"
 
                     echo "-------------------Start push file to server-------------------"
-                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${patheContractDev}"
+                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${pathInServer}"
                     echo "-------------------Push file to server done-------------------"
 
                     sh """
