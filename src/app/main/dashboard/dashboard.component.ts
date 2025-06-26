@@ -94,6 +94,8 @@ export class DashboardComponent implements OnInit {
   endDateService: any;
   adminEmail: any;
   login_type: any;
+  parent_id: any;
+  currentEmail: any;
   //type = 1 => Hop dong don le khong theo mau
   //type = 2 => Hop dong don le theo mau
   //type = 3 => Hop dong theo lo
@@ -185,11 +187,11 @@ export class DashboardComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
-        this.adminEmail = data?.role?.code;
+        this.adminEmail = data?.organization?.email;
         this.currentName = data.name;
+        this.currentEmail = data?.email;
         this.login_type = data?.login_type;
-        console.log("this.logintype",this.login_type);
-               
+        this.parent_id = data?.organization?.parent_id;
         //lay id role
         if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
           this.openAccountLinkDialog(data)
