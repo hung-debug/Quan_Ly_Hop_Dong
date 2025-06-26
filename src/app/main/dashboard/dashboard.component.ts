@@ -94,6 +94,7 @@ export class DashboardComponent implements OnInit {
   endDateService: any;
   adminEmail: any;
   login_type: any;
+  parent_id: any;
   //type = 1 => Hop dong don le khong theo mau
   //type = 2 => Hop dong don le theo mau
   //type = 3 => Hop dong theo lo
@@ -188,7 +189,8 @@ export class DashboardComponent implements OnInit {
         this.adminEmail = data?.role?.code;
         this.currentName = data.name;
         this.login_type = data?.login_type;
-        console.log("this.logintype",this.login_type);
+        this.parent_id = data?.organization?.parent_id;
+        console.log("data",data);
                
         //lay id role
         if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
