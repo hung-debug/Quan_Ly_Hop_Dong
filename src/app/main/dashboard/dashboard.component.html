@@ -227,7 +227,7 @@
               <span class="end_license">{{'end.date.service' | translate}}: </span>
               <span class="date_license">{{this.endDateService | date:'dd/MM/yyyy'}}</span>
             </div>
-            <div style="margin-top: -8px;" *ngIf="this.adminEmail === 'ADMIN' && this.login_type !== 'SDT' && !this.parent_id">
+            <div style="margin-top: -8px;" *ngIf="this.adminEmail === this.currentEmail && this.login_type !== 'SDT' && !this.parent_id">
               <button class="btn-block btn_packages" (click)="buyPackage()" >
                 {{'buy.package' | translate}}
               </button>
