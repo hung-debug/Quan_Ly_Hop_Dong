@@ -11,7 +11,7 @@
   <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" crossorigin="anonymous"> -->
-  
+  <script src="assets/env-config.js"></script>
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-FX0NLN13RT"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -58,9 +58,10 @@
 </head>
 <body class="mat-typography" style="background-color: var(--BG, #F3F6FA);">
   <script>
+    const apiUrl = window.environmentApiUrl;
     const isMobile = /iPhone|iPod|iPad|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (!isMobile) {
-      document.write('<script src="https://econtractdev.mobifone.ai/script_econtract_tla/script_econtract_tla.js"><\/script>');
+      document.write(`<script src="${apiUrl}/script_econtract_tla/script_econtract_tla.js"><\/script>`);
     }
   </script>
   <app-root></app-root>
