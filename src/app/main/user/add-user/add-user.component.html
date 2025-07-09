@@ -174,13 +174,13 @@
                             </div>
                         </div>
                         <!-- Cropper cho Sign -->
-                        <app-image-cropperv2 #imageCropperSign *ngIf="showCropperSign" [imageSrc]="imgSignPCSelect"
+                        <app-image-cropperv2 #imageCropperSign *ngIf="showCropperSign" [imageSrc]="imgSignPCSelect!"
                             (crop)="onCroppedSign($event)"></app-image-cropperv2>
 
                         <!-- Hiển thị ảnh cho Sign -->
                         <img class="hidden_img" *ngIf="imgSignPCSelect" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg"width="20" height="20" style="margin-top: 10px; margin-left: 10px;"/>
                         <div class="image-div" *ngIf="imgSignPCSelect && !showCropperSign">
-                            <img class="img" [src]="imgSignPCSelect" alt=""
+                            <img class="img" [src]="sanitizer.bypassSecurityTrustUrl(imgSignPCSelect!)" alt=""
                                 style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%">
                             
                         </div>
@@ -203,13 +203,13 @@
                             </div>
                         </div>
                         <!-- Cropper cho Mark -->
-                        <app-image-cropperv2 #imageCropperMark *ngIf="showCropperMark" [imageSrc]="imgSignPCSelectMark"
+                        <app-image-cropperv2 #imageCropperMark *ngIf="showCropperMark" [imageSrc]="imgSignPCSelectMark!"
                             (crop)="onCroppedMark($event)"></app-image-cropperv2>
 
                         <!-- Hiển thị ảnh cho Mark -->
                         <img class="hidden_img"*ngIf="imgSignPCSelectMark" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="20" height="20" style="margin-top: 10px; margin-left: 10px;" />
                         <div class="image-div" *ngIf="imgSignPCSelectMark && !showCropperMark">
-                            <img class="img" [src]="imgSignPCSelectMark" alt=""
+                            <img class="img" [src]="sanitizer.bypassSecurityTrustUrl(imgSignPCSelectMark!)" alt=""
                                 style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
                             
                         </div>

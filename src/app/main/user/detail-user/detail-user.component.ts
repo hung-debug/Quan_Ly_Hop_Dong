@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core'; // Thêm OnDestroy
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
 import { RoleService } from 'src/app/service/role.service';
@@ -7,14 +7,17 @@ import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { networkList } from "../../../config/variable";
 import { ContractService } from 'src/app/service/contract.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Thêm HttpClient, HttpHeaders
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser'; // Thêm DomSanitizer, SafeUrl
+
 @Component({
   selector: 'app-detail-user',
   templateUrl: './detail-user.component.html',
   styleUrls: ['./detail-user.component.scss']
 })
-export class DetailUserComponent implements OnInit {
+export class DetailUserComponent implements OnInit, OnDestroy { // Thêm implements OnDestroy
 
-  isHsmIcorp: boolean = true
+  isHsmIcorp: boolean = true;
   name:any="";
   email:any="";
   birthday:any="";
@@ -31,8 +34,9 @@ export class DetailUserComponent implements OnInit {
   supplier:any="";
   // password1Hsm:any="";
 
-  imgSignPCSelect:any
-  imgSignPCSelectMark: any
+  // Thay đổi kiểu dữ liệu thành string | null để lưu trữ blob URL
+  imgSignPCSelect: string | null = null;
+  imgSignPCSelectMark: string | null = null;
 
   action: string;
   private sub: any;
@@ -55,6 +59,8 @@ export class DetailUserComponent implements OnInit {
     private unitService: UnitService,
     private roleService: RoleService,
     private contractService: ContractService,
+    private http: HttpClient, // Inject HttpClient
+    public sanitizer: DomSanitizer, // Inject DomSanitizer và đặt là public
     ) {
      }
 
@@ -124,35 +130,41 @@ export class DetailUserComponent implements OnInit {
           this.uuid = data.uuid;
           if(data.hsm_supplier) {
             let result  = this.supplierList.find(item => item.id === data.hsm_supplier);
-            this.supplier = result.name;
+            this.supplier = result ? result.name : ''; // Thêm kiểm tra null/undefined
           }
           // this.password1Hsm = data.hsm_pass;
 
-          this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
+          // Gọi hàm tải ảnh với token
+          if (data.sign_image != null && data.sign_image.length > 0 && data.sign_image[0].presigned_url) {
+            this.loadImageWithToken(data.sign_image[0].presigned_url, 'sign');
+          } else {
+            this.imgSignPCSelect = null;
+          }
           
-          this.imgSignPCSelectMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].presigned_url:null;
+          if (data.stampImage != null && data.stampImage.length > 0 && data.stampImage[0].presigned_url) {
+            this.loadImageWithToken(data.stampImage[0].presigned_url, 'mark');
+          } else {
+            this.imgSignPCSelectMark = null;
+          }
 
           //set name
           if(data.organization_id != null){
             this.unitService.getUnitById(data.organization_id).subscribe(
-              data => {
-                
-                this.organizationId = data.name
+              orgData => { // Đổi tên biến để tránh trùng với 'data' chính
+                this.organizationId = orgData.name;
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
               }
             )
           }
           if(data.role_id != null){
-            //lay danh sach vai tro
-            this.roleService.getRoleById(data?.role_id).subscribe(data => {
-              
-              this.role = data.name;
+            this.roleService.getRoleById(data?.role_id).subscribe(roleData => { // Đổi tên biến
+              this.role = roleData.name;
             });
           }
           if(data.phone_tel != null){
             let result  = this.networkList.find(item => item.id === data.phone_tel);
-            this.networkKpi = result.name;
+            this.networkKpi = result ? result.name : ''; // Thêm kiểm tra null/undefined
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
@@ -160,6 +172,49 @@ export class DetailUserComponent implements OnInit {
       )
 
     });    
+  }
+
+  // Hàm tải ảnh với token
+  private loadImageWithToken(imageUrl: string, type: 'sign' | 'mark') {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
+    const token = currentUser.access_token;
+
+    if (!token) {
+      if (type === 'sign') {
+        this.imgSignPCSelect = null;
+      } else {
+        this.imgSignPCSelectMark = null;
+      }
+      return;
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.get(imageUrl, { headers, responseType: 'blob' }).subscribe(blob => {
+      const objectURL = URL.createObjectURL(blob);
+      if (type === 'sign') {
+        this.imgSignPCSelect = objectURL;
+      } else { // type === 'mark'
+        this.imgSignPCSelectMark = objectURL;
+      }
+    }, error => {
+      this.toastService.showErrorHTMLWithTimeout(`Không thể tải ảnh ${type === 'sign' ? 'chữ ký' : 'dấu'}. Vui lòng kiểm tra lại.`, "", 3000);
+      if (type === 'sign') {
+        this.imgSignPCSelect = null;
+      } else {
+        this.imgSignPCSelectMark = null;
+      }
+    });
+  }
+
+  // Thu hồi Blob URL khi component bị hủy
+  ngOnDestroy(): void {
+    if (this.imgSignPCSelect && this.imgSignPCSelect.startsWith('blob:')) {
+      URL.revokeObjectURL(this.imgSignPCSelect);
+    }
+    if (this.imgSignPCSelectMark && this.imgSignPCSelectMark.startsWith('blob:')) {
+      URL.revokeObjectURL(this.imgSignPCSelectMark);
+    }
   }
 
   onCancel(){

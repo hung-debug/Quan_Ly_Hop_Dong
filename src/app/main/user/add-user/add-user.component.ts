@@ -14,6 +14,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component'; // Import component cropper
 import { ContractService } from 'src/app/service/contract.service';
 import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Thêm HttpClient, HttpHeaders
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser'; // Thêm DomSanitizer, SafeUrl
+
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -72,8 +75,9 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   selectedCode: string | null = null; // Lưu mã ('sign' hoặc 'mark') để biết ảnh nào đang được xử lý
 
-  imgSignPCSelect: string;
-  imgSignPCSelectMark: string;
+  // Thay đổi kiểu dữ liệu thành string | null
+  imgSignPCSelect: string | null = null;
+  imgSignPCSelectMark: string | null = null;
   imgSignBucketMark: string | null = null;
   imgSignPathMark: string | null = null;
   environment: any = "";
@@ -89,6 +93,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
               private uploadService:UploadService,
               private spinner: NgxSpinnerService,
               private contractService: ContractService,
+              private http: HttpClient, // Inject HttpClient
+              public sanitizer: DomSanitizer, // Inject DomSanitizer và đặt là public
     ) {
     this.addForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -230,11 +236,20 @@ export class AddUserComponent implements OnInit, OnDestroy {
                   });
                   this.phoneOld = data.phone;
 
-                  this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
+                  // Tải ảnh chữ ký và dấu nếu có
+                  if (data.sign_image != null && data.sign_image.length > 0 && data.sign_image[0].presigned_url) {
+                    this.loadImageWithToken(data.sign_image[0].presigned_url, 'sign');
+                  } else {
+                    this.imgSignPCSelect = null;
+                  }
                   this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
                   this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
 
-                  this.imgSignPCSelectMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].presigned_url:null;
+                  if (data.stampImage != null && data.stampImage.length > 0 && data.stampImage[0].presigned_url) {
+                    this.loadImageWithToken(data.stampImage[0].presigned_url, 'mark');
+                  } else {
+                    this.imgSignPCSelectMark = null;
+                  }
                   this.imgSignBucketMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].bucket:null;
                   this.imgSignPathMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].path:null;
 
@@ -682,18 +697,18 @@ export class AddUserComponent implements OnInit, OnDestroy {
         if (e.target.files[0].size <= 50000000) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
-          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
+          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpeg') {
             this.handleUpload(e, code);
 
             if (code === 'sign') {
               this.selectedFileSign = file;
               this.croppedImageSign = null;
-              this.imgSignPCSelect = '';
+              this.imgSignPCSelect = null; // Đặt là null để ẩn vùng chọn file cũ
               this.showCropperSign = false;
             } else if (code === 'mark') {
               this.selectedFileMark = file;
               this.croppedImageMark = null;
-              this.imgSignPCSelectMark ='';
+              this.imgSignPCSelectMark = null; // Đặt là null để ẩn vùng chọn file cũ
               this.showCropperMark = false;
             }
           }else{
@@ -716,14 +731,21 @@ export class AddUserComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(file);
     reader.onload = () => {
       if(code == 'sign') {
-        this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+        this.imgSignPCSelect = reader.result? reader.result.toString() : null; // Gán string hoặc null
         this.showCropperSign = true; // Hiển thị component cropper cho ảnh Sign
         this.selectedFileSign = file;
       }
       else if(code == 'mark') {
-        this.imgSignPCSelectMark = reader.result? reader.result.toString() : '';
+        this.imgSignPCSelectMark = reader.result? reader.result.toString() : null; // Gán string hoặc null
         this.showCropperMark = true; // Hiển thị component cropper cho ảnh Mark
         this.selectedFileMark = file;
+      }
+    };
+    reader.onerror = (error) => {
+      if (code === 'sign') {
+        this.imgSignPCSelect = null;
+      } else {
+        this.imgSignPCSelectMark = null;
       }
     };
   }
@@ -740,11 +762,18 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
       sessionStorage.removeItem('isMailSame');
+      // Thu hồi Blob URL khi component bị hủy
+      if (this.imgSignPCSelect && this.imgSignPCSelect.startsWith('blob:')) {
+        URL.revokeObjectURL(this.imgSignPCSelect);
+      }
+      if (this.imgSignPCSelectMark && this.imgSignPCSelectMark.startsWith('blob:')) {
+        URL.revokeObjectURL(this.imgSignPCSelectMark);
+      }
   }
    // Hàm được gọi khi ảnh Sign đã được crop
    onCroppedSign(croppedImage: string) {
     this.croppedImageSign = croppedImage; // Lưu dữ liệu base64 của ảnh đã crop
-    this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị
+    this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị (base64 string)
     this.showCropperSign = false; // Ẩn component cropper
     this.selectedFileSign = this.base64ToFile(croppedImage, 'cropped-sign.png'); // Tạo File từ base64
     this.attachFile = this.selectedFileSign;
@@ -754,7 +783,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     // Hàm được gọi khi ảnh Mark đã được crop
     onCroppedMark(croppedImage: string) {
       this.croppedImageMark = croppedImage; // Lưu dữ liệu base64 của ảnh đã crop
-      this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị
+      this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị (base64 string)
       this.showCropperMark = false; // Ẩn component cropper
       this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
       this.attachFileMark = this.selectedFileMark;
@@ -776,5 +805,38 @@ export class AddUserComponent implements OnInit, OnDestroy {
       u8arr[n] = bstr.charCodeAt(n);
     }
     return new File([u8arr], filename, { type: mime });
+  }
+
+  // Hàm tải ảnh từ URL có token
+  private loadImageWithToken(imageUrl: string, type: 'sign' | 'mark') {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
+    const token = currentUser.access_token;
+
+    if (!token) {
+      if (type === 'sign') {
+        this.imgSignPCSelect = null;
+      } else {
+        this.imgSignPCSelectMark = null;
+      }
+      return;
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.get(imageUrl, { headers, responseType: 'blob' }).subscribe(blob => {
+      const objectURL = URL.createObjectURL(blob);
+      if (type === 'sign') {
+        this.imgSignPCSelect = objectURL; // Gán blob URL string
+      } else {
+        this.imgSignPCSelectMark = objectURL; // Gán blob URL string
+      }
+    }, error => {
+      this.toastService.showErrorHTMLWithTimeout(`Không thể tải ảnh ${type === 'sign' ? 'chữ ký' : 'dấu'}. Vui lòng kiểm tra lại.`, "", 3000);
+      if (type === 'sign') {
+        this.imgSignPCSelect = null;
+      } else {
+        this.imgSignPCSelectMark = null;
+      }
+    });
   }
 }
