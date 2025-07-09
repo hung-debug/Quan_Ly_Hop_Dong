@@ -129,6 +129,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
   pageRendering:any;
   pageNumPending: any = null;
+  token: any;
   constructor(
     private contractTemplateService: ContractTemplateService,
     private contractService: ContractService,
@@ -143,6 +144,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     this.typeUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
   ngOnInit(): void {
@@ -408,7 +410,12 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
+    pdfjs.getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }).promise.then((pdf: any) => {
       this.thePDF = pdf;
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
       this.removePage();

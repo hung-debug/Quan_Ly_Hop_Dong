@@ -166,7 +166,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   pageLast: boolean = true;
   enviroment: any = "";
   typeUser: any;
-
+  token: any;
   pageRendering: any;
   pageNumPending: any = null;
   isAllowFirstHandleEdit: boolean = false;
@@ -206,6 +206,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     this.typeUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token
   }
 
   async ngOnInit(): Promise<void> {
@@ -216,7 +218,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       sessionStorage.removeItem('type')
       sessionStorage.removeItem('url')
     }
-
+console.log("tttttttttttttt")
     this.route.queryParams.subscribe((params) => {
       this.pageBefore = params.page;
       this.remoteSinging = params?.remoteSinging;
@@ -649,8 +651,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         const extension = fileName
         currentUrl = res.path
         if (extension?.toLowerCase() == "txt") {
+          console.log("currentUrl", currentUrl)
           window.open(currentUrl)
         } else {
+          console.log("test", currentUrl.replace("/tmp/","/tmp/v2/"))
           window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
         }
       }
@@ -702,8 +706,14 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    console.log("this.pdfSrc", this.pdfSrc)
     pdfjs
-      .getDocument(this.pdfSrc)
+      .getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      })
       .promise.then((pdf: any) => {
         this.thePDF = pdf;
 

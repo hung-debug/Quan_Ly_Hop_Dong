@@ -110,7 +110,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   sum: number[] = [];
   top: any[]= [];
   typeUser: any;
-
+  token: any;
   constructor(
     private contractService: ContractService,
     private dialog: MatDialog,
@@ -126,6 +126,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     this.typeUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
   async ngOnInit() {
@@ -331,7 +332,12 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
+    pdfjs.getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }).promise.then((pdf: any) => {
       this.thePDF = pdf;
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
       this.removePage();

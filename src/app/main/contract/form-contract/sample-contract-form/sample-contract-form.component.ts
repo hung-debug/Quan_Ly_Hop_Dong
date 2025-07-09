@@ -127,6 +127,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   isDropdownVisibleChuKySo: boolean = false;
   hideConfigFirstHandler: boolean = false;
   satisfiedFirstHandler: boolean = false;
+  token: any;
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -140,7 +141,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     private detectCoordinateService: DetectCoordinateService,
     private sysService: SysService,
   ) {
-    this.stepForm = variable.stepSampleContractForm.step3
+    this.stepForm = variable.stepSampleContractForm.step3;
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
   async ngOnInit() {
@@ -1509,7 +1511,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
+    pdfjs.getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }).promise.then((pdf: any) => {
       this.thePDF = pdf;
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
       this.removePage();

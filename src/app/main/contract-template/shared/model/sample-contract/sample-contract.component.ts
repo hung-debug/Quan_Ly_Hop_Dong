@@ -119,6 +119,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   textUnit: number = 1;
   hideConfigFirstHandler: boolean = false;
   satisfiedFirstHandler: boolean = false;
+  token: any;
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractTemplateService: ContractTemplateService,
@@ -130,6 +131,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private sysService: SysService,
   ) {
     this.step = variable.stepSampleContract.step3
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
   ngOnInit() {
@@ -1481,7 +1483,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
+    pdfjs.getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }).promise.then((pdf: any) => {
       this.thePDF = pdf;
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
       this.removePage();

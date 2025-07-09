@@ -242,6 +242,7 @@ export class ConsiderContractComponent
   contract_no: any;
   typeUser: any;
   serialNumber: string;
+  token: any;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -277,6 +278,7 @@ export class ConsiderContractComponent
       localStorage.getItem('currentUser') || ''
     ).customer.type;
 
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
   pdfSrcMobile: any;
@@ -1008,7 +1010,12 @@ export class ConsiderContractComponent
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     let currentPageNum  = this.pageNum;
     pdfjs
-      .getDocument(this.pdfSrc)
+      .getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      })
       .promise.then((pdf: any) => {
         this.thePDF = pdf;
         this.pageNumber = pdf.numPages || pdf.pdfInfo.numPages;
@@ -5614,11 +5621,11 @@ export class ConsiderContractComponent
 
   openPdf(path: any, event: any, item: any) {
     // this.contractService.openPdf(path, event);
-    if(path.endsWith('.pdf')){
-      this.contractService.openPdf(path, event);
-    } else{
-      this.openOrDownloadFile(item);
-    }
+    // if(path.endsWith('.pdf')){
+    //   this.contractService.openPdf(path, event);
+    // } else{
+    //   this.openOrDownloadFile(item);
+    // }
   }
 
   flagFocus: boolean = false;
