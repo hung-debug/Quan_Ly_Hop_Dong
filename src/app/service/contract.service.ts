@@ -844,11 +844,15 @@ export class ContractService {
   }
 
   getDataFileUrl(url: any) {
-    const headers = new HttpHeaders().append(
-      'Content-Type',
-      'application/arraybuffer'
-    );
-    return this.http.get(url, { responseType: 'arraybuffer', headers });
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/arraybuffer')
+      .append('Authorization', `Bearer ${this.token}`);
+
+    return this.http.get(url, {
+      headers,
+      responseType: 'arraybuffer'
+    });
   }
 
   getDataFileUrlPromise(url: any) {
