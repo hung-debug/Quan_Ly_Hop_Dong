@@ -581,7 +581,8 @@ console.log("tttttttttttttt")
                 
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
-                  this.pdfSrc = pdfMobile.filePath;
+                  this.pdfSrc = await this.contractService.viewPdfMobile(pdfMobile.filePath);
+                  //this.pdfSrc = pdfMobile.filePath;
                 } else {
                   return this.toastService.showErrorHTMLWithTimeout(
                     pdfMobile.message,
@@ -590,7 +591,8 @@ console.log("tttttttttttttt")
                   );
                 }
               } else {
-                this.pdfSrc = fileC;  
+              this.pdfSrc = await this.contractService.viewPdfMobile(fileC);
+                //this.pdfSrc = fileC;  
               }
             } else {
               this.pdfSrc = fileC;           

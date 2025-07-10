@@ -845,7 +845,8 @@ export class ConsiderContractComponent
               // }
               if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64, this.idContract).toPromise();
-                this.pdfSrcMobile = pdfMobile.filePath;
+                this.pdfSrcMobile = await this.contractService.viewPdfMobile(pdfMobile.filePath);
+                //this.pdfSrcMobile = pdfMobile.filePath;
               } else if (fieldRecipientId.length >= 1) {
                 this.multiSignInPdf = true;
                 alert('Tài liệu có chứa ô text/ ô số tài liệu. Vui lòng thực hiện xử lý trên web hoặc ứng dụng di động!');
@@ -857,7 +858,8 @@ export class ConsiderContractComponent
               try {  
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
-                  this.pdfSrcMobile = pdfMobile.filePath;
+                  this.pdfSrcMobile = await this.contractService.viewPdfMobile(pdfMobile.filePath);
+                  //this.pdfSrcMobile = pdfMobile.filePath;
                 } else {
                   return this.toastService.showErrorHTMLWithTimeout(
                     pdfMobile.message,

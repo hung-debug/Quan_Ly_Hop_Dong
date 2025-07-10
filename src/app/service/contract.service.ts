@@ -881,6 +881,19 @@ export class ContractService {
     window.open(blobURL);
   }
 
+  viewPdfMobile(fileC: any): Promise<string> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+
+    return this.http.get(fileC, {
+      headers,
+      responseType: 'blob',
+    }).toPromise().then((res: Blob) => {
+      return URL.createObjectURL(res);
+    });
+  }
+
   getDataBinaryFileUrlPromise(url: any) {
     const headers = new HttpHeaders().append(
       'Content-Type',
