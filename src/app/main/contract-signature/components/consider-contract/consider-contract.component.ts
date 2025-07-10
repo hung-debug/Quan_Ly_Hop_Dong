@@ -5604,7 +5604,7 @@ export class ConsiderContractComponent
     }
   }
   
-  openOrDownloadFile(item: any){
+  openOrDownloadFile(item: any, event: any){
     let currentUrl: string = ""
     this.contractService.getFileContract(item.contract_id).subscribe(
       res => {
@@ -5613,10 +5613,10 @@ export class ConsiderContractComponent
         const extension = fileName
         currentUrl = res.path
         if (extension?.toLowerCase() == "txt") {
-          this.contractService.openOrDownloadFileAttach(currentUrl);
+          this.contractService.openOrDownloadFileAttach(currentUrl, event);
           //window.open(currentUrl)
         } else {
-          this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"));
+          this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"), event);
           //window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
         }
       }
@@ -5624,12 +5624,12 @@ export class ConsiderContractComponent
   }
 
   openPdf(path: any, event: any, item: any) {
-    // this.contractService.openPdf(path, event);
-    // if(path.endsWith('.pdf')){
-    //   this.contractService.openPdf(path, event);
-    // } else{
-    //   this.openOrDownloadFile(item);
-    // }
+    this.contractService.openPdf(path, event);
+    if(path.endsWith('.pdf')){
+      this.contractService.openPdf(path, event);
+    } else{
+      this.openOrDownloadFile(item, event);
+    }
   }
 
   flagFocus: boolean = false;

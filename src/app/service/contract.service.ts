@@ -902,6 +902,7 @@ export class ContractService {
         if (extension === 'txt') {
           window.open(a.href);
         } else {
+          console.log("aaaaa")
           a.download = fileName || 'downloaded-file';
           a.click();
           URL.revokeObjectURL(a.href);

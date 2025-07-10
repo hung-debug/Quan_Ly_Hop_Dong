@@ -102,7 +102,7 @@ export class ContractFolderComponent implements OnInit {
   }
   
 
-  openFolder(item: any){
+  openFolder(item: any, event: any){
     if (item.type == '0') {
       this.p = 1
       this.searchName = ""
@@ -146,10 +146,10 @@ export class ContractFolderComponent implements OnInit {
             (p: any) => p.type == 1 && p.status == 1
           )[0]?.path
           if (extension?.toLowerCase() == "txt") {
-            this.contractService.openOrDownloadFileAttach(currentUrl);
+            this.contractService.openOrDownloadFileAttach(currentUrl, event);
             //window.open(currentUrl)
           } else {
-            this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"));
+            this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"), event);
             //window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
           }
         }

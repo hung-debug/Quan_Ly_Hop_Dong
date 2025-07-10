@@ -60,7 +60,7 @@ export class CurrentFolderComponent implements OnInit {
     this.router.navigate(['/main/contract-folder'])
   }
 
-  openDetail(item: any) {
+  openDetail(item: any, event: any) {
     let currentUrl: string = ""
     if (item.status == 35) {
       this.contractService.getFileContract(item.id).subscribe(
@@ -77,10 +77,10 @@ export class CurrentFolderComponent implements OnInit {
             (p: any) => p.type == 1 && p.status == 1
           )[0]?.path
           if (extension?.toLowerCase() == "txt") {
-            this.contractService.openOrDownloadFileAttach(currentUrl);
+            this.contractService.openOrDownloadFileAttach(currentUrl, event);
             //window.open(currentUrl)
           } else {
-            this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"));
+            this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"), event);
             //window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
           }
         }
