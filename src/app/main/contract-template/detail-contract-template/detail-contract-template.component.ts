@@ -1007,4 +1007,12 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     this.show_information = !this.show_information;
     this.getPage();
   }
+
+  openPdfAttach(path: any, event: any) {
+    if(path.endsWith('.pdf')){
+      this.contractService.openPdf(path, event);
+    } else{
+      this.contractService.openOrDownloadFileAttach(path, event);
+    }
+  }
 }

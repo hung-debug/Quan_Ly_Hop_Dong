@@ -6127,4 +6127,12 @@ export class ConsiderContractComponent
       }
     });
   }
+
+  openPdfAttach(path: any, event: any) {
+    if(path.endsWith('.pdf')){
+      this.contractService.openPdf(path, event);
+    } else{
+      this.contractService.openOrDownloadFileAttach(path, event);
+    }
+  }
 }
