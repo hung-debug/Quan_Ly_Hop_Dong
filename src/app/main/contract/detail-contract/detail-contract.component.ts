@@ -644,30 +644,19 @@ console.log("tttttttttttttt")
     );
   }
   
-  openOrDownloadFile(item: any){
-    let currentUrl: string = ""
-    this.contractService.getFileContract(item.contract_id).subscribe(
-      res => {
-        let fileName = res.path
-        // const extension = fileName.split(".").pop()
-        const extension = fileName
-        currentUrl = res.path
-        if (extension?.toLowerCase() == "txt") {
-          console.log("currentUrl", currentUrl)
-          window.open(currentUrl)
-        } else {
-          console.log("test", currentUrl.replace("/tmp/","/tmp/v2/"))
-          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
-        }
-      }
-    )
-  }
-
   openPdf(path: any, event: any, item: any) {
     if(path.endsWith('.pdf')){
       this.contractService.openPdf(path, event);
     } else{
-      this.openOrDownloadFile(item);
+      this.contractService.openOrDownloadFile(item);
+    }
+  }
+
+  openPdfAttach(path: any, event: any) {
+    if(path.endsWith('.pdf')){
+      this.contractService.openPdf(path, event);
+    } else{
+      this.contractService.openOrDownloadFileAttach(path, event);
     }
   }
 

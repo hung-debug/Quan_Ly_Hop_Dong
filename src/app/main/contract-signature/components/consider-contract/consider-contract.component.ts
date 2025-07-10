@@ -5613,9 +5613,11 @@ export class ConsiderContractComponent
         const extension = fileName
         currentUrl = res.path
         if (extension?.toLowerCase() == "txt") {
-          window.open(currentUrl)
+          this.contractService.openOrDownloadFileAttach(currentUrl);
+          //window.open(currentUrl)
         } else {
-          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+          this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"));
+          //window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
         }
       }
     )

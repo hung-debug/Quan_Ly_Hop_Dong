@@ -58,9 +58,11 @@ export class ContractConnectDialogComponent implements OnInit {
           (p: any) => p.type == 1 && p.status == 1
         )[0]?.path
         if (extension?.toLowerCase() == "txt") {
-          window.open(currentUrl)
+          this.contractService.openOrDownloadFileAttach(currentUrl);
+          //window.open(currentUrl)
         } else {
-          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+          this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"));
+          //window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
         }
       }
     )
