@@ -957,6 +957,7 @@ export class ContractService {
   }
 
   viewPdfMobile(fileC: any): Promise<string> {
+    this.getCurrentUser();
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });

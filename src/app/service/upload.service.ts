@@ -46,8 +46,17 @@ export class UploadService {
     return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/single`, formData, {'headers':headers});
   }
 
-  downloadFile(path:any): any {
-		return this.http.get(path, {responseType: 'blob'});
+  downloadFile(path: any): any {
+    this.getCurrentUser();
+    console.log("this.token", this.token)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http.get(path, {
+      headers,
+      responseType: 'blob'
+    });
   }
 
   // Error handling
