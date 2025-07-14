@@ -9,7 +9,7 @@
   <div *ngFor="let ref of this.datas; let i = index" style="padding: 10px;display: flex;">
       <div style="background-color: rgb(156, 156, 156); border-radius: 10px;width: 20px;text-align: center;color: white;">{{i+1}}</div>
       <!-- <a style="color: #106DB6; cursor: pointer;text-decoration: none; padding-left: 10px;" target="_blank" href="/main/form-contract/detail/{{ref.contract_id}}">{{ref.ref_name}}</a> -->
-      <a style="color: #106DB6; cursor: pointer;text-decoration: none; padding-left: 10px;" target="_blank" (click)="openPdf(ref)">{{ref.ref_name}}</a>
+      <a style="color: #106DB6; cursor: pointer;text-decoration: none; padding-left: 10px;" target="_blank" (click)="openPdf(ref, $event)">{{ref.ref_name}}</a>
   </div>
   <div class="row" style="justify-content: center;padding-top: 10px;">
       <button class="cancel-button" (click)="dialog.closeAll()" autofocus type="button">{{'btn.cancel' | translate}}</button>

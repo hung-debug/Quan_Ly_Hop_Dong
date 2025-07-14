@@ -70,7 +70,8 @@
                             </div>
                         </div>
                         <div class="image-div">
-                            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+                            <!-- Sử dụng sanitizer.bypassSecurityTrustUrl() trực tiếp trong template -->
+                            <img *ngIf="imgSignPCSelect" [src]="sanitizer.bypassSecurityTrustUrl(imgSignPCSelect)" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
                         </div>
                     </div>
                 </div>
@@ -90,12 +91,11 @@
                             </div>
                         </div>
                         <div class="image-div">
-                            <img *ngIf="imgSignPCSelectMark" [src]="imgSignPCSelectMark" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+                            <!-- Sử dụng sanitizer.bypassSecurityTrustUrl() trực tiếp trong template -->
+                            <img *ngIf="imgSignPCSelectMark" [src]="sanitizer.bypassSecurityTrustUrl(imgSignPCSelectMark)" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
                         </div>
                     </div>
                 </div>
-
-                
 
                 <div class="col-md-3">
                     <div class="label-header">
