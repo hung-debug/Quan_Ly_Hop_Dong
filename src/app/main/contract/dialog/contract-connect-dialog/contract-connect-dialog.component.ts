@@ -42,7 +42,7 @@ export class ContractConnectDialogComponent implements OnInit {
     )
   }
   
-  openOrDownloadFile(item: any){
+  openOrDownloadFile(item: any, event: any){
     let currentUrl: string = ""
     this.contractService.getFileContract(item.contract_id).subscribe(
       res => {
@@ -58,20 +58,22 @@ export class ContractConnectDialogComponent implements OnInit {
           (p: any) => p.type == 1 && p.status == 1
         )[0]?.path
         if (extension?.toLowerCase() == "txt") {
-          window.open(currentUrl)
+          this.contractService.openOrDownloadFileAttach(currentUrl, event);
+          //window.open(currentUrl)
         } else {
-          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+          this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"), event);
+          //window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
         }
       }
     )
   }
   
-  openPdf(item: any) {
+  openPdf(item: any, event: any) {
     if(item.isParticipant == true){
       this.router.navigate(['/main/form-contract/detail/' + item.contract_id]);
       this.dialog.closeAll();
     }else{
-      this.openOrDownloadFile(item);
+      this.openOrDownloadFile(item, event);
     }
   }
 

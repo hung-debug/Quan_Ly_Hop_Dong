@@ -21,11 +21,13 @@ export class PreviewContractTemplateComponent implements OnInit {
   objPdfProperties: any = {
     pages: [],
   };
-
+  token: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PreviewContractTemplateComponent>,
-  ) { }
+  ) { 
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+  }
 
   ngOnInit(): void {
     this.datas = this.data;
@@ -156,7 +158,12 @@ export class PreviewContractTemplateComponent implements OnInit {
       // @ts-ignore
       const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
       pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-      pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
+      pdfjs.getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }).promise.then((pdf: any) => {
         this.thePDF = pdf;
         this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
         this.removePage();

@@ -83,6 +83,7 @@ export class FooterSignatureComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
+    console.log("thePDF", this.thePDF)
     let getStatusBonBon = localStorage.getItem('isBonBon');
     this.isBonBon = getStatusBonBon === "true";
     this.getDeviceApp();

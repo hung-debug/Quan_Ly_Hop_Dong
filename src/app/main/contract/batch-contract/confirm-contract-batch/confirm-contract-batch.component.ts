@@ -123,7 +123,7 @@ export class ConfirmContractBatchComponent
 
   sum: number[] = [];
   top: any[] = [];
-
+  token: any;
   constructor(
     private contractService: ContractService,
     private toastService: ToastService,
@@ -134,6 +134,7 @@ export class ConfirmContractBatchComponent
     private customerAnalysis: CustomerAnalysis,
   ) {
     this.step = variable.stepSampleContractBatch.step2;
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token
   }
 
   ngOnInit() {
@@ -378,7 +379,12 @@ export class ConfirmContractBatchComponent
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     pdfjs
-      .getDocument(this.pdfSrc)
+      .getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      })
       .promise.then((pdf: any) => {
         this.thePDF = pdf;
         this.pageNumber = pdf.numPages || pdf.pdfInfo.numPages;

@@ -242,6 +242,7 @@ export class ConsiderContractComponent
   contract_no: any;
   typeUser: any;
   serialNumber: string;
+  token: any;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -277,6 +278,7 @@ export class ConsiderContractComponent
       localStorage.getItem('currentUser') || ''
     ).customer.type;
 
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
   pdfSrcMobile: any;
@@ -843,7 +845,8 @@ export class ConsiderContractComponent
               // }
               if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64, this.idContract).toPromise();
-                this.pdfSrcMobile = pdfMobile.filePath;
+                this.pdfSrcMobile = await this.contractService.viewPdfMobile(pdfMobile.filePath);
+                //this.pdfSrcMobile = pdfMobile.filePath;
               } else if (fieldRecipientId.length >= 1) {
                 this.multiSignInPdf = true;
                 alert('Tài liệu có chứa ô text/ ô số tài liệu. Vui lòng thực hiện xử lý trên web hoặc ứng dụng di động!');
@@ -855,7 +858,8 @@ export class ConsiderContractComponent
               try {  
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
-                  this.pdfSrcMobile = pdfMobile.filePath;
+                  this.pdfSrcMobile = await this.contractService.viewPdfMobile(pdfMobile.filePath);
+                  //this.pdfSrcMobile = pdfMobile.filePath;
                 } else {
                   return this.toastService.showErrorHTMLWithTimeout(
                     pdfMobile.message,
@@ -1008,7 +1012,12 @@ export class ConsiderContractComponent
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     let currentPageNum  = this.pageNum;
     pdfjs
-      .getDocument(this.pdfSrc)
+      .getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      })
       .promise.then((pdf: any) => {
         this.thePDF = pdf;
         this.pageNumber = pdf.numPages || pdf.pdfInfo.numPages;
@@ -5595,7 +5604,7 @@ export class ConsiderContractComponent
     }
   }
   
-  openOrDownloadFile(item: any){
+  openOrDownloadFile(item: any, event: any){
     let currentUrl: string = ""
     this.contractService.getFileContract(item.contract_id).subscribe(
       res => {
@@ -5604,20 +5613,22 @@ export class ConsiderContractComponent
         const extension = fileName
         currentUrl = res.path
         if (extension?.toLowerCase() == "txt") {
-          window.open(currentUrl)
+          this.contractService.openOrDownloadFileAttach(currentUrl, event);
+          //window.open(currentUrl)
         } else {
-          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+          this.contractService.openOrDownloadFileAttach(currentUrl.replace("/tmp/","/tmp/v2/"), event);
+          //window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
         }
       }
     )
   }
 
   openPdf(path: any, event: any, item: any) {
-    // this.contractService.openPdf(path, event);
+    this.contractService.openPdf(path, event);
     if(path.endsWith('.pdf')){
       this.contractService.openPdf(path, event);
     } else{
-      this.openOrDownloadFile(item);
+      this.openOrDownloadFile(item, event);
     }
   }
 
@@ -6115,5 +6126,13 @@ export class ConsiderContractComponent
         e.preventDefault();
       }
     });
+  }
+
+  openPdfAttach(path: any, event: any) {
+    if(path.endsWith('.pdf')){
+      this.contractService.openPdf(path, event);
+    } else{
+      this.contractService.openOrDownloadFileAttach(path, event);
+    }
   }
 }

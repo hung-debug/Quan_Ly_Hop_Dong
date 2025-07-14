@@ -39,7 +39,7 @@ export class MultiSignListComponent implements OnInit {
   totalContact: number = 1;
   isDisablePrevious: boolean = false;
   isDisableNext: boolean = false;
-
+  token: any;
   constructor(
     private route: ActivatedRoute,
     private contractService: ContractService
@@ -51,6 +51,7 @@ export class MultiSignListComponent implements OnInit {
     this.typeUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
    }
 
   ngOnInit(): void {
@@ -110,7 +111,12 @@ export class MultiSignListComponent implements OnInit {
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     
-    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
+    pdfjs.getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }).promise.then((pdf: any) => {
         this.thePDF = pdf;
         this.pageNumber = pdf.numPages || pdf.pdfInfo.numPages;
         this.removePage();

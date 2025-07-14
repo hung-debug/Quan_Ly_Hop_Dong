@@ -166,7 +166,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   pageLast: boolean = true;
   enviroment: any = "";
   typeUser: any;
-
+  token: any;
   pageRendering: any;
   pageNumPending: any = null;
   isAllowFirstHandleEdit: boolean = false;
@@ -206,6 +206,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     this.typeUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token
   }
 
   async ngOnInit(): Promise<void> {
@@ -216,7 +218,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       sessionStorage.removeItem('type')
       sessionStorage.removeItem('url')
     }
-
+console.log("tttttttttttttt")
     this.route.queryParams.subscribe((params) => {
       this.pageBefore = params.page;
       this.remoteSinging = params?.remoteSinging;
@@ -579,7 +581,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
                 
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
-                  this.pdfSrc = pdfMobile.filePath;
+                  this.pdfSrc = await this.contractService.viewPdfMobile(pdfMobile.filePath);
+                  //this.pdfSrc = pdfMobile.filePath;
                 } else {
                   return this.toastService.showErrorHTMLWithTimeout(
                     pdfMobile.message,
@@ -588,7 +591,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
                   );
                 }
               } else {
-                this.pdfSrc = fileC;  
+              this.pdfSrc = await this.contractService.viewPdfMobile(fileC);
+                //this.pdfSrc = fileC;  
               }
             } else {
               this.pdfSrc = fileC;           
@@ -640,28 +644,19 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     );
   }
   
-  openOrDownloadFile(item: any){
-    let currentUrl: string = ""
-    this.contractService.getFileContract(item.contract_id).subscribe(
-      res => {
-        let fileName = res.path
-        // const extension = fileName.split(".").pop()
-        const extension = fileName
-        currentUrl = res.path
-        if (extension?.toLowerCase() == "txt") {
-          window.open(currentUrl)
-        } else {
-          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
-        }
-      }
-    )
-  }
-
   openPdf(path: any, event: any, item: any) {
     if(path.endsWith('.pdf')){
       this.contractService.openPdf(path, event);
     } else{
-      this.openOrDownloadFile(item);
+      this.contractService.openOrDownloadFile(item);
+    }
+  }
+
+  openPdfAttach(path: any, event: any) {
+    if(path.endsWith('.pdf')){
+      this.contractService.openPdf(path, event);
+    } else{
+      this.contractService.openOrDownloadFileAttach(path, event);
     }
   }
 
@@ -702,8 +697,14 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    console.log("this.pdfSrc", this.pdfSrc)
     pdfjs
-      .getDocument(this.pdfSrc)
+      .getDocument({
+        url: this.pdfSrc,
+        httpHeaders: {
+          Authorization: `Bearer ${this.token}`
+        }
+      })
       .promise.then((pdf: any) => {
         this.thePDF = pdf;
 

@@ -29,7 +29,8 @@
               <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'file.attach' | translate}}:</div>
                 <div class="custom-xl-width-col-xl-9 col-lg-12 mt-lg-5px">
                   <div *ngFor="let d of allFileAttachment; let i = index" style="margin-right: 5px;" class="content-info-contract">
-                    <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
+                    
+                    <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank" (click)="openPdfAttach(d.path, $event)">{{d.filename}}</a>
                 </div>
               </div>
             </div> 

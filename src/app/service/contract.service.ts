@@ -844,18 +844,21 @@ export class ContractService {
   }
 
   getDataFileUrl(url: any) {
-    const headers = new HttpHeaders().append(
-      'Content-Type',
-      'application/arraybuffer'
-    );
-    return this.http.get(url, { responseType: 'arraybuffer', headers });
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/arraybuffer')
+      .append('Authorization', `Bearer ${this.token}`);
+
+    return this.http.get(url, {
+      headers,
+      responseType: 'arraybuffer'
+    });
   }
 
   getDataFileUrlPromise(url: any) {
-    const headers = new HttpHeaders().append(
-      'Content-Type',
-      'application/arraybuffer'
-    );
+  const headers = new HttpHeaders()
+    .append('Content-Type', 'application/arraybuffer')
+    .append('Authorization', `Bearer ${this.token}`);
     return this.http
       .get(url, { responseType: 'arraybuffer', headers })
       .toPromise();
@@ -879,6 +882,92 @@ export class ContractService {
     var blob = new Blob([byteArray], { type: 'application/pdf' });
     var blobURL = URL.createObjectURL(blob);
     window.open(blobURL);
+  }
+
+  openOrDownloadFileAttach(path: string, event?: any) {
+    if (event && event.preventDefault) {
+      event.preventDefault();
+    }
+    const fileName = path.split('/').pop();
+    const extension = fileName?.split('.').pop()?.toLowerCase();
+    const filePath = path;
+    const urlToDownload = filePath;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+    this.http.get(urlToDownload, {
+      headers,
+      responseType: 'blob'
+    }).subscribe({
+      next: (blob: Blob) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+
+        if (extension === 'txt') {
+          window.open(a.href);
+        } else {
+          console.log("aaaaa")
+          a.download = fileName || 'downloaded-file';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        }
+      },
+      error: (err) => {
+        console.error('❌ Error downloading file:', err);
+      }
+    });
+  }
+
+  openOrDownloadFile(item: any) {
+    this.getFileContract(item.contract_id).subscribe(res => {
+      const filePath = res.path;
+      const fileName = filePath.split('/').pop();
+      const extension = fileName?.split('.').pop()?.toLowerCase();
+
+      const urlToDownload = extension === 'txt'
+        ? filePath
+        : filePath.replace('/tmp/', '/tmp/v2/');
+
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${this.token}`
+      });
+
+      this.http.get(urlToDownload, {
+        headers,
+        responseType: 'blob'
+      }).subscribe({
+        next: (blob: Blob) => {
+          const blobUrl = URL.createObjectURL(blob);
+
+          if (extension === 'txt') {
+            window.open(blobUrl);
+          } else {
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = fileName || 'downloaded-file';
+            a.click();
+            URL.revokeObjectURL(a.href);
+          }
+        },
+        error: (err) => {
+          console.error('❌ Error downloading file:', err);
+        }
+      });
+    });
+  }
+
+  viewPdfMobile(fileC: any): Promise<string> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+
+    return this.http.get(fileC, {
+      headers,
+      responseType: 'blob',
+    }).toPromise().then((res: Blob) => {
+      return URL.createObjectURL(res);
+    });
   }
 
   getDataBinaryFileUrlPromise(url: any) {

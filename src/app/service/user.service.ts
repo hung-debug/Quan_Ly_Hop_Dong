@@ -404,10 +404,9 @@ export class UserService {
         }),
         concatMap((res: any) => {
           if (res) {
-            const headers = new HttpHeaders().append(
-              'Content-Type',
-              'application/arraybuffer'
-            );
+            const headers = new HttpHeaders()
+              .append('Content-Type', 'application/arraybuffer')
+              .append('Authorization', 'Bearer ' + this.token);
             return this.http
               .get(res, { responseType: 'arraybuffer', headers })
               .pipe(
@@ -436,10 +435,9 @@ export class UserService {
         }),
         concatMap((res: any) => {
           if (res) {
-            const headers = new HttpHeaders().append(
-              'Content-Type',
-              'application/arraybuffer'
-            );
+            const headers = new HttpHeaders()
+              .append('Content-Type', 'application/arraybuffer')
+              .append('Authorization', 'Bearer ' + this.token);
             return this.http
               .get(res, { responseType: 'arraybuffer', headers })
               .pipe(
