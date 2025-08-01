@@ -5653,10 +5653,11 @@ export class ConsiderContractComponent
   }
 
   async signBCY(pdfContractPath: any, fieldId: any){
+    let converPdfContractPath = pdfContractPath.replace('/v1/tmp/', '/v1/tmp/v2/')
     let params = {
       FileUploadHandler: `${environment.apiUrl}/api/v1/processes/digital-sign-bcy?field_id=${fieldId}`,
       SessionId: "",
-      FileName: pdfContractPath,
+      FileName: converPdfContractPath,
       DocNumber: "",
       IssuedDate: new Date()
     }
