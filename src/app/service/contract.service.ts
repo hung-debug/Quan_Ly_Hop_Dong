@@ -72,6 +72,7 @@ export class ContractService {
   uploadFileBase64UrlV2: any = `${environment.apiUrl}/api/v1/upload/organizations/v2/`;
   // currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
+  urlVersionUsbToken: any = `${environment.apiUrl}/api/v1/organizations/basic-info/`;
   isDataDetermine: any = `${environment.apiUrl}/api/v1/participants/byRecipient/`;
   signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
 
@@ -1034,6 +1035,7 @@ export class ContractService {
   }
 
   getDataNotifyOriganzation() {
+    console.log("1")
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1043,6 +1045,7 @@ export class ContractService {
   }
 
   getDataNotifyOriganzationOrgId(orgId: any) {
+    console.log("2")
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1053,6 +1056,20 @@ export class ContractService {
     }
 
     let listContractUrl = this.getNotifyOriganzation + orgId;
+    return this.http.get<any>(listContractUrl, { headers }).pipe();
+  }
+
+  getVersionUsbToken(orgId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    if (this.organization_id) {
+      orgId = this.organization_id;
+    }
+
+    let listContractUrl = this.urlVersionUsbToken + orgId;
     return this.http.get<any>(listContractUrl, { headers }).pipe();
   }
 

@@ -406,8 +406,8 @@ export class FooterSignatureComponent implements OnInit {
 
           this.contractService.getDataCoordination(this.contractId).subscribe((response => {
             this.orgId = response.organization_id;
-            this.unitService.getUnitById(this.orgId).toPromise().then(
-              data => {
+            // this.unitService.getUnitById(this.orgId).toPromise().then(
+            //   data => {
 
                 //chi lay so luong hop dong khi chon to chuc cha to nhat
                 //lay so luong hop dong da dung
@@ -438,10 +438,11 @@ export class FooterSignatureComponent implements OnInit {
                     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã dùng', "", 3000);
                   }
                 )
-              }, error => {
-                this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
-              }
-            )
+            //   }, error => {
+            //     console.log("20")
+            //     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+            //   }
+            // )
           }))
 
 

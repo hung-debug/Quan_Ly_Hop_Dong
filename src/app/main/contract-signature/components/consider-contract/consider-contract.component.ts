@@ -518,16 +518,19 @@ export class ConsiderContractComponent
   }
 
   async getVersionUsbToken(orgId: any) {
-    const dataOrg = await this.contractService
-      .getDataNotifyOriganzationOrgId(orgId)
+    try {
+      const dataOrg = await this.contractService
+      .getVersionUsbToken(orgId)
       .toPromise();
 
+      if (dataOrg.usb_token_version == 1) {
+        this.usbTokenVersion = 1;
+      } else if (dataOrg.usb_token_version == 2) {
 
-    if (dataOrg.usb_token_version == 1) {
-      this.usbTokenVersion = 1;
-    } else if (dataOrg.usb_token_version == 2) {
-
-      this.usbTokenVersion = 2;
+        this.usbTokenVersion = 2;
+      }
+    } catch (error) {
+      console.log("error", error)
     }
   }
 
