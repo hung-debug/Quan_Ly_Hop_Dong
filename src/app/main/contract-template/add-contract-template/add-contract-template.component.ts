@@ -188,6 +188,7 @@ export class AddContractTemplateComponent implements OnInit {
   }
 
   next() {
+    console.log("datas", this.datas)
     if (this.step == 'infor-contract') {
       this.personal_step = true;
       if (this.personalDetails.invalid) {

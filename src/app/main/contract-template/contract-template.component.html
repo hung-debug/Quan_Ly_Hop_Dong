@@ -48,7 +48,11 @@
             </div>
 
             <div [ngClass] = "{'btn-padding-right' : !isQLMHD_06, 'btn-padding-left': isQLMHD_06, 'col-md-6' : isQLMHD_06 && isQLMHD_01}" class="col-lg-1-1 btn-padding-left" *ngIf="isQLMHD_01" >
-              <button class="btn-block btn_cancel" (click)="add()">{{'btn.add' | translate }}</button>
+              <button class="btn-block btn_cancel" mat-button [matMenuTriggerFor]="menu">{{'btn.add' | translate }}</button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="addDragAndDrop()">Mẫu kéo thả</button>
+                <button mat-menu-item (click)="addVariableName()">Mẫu định nghĩa tên trường</button>
+              </mat-menu>
             </div>
           </div>
         

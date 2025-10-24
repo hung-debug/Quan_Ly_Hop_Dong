@@ -77,6 +77,7 @@ export class ContractTemplateComponent implements OnInit {
     this.login_type = this.currentUser.loginType;
   }
 
+  
   ngOnInit(): void {
     this.appService.setTitle('contract-template.list');
     this.appService.setSubTitle('');
@@ -364,5 +365,13 @@ export class ContractTemplateComponent implements OnInit {
     setTimeout(() => {
       void this.router.navigate(['main/form-contract/add/' + id + '/template/KEEP_MY_ORG']);
     }, 100)
+  }
+
+  addDragAndDrop() {
+    this.router.navigate(['/main/contract-template/form/add/1']);
+  }
+
+  addVariableName() {
+    this.router.navigate(['/main/contract-template/form/add/2']);
   }
 }

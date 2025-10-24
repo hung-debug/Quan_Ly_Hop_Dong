@@ -966,5 +966,6 @@
   "select.phone": "Select phone",
   "login.type": "Login type",
   "email.and.phone": "Email and Phone",
-  "buy.package": "Buy more package"
+  "buy.package": "Buy more package",
+  "enter.variable.name": "Enter a display name definition for the information field:"
 }

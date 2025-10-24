@@ -26,6 +26,8 @@ import { CheckZoomService } from 'src/app/service/check-zoom.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 import { environment } from 'src/environments/environment';
 import { SysService } from 'src/app/service/sys.service';
+import {ActivatedRoute } from '@angular/router';
+import { forEach } from 'lodash';
 
 @Component({
   selector: 'app-sample-contract',
@@ -120,6 +122,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   hideConfigFirstHandler: boolean = false;
   satisfiedFirstHandler: boolean = false;
   token: any;
+  private sub: any;
+  typeSample: number;
+  variableName: any;
+  variableInput: any;
+  variableDropdown : any;
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractTemplateService: ContractTemplateService,
@@ -129,16 +136,35 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private checkZoomService: CheckZoomService,
     private detectCoordinateService: DetectCoordinateService,
     private sysService: SysService,
+    private route: ActivatedRoute,
   ) {
     this.step = variable.stepSampleContract.step3
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.onResize();
     console.log("mẫu")
-    this.spinner.hide();
+    this.sub = this.route.params.subscribe(params => {
+      this.typeSample = params['type'];
 
+    })
+    this.spinner.hide();
+    if(this.typeSample == 2) {
+      try{
+        let variableName = await this.contractTemplateService.getVariableName(this.datas.contract_id).toPromise();
+        if(!this.datas.variableName) {
+        console.log("variableName", variableName)
+          this.datas.variableName = variableName;
+        }     
+        this.variableInput = this.datas.variableName.some((v: any) => v.type === 1);
+        this.variableDropdown = this.datas.variableName.some((v: any) => v.type === 3);
+        console.log("this.variableDropdown", this.variableDropdown)
+      } catch(err) {
+        console.log("err", err)
+      }
+    }
+    console.log("this.datas", this.datas)
     if (this.datas.font) {
       this.selectedFont = this.datas.font;
     }
@@ -169,7 +195,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.scale = 1;
     if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
       let data_user_sign = [...this.datas.is_determine_clone];
-      this.getListNameSign(data_user_sign);
+      if(this.typeSample == 2) {
+        this.getListvariableNameSign(data_user_sign);
+      } else {
+        this.getListNameSign(data_user_sign);
+      }
     }
     if (!this.signCurent) {
       this.signCurent = {
@@ -177,6 +207,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         height: 0
       }
     }
+    console.log("this.datas.contract_user_sign", this.datas.contract_user_sign)
+        console.log("this.list_sign_name", this.list_sign_name)
     if (this.datas.isDocx) {
       this.pdfSrc = this.datas.convertedContractFileUrl
     } else {
@@ -271,12 +303,29 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.size = this.datas.size;
     }
 
-    this.synchronized1(this.imageSign);
-    this.synchronized2(this.digitalSign);
-    this.synchronized1(this.textUnit);
+    if(this.typeSample == 1) {
+      this.synchronized1(this.imageSign);
+      this.synchronized2(this.digitalSign);
+      this.synchronized1(this.textUnit);
 
-    this.checkDifferent();
+      this.checkDifferent();
+    }
   }
+
+    test() {
+      console.log("this.variableInput", this.variableInput)
+      console.log("this.variableInput", this.variableDropdown)
+    }
+  // updateValue(item: any) {
+  //   console.log("tttttttttt")
+  //   const index = this.variableName.findIndex((x: any) => x.id === item.id);
+  //   if (index !== -1) {
+  //     this.variableName[index].value = item.value;
+  //   }
+
+  //   console.log("this.variableName", this.variableName)
+  // }
+
 
   synchronized1(numberSign: number) {
     for(let i = 0; i < this.datas.is_determine_clone.length; i++) {
@@ -501,7 +550,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let targetObject1 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau_va_thong_tin");
         let targetObject2 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau");
         let targetObject3 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_thong_tin");
-
+        console.log("targetObject1", targetObject1)
         data_sign_config_cks.forEach((data: any) => {
             if (data.type_image_signature === 3) {
                 data.sign_unit = 'chu_ky_so_con_dau_va_thong_tin';
@@ -790,7 +839,37 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
   }
 
+  getListvariableNameSign(data_user_sign: any) {
+    data_user_sign.forEach((element: any) => {
+      if (element.type == 1 || element.type == 5) {
+        element.recipients.forEach((item: any) => {
+          if (item.role == 3 || item.role == 4 || item.role == 2) {
+            item['type_unit'] = 'organization';
+            item['selected'] = false;
+            //item['is_disable'] = false;
+            item['is_disable'] = false
+            item['org_name'] = element.name;
+            console.log("item", item)
+            this.list_sign_name.push(item);
+          }
+        })
+      } else if (element.type == 2 || element.type == 3) {
+        element.recipients.forEach((item: any) => {
+          if (item.role == 3 || item.role == 4 || item.role == 2) {
+            item['type_unit'] = 'partner'
+            item['selected'] = false;
+            item['is_disable'] = false;
+            //item['type'] = element.type;
+            item['org_name'] = element.name;
+            this.list_sign_name.push(item);
+          }
+        })
+      }
+    })
+  }
+
   getListNameSign(data_user_sign: any) {
+    console.log("data_user_sign", data_user_sign)
     data_user_sign.forEach((element: any) => {
 
       if (element.type == 1 || element.type == 5) {
@@ -801,6 +880,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             //item['is_disable'] = false;
             item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6));
             item['org_name'] = element.name;
+            console.log("item", item)
             this.list_sign_name.push(item);
           }
         })
@@ -1509,7 +1589,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }).then(() => {
       setTimeout(() => {
         this.setPosition();
-        this.eventMouseover();
+        //this.eventMouseover();
 
         for (let i = 0; i <= this.pageNumber; i++) {
           this.top[i] = 0;
@@ -1594,7 +1674,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
     }, 100)
     this.setPosition();
-    this.eventMouseover();
+    //this.eventMouseover();
   }
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
@@ -2213,10 +2293,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
+    this.saveVariableName();
     this.isDropdownVisibleChuKySo = false;
     this.datas.font = this.selectedFont;
     this.datas.size = this.size;
-    if (action == 'next_step' && !this.validData()) {
+    if (action == 'next_step1') {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
@@ -3210,4 +3291,45 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  onSelectSigner(event: any, index: number) {
+    const selectedId = event.value;
+    const selectedSigner = this.list_sign_name.find((s: any) => s.id === selectedId);
+    if (!selectedSigner) return;
+
+    // Gán thông tin vào đúng item
+    this.datas.variableName[index].recipient_id = selectedSigner.id;
+    this.datas.variableName[index].name = selectedSigner.name;
+
+    // Khóa người vừa chọn
+    selectedSigner.is_disable = true;
+
+    console.log("this.datas.variableName", this.datas.variableName)
+  }
+
+  onClearSigner(index: number) {
+    const oldId = this.datas.variableName[index].id;
+    if (oldId) {
+      const signer = this.list_sign_name.find((s: any) => s.id === oldId);
+      if (signer) signer.is_disable = false;
+    }
+
+    // Xóa giá trị
+    this.datas.variableName[index].value = null;
+    this.datas.variableName[index].recipient_id = null;
+    this.datas.variableName[index].name = null;
+  }
+
+  async saveVariableName() {
+    try{
+      for (const item of this.datas.variableName) {
+        item.font = 'Times New Roman';
+        item.font_size = 13;
+      }
+
+      let rs = await this.contractTemplateService.saveVariableName(this.datas.variableName).toPromise();
+      console.log("rs", rs)
+    } catch(err) {
+      console.log("err", err)
+    }
+  }
 }

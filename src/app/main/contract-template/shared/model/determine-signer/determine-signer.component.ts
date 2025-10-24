@@ -110,8 +110,9 @@ export class DetermineSignerComponent implements OnInit {
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
-    }
 
+          console.log("this.datas.is_determine_clone", this.datas.is_determine_clone)
+    }
 
     // data Tổ chức của tôi
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];

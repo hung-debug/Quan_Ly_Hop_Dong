@@ -285,7 +285,7 @@ const routes: Routes = [
         component: ContractTemplateComponent,
       },
       {
-        path: 'contract-template/form/:action',
+        path: 'contract-template/form/:action/:type',
         component: AddContractTemplateComponent,
       },
       {
@@ -293,7 +293,7 @@ const routes: Routes = [
         component: DetailContractTemplateComponent,
       },
       {
-        path: 'contract-template/form/:action/:id',
+        path: 'contract-template/form/:action/:id/:type',
         component: AddContractTemplateComponent,
       },
       {

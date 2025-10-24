@@ -1,4 +1,4 @@
-<div class="sample-contract">
+<div *ngIf = "typeSample == 1" class="sample-contract">
     <div (window:resize)="onResize($event)" class="row" style="margin: 32px 0px 0px 0px !important;">
         <div class="col-lg-2-5 sample-contract__information cancel-padding" style="background-color: white; z-index: 10">
             <div class="sample-contract__information--drag" id="width-element-info"  style="position: relative; padding: 16px">
@@ -266,6 +266,166 @@
     </div>
 </div>
 
+<div *ngIf = "typeSample == 2" class="sample-contract">
+    <div (window:resize)="onResize($event)" class="row" style="margin: 32px 0px 0px 0px !important;">
+        <div class="col-lg-6">
+            <div>
+                <div  class="text-title">{{'componentsnew'|translate}}</div>
+                <div  class="text-describe mt-3px">{{'enter.variable.name'|translate}}</div>
+            </div>
+
+            <div style="max-height: 65vh; overflow-x: hidden;">
+                <!-- 🟦 NHÓM INPUT -->
+                <ng-container *ngIf="variableInput">
+                    <div *ngFor="let i of datas.variableName; let index = index">
+                    <ng-container *ngIf="i.type === 1 && datas.variableName[index + 1]?.type === 1 && index % 2 === 0">
+                        <div class="row" style="margin-top: 16px;">
+                        <!-- Cột 1 -->
+                        <div class="col-md-6" style="padding-right: 8px;">
+                            <label class="label-text-variable-name">
+                            {{ '{{ ' + i.define_text + ' }}' }}
+                            <span class="text-danger">*</span>
+                            </label>
+                            <input
+                            type="text"
+                            class="input-text-variable-name hover-item"
+                            placeholder="Nhập tên trường cho giá trị"
+                            [(ngModel)]="datas.variableName[index].name"
+                            name="variableInput{{index}}"
+                            />
+                        </div>
+
+                        <!-- Cột 2 -->
+                        <div class="col-md-6" style="padding-left: 8px;" *ngIf="datas.variableName[index + 1]?.type === 1">
+                            <label class="label-text-variable-name">
+                            {{ '{{ ' + datas.variableName[index + 1].define_text + ' }}' }}
+                            <span class="text-danger">*</span>
+                            </label>
+                            <input
+                            type="text"
+                            class="input-text-variable-name hover-item"
+                            placeholder="Nhập tên trường cho giá trị"
+                            [(ngModel)]="datas.variableName[index + 1].name"
+                            name="variableInput{{index + 1}}"
+                            />
+                        </div>
+                        </div>
+                    </ng-container>
+                    </div>
+                </ng-container>
+
+                <!-- 🟥 TIÊU ĐỀ NGĂN CÁCH -->
+                <div class="text-title mt-3">NGƯỜI XỬ LÝ</div>
+
+                <!-- 🟩 NHÓM DROPDOWN -->
+                <ng-container *ngIf="variableDropdown">
+                    <div *ngFor="let i of datas.variableName; let index = index">
+                    <ng-container *ngIf="i.type === 3 && index % 2 === 0">
+                        <div class="row" style="margin-top: 16px;">
+                        <!-- Cột 1 -->
+                        <div class="col-md-6" style="padding-right: 8px;">
+                            <label class="label-text-variable-name">
+                            {{ '{{ ' + i.define_text + ' }}' }}
+                            <span class="text-danger">*</span>
+                            </label>
+                            <p-dropdown 
+                            panelStyleClass="font"
+                            [options]="list_sign_name"
+                            optionLabel="name"
+                            optionValue="id"
+                            optionDisabled="is_disable"
+                            placeholder="{{ 'choose.language' | translate }}"
+                            filterBy="name"
+                            [appendTo]="'body'"
+                            [(ngModel)]="datas.variableName[index].value"
+                            (onChange)="onSelectSigner($event, index)"
+                            (onClear)="onClearSigner(index)"
+                            [showClear]="true"
+                            ></p-dropdown>
+                        </div>
+
+                        <!-- Cột 2 -->
+                        <div class="col-md-6" style="padding-left: 8px;" *ngIf="datas.variableName[index + 1]?.type === 3">
+                            <label class="label-text-variable-name">
+                            {{ '{{ ' + datas.variableName[index + 1].define_text + ' }}' }}
+                            <span class="text-danger">*</span>
+                            </label>
+                            <p-dropdown 
+                            panelStyleClass="font"
+                            [options]="list_sign_name"
+                            optionLabel="name"
+                            optionValue="id"
+                            optionDisabled="is_disable"
+                            placeholder="{{ 'choose.language' | translate }}"
+                            filterBy="name"
+                            [appendTo]="'body'"
+                            [(ngModel)]="datas.variableName[index + 1].value"
+                            (onChange)="onSelectSigner($event, index + 1)"
+                            (onClear)="onClearSigner(index + 1)"
+                            [showClear]="true"
+                            ></p-dropdown>
+                        </div>
+                        </div>
+                    </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <!--  file content-->
+        <div class="col-lg-6">
+            <div style="height: 48px; background-color: #EBF2FB; display: flex; justify-content: center;">
+                <div style="margin: auto 0 auto">
+                    <button class="call-page input1" (click)="firstPage()">
+                        <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+                        <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
+                    </button>
+                    <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPage()">
+                        <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+                        <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
+                    </button>
+
+                    <input class="input1 no-focus" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />
+                    &nbsp;/&nbsp;
+                    <span class="page-number">{{ this.pageNumber }}</span>
+
+                    <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPage()" id="prev">
+                        <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+                        <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
+                    </button>
+
+                    <button class="call-page input1" (click)="lastPage()" id="prev">
+                        <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+                        <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
+                    </button>
+                </div>
+            </div>
+
+            <div (scroll)="scroll($event)" id="pdf-full" class="sample-contract__file viewer-pdf-variable-name isDrag" style="background-color: #f3f7f9; position: relative">
+                <div id="pdf-viewer-step-3">
+                    <!-- <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+                        <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="(d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin') ? changePosition(d) : changePositionSignature(d)">
+                            <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
+                            <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.text_attribute_name ? d.text_attribute_name  : ''}}</div>
+                            <div class="sig-img-daky" (click)="onCancel($event, d)">
+                                <img src="assets/img/border-clear.svg" alt="">
+                            </div>
+                            <app-sign-contract-template
+                            style="display: flex; width: 100%; padding: 4px;"
+                            [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''"
+                            [datas]="datas"
+                            [sign]="d"></app-sign-contract-template>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row footer-sample-contract" style="padding: 10px 30px; justify-content: space-between;">
+        <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button-previous">{{'btn.previous' | translate}}</button>
+        <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+    </div>
+</div>
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
     <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>

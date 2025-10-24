@@ -42,6 +42,8 @@ export class ContractTemplateService {
   checkViewTemplateContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/check-view-contract/`
   getCopyContractTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/clone/`;
 
+  getVariableNameUrl: any = `${environment.apiUrl}/api/v1/fields/template/get-key-from-docx/`;
+  saveVariableNameUrl: any = `${environment.apiUrl}/api/v1/fields/template`;
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
@@ -674,5 +676,24 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.get<any>(this.getCopyContractTemplate + id, { headers });
+  }
+
+  getVariableName(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.token
+    });
+    return this.http.post<any>(this.getVariableNameUrl + id, {}, { headers });
+  }
+
+  saveVariableName(variableName: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(variableName);
+    
+    return this.http.post<any>(this.saveVariableNameUrl, body, { 'headers': headers }).pipe();
   }
 }

@@ -672,6 +672,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if(this.datas.isUploadNewFile){
         this.datas.countUploadContractFile ++;
       }   
+      console.log("this.datas", this.datas)
       // set value to datas
       this.datas.name = this.name;
       this.datas.contract_no = this.contract_no;
