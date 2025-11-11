@@ -30,25 +30,19 @@ Hệ thống **E-contract Mobifone** là nền tảng quản lý hợp đồng �
 
 Hệ thống được xây dựng bằng **Angular (front-end)** và **Java/Node.js (back-end)**, hỗ trợ cơ chế client/server để gửi và nhận dữ liệu một cách nhanh chóng và bảo mật.
 
-🖥️ Receiver:
+🖥️ Quản lý người dùng:
 
-    Cho phép nhận kết nối từ Sender.
+    Tạo, sửa, xóa người dùng.
 
-    Hiển thị thông tin file gửi đến: tên file, dung lượng, định dạng.
+    Phân quyền theo vai trò: admin, nhân viên, khách hàng.
 
-    Người dùng có thể chọn: Lưu file hoặc Từ chối file.
+💻 Quản lý hợp đồng:
 
-    Có tùy chọn chọn thư mục lưu file trước khi tải về.
+    Tạo hợp đồng mới, chỉnh sửa hợp đồng.  
 
-💻 Sender:
+    Upload và lưu trữ file hợp đồng (PDF, Word).  
 
-    Giao diện trực quan để nhập IP, cổng của Receiver.
-
-    Chọn tệp bất kỳ từ máy tính để gửi.
-
-    Hiển thị trạng thái kết nối qua chấm tròn (🔴/🟢).
-
-    Log chi tiết quá trình gửi file (kết nối, tên tệp, dung lượng, tiến trình).
+    Gửi hợp đồng để ký điện tử.
 
 🎯 Ý nghĩa của ứng dụng
 
