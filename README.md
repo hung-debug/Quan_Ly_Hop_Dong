@@ -72,14 +72,14 @@ Hệ thống được xây dựng bằng **Angular (front-end)** và **Java/Node
 
 ## 3. Một số hình ảnh của hệ thống
  
-🖥️ Giao diện Client
+🖥️ Giao diện màn đăng ký
 
-![Client GUI](docs/sender.png)
+![Client GUI](docs/daangky.png)
 
 
-🖥️ Giao diện Server
+🖥️ Giao diện màn đăng nhập
 
-![Server GUI](docs/receiver.png)
+![Server GUI](docs/dangnhap.png)
 
 ## 4. Các bước cài đặt
 🔧 Bước 1. Chuẩn bị môi trường
