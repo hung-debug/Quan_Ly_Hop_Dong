@@ -58,15 +58,15 @@ Hệ thống được xây dựng bằng **Angular (front-end)** và **Java/Node
 
 ## 2. Công nghệ sử dụng
 
-[![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/technologies/javase-downloads.html) 
-[![Swing](https://img.shields.io/badge/Java%20Swing-007396?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/) 
-[![UDP](https://img.shields.io/badge/UDP%20Socket-00599C?style=for-the-badge&logo=socket.io&logoColor=white)](https://docs.oracle.com/javase/tutorial/networking/datagrams/) 
+[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/) 
+[![Java Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot) 
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/) 
 [![HTTP](https://img.shields.io/badge/HTTP-FF6F00?style=for-the-badge&logo=mozilla&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTTP) 
 [![NTP](https://img.shields.io/badge/NTP-228B22?style=for-the-badge&logo=internet-explorer&logoColor=white)](https://www.ntp.org/) 
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/) 
-[![JDBC](https://img.shields.io/badge/JDBC%20Connector-CC0000?style=for-the-badge&logo=java&logoColor=white)](https://dev.mysql.com/downloads/connector/j/) 
-[![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=eclipseide&logoColor=white)](https://www.eclipse.org/) 
-[![NetBeans](https://img.shields.io/badge/NetBeans-1B6AC6?style=for-the-badge&logo=apachenetbeanside&logoColor=white)](https://netbeans.apache.org/) 
+[![JDBC Connector](https://img.shields.io/badge/JDBC_Connector-CC0000?style=for-the-badge&logo=java&logoColor=white)](https://dev.mysql.com/downloads/connector/j/) 
+[![Visual Studio Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://code.visualstudio.com/) 
+
  
 
 
@@ -74,7 +74,7 @@ Hệ thống được xây dựng bằng **Angular (front-end)** và **Java/Node
  
 🖥️ Giao diện màn đăng ký
 
-![Client GUI](docs/daangky.png)
+![Client GUI](docs/dangky.png)
 
 
 🖥️ Giao diện màn đăng nhập
@@ -84,40 +84,33 @@ Hệ thống được xây dựng bằng **Angular (front-end)** và **Java/Node
 ## 4. Các bước cài đặt
 🔧 Bước 1. Chuẩn bị môi trường
 
-    Cài đặt **JDK 8+** (Java Development Kit) 
+    Node.js (phiên bản >=16.x) và npm (hoặc yarn)
 
-    👉 [Tải JDK tại đây](https://www.oracle.com/java/technologies/javase-downloads.html)
+    Angular CLI (phiên bản >=15.x)
 
-    IDE hỗ trợ Java: **Eclipse** hoặc **NetBeans**
-🗄️ Bước 2. Clone dự án về máy
+    Java JDK (phiên bản 11 trở lên)
 
-    Mở **Terminal (Linux/macOS)** hoặc **Command Prompt/PowerShell (Windows)** và chạy lệnh sau:
+    Maven (quản lý build backend)
+
+    MySQL hoặc database tương thích đã được cài đặt và cấu hình sẵn
+🗄️ Bước 2. Cài đặt và chạy Frontend (Angular)
+
+    Cài đặt Angular CLI (nếu chưa có):    
     
-    git clone https://github.com/hung-debug/Lap_Trinh_Mang_1604_004Truyen-file-UDP.git
-    cd Lap_Trinh_Mang_1604_004Truyen-file-UDP
-
-📦 Bước 3. Mở dự án trong IDE
-
-    Mở Eclipse hoặc NetBeans
-
-    Chọn Import Project → trỏ đến thư mục vừa clone về
+    cd econtract-web   
     
-⚙️ Bước 4. Chạy chương trình
+    npm install
 
-    Chạy Receiver.java để khởi động máy nhận
+    ng serve --open
 
-    Chạy Sender.java để khởi động máy gửi
+📦 Bước 3. Cài đặt và chạy Backend (Java Spring Boot)
 
-▶️ Bước 5. Kiểm tra hoạt động
-
-    Nhập IP và Port của Receiver vào Sender
-
-    Ấn Kết nối → chấm trạng thái chuyển 🟢 nếu thành công
-
-    Chọn file cần gửi → ấn Gửi tệp
+    cd econtract-backend
     
-    Ở Receiver, chọn Lưu file hoặc Từ chối
-
+    mvn clean install
+    
+    mvn spring-boot:run
+    
 
 ## 5. Liên hệ
 
