@@ -21,8 +21,14 @@
 
 ## 📖 1. Giới thiệu hệ thống 
 
-Hệ thống Truyền tệp qua mạng bằng UDP được xây dựng bằng Java với Swing GUI.
-Ứng dụng cho phép Sender (máy gửi) và Receiver (máy nhận) kết nối trực tiếp thông qua UDP Socket để truyền các tệp tin (bất kỳ định dạng nào) một cách nhanh chóng.
+Hệ thống **E-contract Mobifone** là nền tảng quản lý hợp đồng điện tử, giúp:
+
+- Tạo, lưu trữ và quản lý hợp đồng trực tuyến.  
+- Kiểm tra chữ ký số và phê duyệt hợp đồng.  
+- Theo dõi trạng thái hợp đồng theo thời gian thực.  
+- Đảm bảo bảo mật dữ liệu và tuân thủ các quy định pháp lý về hợp đồng điện tử.
+
+Hệ thống được xây dựng bằng **Angular (front-end)** và **Java/Node.js (back-end)**, hỗ trợ cơ chế client/server để gửi và nhận dữ liệu một cách nhanh chóng và bảo mật.
 
 🖥️ Receiver:
 
