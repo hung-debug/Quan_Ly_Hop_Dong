@@ -44,28 +44,22 @@ Hệ thống được xây dựng bằng **Angular (front-end)** và **Java/Node
 
     Gửi hợp đồng để ký điện tử.
 
-🎯 Ý nghĩa của ứng dụng
+🎯 Ký điện tử
 
-    1️⃣ Ứng dụng kiến thức lập trình mạng
-    Giúp sinh viên/lập trình viên hiểu rõ cách hoạt động của UDP Socket và mô hình Client – Server, đồng thời củng cố kiến thức lý thuyết bằng sản phẩm thực tế.
+    Xác thực chữ ký số. 
+    Ký hợp đồng trực tuyến và lưu lại thông tin xác thực. 
 
-    2️⃣ Mô phỏng quá trình truyền file
-    Minh họa trực quan cách các hệ thống gửi – nhận file trong mạng LAN hoạt động, từ kết nối, trao đổi dữ liệu đến đóng kết nối.
+💻 Theo dõi trạng thái
 
-    3️⃣ Nâng cao trải nghiệm người dùng
-    Có giao diện Java Swing thân thiện, dễ thao tác; biểu tượng trạng thái 🔴🟢 trực quan; hỗ trợ chọn/từ chối nhận file, đảm bảo an toàn dữ liệu.
+    Trạng thái hợp đồng: Chưa ký, Đang ký, Đã ký.
+    Log chi tiết lịch sử thay đổi hợp đồng.
 
-    4️⃣ Khả năng mở rộng
-    Có thể phát triển thêm thành công cụ truyền file trong doanh nghiệp, chia sẻ dữ liệu nhanh qua LAN, hoặc tích hợp thêm bảo mật, lưu lịch sử, quản lý nhiều kết nối.
-
-    5️⃣ Ý nghĩa giáo dục – nghiên cứu
-    Là công cụ minh họa hữu ích trong học tập, nghiên cứu về socket, giúp sinh viên thực hành và làm nền tảng mở rộng sang các chủ đề mã hóa – tối ưu – bảo mật mạng.
+    
 
 ## 2. Công nghệ sử dụng
 
 [![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/technologies/javase-downloads.html) 
 [![Swing](https://img.shields.io/badge/Java%20Swing-007396?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/) 
-[![Nimbus](https://img.shields.io/badge/Nimbus%20Look&Feel-4B0082?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/nimbus.html) 
 [![UDP](https://img.shields.io/badge/UDP%20Socket-00599C?style=for-the-badge&logo=socket.io&logoColor=white)](https://docs.oracle.com/javase/tutorial/networking/datagrams/) 
 [![HTTP](https://img.shields.io/badge/HTTP-FF6F00?style=for-the-badge&logo=mozilla&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTTP) 
 [![NTP](https://img.shields.io/badge/NTP-228B22?style=for-the-badge&logo=internet-explorer&logoColor=white)](https://www.ntp.org/) 
